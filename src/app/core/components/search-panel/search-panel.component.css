@@ -1,0 +1,103 @@
+.search-panel{
+    background-color: white;
+    padding: 10px 30px;
+    border-radius: 5px;
+}
+#searchCollapse{
+    margin-top: 5px;
+}
+
+/* easy search */
+
+/* } easy search */
+
+
+/* pagination {  */
+.rpg-label{
+    font-size: 13px;
+    margin-top: 5px;
+    color: #111;
+}
+.rpg-select{
+    min-width: 70px;
+    margin-left: 10px;
+}
+.pages-container{
+    padding-top: 7px;
+    margin-left: 15px;
+}
+.page{
+    color: #fff;
+    background-color: #000;
+    margin: 0px 3px;
+    display: inline-block;
+    font-size: 12px;
+    text-align: center;
+    padding: 2px;
+    min-width: 22px;
+}
+.page-sep{
+    display: inline-block;
+    margin: 0px 4px;
+}
+.active-page{
+    background-color: #fcda4b;
+    color: black;
+}
+/* } pagination  */
+
+/* expanded search { */
+.expanded-search-container{
+    margin-top: -5px;
+}
+.expanded-search-container input {
+    width: 100%;
+}
+.search-input input,.search-input-group input{
+    background-color: #f5f5f5;
+    border-radius: 0px;
+    font-size: 13px;
+    height: 30px;
+}
+.search-input label,.search-input-group label{
+    font-size: 13px;
+    margin-bottom: 2px;
+    color: #333;
+}
+/* } expanded search */
+
+/* cap statistics/filters { */
+
+.cap-statistics-container{
+    background-color: #fafafa;
+    padding: 20px 0px;
+    border-radius: 8px;
+}
+
+.cap-box{
+    width: 65px;
+    font-size: 13px;
+}
+.cap-box-head{
+    padding: 5px;
+    text-align: center;
+    background-color: #47912b;
+    color: white;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    width: 100%;
+    display: block;
+
+}
+.cap-box-body{
+    display: block;
+    width: 100%;
+    padding: 12px 10px;
+    text-align: center;
+    font-weight: bold;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+
+/* } cap statistics/filters */

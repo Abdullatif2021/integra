@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-light planner-nav z-depth-1">
+  <a class="navbar-brand" href="#"><img src="assets/images/logo-Integraa.jpg"> </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#usreNav" aria-controls="usreNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="usreNav">
+    <div class="mr-auto mt-2 mt-lg-0"></div>
+    <div class="my-2 my-lg-0">
+      <!-- User Drop {  -->
+      <div class="dropdown float-right">
+        <div class="dropdown-toggle user-dropdown" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+          <span class="user-name">Adnan Kharboutli</span>
+          <i class="drop-arrow"></i>
+          <img src="assets/images/user.png" class="user-img rounded-circle">
+        </div>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </div>
+      <!-- } User Drop -->
+      <!-- Settings Area { -->
+      <div class="settings-area float-right">
+        <span class="settings-icon"><fa-icon [icon]="['fa','cogs']"></fa-icon></span>
+        <span class="bell-icon"><fa-icon [icon]="['far','bell']"></fa-icon></span>
+      </div>
+      <!-- } Settings Area -->
+    </div>
+  </div>
+</nav>

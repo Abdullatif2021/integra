@@ -1,0 +1,45 @@
+.planner-nav{
+    background-color: white !important;
+    padding: 2px 35px;
+}
+.navbar-brand img{
+    height: 50px;
+}
+.user-img{
+    width: 50px;
+    height: 50px;
+}
+.user-dropdown{
+    cursor: pointer;
+}
+.user-dropdown::after{
+    display: none;
+}
+.user-name{
+    padding: 0px 15px;
+    color: #555;
+    font-size: 15px;
+}
+.drop-arrow {
+    border: solid #888;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    margin-right: 15px;
+}
+.settings-area{
+    padding: 10px 20px 0px 0px;
+    font-size: 18px;
+}
+.settings-area span{
+    margin-right: 15px;
+    cursor: pointer;
+}
+.settings-icon{
+    color: #444;
+}
+.bell-icon{
+    color: #555;
+}

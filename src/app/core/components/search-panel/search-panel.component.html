@@ -1,0 +1,139 @@
+<div class="search-panel z-depth-half">
+
+
+  <div class="row">
+    <!-- easy search {  -->
+    <ng-container *ngIf="isCollapsed">
+      <!-- easy search input { -->
+      <div class="col-lg-2 wide-col">
+        <app-search-box [placeholder]="'Cerca'"></app-search-box>
+      </div>
+      <!-- } easy search input -->
+      <!-- easy search field select { -->
+      <div class="col-lg-2 wide-col">
+        <ng-select [items]="" class="integraa-select" placeholder="Nel Campo"></ng-select>
+      </div>
+      <!-- } easy search field select  -->
+      <!-- easy search submit { -->
+      <div class="col-lg-3">
+        <button type="button" class="integraa-btn">Cerca</button>
+      </div>
+      <!-- } easy search submit -->
+    </ng-container>
+    <!-- } easy search  -->
+
+    <!-- expanded search expand btn { -->
+    <div class="col-lg-2 offset-3" [ngClass]="{'offset-10':!isCollapsed}">
+      <button type="button" class="integraa-btn search-panel-collapse-btn float-right" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="isCollapsed" aria-controls="searchCollapse">
+        <span class="mr-1">Filtra</span>
+        <ng-container *ngIf="isCollapsed; else collapseArrowUp">
+          <fa-icon [icon]="['fa','chevron-down']"></fa-icon>
+        </ng-container>
+        <ng-template #collapseArrowUp><fa-icon [icon]="['fa','chevron-up']"></fa-icon></ng-template>
+      </button>
+    </div>
+    <!-- } expanded search expand btn -->
+  </div>
+
+  <!-- Collapsed Area { -->
+  <div id="searchCollapse" [ngbCollapse]="isCollapsed">
+    <div class="expanded-search-container container-fluid">
+      <!-- expanded search inputs {  -->
+      <div class="search-inputs-container row">
+        <ng-container *ngFor="let input of searchFields">
+          <!-- If input is simple  -->
+          <ng-container *ngIf="!input.group; else groupInut">
+            <div class="search-input col-2 wide-col">
+              <label>{{input.label}}</label>
+              <input class="form-control" type="{{input.type}}">
+            </div>
+          </ng-container>
+
+          <!-- If input is group -->
+          <ng-template #groupInut>
+            <div class="search-input-group col-2" *ngIf="input.group">
+              <div class="row">
+                <div class="col-12 wide-col">
+                  <label>{{input.label}}</label>
+                </div>
+                <ng-container *ngFor="let subInputType of input.type; first as isFirst">
+                  <div class="search-input col wide-col" [ngClass]="{'pl-1':!isFirst}">
+                    <input class="form-control" type="{{subInputType}}">
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-template>
+
+        </ng-container>
+      </div>
+      <!-- } expanded search inputs -->
+
+      <!-- expanded search buttons { -->
+      <div class="row mt-2">
+        <button class="integraa-btn">Clear</button>
+        <button class="integraa-btn ml-2">Search</button>
+      </div>
+      <!-- } expanded search buttons -->
+
+      <!-- Cap statistics/filters { -->
+      <div class="cap-statistics-container row mt-4 justify-content-center d-flex">
+        <ng-container *ngFor="let cap of caps; let idx = index">
+          <div class="cap-box ml-1">
+            <div class="cap-box-content">
+              <div class="cap-box-head">{{cap.cap}}</div>
+
+              <div class="cap-box-body" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2)}">{{cap.val}}</div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!-- } Cap statistics/filters -->
+
+    </div>
+  </div>
+  <!-- } Collapsed Area -->
+
+
+  <div class="row mt-2">
+
+    <!-- Actions area {  -->
+    <!-- Action select {  -->
+    <div class="col-lg-2 col-md-10">
+      <ng-select [items]="" class="integraa-select" placeholder="Scegli un'operazione"></ng-select>
+    </div>
+    <!-- } Action select -->
+    <!-- Action submit btn {  -->
+    <div class="col-lg-2 col-md-2">
+      <button type="button" class="integraa-btn">Esegui</button>
+    </div>
+    <!-- } Action submit btn  -->
+    <!-- } Actions area -->
+
+    <!-- Pagination area {  -->
+    <div class="col-lg-4 offset-lg-4">
+      <div class="d-flex justify-content-end">
+        <!-- Results per page {  -->
+        <div class="d-inline-flex rpg-label"><label class="rpg-label">Risultati per pagina</label></div>
+        <div class="d-inline-flex rpg-select"><ng-select [items]="[20,40,60]" class="integraa-select results-per-page"></ng-select></div>
+        <!-- } Results per page -->
+
+        <!-- Page select { -->
+        <div class="d-inline-flex">
+          <div class="pages-container">
+            <div class="page active-page rounded-circle">1</div>
+            <div class="page rounded-circle">2</div>
+            <div class="page rounded-circle">3</div>
+            <div class="page-sep">..</div>
+            <div class="page rounded-circle">22</div>
+            <div class="page rounded-circle">23</div>
+          </div>
+        </div>
+        <!-- } Page select -->
+      </div>
+
+    </div>
+    <!-- } Pagination area  -->
+  </div>
+
+</div>

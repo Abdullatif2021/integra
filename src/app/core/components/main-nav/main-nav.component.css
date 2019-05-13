@@ -1,0 +1,31 @@
+.planner-main-nav{
+    margin: 7px 0px;
+    width: 100%;
+    border-radius: 5px;
+    background-color: white !important;
+    padding: 15px 0px 25px 0px;
+}
+.planner-main-nav-item{
+    border-bottom: 1px solid #dddfe0;
+    font-size: 15px;
+    color:#848484 ;
+    font-weight: 500;
+}
+.planner-main-nav-item span{
+    padding-right: 3px;
+}
+.planner-main-nav-item:hover{
+    border-bottom: 2px solid #47912b;
+}
+.planner-main-nav-item:hover span{
+    color:#47912b ;
+}
+.active-tab{
+    border-bottom: 2px solid #47912b;
+}
+.active-tab span{
+    color:#47912b ;
+}
+.inner-nav{
+    padding: 0px 30px;
+}

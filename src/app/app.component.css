@@ -1,0 +1,9 @@
+.small-table{
+    flex: 0 0 18%;
+}
+.large-table{
+    flex: 0 0 64%;
+}
+.tables-area{
+    margin-top: 7px;
+}

@@ -1,0 +1,17 @@
+<div class="table-container">
+  <div class="table-head">{{table.title}}</div>
+  <div class="search-section">
+    <app-search-box [placeholder]="table.searchPlaceHolder"></app-search-box>
+  </div>
+  <div class="table-body">
+    <ng-container *ngFor="let item of items; let idx = index">
+      <div class="item" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx}">
+        <div class="select-row float-left"><div class="select-row-input rounded-circle"></div></div>
+        <div class="item-icon float-left ml-2"><img class="rounded-circle" src="{{table.icon}}"></div>
+        <div class="item-name ml-2 mt-1 float-left">{{item.name}}</div>
+        <div class="item-qt float-right mt-1" *ngIf="item.qt">{{item.qt}}</div>
+        <div class="clear-both"></div>
+      </div>
+    </ng-container>
+  </div>
+</div>

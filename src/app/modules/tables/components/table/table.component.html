@@ -1,0 +1,54 @@
+
+<div class="table-container">
+  <table class="table table-sm">
+
+    <thead class="table-head">
+    <tr>
+      <th scope="col" class="table-head-item"><div class="select-row rounded-circle"></div></th>
+      <ng-container *ngFor="let col of (table.cols)">
+        <th scope="col" class="table-head-item border-left-white" *ngIf="typeof(col.title) === 'string'">{{col.title}}</th>
+        <th scope="col" class="table-head-item border-left-white" *ngIf="typeof(col.title) === 'object'">
+          <ng-container *ngFor="let title of col.title; let idx = index">
+            <div class="separator" *ngIf="idx && col.separator"></div>
+            <div>{{title}}</div>
+          </ng-container>
+        </th>
+      </ng-container>
+    </tr>
+    </thead>
+
+    <tbody class="table-body">
+
+    <ng-container *ngFor="let item of items; let idx = index">
+      <tr class="table-item" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx}">
+        <th scope="row" class="table-item-cell"><div class="select-row rounded-circle"></div> </th>
+        <ng-container *ngFor="let col of (table.cols)">
+
+          <td class="table-item-cell">
+            <span *ngIf="typeof(col.field) === 'string' && item[col.field]" [ngClass]="getFieldClass(col,col.field)">{{item[col.field]}}</span>
+            <span *ngIf="typeof(col.field) === 'object'">
+
+            <ng-container *ngFor="let field of col.field; let idx = index">
+              <div class="separator" *ngIf="idx && col.value_separator == 'dashed'"></div>
+              <div class="line-separator" *ngIf="idx && col.value_separator == 'line'"></div>
+              <div><span [ngClass]="getFieldClass(col,field)">{{item[field]}}</span></div>
+            </ng-container>
+          </span>
+            <ng-container *ngFor="let action of col.actions">
+              <div *ngIf="action=='view';then view"></div>
+              <div *ngIf="action=='book';then book"></div>
+            </ng-container>
+          </td>
+
+        </ng-container>
+      </tr>
+    </ng-container>
+
+
+    </tbody>
+  </table>
+</div>
+
+<!--  Actions templates  -->
+<ng-template #view><img src="assets/images/search-icon.svg" class="action-icon"></ng-template>
+<ng-template #book><img src="assets/images/checklist.png" class="action-icon"></ng-template>
