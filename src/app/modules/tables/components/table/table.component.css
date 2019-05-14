@@ -1,23 +1,22 @@
 .table-container{
-    background-color: #fff !important;
-    border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
-    height: calc(80vh + 30px);
-    overflow: scroll;
+    background-color: #fff;
 }
 .table-head{
-    padding: 10px;
     background-color: #222222;
     color: #feda44;
     font-size: 14px;
-    border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
     font-weight: normal;
     text-align: center;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
 }
 .table-body{
-
+    height: 450px;
+    overflow-y: scroll;
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
 }
+.table-body::-webkit-scrollbar { width: 0 !important }
 .table-head-item{
     font-size: 11px;
     vertical-align: middle;
@@ -64,4 +63,12 @@
     width: 20px;
     margin-top: 5px;
     cursor: pointer;
+}
+
+tbody,thead,tr{
+    display: block;
+    width: 100%;
+}
+td{
+    word-break: break-all;
 }

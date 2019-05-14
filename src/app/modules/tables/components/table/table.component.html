@@ -1,52 +1,76 @@
-
 <div class="table-container">
-  <table class="table table-sm">
+    <table class="table-sm">
 
+    <!-- Table Head { -->
     <thead class="table-head">
-    <tr>
-      <th scope="col" class="table-head-item"><div class="select-row rounded-circle"></div></th>
-      <ng-container *ngFor="let col of (table.cols)">
-        <th scope="col" class="table-head-item border-left-white" *ngIf="typeof(col.title) === 'string'">{{col.title}}</th>
-        <th scope="col" class="table-head-item border-left-white" *ngIf="typeof(col.title) === 'object'">
-          <ng-container *ngFor="let title of col.title; let idx = index">
-            <div class="separator" *ngIf="idx && col.separator"></div>
-            <div>{{title}}</div>
-          </ng-container>
-        </th>
-      </ng-container>
-    </tr>
+        <tr>
+            <!-- Select item col { -->
+            <th class="table-head-item" [ngStyle]="{width: '1%'}">
+                <div class="select-row rounded-circle"></div>
+            </th>
+            <!-- } Select item com -->
+            <!-- Create the other cells using table data -->
+            <!-- Table cols loop {  -->
+            <ng-container *ngFor="let col of (table.cols)">
+                <th scope="col" class="table-head-item border-left-white" [ngStyle]="{width: col.width+'%'}" *ngIf="typeof(col.title) === 'string'">
+                    {{col.title}}
+                </th>
+                <!-- if the col contains more than one field, print every one of them -->
+                <th scope="col" class="table-head-item border-left-white" [ngStyle]="{width: col.width+'%'}" *ngIf="typeof(col.title) === 'object'">
+                    <ng-container *ngFor="let title of col.title; let idx = index">
+                        <!-- print col separator if needed -->
+                        <div class="separator" *ngIf="idx && col.separator"></div>
+                        <div>{{title}}</div>
+                    </ng-container>
+                </th>
+            </ng-container>
+            <!-- } table cols loop -->
+        </tr>
     </thead>
+    <!-- } Table Head -->
+
+    <!-- Table Body { -->
 
     <tbody class="table-body">
 
-    <ng-container *ngFor="let item of items; let idx = index">
-      <tr class="table-item" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx}">
-        <th scope="row" class="table-item-cell"><div class="select-row rounded-circle"></div> </th>
-        <ng-container *ngFor="let col of (table.cols)">
+        <!-- print table items -->
+        <ng-container *ngFor="let item of items; let idx = index">
+            <!-- row item {  -->
+            <tr class="table-item" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx}">
+                <!-- select row item <static item > {  -->
+                <td class="table-item-cell" [ngStyle]="{width: '1%'}">
+                    <div class="select-row rounded-circle"></div>
+                </td>
+                <!-- } select row item  -->
+                <!-- print item cells loop {  -->
+                <ng-container *ngFor="let col of (table.cols)">
+                    <!-- item cell {  -->
+                    <td class="table-item-cell" [ngStyle]="{width: col.width+'%'}">
+                        <span *ngIf="typeof(col.field) === 'string' && item[col.field]" [ngClass]="getFieldClass(col,col.field)">{{item[col.field]}}</span>
+                        <!-- if the cell contains many fields then print them all  -->
+                        <span *ngIf="typeof(col.field) === 'object'">
+                            <ng-container *ngFor="let field of col.field; let idx = index">
+                              <div class="separator" *ngIf="idx && col.value_separator == 'dashed'"></div>
+                              <div class="line-separator" *ngIf="idx && col.value_separator == 'line'"></div>
+                              <div><span [ngClass]="getFieldClass(col,field)">{{item[field]}}</span></div>
+                            </ng-container>
+                        </span>
+                        <ng-container *ngFor="let action of col.actions">
+                            <div *ngIf="action=='view';then view"></div>
+                            <div *ngIf="action=='book';then book"></div>
+                        </ng-container>
+                    </td>
+                    <!-- } item cell  -->
 
-          <td class="table-item-cell">
-            <span *ngIf="typeof(col.field) === 'string' && item[col.field]" [ngClass]="getFieldClass(col,col.field)">{{item[col.field]}}</span>
-            <span *ngIf="typeof(col.field) === 'object'">
-
-            <ng-container *ngFor="let field of col.field; let idx = index">
-              <div class="separator" *ngIf="idx && col.value_separator == 'dashed'"></div>
-              <div class="line-separator" *ngIf="idx && col.value_separator == 'line'"></div>
-              <div><span [ngClass]="getFieldClass(col,field)">{{item[field]}}</span></div>
-            </ng-container>
-          </span>
-            <ng-container *ngFor="let action of col.actions">
-              <div *ngIf="action=='view';then view"></div>
-              <div *ngIf="action=='book';then book"></div>
-            </ng-container>
-          </td>
-
+                </ng-container>
+                <!-- } print item cells loop -->
+            </tr>
+            <!-- } row item -->
         </ng-container>
-      </tr>
-    </ng-container>
-
 
     </tbody>
-  </table>
+    <!-- } Table Body -->
+    </table>
 </div>
 
 <!--  Actions templates  -->

@@ -11,19 +11,19 @@ export class TableComponent implements OnInit {
 
   @Input() table : object = {
     cols:[
-        {title:' ',field:false,actions:['view','book']},
-        {title:'BARCODE',field:'barcode'},
-        {title:'ATTO',field:'act'},
-        {title:['PRODOTTO','DISTINTA'],field:['product_type','dispatch_list_n'],separator:true,value_separator:'dashed'},
-        {title:'STATO',field:'state'},
+        {title:' ',field:false,actions:['view','book'],width:5},
+        {title:'BARCODE',field:'barcode',width:10},
+        {title:'ATTO',field:'act',widht:15},
+        {title:['PRODOTTO','DISTINTA'],field:['product_type','dispatch_list_n'],separator:true,value_separator:'dashed',width:22},
+        {title:'STATO',field:'state',width:8},
         {title:['DATA/ORA','Q.TA','TENTATIVI'],field:['date','qty','attempts'],separator:false,value_separator:'dashed',classes:{
                 'qty':'text-center d-block',
                 'attempts':'text-center d-block'
-            }},
+            },width:10},
         {title:['CLIENTE','MITTENTE','DESTINARIO'],field:['customer','sender','recipent'],separator:false,value_separator:'line',classes:{
                 'sender':'text-gray',
                 'recipent':'marked'
-            }}
+            },width:30}
     ]
   };
 
@@ -48,7 +48,6 @@ export class TableComponent implements OnInit {
 
   getFieldClass(col,field){
     if(typeof col.classes !== 'undefined'){
-        console.log(col,field)
         return col.classes[field]?col.classes[field]:'';
     }
 
