@@ -6,23 +6,23 @@
       </button>
       <div class="collapse navbar-collapse" id="mainNavContent">
         <ul class="navbar-nav container-fluid inner-nav">
-          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item active-tab">
-            <a class="nav-link" href="#"><span>Da consegnare</span> <fa-icon [icon]="['far','clone']"></fa-icon> </a>
+          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item" id="to-deliver-tab" [ngClass]="{'active-tab':active_tab=='to-deliver'}">
+            <a class="nav-link" routerLink="/" href="#"><span>Da consegnare</span> <img src="assets/images/Group 1312.svg"> </a>
           </li>
-          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item">
-            <a class="nav-link" href="#"><span>Pre-Distinta</span> <fa-icon [icon]="['far','clone']"></fa-icon> </a>
+          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item" id="pre-dispatch-tab" [ngClass]="{'active-tab':active_tab=='pre-dispatch'}">
+            <a class="nav-link" routerLink="/pre-dispatch"><span>Pre-Distinta</span> <img src="assets/images/Group 1312.svg"> </a>
           </li>
-          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item">
-            <a class="nav-link" href="#"><span>Distinta</span> <fa-icon [icon]="['far','clone']"></fa-icon> </a>
+          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item" id="dispatch-tab" [ngClass]="{'active-tab':active_tab=='dispatch'}">
+            <a class="nav-link" routerLink="/dispatch" href="#"><span>Distinta</span> <img src="assets/images/Group 1312.svg"> </a>
           </li>
-          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item">
-            <a class="nav-link" href="#"><span>In consegna</span> <fa-icon [icon]="['far','clone']"></fa-icon> </a>
+          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item" id="delivering-tab" [ngClass]="{'active-tab':active_tab=='delivering'}">
+            <a class="nav-link" routerLink="/delivering" href="#"><span>In consegna</span> <img src="assets/images/Group 1312.svg"> </a>
           </li>
-          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item">
-            <a class="nav-link" href="#"><span>In giacenza</span> <fa-icon [icon]="['far','clone']"></fa-icon> </a>
+          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item" id="in-stock-tab" [ngClass]="{'active-tab':active_tab=='in-stock'}">
+            <a class="nav-link" routerLink="/in-stock" href="#"><span>In giacenza</span> <img src="assets/images/Group 1312.svg"> </a>
           </li>
-          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item">
-            <a class="nav-link" href="#"><span>Non consegnati</span> <fa-icon [icon]="['far','clone']"></fa-icon> </a>
+          <li class="nav-item col-lg-2 col-md-12 planner-main-nav-item" id="not-delivered-tab" [ngClass]="{'active-tab':active_tab=='not-delivered'}">
+            <a class="nav-link" routerLink="/not-delivered" href="#"><span>Non consegnati</span> <img src="assets/images/Group 1312.svg"> </a>
           </li>
         </ul>
       </div>

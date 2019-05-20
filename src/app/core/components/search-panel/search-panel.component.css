@@ -11,41 +11,6 @@
 
 /* } easy search */
 
-
-/* pagination {  */
-.rpg-label{
-    font-size: 13px;
-    margin-top: 5px;
-    color: #111;
-}
-.rpg-select{
-    min-width: 70px;
-    margin-left: 10px;
-}
-.pages-container{
-    padding-top: 7px;
-    margin-left: 15px;
-}
-.page{
-    color: #fff;
-    background-color: #000;
-    margin: 0px 3px;
-    display: inline-block;
-    font-size: 12px;
-    text-align: center;
-    padding: 2px;
-    min-width: 22px;
-}
-.page-sep{
-    display: inline-block;
-    margin: 0px 4px;
-}
-.active-page{
-    background-color: #fcda4b;
-    color: black;
-}
-/* } pagination  */
-
 /* expanded search { */
 .expanded-search-container{
     margin-top: -5px;

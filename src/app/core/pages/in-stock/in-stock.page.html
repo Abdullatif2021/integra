@@ -1,0 +1,24 @@
+<div class="container-fluid page-container">
+    <div class="row">
+        <div class="col-12 v-wide-col">
+            <app-main-nav [active_tab]="active_tab"></app-main-nav>
+        </div>
+        <div class="col-12 v-wide-col">
+            <app-search-panel></app-search-panel>
+        </div>
+
+        <div class="d-flex tables-area full-width">
+            <div class="small-table v-wide-col">
+                <app-simple-table [items]="cities" [table]="citiesTable"></app-simple-table>
+            </div>
+            <div class="small-table v-wide-col">
+                <app-simple-table [items]="streets" [table]="streetsTable"></app-simple-table>
+            </div>
+            <div class="large-table v-wide-col">
+                <app-table [items]="products" [table]="productsTable"></app-table>
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,48 @@
+/* pagination {  */
+.rpg-label{
+    font-size: 13px;
+    margin-top: 5px;
+    color: #111;
+}
+.rpg-select{
+    min-width: 70px;
+    margin-left: 10px;
+}
+.pages-container{
+    padding-top: 7px;
+    margin-left: 15px;
+}
+.page{
+    color: #fff;
+    background-color: #000;
+    border: 1px solid #000;
+    margin: 0px 3px;
+    display: inline-block;
+    font-size: 12px;
+    text-align: center;
+    padding: 1px;
+    min-width: 22px;
+}
+.page-sep{
+    display: inline-block;
+    margin: 0px 4px;
+}
+.active-page{
+    background-color: #fcda4b;
+    border: 1px solid #fcda4b;
+    color: black;
+}
+/* } pagination  */
+
+
+/* Dark theme style */
+.dark-theme{
+    color: #fff;
+}
+.dark-theme .rpg-label{
+    color: #fff;
+}
+.dark-theme .page{
+    color: #fff;
+    border: 1px solid #fff;
+}

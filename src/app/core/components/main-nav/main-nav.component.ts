@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-main-nav',
@@ -8,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class MainNavComponent implements OnInit {
 
   constructor() { }
+
+  @Input() active_tab : string = 'to-deliver';
 
   ngOnInit() {
   }

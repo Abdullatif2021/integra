@@ -7,25 +7,106 @@
 }
 .planner-main-nav-item{
     border-bottom: 1px solid #dddfe0;
-    font-size: 15px;
+    font-size: 14px;
     color:#848484 ;
     font-weight: 500;
 }
 .planner-main-nav-item span{
     padding-right: 3px;
 }
-.planner-main-nav-item:hover{
-    border-bottom: 2px solid #47912b;
-}
-.planner-main-nav-item:hover span{
-    color:#47912b ;
-}
-.active-tab{
-    border-bottom: 2px solid #47912b;
-}
-.active-tab span{
-    color:#47912b ;
-}
 .inner-nav{
     padding: 0px 30px;
 }
+
+/* active tabs */
+
+/* to deliver { */
+#to-deliver-tab.active-tab{
+    border-bottom: 2px solid #47912b;
+}
+#to-deliver-tab.active-tab span{
+    color:#47912b ;
+}
+#to-deliver-tab.planner-main-nav-item:hover{
+    border-bottom: 2px solid #47912b;
+}
+#to-deliver-tab.planner-main-nav-item:hover span{
+    color:#47912b ;
+}
+/* } to deliver  */
+
+/* in stock {  */
+#in-stock-tab.active-tab{
+    border-bottom: 2px solid #FF8924;
+}
+#in-stock-tab.active-tab span{
+    color: #FF8924;
+}
+#in-stock-tab.planner-main-nav-item:hover{
+    border-bottom: 2px solid #FF8924;
+}
+#in-stock-tab.planner-main-nav-item:hover span{
+    color: #FF8924 ;
+}
+/* } in stock */
+
+/* not delivered {  */
+#not-delivered-tab.active-tab{
+    border-bottom: 2px solid #AD0000;
+}
+#not-delivered-tab.active-tab span{
+    color: #AD0000;
+}
+#not-delivered-tab.planner-main-nav-item:hover{
+    border-bottom: 2px solid #AD0000;
+}
+#not-delivered-tab.planner-main-nav-item:hover span{
+    color: #AD0000 ;
+}
+/* } not delivered  */
+
+/* delivering { */
+#delivering-tab.active-tab{
+    border-bottom: 2px solid #FEDA44;
+}
+#delivering-tab.active-tab span{
+    color: #FEDA44;
+}
+#delivering-tab.planner-main-nav-item:hover{
+    border-bottom: 2px solid #FEDA44;
+}
+#delivering-tab.planner-main-nav-item:hover span{
+    color: #FEDA44 ;
+}
+/* } delivering  */
+
+/* dispatch { */
+#dispatch-tab.active-tab{
+    border-bottom: 2px solid #3A89DE;
+}
+#dispatch-tab.active-tab span{
+    color: #3A89DE;
+}
+#dispatch-tab.planner-main-nav-item:hover{
+    border-bottom: 2px solid #3A89DE;
+}
+#dispatch-tab.planner-main-nav-item:hover span{
+    color: #3A89DE ;
+}
+/* } dispatch  */
+
+/* pre dispatch { */
+#pre-dispatch-tab.active-tab{
+    border-bottom: 2px solid #0030B1;
+}
+#pre-dispatch-tab.active-tab span{
+    color: #0030B1;
+}
+#pre-dispatch-tab.planner-main-nav-item:hover{
+    border-bottom: 2px solid #0030B1;
+}
+#pre-dispatch-tab.planner-main-nav-item:hover span{
+    color: #0030B1 ;
+}
+/* } pre dispatch  */
+

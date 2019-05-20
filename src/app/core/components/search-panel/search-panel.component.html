@@ -6,7 +6,7 @@
     <ng-container *ngIf="isCollapsed">
       <!-- easy search input { -->
       <div class="col-lg-2 wide-col">
-        <app-search-box [placeholder]="'Cerca'"></app-search-box>
+        <app-search-box [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
       </div>
       <!-- } easy search input -->
       <!-- easy search field select { -->
@@ -112,26 +112,7 @@
 
     <!-- Pagination area {  -->
     <div class="col-lg-4 offset-lg-4">
-      <div class="d-flex justify-content-end">
-        <!-- Results per page {  -->
-        <div class="d-inline-flex rpg-label"><label class="rpg-label">Risultati per pagina</label></div>
-        <div class="d-inline-flex rpg-select"><ng-select [items]="[20,40,60]" class="integraa-select results-per-page"></ng-select></div>
-        <!-- } Results per page -->
-
-        <!-- Page select { -->
-        <div class="d-inline-flex">
-          <div class="pages-container">
-            <div class="page active-page rounded-circle">1</div>
-            <div class="page rounded-circle">2</div>
-            <div class="page rounded-circle">3</div>
-            <div class="page-sep">..</div>
-            <div class="page rounded-circle">22</div>
-            <div class="page rounded-circle">23</div>
-          </div>
-        </div>
-        <!-- } Page select -->
-      </div>
-
+      <app-pagination></app-pagination>
     </div>
     <!-- } Pagination area  -->
   </div>

@@ -10,6 +10,7 @@ export class SearchBoxComponent implements OnInit {
   constructor() { }
 
   @Input() placeholder : string = 'Search';
+  @Input() style : string = 'normal';
   ngOnInit() {
   }
 

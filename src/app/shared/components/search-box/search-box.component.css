@@ -12,5 +12,11 @@
     padding-left: 40px;
     background-color: #f5f5f5;
     border-radius: 0px;
-    font-size: 14px;
+    font-size: 13px;
+}
+.thin .search-input{
+    height: 30px;
+}
+.thin .search-input-icon{
+    top: 0px;
 }

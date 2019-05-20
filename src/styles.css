@@ -4,6 +4,7 @@
 
 body{
     background-color: #f2f2f2 !important;
+    font-family: 'Roboto', sans-serif;
 }
 
 /*TODO move this to a special file*/
@@ -48,6 +49,27 @@ body{
     width: 100% !important;
 }
 
+
+/*  TODO change this styling system */
+.small-table{
+    flex: 0 0 18%;
+}
+.large-table{
+    flex: 0 0 64%;
+}
+.full-width-table{
+    flex: 0 0 100%;
+}
+.tables-area{
+    margin-top: 7px;
+}
+.medium-table{
+    flex: 0 0 22%
+}
+.v-large-table{
+    flex: 0 0 78%;
+}
+
 /*.integraa-select .dropdown-menu{*/
     /*width: 100% !important;*/
 /*}*/
@@ -57,15 +79,18 @@ body{
 
 /* select2 */
 .integraa-select.ng-select{
-    font-size: 14px;
+    font-size: 13px;
     width: 100%;
 }
-.integraa-select .ng-select-container{
+.integraa-select.ng-select .ng-select-container{
     border: 0px;
     border-bottom: 2px solid #dcdcdc;
     border-radius: 0px;
+    align-items: flex-end;
+    background-color: transparent;
+    height: 30px;
+    min-height: 30px;
 }
-
 
 /* bootstrap */
 .wide-col{
