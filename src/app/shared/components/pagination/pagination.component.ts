@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, ViewChild} from '@angular/core';
+import {PaginationService} from '../../../service/pagination.service';
 
 @Component({
   selector: 'app-pagination',
@@ -7,12 +8,50 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class PaginationComponent implements OnInit {
 
-  @Input() theme : string = 'light' ;
+  @Input() theme = 'light' ;
+  @Input() results_count: number = null ;
+  @Input() loading = true ;
+  rpp = 20 ;
+  pages = 0 ;
+  @Input() current_page = 1;
 
-
-  constructor() { }
+  constructor(private paginationService: PaginationService) { }
 
   ngOnInit() {
+    this.paginationService.resultsCountChanges.subscribe((results: number) => {
+      this.results_count = results ;
+      this.updatePages();
+    });
+    this.paginationService.loadingStateChanges.subscribe((state: boolean) => {
+      this.loading = state ;
+    });
   }
 
+  rppChanged(event) {
+    this.paginationService.updateRpp(event);
+    this.rpp = event ;
+    this.updatePages() ;
+  }
+
+  updatePages() {
+      this.pages = Math.ceil(this.results_count / this.rpp);
+      console.log(this.pages);
+  }
+
+  changePage(page) {
+    this.current_page = page ;
+    this.paginationService.updateCurrentPage(page);
+  }
+
+  range(start, end, max, min) {
+    const range = [] ;
+    for (let i = start ; i < end && i <= max ; ++i ) {
+      if ( i > min) {
+          range.push(i);
+      } else {
+        end++;
+      }
+    }
+    return range ;
+  }
 }

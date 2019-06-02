@@ -1,19 +1,30 @@
-<div class="d-flex justify-content-end" [ngClass]="{'dark-theme':theme=='dark'}">
-  <!-- Results per page {  -->
-  <div class="d-inline-flex rpg-label"><label class="rpg-label">Risultati per pagina</label></div>
-  <div class="d-inline-flex rpg-select"><ng-select [items]="[20,40,60]" class="integraa-select results-per-page"></ng-select></div>
-  <!-- } Results per page -->
+<div class="d-flex justify-content-end" [ngClass]="{'dark-theme':theme=='dark'}" *ngIf="!loading;else skeleton">
+  <div *ngIf="!hide">
+    <!-- Results per page {  -->
+    <div class="d-inline-flex rpg-label"><label class="rpg-label">Risultati per pagina</label></div>
+    <div class="d-inline-flex rpg-select"><ng-select [clearable]="false" (change)="rppChanged($event)" [items]="[20,40,60]" class="integraa-select results-per-page"></ng-select></div>
+    <!-- } Results per page -->
 
-  <!-- Page select { -->
-  <div class="d-inline-flex">
-    <div class="pages-container">
-      <div class="page active-page rounded-circle">1</div>
-      <div class="page rounded-circle">2</div>
-      <div class="page rounded-circle">3</div>
-      <div class="page-sep">..</div>
-      <div class="page rounded-circle">22</div>
-      <div class="page rounded-circle">23</div>
+    <!-- Page select { -->
+    <div class="d-inline-flex">
+      <div class="pages-container">
+        <ng-container *ngIf="pages - current_page <= 3">
+          <div class="page rounded-circle" (click)="changePage(i)" *ngFor="let i of range(current_page-1, current_page+2, pages, 0)" [ngClass]="{'active-page':i==current_page}">{{ i }}</div>
+        </ng-container>
+        <ng-container *ngIf="pages - current_page > 3">
+          <div class="page rounded-circle" (click)="changePage(i)" *ngFor="let i of range(current_page-1, current_page+2, pages, 0)" [ngClass]="{'active-page':(i)==current_page}">{{ i }}</div>
+          <div class="page-sep">..</div>
+          <div class="page rounded-circle" (click)="changePage(i)" *ngFor="let i of range(pages-2, pages+1, pages, pages-2)" [ngClass]="{'active-page':(i)==current_page}">{{ i}}</div>
+        </ng-container>
+      </div>
     </div>
+    <!-- } Page select -->
   </div>
-  <!-- } Page select -->
 </div>
+
+
+<ng-template #skeleton>
+  <div class="d-flex justify-content-end">
+    <div class="rect-loading-skeleton mt-1 pagination-loading"></div>
+  </div>
+</ng-template>

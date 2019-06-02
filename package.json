@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -25,11 +25,13 @@
     "@fortawesome/free-regular-svg-icons": "^5.8.1",
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@ng-bootstrap/ng-bootstrap": "^3",
-    "ajv": "^6.10.0",
     "@ng-select/ng-select": "^2.15.1",
+    "@ngx-loading-bar/http-client": "^2.2.0",
+    "ajv": "^6.10.0",
     "bootstrap": "^4.3.1",
     "core-js": "^2.5.4",
     "jquery": "^3.4.0",
+    "ngx-infinite-scroll": "6.0.0",
     "popper.js": "^1.15.0",
     "rxjs": "6.0.0",
     "zone.js": "~0.8.29"

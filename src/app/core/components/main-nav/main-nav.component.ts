@@ -9,7 +9,7 @@ export class MainNavComponent implements OnInit {
 
   constructor() { }
 
-  @Input() active_tab : string = 'to-deliver';
+  @Input() active_tab = 'to-deliver';
 
   ngOnInit() {
   }

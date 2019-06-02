@@ -1,0 +1,11 @@
+<div class="d-flex tables-area full-width">
+  <div class="small-table v-wide-col">
+    <app-simple-table #CitiesTable [table]="citiesTable" (selected)="cityChanged($event)" [getMethod]="citiesGetMethod"></app-simple-table>
+  </div>
+  <div class="small-table v-wide-col">
+    <app-simple-table #StreetsTable [table]="streetsTable" (selected)="streetChanged($event)" [getMethod]="streetsGetMethod"></app-simple-table>
+  </div>
+  <div class="large-table v-wide-col">
+    <app-table #ProductsTable [getMethod]="productsGetMethod" [table]="productsTable"></app-table>
+  </div>
+</div>

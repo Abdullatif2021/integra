@@ -1,0 +1,7 @@
+{
+  "/api":{
+    "target": "http://apiplannerintegraa.storexweb.com",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

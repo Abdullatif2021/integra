@@ -18,10 +18,16 @@
     border: 1px solid #000;
     margin: 0px 3px;
     display: inline-block;
-    font-size: 12px;
+    font-size: 11px;
     text-align: center;
-    padding: 1px;
+    padding: 2px;
     min-width: 22px;
+    cursor: pointer;
+}
+.page:hover{
+    background-color: #fcda4b;
+    border: 1px solid #fcda4b;
+    color: black;
 }
 .page-sep{
     display: inline-block;
@@ -45,4 +51,9 @@
 .dark-theme .page{
     color: #fff;
     border: 1px solid #fff;
+}
+
+.pagination-loading{
+    width: 380px;
+    height: 25px;
 }
