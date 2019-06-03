@@ -38,9 +38,13 @@ export const TablesConfig = {
                 {title: 'ATTO', field : 'act_code'},
                 {title: ['PRODOTTO', 'DISTINTA'], field: ['product_category', 'dispatch_code'], separator: true, value_separator: 'dashed'},
                 {title: 'STATO', field: 'product_status'},
-                {title: ['DATA/ORA', 'Q.TA', 'TENTATIVI'], field: ['date', 'count', 'attempt'], separator: false, value_separator: 'dashed',
+                {title: ['DATA/ORA', 'Q.TA', 'TENTATIVI'], field: [
+                        'date',
+                        (elm: ProductInterface) => (elm.count === "") || !elm.count ? '1' : elm.count,
+                        'attempt'
+                    ], separator: false, value_separator: 'dashed',
                     classes: {
-                        'count': 'text-center d-block',
+                        '1': 'text-center d-block',
                         'attempt': 'text-center d-block'
                     }},
                 {title: ['CLIENTE', 'MITTENTE', 'DESTINARIO'], field: [

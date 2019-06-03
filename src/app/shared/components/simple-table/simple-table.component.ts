@@ -39,7 +39,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     if (typeof this.getMethod !== 'function') { return ; }
     this.loading = true ;
 
-    if (!append) { this.items = [] ; this._selected = null ; this.selected.emit(null); }
+    if (!append) { this.items = [] ; }
     if ( this.subscription ) {
         this.subscription.unsubscribe();
     }
@@ -53,10 +53,11 @@ export class SimpleTableComponent implements OnInit, OnChanges {
           this.loading = false ;
         }
     });
+    return this ;
   }
 
   loadMore() {
-    if (this.rpp * this.page < this.pagination.tolal && this.loaded) {
+    if (this.rpp * this.page < this.pagination.total && this.loaded) {
       this.page++ ;
       this.loadData(true) ;
     }
@@ -73,4 +74,10 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this._selected = item ;
   }
 
+  reset() {
+    if (this.selected !== null) {
+        this.selected.emit(null);
+    }
+    this._selected = null ;
+  }
 }

@@ -9,8 +9,8 @@ export class PaginationService {
   loadingStateChanges = new EventEmitter<boolean>() ;
   rppValueChanges = new EventEmitter<number>() ;
   currentPageChanges = new EventEmitter<number>() ;
-  currentPage = 1 ;
-  rpp = 20 ;
+  current_page: any = 1 ;
+  rpp: any = 20 ;
   constructor() { }
 
 
@@ -23,13 +23,13 @@ export class PaginationService {
   }
 
   updateRpp(rpp: number) {
-    this.rppValueChanges.emit(rpp);
-    this.rpp = rpp ;
+      this.rpp = rpp ;
+      this.rppValueChanges.emit(rpp);
   }
 
   updateCurrentPage(page: number) {
-    this.currentPageChanges.emit(page);
-    this.currentPage = page ;
+      this.current_page = page ;
+      this.currentPageChanges.emit(page);
   }
 
 }

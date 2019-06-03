@@ -2,7 +2,7 @@
   <div *ngIf="!hide">
     <!-- Results per page {  -->
     <div class="d-inline-flex rpg-label"><label class="rpg-label">Risultati per pagina</label></div>
-    <div class="d-inline-flex rpg-select"><ng-select [clearable]="false" (change)="rppChanged($event)" [items]="[20,40,60]" class="integraa-select results-per-page"></ng-select></div>
+    <div class="d-inline-flex rpg-select"><ng-select placeholder="20" bindLabel="key" [clearable]="false" (change)="rppChanged($event)" [items]="pages_list" class="integraa-select results-per-page"></ng-select></div>
     <!-- } Results per page -->
 
     <!-- Page select { -->

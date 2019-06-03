@@ -4,18 +4,27 @@ import {ApiResponseInterface} from '../core/models/api-response.interface';
 import {catchError} from 'rxjs/operators';
 import {AppConfig} from '../config/app.config';
 import {throwError} from 'rxjs';
+import {FiltersService} from './filters.service';
+import {PaginationService} from './pagination.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+      private http: HttpClient,
+      private filtersService: FiltersService,
+      private paginationService: PaginationService
+  ) { }
 
-  getToDeliverProducts(page, rpp, city, street) {
-      const options = { params: new HttpParams().set('page', page).set('pageSize', rpp)};
+  getToDeliverProducts(city, street) {
+      const options = { params: new HttpParams()
+              .set('page', this.paginationService.current_page)
+              .set('pageSize', this.paginationService.rpp)};
       if (city) { options.params = options.params.set('cityId', city); }
       if (street) { options.params = options.params.set('streetId', street); }
+      options.params = this.filtersService.getHttpParams(options.params) ;
       return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getProducts, options).pipe(
           catchError(this.handleError)
       );

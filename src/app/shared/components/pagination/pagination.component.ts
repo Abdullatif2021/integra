@@ -14,6 +14,12 @@ export class PaginationComponent implements OnInit {
   rpp = 20 ;
   pages = 0 ;
   @Input() current_page = 1;
+  pages_list  = [
+      {key: 20, value: 20},
+      {key: 40, value: 40},
+      {key: 60, value: 60},
+      {key: 80, value: 80},
+  ]
 
   constructor(private paginationService: PaginationService) { }
 
@@ -28,14 +34,15 @@ export class PaginationComponent implements OnInit {
   }
 
   rppChanged(event) {
-    this.paginationService.updateRpp(event);
-    this.rpp = event ;
+    console.log(event.value);
+    this.paginationService.updateRpp(event.value);
+    this.rpp = event.value ;
     this.updatePages() ;
   }
 
   updatePages() {
       this.pages = Math.ceil(this.results_count / this.rpp);
-      console.log(this.pages);
+      console.log(this.results_count , this.rpp);
   }
 
   changePage(page) {

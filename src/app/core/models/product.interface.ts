@@ -6,7 +6,7 @@ export interface ProductInterface {
     acceptance_date: string ;
     dispatch_code: string ;
     attempt: number ;
-    count: number ;
+    count: string ;
     note: string ;
     article_law_name: string ;
     article_law_date: string ;

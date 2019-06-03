@@ -6,6 +6,6 @@
     <app-simple-table #StreetsTable [table]="streetsTable" (selected)="streetChanged($event)" [getMethod]="streetsGetMethod"></app-simple-table>
   </div>
   <div class="large-table v-wide-col">
-    <app-table #ProductsTable [getMethod]="productsGetMethod" [table]="productsTable"></app-table>
+    <app-table #ProductsTable [items]="products" [table]="productsTable"></app-table>
   </div>
 </div>

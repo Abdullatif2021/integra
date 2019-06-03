@@ -1,6 +1,4 @@
-import {Component, OnInit, Input, Output, ViewChild, ChangeDetectorRef, AfterViewChecked, EventEmitter} from '@angular/core';
-import {ApiResponseInterface} from '../../../core/models/api-response.interface';
-import {PaginationService} from '../../../service/pagination.service';
+import {Component, OnInit, Input, ViewChild, ChangeDetectorRef, AfterViewChecked, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'app-table',
@@ -9,62 +7,20 @@ import {PaginationService} from '../../../service/pagination.service';
 })
 export class TableComponent implements OnInit, AfterViewChecked {
 
-    constructor(
-        private cdr: ChangeDetectorRef,
-        private paginationService: PaginationService
-    ) { }
+    constructor(private cdr: ChangeDetectorRef) { }
 
     cells_size = [] ;
     @ViewChild('tableRow') tableRowElement;
     @Input() table: object = {} ;
     @Input() items: any = [] ;
-    @Input() page = 1 ;
-    @Input() rpp = 25 ;
-    @Input() getMethod ;
-
-    pagination: any = { total: 0, totalProduct: 0 };
-    loaded = false ;
-    loading = true ;
-    subscription: any = false ;
+    isLoading = true ;
 
     ngOnInit() {
-        // TODO change this thing location to the actual page, don't forget the loading data event emitting, use output instead
-        this.loadData(false);
-        this.paginationService.rppValueChanges.subscribe((rpp: number) => {
-            this.rpp = rpp ;
-            this.loadData(false) ;
-        });
-        this.paginationService.currentPageChanges.subscribe( (page: number) => {
-            this.page = page ;
-            this.loadData(false) ;
-        });
-        this.page = this.paginationService.currentPage ;
-        this.rpp = this.paginationService.rpp ;
     }
 
-    loadData(append) {
-        if (typeof this.getMethod !== 'function') { return ; }
-        // this.paginationService.updateLoadingState(true);
-        if (!append) {
-            this.items = [] ;
-        }
-
-        this.loading = true ;
-        if ( this.subscription ) {
-            this.subscription.unsubscribe();
-        }
-        this.subscription = this.getMethod(this.page, this.rpp).subscribe((res: ApiResponseInterface) => {
-            if (res.status === 'success') {
-                if (append) {
-                    this.items = this.items.concat(res.data);
-                } else { this.items = res.data ; }
-                this.pagination = res.pagination ;
-                this.paginationService.updateLoadingState(false);
-                this.paginationService.updateResultsCount(this.pagination.tolal);
-                this.loaded = true ;
-                this.loading = false ;
-            }
-        });
+    loading(state) {
+        this.isLoading = state ;
+        console.log(state);
     }
 
     typeof(variable) {

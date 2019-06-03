@@ -4,6 +4,9 @@ import { TablesConfig } from '../../../../config/tables.config';
 import {StreetsService} from '../../../../service/streets.service';
 import {ProductsService} from '../../../../service/products.service';
 import {PaginationService} from '../../../../service/pagination.service';
+import {ApiResponseInterface} from '../../../../core/models/api-response.interface';
+import {FiltersService} from '../../../../service/filters.service';
+import {TableComponent} from '../../../../shared/components/table/table.component';
 
 @Component({
   selector: 'app-to-deliver',
@@ -16,23 +19,26 @@ export class ToDeliverComponent implements OnInit {
       private citiesService: CitiesService,
       private streetsService: StreetsService,
       private productsService: ProductsService,
-      private paginationService: PaginationService
-  ) { }
+      private paginationService: PaginationService,
+      private filtersService: FiltersService
+  ) {
+      this.paginationService.updateResultsCount(null) ;
+      this.paginationService.updateLoadingState(true) ;
+  }
 
   productsTable = TablesConfig.table.productsTable ;
   citiesTable = TablesConfig.simpleTable.citiesTable ;
   streetsTable = TablesConfig.simpleTable.streetsTable ;
-
+  products: any ;
   @ViewChild('CitiesTable') _citiesTable ;
   @ViewChild('StreetsTable') _streetsTable ;
-  @ViewChild('ProductsTable') _productsTable ;
-
+  @ViewChild('ProductsTable') _productsTable: TableComponent ;
+  subscription: any = false ;
   current_city: number = null ;
   current_street: number = null ;
 
   citiesGetMethod = (page, rpp, name) => this.citiesService.getCities(page, rpp, name);
   streetsGetMethod = (page, rpp, name) => this.streetsService.getStreets(page, rpp, name, this.current_city)
-  productsGetMethod = (page, rpp) => this.productsService.getToDeliverProducts(page, rpp, this.current_city, this.current_street);
 
   cityChanged(event) {
     if (event === null) {
@@ -40,8 +46,8 @@ export class ToDeliverComponent implements OnInit {
     } else {
       this.current_city = event.id ;
     }
-    this._streetsTable.loadData(false);
-    this._productsTable.loadData(false);
+    this._streetsTable.loadData(false).reset();
+    this.loadProducts();
   }
 
   streetChanged(event) {
@@ -50,12 +56,35 @@ export class ToDeliverComponent implements OnInit {
       } else {
           this.current_street = event.id ;
       }
-      this._productsTable.loadData(false);
+      this.loadProducts();
   }
 
   ngOnInit() {
-      this.paginationService.updateResultsCount(null) ;
-      this.paginationService.updateLoadingState(true) ;
+      this.loadProducts();
+      this.paginationService.rppValueChanges.subscribe((rpp: number) => {
+          this.loadProducts() ;
+      });
+      this.paginationService.currentPageChanges.subscribe( (page: number) => {
+          this.loadProducts() ;
+      });
+      this.filtersService.filtersChanges.subscribe((filters) => {
+          this.loadProducts() ;
+      });
+  }
+
+  loadProducts() {
+      if ( this.subscription ) { this.subscription.unsubscribe(); }
+      this.products = [];
+      this._productsTable.loading(true);
+      this.subscription = this.productsService.getToDeliverProducts(
+          this.current_city,
+          this.current_street,
+      ).subscribe((res: ApiResponseInterface) => {
+          this.paginationService.updateLoadingState(false);
+          this.paginationService.updateResultsCount(res.pagination.total);
+          this.products = res.data ;
+          this._productsTable.loading(false);
+      });
   }
 
 }

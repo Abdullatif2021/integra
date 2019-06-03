@@ -5,18 +5,30 @@
     <!-- easy search {  -->
     <ng-container *ngIf="isCollapsed">
       <!-- easy search input { -->
-      <div class="col-lg-2 wide-col">
-        <app-search-box [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
+      <div class="col-lg-2 wide-col" >
+        <app-search-box *ngIf="!_search" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
+        <ng-container *ngFor="let field of searchFields">
+          <ng-container *ngIf="field.type === 'text'">
+            <app-search-box (changed)="changeSearchValue($event, field.type)" *ngIf="_search && _search.key == field.key" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
+          </ng-container>
+          <ng-container *ngIf="field.type === 'ng-select' && _search && _search.key == field.key">
+            <ng-select [clearable]="false" [typeahead]="typeahead" (change)="changeSearchValue($event, field.type)" *ngIf="field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
+            <ng-select [clearable]="false" (change)="changeSearchValue($event, field.type)" *ngIf="!field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
+          </ng-container>
+          <ng-container *ngIf="field.type === 'date'">
+            <input (change)="changeSearchValue($event, field.type)" *ngIf="_search && _search.key == field.key" #searchDateInput type="date" class="date-select">
+          </ng-container>
+        </ng-container>
       </div>
       <!-- } easy search input -->
       <!-- easy search field select { -->
       <div class="col-lg-2 wide-col">
-        <ng-select [items]="" class="integraa-select" placeholder="Nel Campo"></ng-select>
+        <ng-select (change)="searchFieldChanged($event)" [items]="searchFields" class="integraa-select" placeholder="Nel Campo"></ng-select>
       </div>
       <!-- } easy search field select  -->
       <!-- easy search submit { -->
       <div class="col-lg-3">
-        <button type="button" class="integraa-btn">Cerca</button>
+        <button type="button" (click)="search()" class="integraa-btn">Cerca</button>
       </div>
       <!-- } easy search submit -->
     </ng-container>
@@ -40,7 +52,7 @@
     <div class="expanded-search-container container-fluid">
       <!-- expanded search inputs {  -->
       <div class="search-inputs-container row">
-        <ng-container *ngFor="let input of searchFields">
+        <ng-container *ngFor="let input of filtersFields">
           <!-- If input is simple  -->
           <ng-container *ngIf="!input.group; else groupInut">
             <div class="search-input col-2 wide-col">
