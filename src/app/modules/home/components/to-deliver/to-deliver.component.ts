@@ -47,7 +47,7 @@ export class ToDeliverComponent implements OnInit {
       this.current_city = event.id ;
     }
     this._streetsTable.loadData(false).reset();
-    this.loadProducts();
+    this.loadProducts(true);
   }
 
   streetChanged(event) {
@@ -56,26 +56,30 @@ export class ToDeliverComponent implements OnInit {
       } else {
           this.current_street = event.id ;
       }
-      this.loadProducts();
+      this.loadProducts(true);
   }
 
   ngOnInit() {
-      this.loadProducts();
+      this.loadProducts(false);
       this.paginationService.rppValueChanges.subscribe((rpp: number) => {
-          this.loadProducts() ;
+          this.loadProducts(false) ;
       });
       this.paginationService.currentPageChanges.subscribe( (page: number) => {
-          this.loadProducts() ;
+          this.loadProducts(false) ;
       });
       this.filtersService.filtersChanges.subscribe((filters) => {
-          this.loadProducts() ;
+          this.loadProducts(true) ;
       });
   }
 
-  loadProducts() {
+  loadProducts(reset: boolean) {
       if ( this.subscription ) { this.subscription.unsubscribe(); }
       this.products = [];
       this._productsTable.loading(true);
+      if (reset) {
+          this.paginationService.updateCurrentPage(1);
+          this.paginationService.updateLoadingState(true);
+      }
       this.subscription = this.productsService.getToDeliverProducts(
           this.current_city,
           this.current_street,

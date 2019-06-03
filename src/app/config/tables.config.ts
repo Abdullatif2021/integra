@@ -40,7 +40,7 @@ export const TablesConfig = {
                 {title: 'STATO', field: 'product_status'},
                 {title: ['DATA/ORA', 'Q.TA', 'TENTATIVI'], field: [
                         'date',
-                        (elm: ProductInterface) => (elm.count === "") || !elm.count ? '1' : elm.count,
+                        (elm: ProductInterface) => (elm.count === '') || !elm.count ? '1' : elm.count,
                         'attempt'
                     ], separator: false, value_separator: 'dashed',
                     classes: {

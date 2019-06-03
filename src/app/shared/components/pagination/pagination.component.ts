@@ -31,6 +31,9 @@ export class PaginationComponent implements OnInit {
     this.paginationService.loadingStateChanges.subscribe((state: boolean) => {
       this.loading = state ;
     });
+    this.paginationService.currentPageChanges.subscribe((page: number) => {
+      this.current_page = page ;
+    });
   }
 
   rppChanged(event) {
