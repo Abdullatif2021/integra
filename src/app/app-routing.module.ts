@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {HomeComponent} from './modules/home/home.component';
-import { routes as home_routes } from './modules/home/home-routing.module';
 
 const routes: Routes = [
-    {path: '', component: HomeComponent, children: home_routes}
+    {path: '', loadChildren: './modules/home/home.module#HomeModule'},
+    {path: 'settings', loadChildren: './modules/settings/settings.module#SettingsModule'},
     // {path: '404', component: E404Component},
     // {path: '**', redirectTo: '/404'}
 

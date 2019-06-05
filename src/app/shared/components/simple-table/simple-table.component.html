@@ -4,11 +4,11 @@
     <app-search-box [placeholder]="table.searchPlaceHolder" (changed)="search($event)" ></app-search-box>
   </div>
   <div class="table-body" infiniteScroll (scrolled)="loadMore()" [scrollWindow]="false">
-    <div class="item odd-bg flipInX animated" *ngIf="items" (click)="selectItem(null)" [ngClass]="{'active-item':_selected==null}">
+    <div class="item odd-bg flipInX animated" *ngIf="items && !table.custom" (click)="selectItem(null)" [ngClass]="{'active-item':_selected==null}">
       <ng-container [ngTemplateOutlet]="item_body" [ngTemplateOutletContext]="{item:{name:'ALL',count:pagination.totalProduct},table:table}"></ng-container>
     </div>
     <ng-container *ngFor="let item of items; let idx = index">
-      <div class="item flipInX animated" (click)="selectItem(item)" [ngClass]="{'odd-bg':(idx%2),'even-bg':!(idx%2),'active-item':_selected && _selected.id==item.id}">
+      <div class="item flipInX animated" (click)="selectItem(item)" [ngClass]="{'odd-bg':(idx%2),'even-bg':!(idx%2),'active-item':_selected && _selected.id == item.id}">
         <ng-container [ngTemplateOutlet]="item_body" [ngTemplateOutletContext]="{item:item,table:table}"></ng-container>
       </div>
     </ng-container>
@@ -16,11 +16,10 @@
   </div>
 </div>
 
-
 <ng-template #item_body let-item="item" let-table="table">
-  <div class="select-row float-left"><div class="select-row-input rounded-circle"></div></div>
-  <div class="item-icon float-left ml-2"><img class="item-icon-img" src="{{table.icon}}"></div>
-  <div class="item-name ml-2 mt-1 float-left">{{item.name}}</div>
+  <div *ngIf="!table.custom" class="select-row float-left"><div class="select-row-input rounded-circle"></div></div>
+  <div *ngIf="table.icon" class="item-icon float-left ml-2"><img class="item-icon-img" src="{{table.icon}}"></div>
+  <div class="item-name ml-2 mt-1 float-left" [ngClass]="{'full-width': table.custom}">{{item.name}}</div>
   <div class="item-qt float-right mt-1" *ngIf="item.count !== undefined">Q.t: {{item.count+''}}</div>
   <div class="clear-both"></div>
 </ng-template>

@@ -30,8 +30,12 @@ body{
     font-weight: 600;
     min-width: 75px;
     margin-top: 5px;
+    text-align: center;
 }
-
+.integraa-btn-dark{
+    background-color: #212121 !important;
+    color: #fff !important;
+}
 .page-container{
     padding: 0px 30px !important;
     margin: auto;
@@ -111,5 +115,9 @@ body{
 }
 .v-wide-col{
     padding: 0px 3px !important;
+}
+.col-3-half{
+    flex: 0 0 29.1%;
+    max-width: 29.1%;
 }
 

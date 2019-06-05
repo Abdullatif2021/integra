@@ -28,7 +28,8 @@ import { HomeRoutingModule } from './home-routing.module';
       HomeComponent,
   ],
   exports: [
-      HomeComponent
+      HomeComponent,
+      HomeRoutingModule
   ],
   bootstrap: [HomeComponent]
 })

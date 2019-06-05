@@ -1,0 +1,12 @@
+<app-user-nav></app-user-nav>
+<div class="d-flex tables-area full-width">
+    <div class="small-table v-wide-col">
+        <app-simple-table [table]="settingsTable" [_selected]="activeSetting" [items]="settings" (changed)="updateActiveTab($event)" ></app-simple-table>
+    </div>
+    <div class="small-table v-wide-col">
+        <app-simple-table [table]="subSettingsTable" [_selected]="activeSubSetting" [items]="subSettings[activeSetting.id]" (changed)="routeTo($event)"></app-simple-table>
+    </div>
+    <div class="large-table v-wide-col">
+        <router-outlet></router-outlet>
+    </div>
+</div>

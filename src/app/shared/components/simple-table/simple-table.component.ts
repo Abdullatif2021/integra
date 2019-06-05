@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnChanges} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
 
 @Component({
@@ -10,15 +10,18 @@ export class SimpleTableComponent implements OnInit, OnChanges {
 
   constructor() { }
 
-  @Input() table: object = {
+  @Input() table: any = {
     title: '',
     icon: '',
-    searchPlaceHolder: ''
+    searchPlaceHolder: '',
+    custom: false,
+    searchMethod: false,
   } ;
   @Input() items ;
+  _items: any ;
   @Input() getMethod ;
-  @Output() selected = new EventEmitter<object>() ;
-  _selected: string = null ;
+  @Output() changed = new EventEmitter<object>() ;
+  @Input() _selected: string = null ;
   page = 1 ;
   rpp = 25 ;
   searchValue: string = null ;
@@ -31,12 +34,18 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this.loadData(false);
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     this.loadData(false);
+    if (changes.items) {
+      this._items = this.items ;
+    }
   }
 
   loadData(append) {
-    if (typeof this.getMethod !== 'function') { return ; }
+    if (typeof this.getMethod !== 'function') {
+      if (this.items) { this.loading = false ; }
+      return false ;
+    }
     this.loading = true ;
 
     if (!append) { this.items = [] ; }
@@ -66,17 +75,21 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   search(event) {
     this.searchValue = event ;
     this.page = 1 ;
+    if (this.table.searchMethod && typeof this.table.searchMethod) {
+      return this.items = this.table.searchMethod(this._items, event) ;
+    }
     this.loadData(false) ;
   }
 
   selectItem(item) {
-    this.selected.emit(item) ;
+    console.log(item);
+    this.changed.emit(item) ;
     this._selected = item ;
   }
 
   reset() {
-    if (this.selected !== null) {
-        this.selected.emit(null);
+    if (this.changed !== null) {
+        this.changed.emit(null);
     }
     this._selected = null ;
   }
