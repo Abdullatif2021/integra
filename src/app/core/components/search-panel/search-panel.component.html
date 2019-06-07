@@ -11,8 +11,11 @@
           <ng-container *ngIf="field.type === 'text'">
             <app-search-box (changed)="changeSearchValue($event, field.type)" *ngIf="_search && _search.key == field.key" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
           </ng-container>
+          <ng-container *ngIf="field.type === 'number'">
+            <input type="number" class="search-number-input" *ngIf="_search && _search.key == field.key" (change)="changeSearchValue($event, field.type)" [placeholder]="'Cerca'">
+          </ng-container>
           <ng-container *ngIf="field.type === 'ng-select' && _search && _search.key == field.key">
-            <ng-select [clearable]="false" [typeahead]="typeahead" (change)="changeSearchValue($event, field.type)" *ngIf="field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
+            <ng-select [clearable]="false" [loading]="search_loading" [typeahead]="search_typeahead" (change)="changeSearchValue($event, field.type)" *ngIf="field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
             <ng-select [clearable]="false" (change)="changeSearchValue($event, field.type)" *ngIf="!field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
           </ng-container>
           <ng-container *ngIf="field.type === 'date'">
@@ -52,25 +55,41 @@
     <div class="expanded-search-container container-fluid">
       <!-- expanded search inputs {  -->
       <div class="search-inputs-container row">
-        <ng-container *ngFor="let input of filtersFields">
+        <ng-container *ngFor="let input of filtersFields; let idx = index">
           <!-- If input is simple  -->
-          <ng-container *ngIf="!input.group; else groupInut">
+          <ng-container *ngIf="!input.group; else groupInput">
             <div class="search-input col-2 wide-col">
               <label>{{input.label}}</label>
-              <input class="form-control" type="{{input.type}}">
+              <ng-container *ngIf="input.type === 'text'">
+                <app-search-box [ngClass]="{'active-filter':isActive(input.key)}" (changed)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
+              </ng-container>
+              <ng-container *ngIf="input.type === 'simpleText'">
+                <input [ngClass]="{'active-filter':isActive(input.key)}" class="form-control" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
+              </ng-container>
+              <ng-container *ngIf="input.type === 'number'">
+                <input type="number" [ngClass]="{'active-filter':isActive(input.key)}" class="form-control" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
+              </ng-container>
+              <ng-container *ngIf="input.type === 'ng-select'">
+                <ng-select [ngClass]="{'active-filter':isActive(input.key)}" [loading]="input.loading" (search)="filtersGetData($event,idx)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+                <ng-select [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+              </ng-container>
+              <ng-container *ngIf="input.type === 'date'">
+                <input [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" type="date" class="date-select">
+              </ng-container>
             </div>
           </ng-container>
 
           <!-- If input is group -->
-          <ng-template #groupInut>
+          <ng-template #groupInput>
             <div class="search-input-group col-2" *ngIf="input.group">
               <div class="row">
                 <div class="col-12 wide-col">
                   <label>{{input.label}}</label>
                 </div>
-                <ng-container *ngFor="let subInputType of input.type; first as isFirst">
-                  <div class="search-input col wide-col" [ngClass]="{'pl-1':!isFirst}">
-                    <input class="form-control" type="{{subInputType}}">
+                <ng-container *ngFor="let subInputType of input.type; let idx = index ,first as isFirst">
+                  <!-- TODO handle all types -->
+                  <div class="search-input col-6 wide-col" [ngClass]="{'pl-1':!isFirst}">
+                    <input [ngClass]="{'active-filter':isActive(input.key[idx])}" (change)="changeFiltersValue($event, input.key[idx], subInputType, idx)" type="date" class="form-control date-select">
                   </div>
                 </ng-container>
               </div>
@@ -83,22 +102,23 @@
 
       <!-- expanded search buttons { -->
       <div class="row mt-2">
-        <button class="integraa-btn">Clear</button>
-        <button class="integraa-btn ml-2">Search</button>
+        <button class="integraa-btn" (click)="clearFilters()">Clear</button>
+        <button class="integraa-btn ml-2" (click)="filter()">Search</button>
       </div>
       <!-- } expanded search buttons -->
 
       <!-- Cap statistics/filters { -->
-      <div class="cap-statistics-container row mt-4 justify-content-center d-flex">
-        <ng-container *ngFor="let cap of caps; let idx = index">
-          <div class="cap-box ml-1">
-            <div class="cap-box-content">
-              <div class="cap-box-head">{{cap.cap}}</div>
-
-              <div class="cap-box-body" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2)}">{{cap.val}}</div>
+      <div *ngIf="filters_data && filters_data.caps_group" class="cap-statistics-container row mt-4 justify-content-center d-flex">
+        <div class="caps-inner-container">
+          <ng-container *ngFor="let cap of filters_data.caps_group; let idx = index">
+            <div class="cap-box ml-1" [ngClass]="{'active-cap': active_cap == cap}" (click)="filterCap(cap)">
+              <div class="cap-box-content">
+                <div class="cap-box-head">{{cap.name}}</div>
+                <div class="cap-box-body" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2)}">{{cap.count}}</div>
+              </div>
             </div>
-          </div>
-        </ng-container>
+          </ng-container>
+        </div>
       </div>
       <!-- } Cap statistics/filters -->
 

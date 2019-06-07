@@ -77,6 +77,7 @@ export class ToDeliverComponent implements OnInit {
       this.products = [];
       this._productsTable.loading(true);
       if (reset) {
+          // TODO fix tow times products loading caused by page change
           this.paginationService.updateCurrentPage(1);
           this.paginationService.updateLoadingState(true);
       }
