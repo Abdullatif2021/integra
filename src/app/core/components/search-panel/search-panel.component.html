@@ -15,7 +15,7 @@
             <input type="number" class="search-number-input" *ngIf="_search && _search.key == field.key" (change)="changeSearchValue($event, field.type)" [placeholder]="'Cerca'">
           </ng-container>
           <ng-container *ngIf="field.type === 'ng-select' && _search && _search.key == field.key">
-            <ng-select [clearable]="false" [loading]="search_loading" [typeahead]="search_typeahead" (change)="changeSearchValue($event, field.type)" *ngIf="field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
+            <ng-select [clearable]="false" [loading]="_search.loading" (search)="getFieldRemoteData($event,_search)" (change)="changeSearchValue($event, field.type)" *ngIf="field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
             <ng-select [clearable]="false" (change)="changeSearchValue($event, field.type)" *ngIf="!field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
           </ng-container>
           <ng-container *ngIf="field.type === 'date'">
@@ -70,7 +70,7 @@
                 <input type="number" [ngClass]="{'active-filter':isActive(input.key)}" class="form-control" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
               </ng-container>
               <ng-container *ngIf="input.type === 'ng-select'">
-                <ng-select [ngClass]="{'active-filter':isActive(input.key)}" [loading]="input.loading" (search)="filtersGetData($event,idx)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+                <ng-select [ngClass]="{'active-filter':isActive(input.key)}" [loading]="input.loading" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
                 <ng-select [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
               </ng-container>
               <ng-container *ngIf="input.type === 'date'">

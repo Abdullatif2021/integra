@@ -1,7 +1,6 @@
-import {Component, ElementRef, EventEmitter, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FiltersService} from '../../../service/filters.service';
 import {ApiResponseInterface} from '../../models/api-response.interface';
-import {debounceTime, switchMap} from 'rxjs/internal/operators';
 import {RecipientsService} from '../../../service/recipients.service';
 
 @Component({
@@ -10,25 +9,12 @@ import {RecipientsService} from '../../../service/recipients.service';
   styleUrls: ['./search-panel.component.css']
 })
 
-
-
-
 export class SearchPanelComponent implements OnInit {
 
   constructor(
       private filtersService: FiltersService,
       private recipientsService: RecipientsService
-  ) {
-      this.search_typeahead.pipe(
-            debounceTime(200),
-            switchMap(term => this.getSearchSelectData(term))
-          ).subscribe((res: ApiResponseInterface) => {
-            if (res.status === 'success') {
-                this._search.items  = res.data ;
-            }
-            this.search_loading = false ;
-          });
-  }
+  ) {}
 
   isCollapsed = true ;
   _search: any ;
@@ -38,28 +24,14 @@ export class SearchPanelComponent implements OnInit {
   filtersFields: object ;
   searchFields: object ;
   search_value: string;
-  search_typeahead = new EventEmitter<string>();
-  search_loading = false ;
   active_cap = null ;
-  filtersGetData(event, idx) {
-      if (typeof this.filtersFields[idx].getMethod === 'function') {
-          this.filtersFields[idx].loading = true ;
-          this.filtersFields[idx].getMethod(event.term).subscribe((res: ApiResponseInterface) => {
-              if (res.status === 'success') {
-                  this.filtersFields[idx].items = res.data ;
-                  this.filtersFields[idx].loading = false ;
-              }
-          });
-      }
-  }
-  getSearchSelectData(term) {
-      this.search_loading = true ;
-      if (term && term !== '' && this._search && typeof this._search.getMethod !== 'undefined') {
-          return this._search.getMethod(term) ;
-      }
-      return [{'status': 'failed'}] ;
-  }
+  subscriptions: any = {} ;
 
+  unsubscribeTo(name) {
+      if ( this.subscriptions[name] ) {
+          this.subscriptions[name].unsubscribe() ;
+      }
+  }
 
   ngOnInit() {
       this.filtersService.getFiltersData().subscribe((res: ApiResponseInterface) => {
@@ -82,7 +54,7 @@ export class SearchPanelComponent implements OnInit {
           case 'date': value = event.target.value ; break ;
           case 'simpleText': value = event.target.value ; break ;
           case 'number': value = event.target.value ; break ;
-          case 'ng-select': value = event && event.id ? event.id : null ;
+          case 'ng-select': value = event && event.id ? event.id : ( event && event.name ? event.name : null) ;
       }
       return value ;
   }
@@ -97,6 +69,7 @@ export class SearchPanelComponent implements OnInit {
       } else {
         this.filtersService.updateFilters([]) ;
       }
+      this._active_filters = [] ;
   }
 
   changeFiltersValue(event, key, type, idx) {
@@ -115,14 +88,14 @@ export class SearchPanelComponent implements OnInit {
       this._active_filters = this._active_filters.filter((elm) => {
           return elm.key !== 'recipientCap' ;
       });
-      this._active_filters.concat({key: 'recipientCap', value: cap.name});
-      this.filtersService.updateFilters(this._active_filters) ;
+      this.filtersService.updateFilters(this._active_filters.concat({key: 'recipientCap', value: cap.name})) ;
   }
 
   filter() {
       this.filtersService.updateFilters(this._filters) ;
       this._active_filters = this._filters ;
       this.active_cap = null ;
+      this._search = null ;
   }
 
   isActive(key) {
@@ -140,7 +113,7 @@ export class SearchPanelComponent implements OnInit {
           {type: 'text', label: 'Codice Atto', key: 'actCode'},
           {type: 'text', label: 'Nominativo Destinatario', key: 'recipientName'},
           {type: 'ng-select', label: 'Destinatario', key: 'recipientId', labelVal: 'name',
-              getMethod: (term) => this.recipientsService.getRecipientsByName(term), items: []},
+              getMethod: (term) => this.recipientsService.getRecipientsByName(term), items: this.filters_data.recipient},
           {type: 'date', label: 'Data/Ora', key: 'date'},
           {type: 'text', label: 'Articolo Legge', key: 'articleLawName'},
           {type: 'date', label: 'Data Articolo Legge', key: 'articleLawDate'},
@@ -167,7 +140,7 @@ export class SearchPanelComponent implements OnInit {
           // {type: 'simpleText', label: 'Stato/Esito:', disabled: true},
           {type: 'simpleText', label: 'Nominativo Destinatario', key: 'recipientName', value: ''},
           {type: 'ng-select', label: 'Destinatario', key: 'recipientId', labelVal: 'name',
-              getMethod: (term) => this.recipientsService.getRecipientsByName(term), items: []},
+              getMethod: (term) => this.recipientsService.getRecipientsByName(term), items: this.filters_data.recipient},
           {type: 'ng-select', label: 'CAP Destinatario:', key: 'recipientCap', items: this.filters_data.caps_group, labelVal: 'name'},
           {type: 'simpleText', label: 'Indirizzo Destinatario:', key: 'destination'},
           // {type: 'simpleText', label: 'Raggruppamento quantita:', disabled: true},
@@ -184,6 +157,24 @@ export class SearchPanelComponent implements OnInit {
               items: this.filters_data.products_type, labelVal: 'type'}, // not in filters
          ];
   }
+
+  getFieldRemoteData(event, field) {
+      if (!event.term || event.term === '') {
+          field.items = field.originalItems ? field.originalItems : [] ;
+          this.unsubscribeTo('fieldRemoteData') ;
+          field.loading = false ;
+      } else if (typeof field.getMethod === 'function') {
+          this.unsubscribeTo('fieldRemoteData') ;
+          field.loading = true ;
+          this.subscriptions.fieldRemoteData = field.getMethod(event.term).subscribe((res: ApiResponseInterface) => {
+              if (res.status === 'success') {
+                  field.originalItems = field.items ;
+                  field.items = res.data ;
+                  field.loading = false ;
+              }
+          });
+      }
+    }
 
 
 

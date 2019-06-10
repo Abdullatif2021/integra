@@ -25,10 +25,10 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   pagination: any = { total: 0, totalProduct: 0 };
   loaded = false ;
   loading = true ;
-  subscription: any = false ;
+    subscription: any = false ;
 
   ngOnInit() {
-    this.loadData(false);
+    // this.loadData(false);
   }
 
   ngOnChanges() {

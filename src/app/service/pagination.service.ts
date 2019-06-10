@@ -27,9 +27,9 @@ export class PaginationService {
       this.rppValueChanges.emit(rpp);
   }
 
-  updateCurrentPage(page: number) {
+  updateCurrentPage(page: number, ignore: boolean = false ) {
       this.current_page = page ;
-      this.currentPageChanges.emit(page);
+      if ( ! ignore ) { this.currentPageChanges.emit(page); }
   }
 
 }
