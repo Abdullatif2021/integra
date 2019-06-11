@@ -95,10 +95,10 @@ export class SearchPanelComponent implements OnInit {
       });
       let filters = [] ;
       if (this.grouping.filters === 'filters' ) {
-          filters = this._active_filters.concat({key: 'recipientCap', value: cap.name}) ;
+          filters = this._active_filters.concat({key: 'recipientCap', value: cap.id}) ;
       } else {
           this._active_filters = [] ;
-          filters = [{key: 'recipientCap', value: cap.name}] ;
+          filters = [{key: 'recipientCap', value: cap.id}] ;
       }
       this.filtersService.updateFilters(filters) ;
   }
@@ -109,10 +109,10 @@ export class SearchPanelComponent implements OnInit {
       });
       let filters = [] ;
       if (this.grouping.filters === 'filters' ) {
-          filters = this._active_filters.concat({key: 'customerId', value: customer.name}) ;
+          filters = this._active_filters.concat({key: 'customerId', value: customer.id}) ;
       } else {
           this._active_filters = [] ;
-          filters = [{key: 'customerId', value: customer.name}] ;
+          filters = [{key: 'customerId', value: customer.id}] ;
       }
       this.filtersService.updateFilters(filters) ;
   }
