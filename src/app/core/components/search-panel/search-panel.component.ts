@@ -21,11 +21,12 @@ export class SearchPanelComponent implements OnInit {
   _filters = [] ;
   _active_filters = [] ;
   filters_data: any ;
-  filtersFields: object ;
+  filtersFields: any ;
   searchFields: object ;
   search_value: string;
   active_cap = null ;
   subscriptions: any = {} ;
+  grouping = {active: 'cap', filters: 'filters'} ;
 
   unsubscribeTo(name) {
       if ( this.subscriptions[name] ) {
@@ -73,6 +74,9 @@ export class SearchPanelComponent implements OnInit {
   }
 
   changeFiltersValue(event, key, type, idx) {
+    if (typeof this.filtersFields[idx].change === 'function') {
+        return this.filtersFields[idx].change(event) ;
+    }
     this._filters = this._filters.filter((elm) => {
         return elm.key !== key ;
     });
@@ -83,12 +87,34 @@ export class SearchPanelComponent implements OnInit {
     this.filtersFields[idx].value = val ;
   }
 
+  // TODO remake in a better way
   filterCap(cap) {
       this.active_cap = cap ;
       this._active_filters = this._active_filters.filter((elm) => {
           return elm.key !== 'recipientCap' ;
       });
-      this.filtersService.updateFilters(this._active_filters.concat({key: 'recipientCap', value: cap.name})) ;
+      let filters = [] ;
+      if (this.grouping.filters === 'filters' ) {
+          filters = this._active_filters.concat({key: 'recipientCap', value: cap.name}) ;
+      } else {
+          this._active_filters = [] ;
+          filters = [{key: 'recipientCap', value: cap.name}] ;
+      }
+      this.filtersService.updateFilters(filters) ;
+  }
+  filterCustomer(customer) {
+      this.active_cap = customer ;
+      this._active_filters = this._active_filters.filter((elm) => {
+          return elm.key !== 'customerId' ;
+      });
+      let filters = [] ;
+      if (this.grouping.filters === 'filters' ) {
+          filters = this._active_filters.concat({key: 'customerId', value: customer.name}) ;
+      } else {
+          this._active_filters = [] ;
+          filters = [{key: 'customerId', value: customer.name}] ;
+      }
+      this.filtersService.updateFilters(filters) ;
   }
 
   filter() {
@@ -135,7 +161,8 @@ export class SearchPanelComponent implements OnInit {
           {type: 'simpleText', label: 'Codice Barre', key: 'barcode', value: ''},
           {type: 'simpleText', label: 'Codice Atto', key: 'actCode', value: ''},
           {type: 'simpleText', label: 'Nome Prodotto:', key: 'productTypeName', value: ''},
-          // {type: 'simpleText', label: 'Prodotto:', disabled: true},
+          {type: 'ng-select', label: 'Prodotto', key: 'productTypeNameId',
+              items: this.filters_data.products_type, labelVal: 'type'},
           {type: 'ng-select', label: 'Categoria', key: 'categoryId', items: this.filters_data.categories, labelVal: 'name', value: ''},
           // {type: 'simpleText', label: 'Stato/Esito:', disabled: true},
           {type: 'simpleText', label: 'Nominativo Destinatario', key: 'recipientName', value: ''},
@@ -143,19 +170,47 @@ export class SearchPanelComponent implements OnInit {
               getMethod: (term) => this.recipientsService.getRecipientsByName(term), items: this.filters_data.recipient},
           {type: 'ng-select', label: 'CAP Destinatario:', key: 'recipientCap', items: this.filters_data.caps_group, labelVal: 'name'},
           {type: 'simpleText', label: 'Indirizzo Destinatario:', key: 'destination'},
-          // {type: 'simpleText', label: 'Raggruppamento quantita:', disabled: true},
-          // {type: 'simpleText', label: 'Quantita per CAP:', disabled: true},
+          {type: 'ng-select', label: 'Raggruppamento quantita:', labelVal: 'name',
+              items: [{name: 'Quantità per CAP', id: 'cap'}, {name: 'Quantità per Cliente', id: 'client'}],
+              change: (val) => {this.groupByChanged(val) ; }, unclearbale: true,
+              selectedAttribute: {name: 'Quantità per CAP', id: 'cap'}},
+          {type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
+              {name: 'Tutto', id: 'all'}, {name: 'Con Filtri Applicati', id: 'filters'} ], labelVal: 'name',
+              selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'},
+              change: (val) => {this.grouping.filters = val.id ; }, unclearbale: true
+          },
           {type: ['date', 'date'], label: 'Data/Ora:', group: true, key: ['fromDate', 'toDate']},
           {type: 'simpleText', label: 'Articolo Legge', key: 'articleLawName'},
           {type: ['date', 'date'], label: 'Data Articolo Legge:', group: true, key: ['fromArticleLawDate', 'toArticleLawDate']},
           {type: ['date', 'date'], label: 'Data Accettazione:', group: true, key: ['fromAcceptanceDate', 'toAcceptanceDate']},
+          // {type: 'simpleText', label: 'Nominativo MITTENTE', key: 'senderName'}, // not in filters
+          // {type: 'ng-select', label: 'MITTENTE', key: 'senderId', items: this.filters_data.senders, labelVal: 'name'}, // not in filters
 
-          {type: 'number', label: 'TENTATIVI', key: 'attempt'}, // not in filters
-          {type: 'simpleText', label: 'Nominativo MITTENTE', key: 'senderName'}, // not in filters
-          {type: 'ng-select', label: 'MITTENTE', key: 'senderId', items: this.filters_data.senders, labelVal: 'name'}, // not in filters
-          {type: 'ng-select', label: 'Product Type', key: 'typeId',
-              items: this.filters_data.products_type, labelVal: 'type'}, // not in filters
          ];
+  }
+
+  groupByChanged(val) {
+      this.grouping.active = val.id ;
+      let selected = {} ;
+      switch (val.id) {
+          case 'cap': selected = {
+              type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
+                  {name: 'Tutto', id: 'all'},
+                  {name: 'Con Filtri Applicati', id: 'filters'}
+              ], labelVal: 'name', change: (value) => {this.grouping.filters = value.id ; },
+              selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'}, unclearbale: true} ; break ;
+          case 'client': selected = {
+              type: 'ng-select', key: '__quantity_', label: 'Quantita per Client:', items : [
+                  {name: 'Tutto', id: 'all'},
+                  {name: 'Con Filtri Applicati', id: 'filters'}
+              ], labelVal: 'name', change: (value) => {this.grouping.filters = value.id ; },
+              selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'}, unclearbale: true} ; break ;
+      }
+      for (let i = 0; i < this.filtersFields.length ; ++i) {
+          if ( this.filtersFields[i].key && this.filtersFields[i].key === '__quantity_') {
+              this.filtersFields[i] = selected ;
+          }
+      }
   }
 
   getFieldRemoteData(event, field) {

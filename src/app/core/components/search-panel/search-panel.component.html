@@ -70,8 +70,8 @@
                 <input type="number" [ngClass]="{'active-filter':isActive(input.key)}" class="form-control" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
               </ng-container>
               <ng-container *ngIf="input.type === 'ng-select'">
-                <ng-select [ngClass]="{'active-filter':isActive(input.key)}" [loading]="input.loading" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
-                <ng-select [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+                <ng-select [(ngModel)]="input.selectedAttribute" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key)}" [loading]="input.loading" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+                <ng-select [(ngModel)]="input.selectedAttribute" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
               </ng-container>
               <ng-container *ngIf="input.type === 'date'">
                 <input [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" type="date" class="date-select">
@@ -106,9 +106,9 @@
         <button class="integraa-btn ml-2" (click)="filter()">Search</button>
       </div>
       <!-- } expanded search buttons -->
-
+      <!-- TODO REMAKE IN A BETTER WAY -->
       <!-- Cap statistics/filters { -->
-      <div *ngIf="filters_data && filters_data.caps_group" class="cap-statistics-container row mt-4 justify-content-center d-flex">
+      <div *ngIf="filters_data && filters_data.caps_group && grouping.active == 'cap'" class="cap-statistics-container row mt-4 justify-content-center d-flex">
         <div class="caps-inner-container">
           <ng-container *ngFor="let cap of filters_data.caps_group; let idx = index">
             <div class="cap-box ml-1" [ngClass]="{'active-cap': active_cap == cap}" (click)="filterCap(cap)">
@@ -120,6 +120,18 @@
           </ng-container>
         </div>
       </div>
+      <div *ngIf="filters_data && filters_data.customer_group && grouping.active == 'client'" class="cap-statistics-container row mt-4 justify-content-center d-flex">
+        <div class="caps-inner-container">
+            <ng-container *ngFor="let customer of filters_data.customer_group; let idx = index">
+                <div class="cap-box ml-1" [ngClass]="{'active-cap': active_cap == customer}" (click)="filterCustomer(customer)">
+                    <div class="cap-box-content">
+                        <div class="cap-box-head">{{customer.name}}</div>
+                        <div class="cap-box-body" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2)}">{{customer.count}}</div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
       <!-- } Cap statistics/filters -->
 
     </div>

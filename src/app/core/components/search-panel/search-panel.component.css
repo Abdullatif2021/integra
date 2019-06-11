@@ -46,8 +46,9 @@
 }
 .cap-box{
     min-width: 65px;
-    max-width: 65px;
-    font-size: 13px;
+    max-width: 75px;
+    word-break: break-all;
+    font-size: 12px;
     cursor: pointer;
 }
 .cap-box-head{
