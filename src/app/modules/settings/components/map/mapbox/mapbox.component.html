@@ -1,0 +1,9 @@
+<div class="settings-page">
+  <app-settings-header (create)="create()"></app-settings-header>
+
+  <div class="settings-actual-page">
+    <ng-container *ngFor="let setting of settings">
+      <app-map-api-input (deleted)="delete($event)" [setting]="setting"></app-map-api-input>
+    </ng-container>
+  </div>
+</div>

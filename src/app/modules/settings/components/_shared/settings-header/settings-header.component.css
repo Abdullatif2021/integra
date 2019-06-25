@@ -1,0 +1,16 @@
+.settings-header {
+    background-color: #fff;
+    min-height: 50px;
+    border-radius: 5px;
+    padding: 0px 10px;
+}
+.back-btn, .create-btn {
+    margin-top: 10px;
+    cursor: pointer;
+}
+.create-btn {
+    float: right;
+}
+.back-btn {
+    float: left;
+}

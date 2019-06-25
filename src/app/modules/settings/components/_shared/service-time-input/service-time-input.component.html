@@ -1,0 +1,21 @@
+<div class="container-fluid">
+  <div class="row setting-row">
+    <div class="col-4 wide-col">
+      <label for="setting-product-{{setting.id}}">Prodotto</label>
+      <ng-select id="setting-product-{{setting.id}}" class="product-input integraa-select"></ng-select>
+    </div>
+    <div class="col-3-half wide-col">
+      <label for="setting-single-service-time-{{setting.id}}">Tempo di servizio singolo</label>
+      <input id="setting-single-service-time-{{setting.id}}" value="{{setting.single_service_time}}" type="number" class="single-service-time-input">
+      <span> Min.</span>
+    </div>
+    <div class="col-3-half wide-col">
+      <label for="setting-multiple-service-time-{{setting.id}}">Tempo di servizio singolo</label>
+      <input id="setting-multiple-service-time-{{setting.id}}" value="{{setting.multiple_service_time}}" type="number" class="multiple-service-time-input">
+      <span> Min.</span>
+    </div>
+    <div class="col-1 wide-col">
+      <div class="delete-btn" (click)="delete(setting)"><img src="/assets/images/delete.png" /> </div>
+    </div>
+  </div>
+</div>

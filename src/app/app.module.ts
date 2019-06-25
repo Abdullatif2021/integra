@@ -8,6 +8,7 @@ import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeModule } from './modules/home/home.module';
 import {LoadingBarHttpClientModule} from '@ngx-loading-bar/http-client';
+import {SettingsModule} from './modules/settings/settings.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,6 @@ import {LoadingBarHttpClientModule} from '@ngx-loading-bar/http-client';
     NgbModule,
     CoreModule,
     SharedModule,
-    HomeModule,
     LoadingBarHttpClientModule
   ],
   providers: [],

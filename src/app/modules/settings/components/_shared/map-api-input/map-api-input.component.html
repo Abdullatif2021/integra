@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <div class="row setting-row">
+    <div class="col-5 wide-col">
+      <label for="setting-key-{{setting.id}}">API key</label>
+      <input id="setting-key-{{setting.id}}" value="{{setting.key}}" type="text" class="api-key-input">
+    </div>
+    <div class="col-3 wide-col">
+      <label for="setting-daily-limit-{{setting.id}}">Limite giornaliero</label>
+      <input id="setting-daily-limit-{{setting.id}}" value="{{setting.daily_limit}}" type="number" class="api-daily-limit-input">
+    </div>
+    <div class="col-3 wide-col">
+      <label for="setting-monthly-limit-{{setting.id}}">Limite mensile</label>
+      <input id="setting-monthly-limit-{{setting.id}}" value="{{setting.monthly_limit}}" type="number" class="api-monthly-limit-input">
+    </div>
+    <div class="col-1 wide-col">
+      <div class="delete-btn" (click)="delete(setting)"><img src="/assets/images/delete.png" /> </div>
+    </div>
+  </div>
+</div>

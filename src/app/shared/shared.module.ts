@@ -10,6 +10,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { TableComponent } from './components/table/table.component';
 import { SimpleTableComponent } from './components/simple-table/simple-table.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     NgbModule,
     FontAwesomeModule,
     NgSelectModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    RouterModule
   ],
   declarations: [
       SearchBoxComponent,

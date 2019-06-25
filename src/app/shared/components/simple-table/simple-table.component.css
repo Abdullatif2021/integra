@@ -2,6 +2,9 @@
     background-color: #fff;
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
+    height: calc( 100vh - 100px ) ;
+    position: relative;
+    overflow: hidden;
 }
 .search-section{
     padding: 10px 10px;
@@ -30,7 +33,7 @@
     color: #333;
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
-    height: 500px;
+    height: 100%
 }
 .table-body::-webkit-scrollbar { width: 0 !important }
 
@@ -43,6 +46,7 @@
     padding: 3px 5px;
     cursor: pointer;
     border: 1px solid transparent;
+    min-height: 33px;
 }
 .active-item{
     background-color: #feda44 !important;

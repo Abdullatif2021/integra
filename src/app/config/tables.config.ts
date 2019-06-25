@@ -7,22 +7,44 @@ export const TablesConfig = {
     // simple tables structure
     simpleTable: {
         // cities table structure
-        citiesTable : {
+        citiesTable: {
             title: 'Paese',
             icon: 'assets/images/cityscape.svg',
             searchPlaceHolder: 'Cerca Paese',
         },
         // streets table structure
-        streetsTable : {
+        streetsTable: {
             title: 'Strada',
             icon: 'assets/images/work-tools.svg',
             searchPlaceHolder: 'Cerca Strada'
         },
         // postmen table structure
-        postmenTable : {
+        postmenTable: {
             title: 'Expected Postmen',
             icon: 'assets/images/postman-icon.png',
             searchPlaceHolder: 'Cerca postino previsto'
+        },
+        settingsTable: {
+            custom: true,
+            title: 'Impostazioni',
+            icon: false,
+            searchPlaceHolder: 'Cerca',
+            searchMethod: (items, term) => {
+                return items.filter((elm) => {
+                    return elm.name.toLowerCase().indexOf(term.toLowerCase()) !== -1;
+                });
+            },
+        },
+        subSettingsTable: {
+            custom: true,
+            title: 'Map Provider',
+            icon: false,
+            searchPlaceHolder: 'Cerca',
+            searchMethod: (items, term) => {
+                return items.filter((elm) => {
+                    return elm.name.toLowerCase().indexOf(term.toLowerCase()) !== -1;
+                });
+            },
         },
     },
     // normal tables structure
