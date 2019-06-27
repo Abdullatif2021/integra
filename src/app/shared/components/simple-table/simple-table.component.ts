@@ -18,10 +18,10 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     searchMethod: false,
   } ;
   @Input() items ;
-  _items: any ;
   @Input() getMethod ;
   @Output() changed = new EventEmitter<object>() ;
   @Input() _selected: string = null ;
+  _items: any = [] ;
   page = 1 ;
   rpp = 25 ;
   searchValue: string = null ;
@@ -35,13 +35,16 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.loadData(false);
     if (changes.items) {
       this._items = this.items ;
+      this.loading = false ;
+    } else {
+        this.loadData(false);
     }
   }
 
-  loadData(append) {
+  loadData(append: boolean) {
+
     if (typeof this.getMethod !== 'function') {
       if (this.items) { this.loading = false ; }
       return false ;
@@ -49,24 +52,27 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this.loading = true ;
 
     if (!append) { this.items = [] ; }
-    if ( this.subscription ) {
-        this.subscription.unsubscribe();
-    }
-    this.subscription = this.getMethod(this.page, this.rpp, this.searchValue).subscribe((res: ApiResponseInterface) => {
-        if (res.status === 'success') {
-          if (append) {
-            this.items = this.items.concat(res.data);
-          } else { this.items = res.data ; }
-          this.pagination = res.pagination ;
-          this.loaded = true ;
-          this.loading = false ;
-        }
-    });
+    if ( this.subscription ) { this.subscription.unsubscribe(); }
+
+    this.subscription = this.getMethod(this.page, this.rpp, this.searchValue)
+        .subscribe((res: ApiResponseInterface) => {
+          this.handleResponse(res);
+        });
+
     return this ;
   }
 
+  handleResponse(res: ApiResponseInterface) {
+    if (res.status === 'success') {
+      this.items = this.items.concat(res.data) ;
+      this.pagination = res.pagination ;
+      this.loaded = true ;
+      this.loading = false ;
+    }
+  }
+
   loadMore() {
-    if (this.rpp * this.page < this.pagination.total && this.loaded) {
+    if (this.rpp * this.page < this.pagination.total && this.loaded && !this.loading) {
       this.page++ ;
       this.loadData(true) ;
     }
@@ -82,15 +88,8 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   }
 
   selectItem(item) {
-    console.log(item);
     this.changed.emit(item) ;
     this._selected = item ;
   }
 
-  reset() {
-    if (this.changed !== null) {
-        this.changed.emit(null);
-    }
-    this._selected = null ;
-  }
 }

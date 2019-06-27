@@ -41,21 +41,12 @@ export class ToDeliverComponent implements OnInit {
   streetsGetMethod = (page, rpp, name) => this.streetsService.getStreets(page, rpp, name, this.current_city)
 
   cityChanged(event) {
-    if (event === null) {
-      this.current_city = null ;
-    } else {
-      this.current_city = event.id ;
-    }
-    this._streetsTable.loadData(false).reset();
-    this.loadProducts(true);
+    this.current_city = event === null ? null : event.id ;
+    this._streetsTable.loadData(false).selectItem(null);
   }
 
   streetChanged(event) {
-      if (event === null) {
-          this.current_street = null ;
-      } else {
-          this.current_street = event.id ;
-      }
+      this.current_street = event === null ? null : event.id ;
       this.loadProducts(true);
   }
 

@@ -8,7 +8,6 @@
     position: relative;
 }
 .table-container::-webkit-scrollbar { width: 0 !important }
-
 .table-head,.pagination-footer{
     background-color: #222222;
     color: #feda44;
@@ -28,8 +27,11 @@
     line-height: 12px;
     height: 38px;
 }
-.hidden-head{
-    visibility: collapse;
+.hidden-head th{
+    line-height: 0px;
+}
+.real-table{
+    margin-top: -38px;
 }
 .table-item-cell{
     font-size: 11px;
