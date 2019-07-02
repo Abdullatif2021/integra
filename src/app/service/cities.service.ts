@@ -4,6 +4,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs/index';
 import { AppConfig } from '../config/app.config';
 import {ApiResponseInterface} from '../core/models/api-response.interface';
+import {FiltersService} from './filters.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +12,15 @@ import {ApiResponseInterface} from '../core/models/api-response.interface';
 
 export class CitiesService {
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        private filtersService: FiltersService,
+    ) { }
 
     getCities(page, rpp, name) {
         const options = { params: new HttpParams().set('page', page).set('pageSize', rpp)};
         if (name !== null) { console.log('here'); options.params = options.params.set('cityName', name); }
+        options.params = this.filtersService.getHttpParams(options.params) ;
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCities, options).pipe(
             catchError(this.handleError)
         );

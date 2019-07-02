@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {TablesConfig} from '../../../../config/tables.config';
+import {ApiResponseInterface} from '../../../../core/models/api-response.interface';
+import {TableComponent} from '../../../../shared/components/table/table.component';
+import {FiltersService} from '../../../../service/filters.service';
+import {PaginationService} from '../../../../service/pagination.service';
+import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 
 @Component({
   selector: 'app-pre-dispatch',
@@ -8,25 +13,41 @@ import {TablesConfig} from '../../../../config/tables.config';
 })
 export class PreDispatchComponent implements OnInit {
 
-  preDispatchTable = TablesConfig.table.preDispatchTable ;
+  table = TablesConfig.table.preDispatchTable ;
+  subscription: any = false ;
+  preDispatchList: any = [] ;
+  @ViewChild('preDispatchTable') _preDispatchTable: TableComponent ;
 
-  // Dummy data {
-  products = [
-      {list_name:'Nome Distinta scelto dall’operatore',list_id:'de-5c8659f896120-11032019135208',status:'Da Pianificare',qty:124,date:'13/03/2019',progress:0,p_status:1},
-      {list_name:'Nome Distinta scelto dall’operatore',list_id:'de-5c8659f896120-11032019135208',status:'Da Pianificare',qty:124,date:'13/03/2019',progress:0,p_status:1},
-      {list_name:'Nome Distinta scelto dall’operatore',list_id:'de-5c8659f896120-11032019135208',status:'Pianificato',qty:124,date:'13/03/2019',progress:100,p_status:1},
-      {list_name:'Nome Distinta scelto dall’operatore',list_id:'de-5c8659f896120-11032019135208',status:'Da Pianificare',qty:124,date:'13/03/2019',progress:63,p_status:1},
-      {list_name:'Nome Distinta scelto dall’operatore',list_id:'de-5c8659f896120-11032019135208',status:'Da Pianificare',qty:124,date:'13/03/2019',progress:30,p_status:0},
-      {list_name:'Nome Distinta scelto dall’operatore',list_id:'de-5c8659f896120-11032019135208',status:'Pianificato',qty:124,date:'13/03/2019',progress:100,p_status:1},
-      {list_name:'Nome Distinta scelto dall’operatore',list_id:'de-5c8659f896120-11032019135208',status:'Da Pianificare',qty:124,date:'13/03/2019',progress:63,p_status:1},
-      {list_name:'Nome Distinta scelto dall’operatore',list_id:'de-5c8659f896120-11032019135208',status:'Da Pianificare',qty:124,date:'13/03/2019',progress:0,p_status:1},
-  ]
+
+  constructor(
+      private paginationService: PaginationService,
+      private filtersService: FiltersService,
+      private preDispatchService: PreDispatchService
+  ) { }
+
+    // Dummy data {
+  loadItems(reset: boolean) {
+      if ( this.subscription ) { this.subscription.unsubscribe(); }
+      this.preDispatchList = [];
+      this._preDispatchTable.loading(true);
+      if (reset) {
+          this.paginationService.updateCurrentPage(1, true);
+          this.paginationService.updateLoadingState(true);
+          this._preDispatchTable.resetSelected();
+      }
+      this.subscription = this.preDispatchService.getPreDispatchItems().subscribe((res: ApiResponseInterface) => {
+          this.paginationService.updateLoadingState(false);
+          this.paginationService.updateResultsCount(res.pagination.total);
+          this.preDispatchList = res.data ;
+          this._preDispatchTable.loading(false);
+      });
+  }
   // } Dummy data
 
 
-  constructor() { }
-
   ngOnInit() {
+      this.filtersService.clear();
+      this.loadItems(true);
   }
 
 }

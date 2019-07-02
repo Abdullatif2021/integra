@@ -90,14 +90,14 @@ export const TablesConfig = {
                         {action: 'excel_export', click: (elm) => { console.log('export . '); }},
                         {action: 'view', click: (elm) => { console.log('call back working 1 . '); }},
                     ]},
-                {title: 'PRE-DISPATCH LIST NAME', field: 'list_name', actions: []},
-                {title: 'PRE-DISPATCH LIST N°', field: 'list_id', actions: []},
+                {title: 'PRE-DISPATCH LIST NAME', field: 'name', actions: []},
+                {title: 'PRE-DISPATCH LIST N°', field: 'code', actions: []},
                 {title: 'STATE / RESULT', field: 'status', actions: [
                         {action: 'view', click: (elm) => { console.log('call back working 2 . '); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ]},
-                {title: 'Q.TY', field: 'qty', actions: []},
-                {title: 'DATE', field: 'date', actions: []},
+                {title: 'Q.TY', field: 'quantity', actions: []},
+                {title: 'DATE', field: 'creation_date', actions: []},
                 {title: 'OPERATION', actions: [
                         {action: 'progress', field: 'progress'},
                         {action: 'pp', field: 'p_status', print_if: (elm) =>  elm.progress !== 100 ,

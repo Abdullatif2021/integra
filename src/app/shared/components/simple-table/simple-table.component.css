@@ -22,6 +22,7 @@
     width: 25px;
     height: 25px;
 }
+
 .item-name{
     width: 40%;
 }
@@ -47,6 +48,9 @@
     cursor: pointer;
     border: 1px solid transparent;
     min-height: 33px;
+}
+.item:hover{
+    background-color: #e5e5ff !important;
 }
 .active-item{
     background-color: #feda44 !important;

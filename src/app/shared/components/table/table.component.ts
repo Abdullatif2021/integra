@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ViewChild, ChangeDetectorRef, AfterViewChecked, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, ViewChild, ChangeDetectorRef, AfterViewChecked, EventEmitter, Output} from '@angular/core';
 
 @Component({
     selector: 'app-table',
@@ -11,16 +11,16 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
     cells_size = [] ;
     @ViewChild('tableRow') tableRowElement;
-    @Input() table: object = {} ;
+    @Input() table: any = {} ;
     @Input() items: any = [] ;
     isLoading = true ;
-
+    @Output() selected = new EventEmitter() ;
+    selectedProducts = [] ;
     ngOnInit() {
     }
 
     loading(state) {
         this.isLoading = state ;
-        console.log(state);
     }
 
     typeof(variable) {
@@ -50,6 +50,31 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
     getCellWidth(idx) {
         return this.cells_size[idx] + 'px';
+    }
+    isSelectedRow(item) {
+        return this.selectedProducts.find((elm) => elm.id === item.id ) ;
+    }
+    selectItem(item) {
+        if (this.selectedProducts.find((elm) => elm.id === item.id  ) !== undefined) {
+            this.selectedProducts = this.selectedProducts.filter((elm) => {
+                return item.id !== elm.id ;
+            });
+        } else {
+            this.selectedProducts.push(item) ;
+        }
+        this.selected.emit(this.selectedProducts);
+    }
+    selectAll() {
+        if (this.selectedProducts && this.selectedProducts.length) {
+            this.selectedProducts = [] ;
+        } else {
+            this.selectedProducts = this.items ;
+        }
+        this.selected.emit(this.selectedProducts);
+    }
+    resetSelected() {
+        this.selectedProducts = [] ;
+        this.selected.emit(this.selectedProducts);
     }
 
 

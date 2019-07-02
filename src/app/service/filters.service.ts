@@ -13,6 +13,7 @@ export class FiltersService {
 
   constructor(private http: HttpClient) { }
   filtersChanges = new EventEmitter<number>() ;
+  cleared = new EventEmitter<number>() ;
   filters = [];
 
   getFiltersData() {
@@ -27,14 +28,30 @@ export class FiltersService {
   }
 
   getHttpParams(options: HttpParams) {
+    let applied = false ;
+    // if there is no filters return the original options
     if ( typeof this.filters !== 'object') {return options ; }
+    // loop through all filters and add them if there value was not empty string or null
     this.filters.forEach((filter: FilterInterface) => {
-      if (!filter.value && filter.value === '') { return ; }
+      if (!filter.value || filter.value === '') { return ; }
       options = options.set(filter.key, filter.value) ;
-      console.log(options, filter.key, filter.value);
+      // if a filter is valid, set applied to true
+      applied = true ;
     });
-
+    // if any filter was applied set withFilter param to true
+    if (applied) { options = options.set('withFilter', '1') ; }
     return options ;
+  }
+
+  getFiltersObject() {
+      if ( typeof this.filters !== 'object') { return [] ; }
+      // loop through all filters and add them if there value was not empty string or null
+      const _filters = {} ;
+      this.filters.forEach((filter: FilterInterface) => {
+          if (!filter.value || filter.value === '') { return ; }
+          _filters[filter.key] = filter.value ;
+      });
+      return _filters ;
   }
 
   handleError(error: HttpErrorResponse) {
@@ -44,6 +61,11 @@ export class FiltersService {
           console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
       }
       return throwError('');
+  }
+
+  clear() {
+      this.filters = [] ;
+      this.cleared.emit(1);
   }
 
 }

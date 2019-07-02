@@ -1,7 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {FiltersService} from '../../../service/filters.service';
 import {ApiResponseInterface} from '../../models/api-response.interface';
 import {RecipientsService} from '../../../service/recipients.service';
+import {ActionsService} from '../../../service/actions.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ModalDirective} from '../../directives/modal.directive';
 
 @Component({
   selector: 'app-search-panel',
@@ -13,7 +16,11 @@ export class SearchPanelComponent implements OnInit {
 
   constructor(
       private filtersService: FiltersService,
-      private recipientsService: RecipientsService
+      private recipientsService: RecipientsService,
+      private actionsService: ActionsService,
+      private componentFactoryResolver: ComponentFactoryResolver,
+      private viewContainerRef: ViewContainerRef,
+      private modalService: NgbModal
   ) {}
 
   isCollapsed = true ;
@@ -27,6 +34,9 @@ export class SearchPanelComponent implements OnInit {
   active_cap = null ;
   subscriptions: any = {} ;
   grouping = {active: 'cap', filters: 'filters'} ;
+  active_action: any = false ;
+  actions: any = [];
+  @ViewChild(ModalDirective) modalHost: ModalDirective;
 
   unsubscribeTo(name) {
       if ( this.subscriptions[name] ) {
@@ -40,6 +50,12 @@ export class SearchPanelComponent implements OnInit {
             this.filters_data = res.data ;
             this.initFields();
          }
+      });
+      this.actionsService.actionsChanges.subscribe((actions) => {
+          this.actions = actions ;
+      });
+      this.filtersService.cleared.subscribe(() => {
+          this._active_filters = [];
       });
   }
 
@@ -55,7 +71,8 @@ export class SearchPanelComponent implements OnInit {
           case 'date': value = event.target.value ; break ;
           case 'simpleText': value = event.target.value ; break ;
           case 'number': value = event.target.value ; break ;
-          case 'ng-select': value = event && event.id ? event.id : ( event && event.name ? event.name : null) ;
+          case 'ng-select': value = event && event.id ? event.id : ( event && event.name ? event.name : null); break;
+          case 'tag': value = event;
       }
       return value ;
   }
@@ -82,6 +99,7 @@ export class SearchPanelComponent implements OnInit {
     });
     const val = this.getInputValue(event, type) ;
     if (val && val !== '') {
+        if ( typeof val === 'object' && !val.length ) { return ; }
         this._filters.push({key: key, value: val});
     }
     this.filtersFields[idx].value = val ;
@@ -158,7 +176,7 @@ export class SearchPanelComponent implements OnInit {
           // {type: 'simpleText', label: 'Postino previsto:', disabled: true},
           {type: 'ng-select', label: 'Agenzia', key: 'agencyId', items: this.filters_data.agencies, labelVal: 'name', value: ''},
           {type: 'simpleText', label: 'Distinita Postale', key: 'dispatchCode', value: ''},
-          {type: 'simpleText', label: 'Codice Barre', key: 'barcode', value: ''},
+          {type: 'tag', label: 'Codice Barre', key: 'barcode', value: '', _class: 'tags-select'},
           {type: 'simpleText', label: 'Codice Atto', key: 'actCode', value: ''},
           {type: 'simpleText', label: 'Nome Prodotto:', key: 'productTypeName', value: ''},
           {type: 'ng-select', label: 'Prodotto', key: 'productTypeNameId',
@@ -231,6 +249,37 @@ export class SearchPanelComponent implements OnInit {
       }
     }
 
+  changeActiveAction(action, appendField = null, appendVal = null) {
+    if ( action && appendField ) {
+        if ( appendField.type === 'select' ) {
+            action[appendField['field']] = appendVal ? appendVal.value : null ;
+        } else {
+            action[appendField['field']] = appendVal && appendVal.target.value && appendVal.target.value !== '' ?
+                appendVal.target.value : null ;
+        }
+    }
+    if ( action && !appendField ) {
+        action.fields.forEach((field) => {
+            action[field.field] = field.selectedAttribute.value ;
+        });
+    }
+    this.active_action = action;
+  }
+
+  runAction() {
+
+    if ( this.active_action.modal ) {
+        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.active_action.modal);
+        const viewContainerRef = this.modalHost.viewContainerRef ;
+        viewContainerRef.clear() ;
+        const componentRef = viewContainerRef.createComponent(componentFactory);
+        const instance = <any>componentRef.instance ;
+        instance.data = this.active_action ;
+        this.modalService.open(instance.modalRef,{ windowClass: 'animated slideInDown' }) ;
+    } else if ( typeof this.active_action === 'object' && typeof this.active_action.run === 'function' ) {
+        this.active_action.run() ;
+    }
+  }
 
 
 

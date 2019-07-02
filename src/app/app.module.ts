@@ -6,9 +6,8 @@ import { CoreModule } from './core/core.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
-import { HomeModule } from './modules/home/home.module';
 import {LoadingBarHttpClientModule} from '@ngx-loading-bar/http-client';
-import {SettingsModule} from './modules/settings/settings.module';
+import {SnotifyModule, SnotifyService, ToastDefaults} from 'ng-snotify';
 
 @NgModule({
   declarations: [
@@ -21,9 +20,13 @@ import {SettingsModule} from './modules/settings/settings.module';
     NgbModule,
     CoreModule,
     SharedModule,
-    LoadingBarHttpClientModule
+    LoadingBarHttpClientModule,
+    SnotifyModule
   ],
-  providers: [],
+  providers: [
+      { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
+      SnotifyService
+  ],
   bootstrap: [AppComponent]
 })
 

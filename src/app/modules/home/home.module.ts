@@ -10,13 +10,17 @@ import { HomeComponent } from './home.component';
 import { CoreModule } from '../../core/core.module';
 import { SharedModule } from '../../shared/shared.module';
 import { HomeRoutingModule } from './home-routing.module';
+import { PreDispatchAddComponent } from './modals/pre-dispatch-add/pre-dispatch-add.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { PreDispatchNewComponent } from './modals/pre-dispatch-new/pre-dispatch-new.component';
 
 @NgModule({
   imports: [
     CommonModule,
     CoreModule,
     SharedModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    NgSelectModule
   ],
   declarations: [
       ToDeliverComponent,
@@ -26,11 +30,15 @@ import { HomeRoutingModule } from './home-routing.module';
       InStockComponent,
       NotDeliveredComponent,
       HomeComponent,
+      PreDispatchAddComponent,
+      PreDispatchNewComponent,
   ],
   exports: [
       HomeComponent,
       HomeRoutingModule
   ],
-  bootstrap: [HomeComponent]
+  bootstrap: [HomeComponent],
+  entryComponents: [PreDispatchAddComponent,PreDispatchNewComponent],
+
 })
 export class HomeModule { }

@@ -3,6 +3,7 @@
 @import "~@ng-select/ng-select/themes/default.theme.css";
 @import "./assets/css/skeleton.css";
 @import "./assets/css/animate.css";
+@import "~ng-snotify/styles/material";
 
 body{
     background-color: #f2f2f2 !important;
@@ -126,6 +127,10 @@ body{
     margin-top: 5px;
 }
 
+.tags-select .ng-arrow-wrapper {
+    display: none;
+}
+
 
 /* bootstrap */
 .wide-col{
@@ -139,3 +144,15 @@ body{
     max-width: 29.1%;
 }
 
+/* snotify */
+.snotify-icon{
+    width: 25px;
+    height: 25px;
+}
+.snotifyToast__inner{
+    min-height: 45px;
+}
+.snotifyToast{
+    width: 363px;
+    float: right;
+}

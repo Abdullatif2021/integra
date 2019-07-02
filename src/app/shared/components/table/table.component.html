@@ -6,7 +6,7 @@
         <tr *ngIf="cells_size.length">
             <!-- Select item col { -->
             <th class="table-head-item" [ngStyle]="{width:getCellWidth(0)}">
-                <div class="select-row rounded-circle"></div>
+                <div (click)="selectAll()" class="select-row rounded-circle"></div>
             </th>
             <!-- } Select item com -->
             <!-- Create the other cells using table data -->
@@ -32,7 +32,7 @@
     <!-- } Table Sticky Header -->
 
     <!-- Real Table { -->
-    <div class="table-container">
+    <div class="table-container" (window:resize)="updateTableHeaderSize()">
         <table class="table-sm real-table">
             <!--  -->
             <thead class="hidden-head">
@@ -66,10 +66,10 @@
             <!-- print table items -->
             <ng-container *ngFor="let item of items; let idx = index">
                 <!-- row item {  -->
-                <tr #tableRow class="table-item" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx}">
+                <tr #tableRow class="table-item" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx, 'selected-row':isSelectedRow(item)}">
                     <!-- select row item <static item > {  -->
                     <td class="table-item-cell" [ngStyle]="{width: '1%'}">
-                        <div class="select-row rounded-circle"></div>
+                        <div class="select-row rounded-circle" (click)="selectItem(item)"></div>
                     </td>
                     <!-- } select row item  -->
                     <!-- print item cells loop {  -->

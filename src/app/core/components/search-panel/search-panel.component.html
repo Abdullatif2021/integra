@@ -61,20 +61,23 @@
             <div class="search-input col-2 wide-col">
               <label>{{input.label}}</label>
               <ng-container *ngIf="input.type === 'text'">
-                <app-search-box [ngClass]="{'active-filter':isActive(input.key)}" (changed)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
+                <app-search-box [ngClass]="{'active-filter':isActive(input.key)}" class="{{input._class}}" (changed)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
               </ng-container>
               <ng-container *ngIf="input.type === 'simpleText'">
-                <input [ngClass]="{'active-filter':isActive(input.key)}" class="form-control" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
+                <input [ngClass]="{'active-filter':isActive(input.key)}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
               </ng-container>
               <ng-container *ngIf="input.type === 'number'">
-                <input type="number" [ngClass]="{'active-filter':isActive(input.key)}" class="form-control" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
+                <input type="number" [ngClass]="{'active-filter':isActive(input.key)}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
               </ng-container>
               <ng-container *ngIf="input.type === 'ng-select'">
-                <ng-select [(ngModel)]="input.selectedAttribute" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key)}" [loading]="input.loading" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
-                <ng-select [(ngModel)]="input.selectedAttribute" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+                <ng-select [(ngModel)]="input.selectedAttribute" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key)}" [loading]="input.loading" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+                <ng-select [(ngModel)]="input.selectedAttribute" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+              </ng-container>
+              <ng-container *ngIf="input.type === 'tag'">
+                <ng-select [addTag]="'any'" [multiple]="true" notFoundText="Add Item" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" class="filters-select-input {{input._class}}" [items]="input.items" placeholder="Cerca"></ng-select>
               </ng-container>
               <ng-container *ngIf="input.type === 'date'">
-                <input [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" type="date" class="date-select">
+                <input [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" type="date" class="date-select {{input._class}}">
               </ng-container>
             </div>
           </ng-container>
@@ -144,21 +147,33 @@
     <!-- Actions area {  -->
     <!-- Action select {  -->
     <div class="col-lg-2 col-md-10">
-      <ng-select [items]="" class="integraa-select" placeholder="Scegli un'operazione"></ng-select>
+      <ng-select [items]="actions" (change)="changeActiveAction($event)" [bindLabel]="'name'" class="integraa-select" placeholder="Scegli un'operazione"></ng-select>
     </div>
     <!-- } Action select -->
+    <ng-container *ngIf="active_action">
+      <div class="col-lg-2 col-md-10" *ngFor="let field of active_action.fields">
+        <ng-container *ngIf="field.type == 'select'">
+          <ng-select [clearable]="false" (change)="changeActiveAction(active_action,field,$event)" class="integraa-select" [items]="field.options" [bindLabel]="'name'" [(ngModel)]="field.selectedAttribute"></ng-select>
+        </ng-container>
+        <ng-container *ngIf="field.type == 'text'">
+          <input type="text" (change)="changeActiveAction(active_action,field,$event)" class="form-control">
+        </ng-container>
+      </div>
+    </ng-container>
     <!-- Action submit btn {  -->
     <div class="col-lg-2 col-md-2">
-      <button type="button" class="integraa-btn">Esegui</button>
+      <button type="button" (click)="runAction()" class="integraa-btn">Esegui</button>
     </div>
     <!-- } Action submit btn  -->
     <!-- } Actions area -->
 
     <!-- Pagination area {  -->
-    <div class="col-lg-4 offset-lg-4">
+    <div class="col align-self-end">
       <app-pagination></app-pagination>
     </div>
     <!-- } Pagination area  -->
   </div>
 
 </div>
+
+<ng-template appModal></ng-template>

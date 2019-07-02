@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
 
 @Component({
@@ -90,6 +90,13 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   selectItem(item) {
     this.changed.emit(item) ;
     this._selected = item ;
+  }
+
+  reload() {
+    this.page = 1 ;
+    this.loaded = false ;
+    this.loading = true ;
+    this.loadData(false) ;
   }
 
 }

@@ -13,6 +13,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
+import { ModalDirective } from './directives/modal.directive';
 
 @NgModule({
   imports: [
@@ -29,12 +30,13 @@ import { RouterModule } from '@angular/router';
       UserNavComponent,
       MainNavComponent,
       SearchPanelComponent,
+      ModalDirective,
   ],
   exports: [
     UserNavComponent,
     MainNavComponent,
     SearchPanelComponent
-  ]
+  ],
 })
 export class CoreModule {
     constructor() {

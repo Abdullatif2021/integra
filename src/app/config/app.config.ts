@@ -6,7 +6,10 @@ export const AppConfig = {
         getStreet: '/api/getStreet', // get streets list
         getProducts: '/api/getProducts', // get to deliver products list
         getFiltersData: '/api/initFilterData',
-        getRecipients: '/api/recipient'
+        getRecipients: '/api/recipient',
+        getPreDispatched: '/api/preDispatch',
+        createPreDispatched: '/api/preDispatch',
+        preDispatchAddProducts: 'preDispatch/addProducts',
     },
 
 };

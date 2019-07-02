@@ -18,6 +18,8 @@ export class ProductsService {
       private paginationService: PaginationService
   ) { }
 
+  public selectedProducts ;
+
   getToDeliverProducts(city, street) {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)

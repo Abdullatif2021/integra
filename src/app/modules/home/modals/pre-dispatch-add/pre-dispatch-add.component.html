@@ -1,0 +1,25 @@
+<ng-template #modalRef let-modal>
+<div class="modal-container">
+  <div class="modal-body">
+    <h6>Aggiungi a Pre-distinta esistente</h6>
+    <div class="row mt-4">
+      <div class="col-12 text-danger mb-2" *ngIf="error===1">Pre Dispatch is not selected</div>
+      <div class="col-6">
+        <label>Aggiungi a Pre-distinta esistente</label>
+        <ng-select [clearable]="false" (change)="changeBindLabel($event)" [bindLabel]="'name'" [items]="options" placeholder="Seleziona" class="integraa-select"></ng-select>
+      </div>
+      <div class="col-6">
+        <label>Pre-distinte:</label>
+        <ng-select [clearable]="false" *ngIf="bindLabel=='name'" (change)="select($event)" [items]="preDispatches" [bindLabel]="'name'" class="integraa-select"></ng-select>
+        <ng-select [clearable]="false" *ngIf="bindLabel=='code'" (change)="select($event)" [items]="preDispatches" [bindLabel]="'code'" class="integraa-select"></ng-select>
+      </div>
+    </div>
+
+    <div class="btns-container mt-3">
+      <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">Esegui</button>
+      <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Cancel</button>
+      <div class="clear-both"></div>
+    </div>
+  </div>
+</div>
+</ng-template>
