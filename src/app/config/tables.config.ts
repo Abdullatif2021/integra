@@ -1,6 +1,7 @@
 // Add Tables in here :)
 // TODO add documentation for table structuring
 import {ProductInterface} from '../core/models/product.interface';
+import {AppConfig} from './app.config';
 
 export const TablesConfig = {
 
@@ -85,10 +86,14 @@ export const TablesConfig = {
         preDispatchTable : {
             cols: [
                 {title: ' ', field: false, actions: [
-                        {action: 'edit', click: (elm) => { console.log('export . '); }},
+                        {action: 'edit', click: (elm) => { console.log('edit'); }},
                         {action: 'print', click: (elm) => { console.log('print . '); }},
-                        {action: 'excel_export', click: (elm) => { console.log('export . '); }},
-                        {action: 'view', click: (elm) => { console.log('call back working 1 . '); }},
+                        {action: 'excel_export', click: (elm) => {
+                            window.open(AppConfig.endpoints.exportPreDispatches + '?pre_dispatch_id=' + elm.id);
+                        }},
+                        {action: 'view', click: (elm, container) => {
+                            container.integraaModalService.open('/pages/pre-dispatch/' + elm.id + '/products', {width: 1250, height: 650});
+                        }},
                     ]},
                 {title: 'PRE-DISPATCH LIST NAME', field: 'name', actions: []},
                 {title: 'PRE-DISPATCH LIST N°', field: 'code', actions: []},

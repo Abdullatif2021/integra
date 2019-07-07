@@ -9,7 +9,10 @@ export const AppConfig = {
         getRecipients: '/api/recipient',
         getPreDispatched: '/api/preDispatch',
         createPreDispatched: '/api/preDispatch',
-        preDispatchAddProducts: 'preDispatch/addProducts',
+        preDispatchAddProducts: '/api/preDispatch/addProducts',
+        mergePreDispatches: '/api/preDispatch/merge',
+        exportPreDispatches: '/api/preDispatch/export',
+        getPreDispatchProducts: '/api/preDispatch/getProducts'
     },
 
 };

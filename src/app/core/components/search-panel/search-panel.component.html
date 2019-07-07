@@ -147,7 +147,7 @@
     <!-- Actions area {  -->
     <!-- Action select {  -->
     <div class="col-lg-2 col-md-10">
-      <ng-select [items]="actions" (change)="changeActiveAction($event)" [bindLabel]="'name'" class="integraa-select" placeholder="Scegli un'operazione"></ng-select>
+      <ng-select [items]="actions" [(ngModel)]="_m_active_action" (change)="changeActiveAction($event)" [bindLabel]="'name'" class="integraa-select" placeholder="Scegli un'operazione"></ng-select>
     </div>
     <!-- } Action select -->
     <ng-container *ngIf="active_action">

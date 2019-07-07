@@ -13,7 +13,15 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
-import { ModalDirective } from './directives/modal.directive';
+import {faTimes} from '@fortawesome/free-solid-svg-icons/faTimes';
+import {faExpand} from '@fortawesome/free-solid-svg-icons/faExpand';
+import {faArrowsAltH} from '@fortawesome/free-solid-svg-icons/faArrowsAltH';
+import {faCompress} from '@fortawesome/free-solid-svg-icons/faCompress';
+import {faWindowMaximize} from '@fortawesome/free-solid-svg-icons/faWindowMaximize';
+import {faWindowMinimize} from '@fortawesome/free-solid-svg-icons/faWindowMinimize';
+import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons/faExternalLinkAlt';
+import {IntegraaModalComponent} from './components/integraa-modal/integraa-modal.component';
+import {AngularDraggableModule} from 'angular2-draggable';
 
 @NgModule({
   imports: [
@@ -24,18 +32,20 @@ import { ModalDirective } from './directives/modal.directive';
     NgSelectModule,
     FormsModule,
     SharedModule,
-    RouterModule
+    RouterModule,
+    AngularDraggableModule,
   ],
   declarations: [
       UserNavComponent,
       MainNavComponent,
       SearchPanelComponent,
-      ModalDirective,
+      IntegraaModalComponent
   ],
   exports: [
     UserNavComponent,
     MainNavComponent,
-    SearchPanelComponent
+    SearchPanelComponent,
+    IntegraaModalComponent
   ],
 })
 export class CoreModule {
@@ -44,5 +54,12 @@ export class CoreModule {
         library.add(faBell);
         library.add(faChevronDown);
         library.add(faChevronUp);
+        library.add(faExpand);
+        library.add(faCompress);
+        library.add(faWindowMinimize);
+        library.add(faWindowMaximize);
+        library.add(faArrowsAltH);
+        library.add(faExternalLinkAlt);
+        library.add(faTimes);
     }
 }

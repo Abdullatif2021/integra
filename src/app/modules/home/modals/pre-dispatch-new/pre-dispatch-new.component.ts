@@ -27,6 +27,7 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit {
 
   run(modal) {
     if ( !this.name || this.name === '' ) { return this.error = 1; }
+    if ( this.name.length < 3 ) { return this.error = 2; }
     this.actionsService.createNewPreDispatch(this.data, this.name) ;
     modal.close();
   }

@@ -1,4 +1,5 @@
-import {Component, OnInit, Input, ViewChild, ChangeDetectorRef, AfterViewChecked, EventEmitter, Output} from '@angular/core';
+import {Component, OnInit, Input, ViewChild, ChangeDetectorRef, AfterViewChecked, EventEmitter, Output, Host} from '@angular/core';
+import {PreDispatchComponent} from '../../../modules/home/components/pre-dispatch/pre-dispatch.component';
 
 @Component({
     selector: 'app-table',
@@ -13,6 +14,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     @ViewChild('tableRow') tableRowElement;
     @Input() table: any = {} ;
     @Input() items: any = [] ;
+    @Input() parent: any ;
     isLoading = true ;
     @Output() selected = new EventEmitter() ;
     selectedProducts = [] ;

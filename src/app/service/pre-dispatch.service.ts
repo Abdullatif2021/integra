@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {ApiResponseInterface} from '../core/models/api-response.interface';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import {AppConfig} from '../config/app.config';
@@ -21,6 +21,7 @@ export class PreDispatchService {
     httpOptions = {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
+    selectedPreDispatches = [] ;
 
     getPreDispatchList() {
         const options = { params: new HttpParams()};
@@ -30,6 +31,7 @@ export class PreDispatchService {
             catchError(this.handleError)
         );
     }
+
     getPreDispatchItems() {
         const options = { params: new HttpParams()};
         options.params = options.params.set('page', this.paginationService.current_page) ;
@@ -47,6 +49,7 @@ export class PreDispatchService {
         }
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.createPreDispatched, options, this.httpOptions);
     }
+
     createByFilters(name) {
         const options = {
             name: name,
@@ -57,17 +60,19 @@ export class PreDispatchService {
             catchError(this.handleError)
         );
     }
+
     addProductsBySelected(id, products) {
         const options = {
             id: id,
             product_ids: products,
             confirm: true,
-            byFilter: '0',
+            byFilter: false,
         }
-        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.createPreDispatched, options).pipe(
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.preDispatchAddProducts, options).pipe(
             catchError(this.handleError)
         );
     }
+
     addProductsByFilters(id) {
         const options = {
             id: id,
@@ -75,7 +80,7 @@ export class PreDispatchService {
             filters: this.filtersService.getFiltersObject(),
             byFilter: '1',
         }
-        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.createPreDispatched, options).pipe(
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.preDispatchAddProducts, options).pipe(
             catchError(this.handleError)
         );
     }
@@ -87,5 +92,15 @@ export class PreDispatchService {
             console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
         }
         return throwError('');
+    }
+
+    merge(items, name) {
+        const options = {
+            name: name,
+            pre_dispatch_ids: items,
+        }
+        return this.http.post<any>(AppConfig.endpoints.mergePreDispatches, options).pipe(
+            catchError(this.handleError)
+        );
     }
 }

@@ -10,7 +10,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { TableComponent } from './components/table/table.component';
 import { SimpleTableComponent } from './components/simple-table/simple-table.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import {RouterModule} from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { ModalDirective } from './directives/modal.directive';
 
 @NgModule({
   imports: [
@@ -19,24 +20,26 @@ import {RouterModule} from '@angular/router';
     FontAwesomeModule,
     NgSelectModule,
     InfiniteScrollModule,
-    RouterModule
+    RouterModule,
   ],
   declarations: [
       SearchBoxComponent,
       PaginationComponent,
       TableComponent,
-      SimpleTableComponent
+      SimpleTableComponent,
+      ModalDirective
   ],
   exports: [
       SearchBoxComponent,
       PaginationComponent,
       TableComponent,
-      SimpleTableComponent
+      SimpleTableComponent,
+      ModalDirective
   ]
 })
 export class SharedModule {
 
-    constructor(){
+    constructor() {
         library.add(faSearch);
     }
 

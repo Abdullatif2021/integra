@@ -5,6 +5,9 @@ import {TableComponent} from '../../../../shared/components/table/table.componen
 import {FiltersService} from '../../../../service/filters.service';
 import {PaginationService} from '../../../../service/pagination.service';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
+import {ActionsService} from '../../../../service/actions.service';
+import {PreDispatchMergeComponent} from '../../modals/pre-dispatch-merge/pre-dispatch-merge.component';
+import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 
 @Component({
   selector: 'app-pre-dispatch',
@@ -17,12 +20,15 @@ export class PreDispatchComponent implements OnInit {
   subscription: any = false ;
   preDispatchList: any = [] ;
   @ViewChild('preDispatchTable') _preDispatchTable: TableComponent ;
-
+  @ViewChild('imodal') imodal ;
+  actions = [{name: 'Unisci Pre-distinte', modal: PreDispatchMergeComponent}] ;
 
   constructor(
       private paginationService: PaginationService,
       private filtersService: FiltersService,
-      private preDispatchService: PreDispatchService
+      private preDispatchService: PreDispatchService,
+      private actionsService: ActionsService,
+      private integraaModalService: IntegraaModalService
   ) { }
 
     // Dummy data {
@@ -46,8 +52,18 @@ export class PreDispatchComponent implements OnInit {
 
 
   ngOnInit() {
+      this.actionsService.setActions(this.actions) ;
       this.filtersService.clear();
       this.loadItems(true);
+      this.actionsService.reloadData.subscribe((state) => {
+          this.loadItems(false) ;
+          this.preDispatchService.selectedPreDispatches = [] ;
+      });
+      // setTimeout(() => {this.integraaModalService.open('/settings', {width: '400px', height: '300px'}) ; }, 1000);
+      // setTimeout(() => {this.integraaModalService.open('/dispatch', {width: '400px', height: '300px'}) ; }, 3000);
   }
 
+  selectedItemsChanged(items) {
+      this.preDispatchService.selectedPreDispatches = items ;
+  }
 }

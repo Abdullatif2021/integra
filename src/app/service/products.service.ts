@@ -32,6 +32,18 @@ export class ProductsService {
       );
   }
 
+  getPreDispatchProducts(id) {
+      const options = { params: new HttpParams()
+              .set('page', this.paginationService.current_page)
+              .set('pageSize', this.paginationService.rpp)
+              .set('pre_dispatch_id', id)
+      };
+      options.params = this.filtersService.getHttpParams(options.params) ;
+      return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchProducts, options).pipe(
+          catchError(this.handleError)
+      );
+  }
+
   handleError(error: HttpErrorResponse) {
       if (error.error instanceof ErrorEvent) {
           console.error('An error occurred:', error.error.message);

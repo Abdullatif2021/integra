@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ViewChild} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {PaginationService} from '../../../service/pagination.service';
 
 @Component({
@@ -11,14 +11,17 @@ export class PaginationComponent implements OnInit {
   @Input() theme = 'light' ;
   @Input() results_count: number = null ;
   @Input() loading = true ;
-  rpp = 20 ;
+  rpp = 50 ;
   pages = 0 ;
   @Input() current_page = 1;
   pages_list  = [
-      {key: 20, value: 20},
-      {key: 40, value: 40},
-      {key: 60, value: 60},
-      {key: 80, value: 80},
+      {key: 50, value: 50},
+      {key: 100, value: 100},
+      {key: 150, value: 150},
+      {key: 200, value: 200},
+      {key: 500, value: 500},
+      {key: 1000, value: 1000},
+      {key: 'Toutto', value: 9000000},
   ]
 
   constructor(private paginationService: PaginationService) { }
@@ -38,7 +41,6 @@ export class PaginationComponent implements OnInit {
   }
 
   rppChanged(event) {
-    console.log(event.value);
     this.paginationService.updateRpp(event.value);
     this.rpp = event.value ;
     this.updatePages() ;
@@ -46,7 +48,6 @@ export class PaginationComponent implements OnInit {
 
   updatePages() {
       this.pages = Math.ceil(this.results_count / this.rpp);
-      console.log(this.results_count , this.rpp);
   }
 
   changePage(page) {

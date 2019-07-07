@@ -10,7 +10,7 @@ export class PaginationService {
   rppValueChanges = new EventEmitter<number>() ;
   currentPageChanges = new EventEmitter<number>() ;
   current_page: any = 1 ;
-  rpp: any = 20 ;
+  rpp: any = 50 ;
   constructor() { }
 
 

@@ -88,13 +88,13 @@
                             </ng-container>
                         </span>
                             <ng-container *ngFor="let action of col.actions">
-                                <ng-container *ngIf="action.action=='view'" [ngTemplateOutlet]="view" [ngTemplateOutletContext]="{action:action}"></ng-container>
-                                <ng-container *ngIf="action.action=='book'" [ngTemplateOutlet]="book" [ngTemplateOutletContext]="{action:action}"></ng-container>
-                                <ng-container *ngIf="action.action=='progress'" [ngTemplateOutlet]="progress" [ngTemplateOutletContext]="{action:action,item:item}"></ng-container>
-                                <ng-container *ngIf="action.action=='pp'" [ngTemplateOutlet]="pp" [ngTemplateOutletContext]="{action:action,item:item}"></ng-container>
-                                <ng-container *ngIf="action.action=='print'" [ngTemplateOutlet]="print" [ngTemplateOutletContext]="{action:action,item:item}"></ng-container>
-                                <ng-container *ngIf="action.action=='excel_export'" [ngTemplateOutlet]="excel_export" [ngTemplateOutletContext]="{action:action,item:item}"></ng-container>
-                                <ng-container *ngIf="action.action=='edit'" [ngTemplateOutlet]="edit" [ngTemplateOutletContext]="{action:action,item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='view'" [ngTemplateOutlet]="view" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='book'" [ngTemplateOutlet]="book" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='progress'" [ngTemplateOutlet]="progress" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='pp'" [ngTemplateOutlet]="pp" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='print'" [ngTemplateOutlet]="print" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='excel_export'" [ngTemplateOutlet]="excel_export" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='edit'" [ngTemplateOutlet]="edit" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                             </ng-container>
                         </td>
                         <!-- } item cell  -->
@@ -134,16 +134,16 @@
 
 <!-- TODO complete this thing -->
 <!--  Actions templates { -->
-<ng-template #view let-action="action">
-    <img (click)="action.click && action.click(null)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon">
+<ng-template #view let-action="action" let-item="item">
+    <img (click)="action.click && action.click(item, parent)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon">
 </ng-template>
 <ng-template #book><img src="assets/images/notepad.svg" class="action-icon"></ng-template>
-<ng-template #print><img src="assets/images/printer-icon.png" class="action-icon"></ng-template>
-<ng-template #excel_export><img src="assets/images/download-to-excel-icon.jpg" class="action-icon"></ng-template>
-<ng-template #edit><img src="assets/images/edit-icon.png" class="action-icon"></ng-template>
+<ng-template #print><img src="assets/images/printer.svg" class="action-icon"></ng-template>
+<ng-template #excel_export let-action="action" let-item="item"><img (click)="action.click(item)" src="assets/images/excel.svg" class="action-icon"></ng-template>
+<ng-template #edit><img src="assets/images/edit.svg" class="action-icon"></ng-template>
 <ng-template #pp let-action="action" let-item="item">
-    <img *ngIf="item[action.field] && (action.print_if?action.print_if(item):true)" (click)="action.click && action.click(null)" src="assets/images/pause-icon.png" class="action-icon play-pause-icon">
-    <img *ngIf="!item[action.field] && (action.print_if?action.print_if(item):true)" (click)="action.click && action.click(null)" src="assets/images/play-icon.png" class="action-icon play-pause-icon">
+    <img *ngIf="item[action.field] && (action.print_if?action.print_if(item):true)" (click)="action.click && action.click(item)" src="assets/images/pause.svg" class="action-icon play-pause-icon">
+    <img *ngIf="!item[action.field] && (action.print_if?action.print_if(item):true)" (click)="action.click && action.click(item)" src="assets/images/play.svg" class="action-icon play-pause-icon">
 </ng-template>
 <ng-template #progress let-action="action" let-item="item">
     <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngStyle]="{width:item[action.field]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz">{{item[action.field]}} %</div></div>

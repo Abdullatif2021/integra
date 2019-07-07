@@ -13,6 +13,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { PreDispatchAddComponent } from './modals/pre-dispatch-add/pre-dispatch-add.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PreDispatchNewComponent } from './modals/pre-dispatch-new/pre-dispatch-new.component';
+import { PreDispatchMergeComponent } from './modals/pre-dispatch-merge/pre-dispatch-merge.component';
 
 @NgModule({
   imports: [
@@ -32,13 +33,18 @@ import { PreDispatchNewComponent } from './modals/pre-dispatch-new/pre-dispatch-
       HomeComponent,
       PreDispatchAddComponent,
       PreDispatchNewComponent,
+      PreDispatchMergeComponent,
   ],
   exports: [
       HomeComponent,
       HomeRoutingModule
   ],
   bootstrap: [HomeComponent],
-  entryComponents: [PreDispatchAddComponent,PreDispatchNewComponent],
+  entryComponents: [
+      PreDispatchAddComponent,
+      PreDispatchNewComponent,
+      PreDispatchMergeComponent
+  ],
 
 })
 export class HomeModule { }

@@ -4,7 +4,8 @@ import {ApiResponseInterface} from '../../models/api-response.interface';
 import {RecipientsService} from '../../../service/recipients.service';
 import {ActionsService} from '../../../service/actions.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ModalDirective} from '../../directives/modal.directive';
+import {ModalDirective} from '../../../shared/directives/modal.directive';
+// import {FilterConfig} from '../../../config/filters.config';
 
 @Component({
   selector: 'app-search-panel',
@@ -19,7 +20,6 @@ export class SearchPanelComponent implements OnInit {
       private recipientsService: RecipientsService,
       private actionsService: ActionsService,
       private componentFactoryResolver: ComponentFactoryResolver,
-      private viewContainerRef: ViewContainerRef,
       private modalService: NgbModal
   ) {}
 
@@ -35,6 +35,7 @@ export class SearchPanelComponent implements OnInit {
   subscriptions: any = {} ;
   grouping = {active: 'cap', filters: 'filters'} ;
   active_action: any = false ;
+  _m_active_action = null ;
   actions: any = [];
   @ViewChild(ModalDirective) modalHost: ModalDirective;
 
@@ -56,6 +57,8 @@ export class SearchPanelComponent implements OnInit {
       });
       this.filtersService.cleared.subscribe(() => {
           this._active_filters = [];
+          this._m_active_action = null ;
+          this.active_action = null ;
       });
   }
 
@@ -120,6 +123,7 @@ export class SearchPanelComponent implements OnInit {
       }
       this.filtersService.updateFilters(filters) ;
   }
+
   filterCustomer(customer) {
       this.active_cap = customer ;
       this._active_filters = this._active_filters.filter((elm) => {
@@ -201,9 +205,6 @@ export class SearchPanelComponent implements OnInit {
           {type: 'simpleText', label: 'Articolo Legge', key: 'articleLawName'},
           {type: ['date', 'date'], label: 'Data Articolo Legge:', group: true, key: ['fromArticleLawDate', 'toArticleLawDate']},
           {type: ['date', 'date'], label: 'Data Accettazione:', group: true, key: ['fromAcceptanceDate', 'toAcceptanceDate']},
-          // {type: 'simpleText', label: 'Nominativo MITTENTE', key: 'senderName'}, // not in filters
-          // {type: 'ng-select', label: 'MITTENTE', key: 'senderId', items: this.filters_data.senders, labelVal: 'name'}, // not in filters
-
          ];
   }
 
@@ -258,9 +259,9 @@ export class SearchPanelComponent implements OnInit {
                 appendVal.target.value : null ;
         }
     }
-    if ( action && !appendField ) {
+    if ( action && !appendField && action.fields) {
         action.fields.forEach((field) => {
-            action[field.field] = field.selectedAttribute.value ;
+            action[field.field] = field.selectedAttribute && field.selectedAttribute.value ? field.selectedAttribute.value : '' ;
         });
     }
     this.active_action = action;

@@ -1,0 +1,49 @@
+<ng-container *ngFor="let modal of modals">
+  <ng-container [ngTemplateOutlet]="modalRef" [ngTemplateOutletContext]="{modal:modal}"></ng-container>
+</ng-container>
+<div class="minimized-modals-container">
+  <ng-container *ngFor="let modal of modals">
+    <ng-container *ngIf="modal.options.minimized" [ngTemplateOutlet]="minimizedModal" [ngTemplateOutletContext]="{modal:modal}"></ng-container>
+  </ng-container>
+</div>
+
+
+<ng-template #modalRef let-modal="modal">
+  <div class="integraa-modal-container" id="{{modal.id}}" [ngStyle]="{'height': modal.height + 'px'}" [ngClass]="{'hidden':modal.options.minimized}">
+    <div class="integraa-modal z-depth-1" [handle]="handle" [bounds]="bounds"
+         [inBounds]="modal.inBounds" ngDraggable ngResizable [ngStyle]="{
+         'width': modal.options.width + modal.options.sizeUnit,
+         'height': modal.options.height + modal.options.sizeUnit
+         }" (endOffset)="onEndOffset($event, modal)" [position]="modal.options.position"
+         (rzResizing)="onResizing($event, modal)">
+      <div class="integraa-modal-header" #handle>
+        <div class="actions">
+          <div *ngIf="!modal.options.minimized" (click)="minimize(modal)" class="action-btn"><fa-icon [icon]="['fa','window-minimize']"></fa-icon></div>
+          <div class="action-btn" *ngIf="!modal.options.fullWidth && !modal.options.expanded" (click)="fullWidth(modal)"><fa-icon [icon]="['fa','arrows-alt-h']"></fa-icon></div>
+          <div class="action-btn" *ngIf="modal.options.fullWidth && !modal.options.expanded" (click)="fullWidth(modal)"><fa-icon [icon]="['fa','arrows-alt-h']"></fa-icon></div>
+          <div *ngIf="!modal.options.expanded" (click)="expand(modal)" class="action-btn"><fa-icon [icon]="['fa','expand']"></fa-icon></div>
+          <div *ngIf="modal.options.expanded" (click)="expand(modal)" class="action-btn"><fa-icon [icon]="['fa','compress']"></fa-icon></div>
+          <div class="action-btn" (click)="close(modal)"><fa-icon [icon]="['fa','times']"></fa-icon></div>
+        </div>
+        <div class="left-actions">
+          <div class="action-btn" (click)="openLink(modal)"><fa-icon [icon]="['fa','external-link-alt']"></fa-icon></div>
+        </div>
+        <div class="clear-both"></div>
+      </div>
+      <div class="integraa-modal-body">
+        <div class="loading-container" [ngClass]="{'hidden':modal.displayed}">
+          <div class="loader"></div>
+        </div>
+        <iframe class="m-frame" [ngClass]="{'hidden':modal.displayed < 1}" (load)="display(modal)" [src]="modal.options.url"></iframe>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #minimizedModal let-modal="modal">
+  <div class="integraa-minimized-modal">
+    <div class="integraa-modal-header">
+      <div class="action-btn" (click)="minimize(modal)"><fa-icon [icon]="['fa','window-maximize']"></fa-icon></div>
+    </div>
+  </div>
+</ng-template>

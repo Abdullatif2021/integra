@@ -46,15 +46,17 @@ export class ToDeliverComponent implements OnInit {
               { type: 'select', field: 'method', options: [
                       {name: 'Selezionati', value: 'selected'},
                       {name: 'Secondo i filtri applicati', value: 'filters'}
-                  ], selectedAttribute: {name: 'Selezionati', value: 'selected'}}
+                  ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+              }
           ],
           modal: PreDispatchNewComponent
       },
       {name: 'Aggiungi a Pre-Distinta esistente', fields: [
               { type: 'select', field: 'method', options: [
-                  {name: 'Selezionati', value: 'selected'},
-                  {name: 'Secondo i filtri applicati', value: 'filters'}
-              ], selectedAttribute: {name: 'Selezionati', value: 'selected'}}
+                      {name: 'Selezionati', value: 'selected'},
+                      {name: 'Secondo i filtri applicati', value: 'filters'}
+                  ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+              }
           ],
           modal: PreDispatchAddComponent,
       },
@@ -88,6 +90,10 @@ export class ToDeliverComponent implements OnInit {
           this._citiesTable.reload();
       });
       this.actionsService.setActions(this.actions);
+      this.actionsService.reloadData.subscribe((state) => {
+          this.loadProducts(false) ;
+          this.productsService.selectedProducts = [] ;
+      });
   }
 
   loadProducts(reset: boolean) {
