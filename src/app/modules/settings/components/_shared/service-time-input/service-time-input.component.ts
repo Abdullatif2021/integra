@@ -14,7 +14,7 @@ export class ServiceTimeInputComponent implements OnInit {
   ngOnInit() {
   }
 
-  delete() {
+  delete(setting) {
     this.deleted.emit(this.setting) ;
   }
 

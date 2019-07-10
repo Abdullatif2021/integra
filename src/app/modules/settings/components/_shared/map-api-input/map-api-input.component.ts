@@ -15,7 +15,7 @@ export class MapApiInputComponent implements OnInit {
   ngOnInit() {
   }
 
-  delete() {
+  delete(setting) {
     this.deleted.emit(this.setting) ;
   }
 
