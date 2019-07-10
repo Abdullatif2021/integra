@@ -90,6 +90,9 @@ export class ActionsService {
       }
       this.run(method, 'Creazione Pre-Distinta in corsot', () => {
           setTimeout(() => {this.reloadData.emit(true) ; }, 500 );
+          if ( typeof data.finish === 'function' ) {
+              data.finish() ;
+          }
           return 'Pre-distinta Creata con successo' ;
       }, (error) => error.error.message );
 

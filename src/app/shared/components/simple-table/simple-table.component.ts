@@ -98,5 +98,11 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this.loading = true ;
     this.loadData(false) ;
   }
+  clearData() {
+    this.page = 1;
+    this.loaded = false ;
+    this.loading = false ;
+    this.items = [] ;
+  }
 
 }

@@ -1,0 +1,23 @@
+<ng-template #modalRef let-modal>
+  <div class="modal-container">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-12">
+          <label>Colonne da Importare</label>
+          <textarea (input)="valueChanged($event)" class="form-control barcodes-input"></textarea>
+          <div class="total">
+            <label>Totale righe: </label>
+            <div class="total-val">{{ items.length }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btns-container mt-3">
+        <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">Esegui</button>
+        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Cancel</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+

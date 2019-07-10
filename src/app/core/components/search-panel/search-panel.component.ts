@@ -5,7 +5,6 @@ import {RecipientsService} from '../../../service/recipients.service';
 import {ActionsService} from '../../../service/actions.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../shared/directives/modal.directive';
-// import {FilterConfig} from '../../../config/filters.config';
 
 @Component({
   selector: 'app-search-panel',
@@ -29,7 +28,8 @@ export class SearchPanelComponent implements OnInit {
   _active_filters = [] ;
   filters_data: any ;
   filtersFields: any ;
-  searchFields: object ;
+  fieldsData: any ;
+  searchFields: any ;
   search_value: string;
   active_cap = null ;
   subscriptions: any = {} ;
@@ -37,6 +37,7 @@ export class SearchPanelComponent implements OnInit {
   active_action: any = false ;
   _m_active_action = null ;
   actions: any = [];
+  loaded = false ;
   @ViewChild(ModalDirective) modalHost: ModalDirective;
 
   unsubscribeTo(name) {
@@ -50,6 +51,7 @@ export class SearchPanelComponent implements OnInit {
          if (res.status === 'success') {
             this.filters_data = res.data ;
             this.initFields();
+            this.loaded = true;
          }
       });
       this.actionsService.actionsChanges.subscribe((actions) => {
@@ -59,7 +61,18 @@ export class SearchPanelComponent implements OnInit {
           this._active_filters = [];
           this._m_active_action = null ;
           this.active_action = null ;
+          this._search = null ;
+          this._filters = [] ;
       });
+      this.filtersService.fields.subscribe((data) => {
+          if ( this.loaded ) {
+              this.filtersFields = data.fields.filters( data.container, this);
+              this.searchFields = data.fields.search( data.container, this);
+          } else {
+              this.fieldsData = data ;
+          }
+      });
+
   }
 
   searchFieldChanged(event) {
@@ -152,62 +165,6 @@ export class SearchPanelComponent implements OnInit {
 
   clearFilters() {}
 
-  initFields() {
-      this.searchFields = [
-          {type: 'ng-select', label: 'Cliente', key: 'customerId', items:  this.filters_data.customers, labelVal: 'name'},
-          {type: 'text', label: 'Nominativo Cliente', key: 'customerName'},
-          {type: 'text', label: 'Distinita Postale', key: 'dispatchCode'},
-          {type: 'text', label: 'Codice Barre', key: 'barcode'},
-          {type: 'text', label: 'Codice Atto', key: 'actCode'},
-          {type: 'text', label: 'Nominativo Destinatario', key: 'recipientName'},
-          {type: 'ng-select', label: 'Destinatario', key: 'recipientId', labelVal: 'name',
-              getMethod: (term) => this.recipientsService.getRecipientsByName(term), items: this.filters_data.recipient},
-          {type: 'date', label: 'Data/Ora', key: 'date'},
-          {type: 'text', label: 'Articolo Legge', key: 'articleLawName'},
-          {type: 'date', label: 'Data Articolo Legge', key: 'articleLawDate'},
-          {type: 'date', label: 'Data Accettazione', key: 'acceptanceDate'},
-          {type: 'number', label: 'TENTATIVI', key: 'attempt'},
-          {type: 'text', label: 'Nominativo MITTENTE', key: 'senderName'},
-          {type: 'ng-select', label: 'MITTENTE', key: 'senderId', items: this.filters_data.senders, labelVal: 'name'},
-          {type: 'ng-select', label: 'Categoria', key: 'categoryId', items: this.filters_data.categories, labelVal: 'name'},
-          {type: 'ng-select', label: 'Agenzia', key: 'agencyId', items: this.filters_data.agencies, labelVal: 'name'},
-          {type: 'ng-select', label: 'Product Type', key: 'typeId', items: this.filters_data.products_type, labelVal: 'type'},
-          {type: 'text', label: 'Note', key: 'note'}
-      ];
-      this.filtersFields =  [
-          {type: 'simpleText', label: 'Nominativo Cliente', key: 'customerName', value: ''},
-          {type: 'ng-select', label: 'Cliente', key: 'customerId', items:  this.filters_data.customers, labelVal: 'name', value: ''},
-          // {type: 'simpleText', label: 'Postino previsto:', disabled: true},
-          {type: 'ng-select', label: 'Agenzia', key: 'agencyId', items: this.filters_data.agencies, labelVal: 'name', value: ''},
-          {type: 'simpleText', label: 'Distinita Postale', key: 'dispatchCode', value: ''},
-          {type: 'tag', label: 'Codice Barre', key: 'barcode', value: '', _class: 'tags-select'},
-          {type: 'simpleText', label: 'Codice Atto', key: 'actCode', value: ''},
-          {type: 'simpleText', label: 'Nome Prodotto:', key: 'productTypeName', value: ''},
-          {type: 'ng-select', label: 'Prodotto', key: 'productTypeNameId',
-              items: this.filters_data.products_type, labelVal: 'type'},
-          {type: 'ng-select', label: 'Categoria', key: 'categoryId', items: this.filters_data.categories, labelVal: 'name', value: ''},
-          // {type: 'simpleText', label: 'Stato/Esito:', disabled: true},
-          {type: 'simpleText', label: 'Nominativo Destinatario', key: 'recipientName', value: ''},
-          {type: 'ng-select', label: 'Destinatario', key: 'recipientId', labelVal: 'name',
-              getMethod: (term) => this.recipientsService.getRecipientsByName(term), items: this.filters_data.recipient},
-          {type: 'ng-select', label: 'CAP Destinatario:', key: 'recipientCap', items: this.filters_data.caps_group, labelVal: 'name'},
-          {type: 'simpleText', label: 'Indirizzo Destinatario:', key: 'destination'},
-          {type: 'ng-select', label: 'Raggruppamento quantita:', labelVal: 'name',
-              items: [{name: 'Quantità per CAP', id: 'cap'}, {name: 'Quantità per Cliente', id: 'client'}],
-              change: (val) => {this.groupByChanged(val) ; }, unclearbale: true,
-              selectedAttribute: {name: 'Quantità per CAP', id: 'cap'}},
-          {type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
-              {name: 'Tutto', id: 'all'}, {name: 'Con Filtri Applicati', id: 'filters'} ], labelVal: 'name',
-              selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'},
-              change: (val) => {this.grouping.filters = val.id ; }, unclearbale: true
-          },
-          {type: ['date', 'date'], label: 'Data/Ora:', group: true, key: ['fromDate', 'toDate']},
-          {type: 'simpleText', label: 'Articolo Legge', key: 'articleLawName'},
-          {type: ['date', 'date'], label: 'Data Articolo Legge:', group: true, key: ['fromArticleLawDate', 'toArticleLawDate']},
-          {type: ['date', 'date'], label: 'Data Accettazione:', group: true, key: ['fromAcceptanceDate', 'toAcceptanceDate']},
-         ];
-  }
-
   groupByChanged(val) {
       this.grouping.active = val.id ;
       let selected = {} ;
@@ -251,6 +208,9 @@ export class SearchPanelComponent implements OnInit {
     }
 
   changeActiveAction(action, appendField = null, appendVal = null) {
+    if ( !appendField &&  this.active_action && typeof this.active_action.finish === 'function') {
+        this.active_action.finish() ;
+    }
     if ( action && appendField ) {
         if ( appendField.type === 'select' ) {
             action[appendField['field']] = appendVal ? appendVal.value : null ;
@@ -264,11 +224,13 @@ export class SearchPanelComponent implements OnInit {
             action[field.field] = field.selectedAttribute && field.selectedAttribute.value ? field.selectedAttribute.value : '' ;
         });
     }
+    if ( action && !appendField && typeof action.init === 'function' ) {
+        action.init() ;
+    }
     this.active_action = action;
   }
 
   runAction() {
-
     if ( this.active_action.modal ) {
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.active_action.modal);
         const viewContainerRef = this.modalHost.viewContainerRef ;
@@ -276,12 +238,21 @@ export class SearchPanelComponent implements OnInit {
         const componentRef = viewContainerRef.createComponent(componentFactory);
         const instance = <any>componentRef.instance ;
         instance.data = this.active_action ;
-        this.modalService.open(instance.modalRef,{ windowClass: 'animated slideInDown' }) ;
+        this.modalService.open(instance.modalRef, { windowClass: 'animated slideInDown' }) ;
     } else if ( typeof this.active_action === 'object' && typeof this.active_action.run === 'function' ) {
         this.active_action.run() ;
     }
   }
 
+  checkActionSubmit(event) {
+      if (event.code === 'Enter' && typeof this.active_action.submit === 'function') {
+          this.active_action.submit(this.active_action, event);
+      }
+  }
 
+  initFields() {
+      this.filtersFields = this.fieldsData.fields.filters( this.fieldsData.container, this);
+      this.searchFields = this.fieldsData.fields.search( this.fieldsData.container, this);
+  }
 
 }

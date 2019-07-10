@@ -14,6 +14,7 @@ import { PreDispatchAddComponent } from './modals/pre-dispatch-add/pre-dispatch-
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PreDispatchNewComponent } from './modals/pre-dispatch-new/pre-dispatch-new.component';
 import { PreDispatchMergeComponent } from './modals/pre-dispatch-merge/pre-dispatch-merge.component';
+import { ImportFromBarcodesComponent } from './modals/import-from-barcodes/import-from-barcodes.component';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { PreDispatchMergeComponent } from './modals/pre-dispatch-merge/pre-dispa
       PreDispatchAddComponent,
       PreDispatchNewComponent,
       PreDispatchMergeComponent,
+      ImportFromBarcodesComponent,
   ],
   exports: [
       HomeComponent,
@@ -43,7 +45,8 @@ import { PreDispatchMergeComponent } from './modals/pre-dispatch-merge/pre-dispa
   entryComponents: [
       PreDispatchAddComponent,
       PreDispatchNewComponent,
-      PreDispatchMergeComponent
+      PreDispatchMergeComponent,
+      ImportFromBarcodesComponent
   ],
 
 })

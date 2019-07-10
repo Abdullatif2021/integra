@@ -33,6 +33,10 @@ body{
     margin-top: 5px;
     text-align: center;
 }
+.integraa-light-btn {
+    background: white;
+    border: 1px solid #fcda4b;
+}
 .integraa-btn-dark{
     background-color: #212121 !important;
     color: #fff !important;

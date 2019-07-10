@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {ApiResponseInterface} from '../core/models/api-response.interface';
 import {catchError} from 'rxjs/operators';
@@ -19,7 +19,7 @@ export class ProductsService {
   ) { }
 
   public selectedProducts ;
-
+  selectAllOnLoadEvent = new EventEmitter() ;
   getToDeliverProducts(city, street) {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)
@@ -42,6 +42,10 @@ export class ProductsService {
       return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchProducts, options).pipe(
           catchError(this.handleError)
       );
+  }
+
+  selectAllOnLoad(val) {
+      this.selectAllOnLoadEvent.emit(val);
   }
 
   handleError(error: HttpErrorResponse) {

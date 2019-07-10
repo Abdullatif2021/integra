@@ -14,7 +14,9 @@ export class FiltersService {
   constructor(private http: HttpClient) { }
   filtersChanges = new EventEmitter<number>() ;
   cleared = new EventEmitter<number>() ;
+  fields = new EventEmitter() ;
   filters = [];
+  barcodes = [];
 
   getFiltersData() {
       return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getFiltersData).pipe(
@@ -54,6 +56,16 @@ export class FiltersService {
       return _filters ;
   }
 
+  addBarcodeFilter(barcode) {
+      this.barcodes.push(barcode) ;
+      this.updateFilters([{key: 'barcode', value: this.barcodes}]);
+  }
+
+  clearBarcodFilter() {
+      this.barcodes = [] ;
+      this.updateFilters([]) ;
+  }
+
   handleError(error: HttpErrorResponse) {
       if (error.error instanceof ErrorEvent) {
           console.error('An error occurred:', error.error.message);
@@ -61,6 +73,10 @@ export class FiltersService {
           console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
       }
       return throwError('');
+  }
+
+  setFields(fields, container) {
+      this.fields.emit({fields: fields, container: container});
   }
 
   clear() {

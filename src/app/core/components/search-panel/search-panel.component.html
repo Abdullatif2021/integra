@@ -26,7 +26,7 @@
       <!-- } easy search input -->
       <!-- easy search field select { -->
       <div class="col-lg-2 wide-col">
-        <ng-select (change)="searchFieldChanged($event)" [items]="searchFields" class="integraa-select" placeholder="Nel Campo"></ng-select>
+        <ng-select [(ngModel)]="_search" (change)="searchFieldChanged($event)" [items]="searchFields" class="integraa-select" placeholder="Nel Campo"></ng-select>
       </div>
       <!-- } easy search field select  -->
       <!-- easy search submit { -->
@@ -111,7 +111,7 @@
       <!-- } expanded search buttons -->
       <!-- TODO REMAKE IN A BETTER WAY -->
       <!-- Cap statistics/filters { -->
-      <div *ngIf="filters_data && filters_data.caps_group && grouping.active == 'cap'" class="cap-statistics-container row mt-4 justify-content-center d-flex">
+      <div *ngIf="filters_data && fieldsData.grouping && filters_data.caps_group && grouping.active == 'cap'" class="cap-statistics-container row mt-4 justify-content-center d-flex">
         <div class="caps-inner-container">
           <ng-container *ngFor="let cap of filters_data.caps_group; let idx = index">
             <div class="cap-box ml-1" [ngClass]="{'active-cap': active_cap == cap}" (click)="filterCap(cap)">
@@ -123,7 +123,7 @@
           </ng-container>
         </div>
       </div>
-      <div *ngIf="filters_data && filters_data.customer_group && grouping.active == 'client'" class="cap-statistics-container row mt-4 justify-content-center d-flex">
+      <div *ngIf="filters_data && fieldsData.grouping && filters_data.customer_group && grouping.active == 'client'" class="cap-statistics-container row mt-4 justify-content-center d-flex">
         <div class="caps-inner-container">
             <ng-container *ngFor="let customer of filters_data.customer_group; let idx = index">
                 <div class="cap-box ml-1" [ngClass]="{'active-cap': active_cap == customer}" (click)="filterCustomer(customer)">
@@ -151,14 +151,23 @@
     </div>
     <!-- } Action select -->
     <ng-container *ngIf="active_action">
-      <div class="col-lg-2 col-md-10" *ngFor="let field of active_action.fields">
+      <ng-container *ngFor="let field of active_action.fields" >
         <ng-container *ngIf="field.type == 'select'">
-          <ng-select [clearable]="false" (change)="changeActiveAction(active_action,field,$event)" class="integraa-select" [items]="field.options" [bindLabel]="'name'" [(ngModel)]="field.selectedAttribute"></ng-select>
+          <div class="col-lg-2 col-md-10" >
+            <ng-select [clearable]="false" (change)="changeActiveAction(active_action,field,$event)" class="integraa-select" [items]="field.options" [bindLabel]="'name'" [(ngModel)]="field.selectedAttribute"></ng-select>
+          </div>
         </ng-container>
         <ng-container *ngIf="field.type == 'text'">
-          <input type="text" (change)="changeActiveAction(active_action,field,$event)" class="form-control">
+          <div class="col-lg-2 col-md-10" >
+            <input type="text" (keydown)="checkActionSubmit($event)" [placeholder]="field.placeholder" (input)="changeActiveAction(active_action,field,$event)" class="form-control light-text-input">
+          </div>
         </ng-container>
-      </div>
+        <ng-container *ngIf="field.type == 'button'">
+          <div class="col-lg-1 col-md-10" >
+            <button type="submit" (click)="field.click(active_action)" class="integraa-btn integraa-light-btn">{{ field.label }}</button>
+          </div>
+        </ng-container>
+      </ng-container>
     </ng-container>
     <!-- Action submit btn {  -->
     <div class="col-lg-2 col-md-2">

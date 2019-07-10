@@ -1,0 +1,19 @@
+.barcodes-input{
+    width: 100%;
+    height: 300px;
+    margin: 10px 0px;
+    resize: none;
+}
+.total-val{
+    border: 1px solid #fcda4b;
+    display: inline-block;
+    margin-left: 5px;
+    padding: 0px 5px;
+    font-style: normal;
+    font-weight: bold;
+}
+.total{
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+}

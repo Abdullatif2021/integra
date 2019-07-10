@@ -84,7 +84,6 @@ export class IntegraaModalComponent implements OnInit {
       }
   }
 
-
   onEndOffset(event, modal: IntegraaModal) {
       if (!modal._status.change && event.x > -1 && event.y > -1 &&
           !(event.x === modal.options.position.x && event.y === modal.options.position.y)) {
