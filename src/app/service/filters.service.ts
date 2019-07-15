@@ -5,6 +5,7 @@ import {catchError} from 'rxjs/operators';
 import {AppConfig} from '../config/app.config';
 import {throwError} from 'rxjs';
 import {FilterInterface} from '../core/models/filter.interface';
+import {FilterConfig} from '../config/filters.config';
 
 @Injectable({
   providedIn: 'root'

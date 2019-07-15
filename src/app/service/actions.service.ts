@@ -116,5 +116,20 @@ export class ActionsService {
       }, (error) => error.error.message );
   }
 
+  editPreDispatch(name, id) {
+      const method = this.preDispatchService.edit(id, name) ;
+      this.run(method, 'Edit in corso', () => {
+          setTimeout(() => {this.reloadData.emit(true) ; }, 500 );
+          return 'Pre-Distinte Edit con successo' ;
+      }, (error) => error.error.message );
+  }
+
+  deletePreDispatch(ids) {
+      const method = this.preDispatchService.delete(ids) ;
+      this.run(method, 'Elimina in corso', () => {
+          setTimeout(() => {this.reloadData.emit(true) ; }, 500 );
+          return 'Pre-Distinte Elimina con successo' ;
+      }, (error) => error.error.message );
+  }
 
 }

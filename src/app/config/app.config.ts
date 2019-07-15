@@ -1,4 +1,5 @@
 const api_url = 'http://apiplannerintegraa.storexweb.com'
+// const api_url = ''
 export const AppConfig = {
     api_url: api_url,
     endpoints: {
@@ -12,7 +13,13 @@ export const AppConfig = {
         preDispatchAddProducts: api_url + '/api/preDispatch/addProducts',
         mergePreDispatches: api_url + '/api/preDispatch/merge',
         exportPreDispatches: api_url + '/api/preDispatch/export',
-        getPreDispatchProducts: api_url + '/api/preDispatch/getProducts'
+        getPreDispatchProducts: api_url + '/api/preDispatch/getProducts',
+        preDispatchedit: api_url + '/api/preDispatch',
+        getProvider: api_url + '/api/provider',
+        createProviderKeys: api_url + '/api/providerKey',
+        editProviderKeys: api_url + '/api/providerKey',
+        deleteProviderKeys: api_url + '/api/providerKey',
+        getProviderKeys: api_url + '/api/providerKey'
     },
 
 };

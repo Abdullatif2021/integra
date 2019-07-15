@@ -65,8 +65,8 @@ export const FilterConfig = {
                     {name: 'Planned', id: 'planned'},
                     {name: 'Paused', id: 'paused'}
                 ], labelVal: 'name'},
-            {type: 'simpleText', label: 'Nominativo', key: 'name'},
-            {type: 'simpleText', label: 'Distinita Postale', key: 'code'},
+            {type: 'text', label: 'Nominativo', key: 'name'},
+            {type: 'text', label: 'Distinita Postale', key: 'code'},
             {type: 'number', label: 'Quantity', key: 'quantity'},
 
         ],

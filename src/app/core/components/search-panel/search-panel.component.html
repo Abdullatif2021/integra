@@ -111,7 +111,7 @@
       <!-- } expanded search buttons -->
       <!-- TODO REMAKE IN A BETTER WAY -->
       <!-- Cap statistics/filters { -->
-      <div *ngIf="filters_data && fieldsData.grouping && filters_data.caps_group && grouping.active == 'cap'" class="cap-statistics-container row mt-4 justify-content-center d-flex">
+      <div *ngIf="filters_data && (fieldsData && fieldsData.fields.grouping) && filters_data.caps_group && grouping.active == 'cap'" class="cap-statistics-container row mt-4 justify-content-center d-flex">
         <div class="caps-inner-container">
           <ng-container *ngFor="let cap of filters_data.caps_group; let idx = index">
             <div class="cap-box ml-1" [ngClass]="{'active-cap': active_cap == cap}" (click)="filterCap(cap)">
@@ -123,7 +123,7 @@
           </ng-container>
         </div>
       </div>
-      <div *ngIf="filters_data && fieldsData.grouping && filters_data.customer_group && grouping.active == 'client'" class="cap-statistics-container row mt-4 justify-content-center d-flex">
+      <div *ngIf="filters_data && (fieldsData && fieldsData.fields.grouping) && filters_data.customer_group && grouping.active == 'client'" class="cap-statistics-container row mt-4 justify-content-center d-flex">
         <div class="caps-inner-container">
             <ng-container *ngFor="let customer of filters_data.customer_group; let idx = index">
                 <div class="cap-box ml-1" [ngClass]="{'active-cap': active_cap == customer}" (click)="filterCustomer(customer)">

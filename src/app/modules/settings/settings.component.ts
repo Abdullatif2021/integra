@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {TablesConfig} from '../../config/tables.config';
-import {NavigationEnd, Router} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {SettingsService} from '../../service/settings.service';
+import {ApiResponseInterface} from '../../core/models/api-response.interface';
 
 @Component({
   selector: 'app-settings',
@@ -14,14 +16,14 @@ export class SettingsComponent implements OnInit {
       {id: 'service-time', name: 'Tempo di servizio', route: '/settings'}
     ],
     mapProvider: [
-      {id: 'map-box', name: 'MapBox', route: '/settings/map-box'},
-      {id: 'google-maps', name: 'Google Maps', route: '/settings/google-maps'},
-      {id: 'all-cities', name: 'Tutto città', route: '/settings/all-cities'}
+      // {id: 'map-box', name: 'MapBox', route: '/settings/map-box'},
+      // {id: 'google-maps', name: 'Google Maps', route: '/settings/google-maps'},
+      // {id: 'all-cities', name: 'Tutto città', route: '/settings/all-cities'}
     ]
   }
   settings = [
     {id: 'general', name: 'General'},
-    {id: 'mapProvider', name: 'Map Provider'}
+    {id: 'mapProvider', name: 'Map Provider', route: (subSetting) => '/settings/map/' + subSetting.id}
   ];
 
   activeSetting: any ;
@@ -31,27 +33,43 @@ export class SettingsComponent implements OnInit {
   settingsTable = TablesConfig.simpleTable.settingsTable ;
   subSettingsTable = TablesConfig.simpleTable.subSettingsTable ;
 
-  constructor(private router: Router) {
+  constructor(
+      private router: Router,
+      private activatedRoute: ActivatedRoute,
+      private settingsService: SettingsService
+  ) {
       router.events.subscribe((_route) => {
         if (_route instanceof NavigationEnd) { this.updateActiveTabFromRoute() ; }
       });
   }
 
   ngOnInit() {
-      this.updateActiveTabFromRoute() ;
+      this.activatedRoute.data.subscribe((d) => {
+          if ( d.res.status === 'success') {
+              this.subSettings.mapProvider = d.res.data ;
+          }
+          this.updateActiveTabFromRoute() ;
+      });
   }
 
   updateActiveTab(event) {
     this.activeSetting = event;
   }
+
   routeTo(event) {
-    this.router.navigate([event.route]);
+    if (event.route) {
+        this.router.navigate([event.route]);
+    } else if (typeof this.activeSetting.route === 'function') {
+        this.router.navigate([this.activeSetting.route(event)]);
+    }
   }
+
   updateActiveTabFromRoute() {
     let active = {setting: this.settings[0], subSetting: this.subSettings[this.settings[0].id]} ;
     this.settings.forEach((setting) => {
       this.subSettings[setting.id].forEach( (subSetting) => {
-        if (subSetting.route === this.router.url) {
+        if ( (subSetting.route === this.router.url)
+            || (typeof  setting.route === 'function' && setting.route(subSetting) === this.router.url)) {
           active = {setting: setting, subSetting: subSetting} ;
         }
       });

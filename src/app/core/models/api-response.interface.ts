@@ -1,5 +1,5 @@
 export interface ApiResponseInterface {
     status: string ;
-    data: object ;
+    data: any ;
     pagination: any ;
 }

@@ -37,6 +37,10 @@ body{
     background: white;
     border: 1px solid #fcda4b;
 }
+.integraa-danger-btn {
+    background-color: #f18883;
+    color: white;
+}
 .integraa-btn-dark{
     background-color: #212121 !important;
     color: #fff !important;

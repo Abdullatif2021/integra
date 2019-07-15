@@ -18,7 +18,7 @@ import {PagesRoutingModule} from './pages-routing.module';
       PreDispatchProductsComponent
   ],
   exports: [
-      PagesRoutingModule
+      PagesRoutingModule,
   ]
 })
 export class PagesModule { }

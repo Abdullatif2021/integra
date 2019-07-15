@@ -86,6 +86,28 @@ export class PreDispatchService {
         );
     }
 
+    edit(id, name) {
+        const options = {
+            id: id,
+            name: name
+        }
+        return this.http.put<ApiResponseInterface>(AppConfig.endpoints.preDispatchedit, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    delete(ids) {
+        const options = {
+            body :{
+                ids: ids,
+            }
+        }
+        return this.http.request<ApiResponseInterface>('delete', AppConfig.endpoints.preDispatchedit, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+
     handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             console.error('An error occurred:', error.error.message);

@@ -1,4 +1,15 @@
-import {Component, OnInit, Input, ViewChild, ChangeDetectorRef, AfterViewChecked, EventEmitter, Output, Host} from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    ViewChild,
+    ChangeDetectorRef,
+    AfterViewChecked,
+    EventEmitter,
+    Output,
+    Host,
+    SimpleChanges, OnChanges
+} from '@angular/core';
 import {PreDispatchComponent} from '../../../modules/home/components/pre-dispatch/pre-dispatch.component';
 
 @Component({
@@ -6,7 +17,7 @@ import {PreDispatchComponent} from '../../../modules/home/components/pre-dispatc
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit, AfterViewChecked {
+export class TableComponent implements OnInit, AfterViewChecked, OnChanges {
 
     constructor(private cdr: ChangeDetectorRef) { }
 
@@ -18,6 +29,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     isLoading = true ;
     @Output() selected = new EventEmitter() ;
     selectedProducts = [] ;
+    isCollapsed = {} ;
     ngOnInit() {
     }
 
@@ -79,6 +91,11 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.selected.emit(this.selectedProducts);
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.items) {
+            this.selectedProducts = [];
+        }
+    }
 
 }
 

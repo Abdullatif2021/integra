@@ -1,4 +1,6 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {ComponentFactoryResolver, EventEmitter, Injectable} from '@angular/core';
+import {ModalDirective} from '../shared/directives/modal.directive';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable({
   providedIn: 'root'
@@ -6,7 +8,9 @@ import {EventEmitter, Injectable} from '@angular/core';
 export class IntegraaModalService {
 
   status = new EventEmitter() ;
-  constructor() { }
+  constructor(
+
+  ) { }
 
 
   open(url, options) {
@@ -14,5 +18,6 @@ export class IntegraaModalService {
     this.status.emit(options) ;
     return this ;
   }
+
 
 }

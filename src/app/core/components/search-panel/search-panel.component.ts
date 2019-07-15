@@ -65,11 +65,9 @@ export class SearchPanelComponent implements OnInit {
           this._filters = [] ;
       });
       this.filtersService.fields.subscribe((data) => {
+          this.fieldsData = data ;
           if ( this.loaded ) {
-              this.filtersFields = data.fields.filters( data.container, this);
-              this.searchFields = data.fields.search( data.container, this);
-          } else {
-              this.fieldsData = data ;
+              this.initFields() ;
           }
       });
 
@@ -231,15 +229,17 @@ export class SearchPanelComponent implements OnInit {
   }
 
   runAction() {
-    if ( this.active_action.modal ) {
+    if ( this.active_action && this.active_action.modal ) {
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.active_action.modal);
         const viewContainerRef = this.modalHost.viewContainerRef ;
         viewContainerRef.clear() ;
         const componentRef = viewContainerRef.createComponent(componentFactory);
         const instance = <any>componentRef.instance ;
-        instance.data = this.active_action ;
-        this.modalService.open(instance.modalRef, { windowClass: 'animated slideInDown' }) ;
-    } else if ( typeof this.active_action === 'object' && typeof this.active_action.run === 'function' ) {
+        instance.data = this.active_action  ;
+        const modalOptions = Object.assign({ windowClass: 'animated slideInDown' },
+            this.active_action.modalOptions ? this.active_action.modalOptions : {} );
+        this.modalService.open(instance.modalRef, modalOptions) ;
+    } else if ( this.active_action && typeof this.active_action.run === 'function' ) {
         this.active_action.run() ;
     }
   }

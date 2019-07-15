@@ -95,12 +95,20 @@
                                 <ng-container *ngIf="action.action=='print'" [ngTemplateOutlet]="print" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                                 <ng-container *ngIf="action.action=='excel_export'" [ngTemplateOutlet]="excel_export" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                                 <ng-container *ngIf="action.action=='edit'" [ngTemplateOutlet]="edit" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='more'" [ngTemplateOutlet]="more" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                             </ng-container>
                         </td>
                         <!-- } item cell  -->
 
                     </ng-container>
                     <!-- } print item cells loop -->
+                </tr>
+                <tr [ngbCollapse]="!isCollapsed[item.id]" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx}">
+                    <td [colSpan]="table.cols.length + 1" class="collapse-actions-container">
+                        <ng-container *ngFor="let action of table.collapsedActions ">
+                            <button class="integraa-btn collapse-action-btn z-depth-1 {{action._class}}" (click)="action.click && action.click(item, parent)">{{action.label}}</button>
+                        </ng-container>
+                    </td>
                 </tr>
                 <!-- } row item -->
             </ng-container>
@@ -139,13 +147,19 @@
 </ng-template>
 <ng-template #book><img src="assets/images/notepad.svg" class="action-icon"></ng-template>
 <ng-template #print><img src="assets/images/printer.svg" class="action-icon"></ng-template>
-<ng-template #excel_export let-action="action" let-item="item"><img (click)="action.click(item)" src="assets/images/excel.svg" class="action-icon"></ng-template>
-<ng-template #edit><img src="assets/images/edit.svg" class="action-icon"></ng-template>
+<ng-template #excel_export let-action="action" let-item="item"><img (click)="action.click && action.click(item)" src="assets/images/excel.svg" class="action-icon"></ng-template>
+<ng-template #edit let-action="action" let-item="item"><img src="assets/images/edit.svg" (click)="action.click && action.click(item, parent)" class="action-icon"></ng-template>
 <ng-template #pp let-action="action" let-item="item">
     <img *ngIf="item[action.field] && (action.print_if?action.print_if(item):true)" (click)="action.click && action.click(item)" src="assets/images/pause.svg" class="action-icon play-pause-icon">
     <img *ngIf="!item[action.field] && (action.print_if?action.print_if(item):true)" (click)="action.click && action.click(item)" src="assets/images/play.svg" class="action-icon play-pause-icon">
 </ng-template>
 <ng-template #progress let-action="action" let-item="item">
     <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngStyle]="{width:item[action.field]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz">{{item[action.field]}} %</div></div>
+</ng-template>
+<ng-template #more let-item="item" let-action="action">
+    <span class="collapse-arrow action-icon">
+        <fa-icon *ngIf="!isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-right']"></fa-icon>
+        <fa-icon *ngIf="isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-up']"></fa-icon>
+    </span>
 </ng-template>
 <!-- } Actions templates -->

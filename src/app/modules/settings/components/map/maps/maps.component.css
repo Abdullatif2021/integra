@@ -1,3 +1,16 @@
+.settings-page{
+    padding-right: 10px;
+}
+.settings-actual-page{
+    background-color: #fff;
+    height: calc( 100vh - 155px);
+    margin-top: 5px;
+    border-radius: 5px;
+    padding: 20px 10px;
+    overflow-y: scroll;
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+}
 .setting-row{
     font-size: 13px;
     padding: 5px 0px;

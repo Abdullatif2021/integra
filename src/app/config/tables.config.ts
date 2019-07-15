@@ -2,6 +2,8 @@
 // TODO add documentation for table structuring
 import {ProductInterface} from '../core/models/product.interface';
 import {AppConfig} from './app.config';
+import {PreDispatchEditComponent} from '../modules/home/modals/pre-dispatch-edit/pre-dispatch-edit.component';
+import {PreDispatchDeleteComponent} from '../modules/home/modals/pre-dispatch-delete/pre-dispatch-delete.component';
 
 export const TablesConfig = {
 
@@ -86,7 +88,10 @@ export const TablesConfig = {
         preDispatchTable : {
             cols: [
                 {title: ' ', field: false, actions: [
-                        {action: 'edit', click: (elm) => { console.log('edit'); }},
+                        {action: 'more'},
+                        {action: 'edit', click: (elm, container) => {
+                            container.openModal(PreDispatchEditComponent, elm) ;
+                        }},
                         {action: 'print', click: (elm) => { console.log('print . '); }},
                         {action: 'excel_export', click: (elm) => {
                             window.open(AppConfig.endpoints.exportPreDispatches + '?pre_dispatch_id=' + elm.id);
@@ -95,20 +100,28 @@ export const TablesConfig = {
                             container.integraaModalService.open('/pages/pre-dispatch/' + elm.id + '/products', {width: 1250, height: 650});
                         }},
                     ]},
-                {title: 'PRE-DISPATCH LIST NAME', field: 'name', actions: []},
-                {title: 'PRE-DISPATCH LIST N°', field: 'code', actions: []},
-                {title: 'STATE / RESULT', field: 'status', actions: [
+                {title: 'NOME DISTINTA', field: 'name', actions: []},
+                {title: 'DISTINTA', field: 'code', actions: []},
+                {title: 'STATO / ESITO', field: 'status', actions: [
                         {action: 'view', click: (elm) => { console.log('call back working 2 . '); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ]},
-                {title: 'Q.TY', field: 'quantity', actions: []},
-                {title: 'DATE', field: 'creation_date', actions: []},
-                {title: 'OPERATION', actions: [
+                {title: 'Q.TA’', field: 'quantity', actions: []},
+                {title: 'DATA', field: 'creation_date', actions: []},
+                {title: 'OPERAZIONE', actions: [
                         {action: 'progress', field: 'progress'},
                         {action: 'pp', field: 'p_status', print_if: (elm) =>  elm.progress !== 100 ,
                             click: (elm) => { console.log('status should change now'); }
                         }
                     ]},
+            ],
+            collapsedActions: [
+                {label: 'Pianifica', _class: 'green-btn', click: (elm, cotainer) => {console.log('clicked') ; }},
+                {label: 'Metti in Consegna', _class: 'yellow-btn', click: (elm, container) => {console.log('clicked') ; }},
+                {label: 'Aggiungi Prodotti', _class: 'orange-btn', click: (elm, container) => {console.log('clicked') ; }},
+                {label: 'Elimina', _class: 'red-btn', click: (elm, container) => {
+                    container.openModal(PreDispatchDeleteComponent, {deleteItem: true, item: elm}) ;
+                }}
             ]
         },
         // dispatchTable used in dispatch.component

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {TablesConfig} from '../../../../config/tables.config';
 import {ApiResponseInterface} from '../../../../core/models/api-response.interface';
 import {TableComponent} from '../../../../shared/components/table/table.component';
@@ -11,6 +11,9 @@ import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 import {FilterConfig} from '../../../../config/filters.config';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ModalDirective} from '../../../../shared/directives/modal.directive';
+import {PreDispatchDeleteComponent} from '../../modals/pre-dispatch-delete/pre-dispatch-delete.component';
 
 @Component({
   selector: 'app-pre-dispatch',
@@ -24,7 +27,11 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   preDispatchList: any = [] ;
   @ViewChild('preDispatchTable') _preDispatchTable: TableComponent ;
   @ViewChild('imodal') imodal ;
-  actions = [{name: 'Unisci Pre-distinte', modal: PreDispatchMergeComponent}] ;
+  @ViewChild(ModalDirective) modalHost: ModalDirective;
+  actions = [
+      {name: 'Unisci Pre-distinte', modal: PreDispatchMergeComponent},
+      {name: 'Elimina', modal: PreDispatchDeleteComponent, modalOptions: {}},
+  ] ;
   unsubscribe: Subject<void> = new Subject();
 
   constructor(
@@ -32,7 +39,9 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       private filtersService: FiltersService,
       private preDispatchService: PreDispatchService,
       private actionsService: ActionsService,
-      private integraaModalService: IntegraaModalService
+      private integraaModalService: IntegraaModalService,
+      private componentFactoryResolver: ComponentFactoryResolver,
+      private modalService: NgbModal
   ) { }
 
   loadItems(reset: boolean) {
@@ -49,6 +58,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
           .subscribe((res: ApiResponseInterface) => {
           this.paginationService.updateLoadingState(false);
           this.paginationService.updateResultsCount(res.pagination.total);
+          this.preDispatchService.selectedPreDispatches = [];
           this.preDispatchList = res.data ;
           this._preDispatchTable.loading(false);
       });
@@ -74,5 +84,15 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   }
   selectedItemsChanged(items) {
       this.preDispatchService.selectedPreDispatches = items ;
+  }
+
+  openModal(modal, data) {
+      const componentFactory = this.componentFactoryResolver.resolveComponentFactory(modal);
+      const viewContainerRef = this.modalHost.viewContainerRef ;
+      viewContainerRef.clear() ;
+      const componentRef = viewContainerRef.createComponent(componentFactory);
+      const instance = <any>componentRef.instance ;
+      instance.data = data  ;
+      this.modalService.open(instance.modalRef, { windowClass: 'animated slideInDown' }) ;
   }
 }
