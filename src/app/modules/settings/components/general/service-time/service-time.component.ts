@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {SettingsService} from '../../../../../service/settings.service';
+import {ApiResponseInterface} from '../../../../../core/models/api-response.interface';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-service-time',
@@ -7,18 +10,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ServiceTimeComponent implements OnInit {
 
-  constructor() { }
-  counter = -9999 ;
-  // DUMMY DATA {
-
-  settings = [
-      {id: 1, product: '', single_service_time: 2, multiple_service_time: 10  },
-  ];
-
-  // } DUMMY DATA
-
+  constructor(
+      private settingsService: SettingsService
+  ) { }
+  settings = [];
+  subscription ;
+  loading = true ;
 
   ngOnInit() {
+    this.settingsService.getProductStatusType().subscribe((res: ApiResponseInterface) => {
+      if (res.status === 'success') {
+        this.settings = res.data ;
+        this.loading = false ;
+      }
+    });
   }
 
   delete(setting) {
@@ -27,8 +32,19 @@ export class ServiceTimeComponent implements OnInit {
     });
   }
 
-  create() {
-    this.counter++ ;
-    this.settings.push({id: this.counter, product: '', single_service_time: 0, multiple_service_time: 0});
+  edit(event, field, setting) {
+    setting[field] = event.target.value ;
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    this.subscription = this.settingsService.editProductStatusType([setting]).subscribe((res: ApiResponseInterface) => {
+      if (res.status === 'success') {
+        // this.settings = res.data ;
+      }
+    });
+  }
+
+  trackSettings(index, item) {
+    return item.id ;
   }
 }

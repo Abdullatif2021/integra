@@ -11,3 +11,27 @@
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
 }
+.setting-row{
+    font-size: 12px;
+    padding: 5px 0px;
+    margin: 2px 0px;
+}
+.single-service-time-input, .multiple-service-time-input {
+    width: 20%;
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #707070;
+}
+.status-type-input{
+    padding: 5px;
+    border: 0px;
+    width: 75%;
+    margin-left: 10px;
+    display: inline-block;
+    color: #e6ba00;
+}
+.delete-btn img {
+    width: 35px;
+    cursor: pointer;
+}

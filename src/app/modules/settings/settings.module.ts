@@ -6,7 +6,6 @@ import {CoreModule} from '../../core/core.module';
 import {SettingsRoutingModule} from './settings-routing.module';
 import { ServiceTimeComponent } from './components/general/service-time/service-time.component';
 import { SettingsHeaderComponent } from './components/_shared/settings-header/settings-header.component';
-import { ServiceTimeInputComponent } from './components/_shared/service-time-input/service-time-input.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import { MapsComponent } from './components/map/maps/maps.component';
 
@@ -22,7 +21,6 @@ import { MapsComponent } from './components/map/maps/maps.component';
       SettingsComponent,
       ServiceTimeComponent,
       SettingsHeaderComponent,
-      ServiceTimeInputComponent,
       MapsComponent,
   ]
 })

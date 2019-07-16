@@ -2,14 +2,21 @@
   <app-settings-header (create)="create()"></app-settings-header>
 
   <div class="settings-actual-page">
-    <ng-container *ngFor="let setting of settings">
-      <ng-container [ngTemplateOutlet]="setting_item" [ngTemplateOutletContext]="{setting:setting}"></ng-container>
+    <ng-container *ngIf="!loading">
+      <ng-container *ngFor="let setting of settings">
+        <ng-container [ngTemplateOutlet]="settingItem" [ngTemplateOutletContext]="{setting:setting}"></ng-container>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="loading">
+      <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
+      <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
+      <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
     </ng-container>
   </div>
 </div>
 
 
-<ng-template let-setting="setting" #setting_item>
+<ng-template let-setting="setting" #settingItem>
   <div class="container-fluid">
     <div class="row setting-row">
       <div class="col-5 wide-col">

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-settings-header',
@@ -10,7 +10,7 @@ export class SettingsHeaderComponent implements OnInit {
   constructor() { }
 
   @Output() create = new EventEmitter();
-
+  @Input() create_btn = true ;
   ngOnInit() {
   }
 

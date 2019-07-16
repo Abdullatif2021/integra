@@ -1,9 +1,38 @@
 <div class="settings-page">
-    <app-settings-header (create)="create()"></app-settings-header>
+    <app-settings-header [create_btn]="false" ></app-settings-header>
 
     <div class="settings-actual-page">
-        <ng-container *ngFor="let setting of settings">
-            <app-service-time-input (deleted)="delete($event)" [setting]="setting"></app-service-time-input>
+        <ng-container *ngIf="!loading">
+            <ng-container *ngFor="let setting of settings;trackBy: trackSettings">
+                <ng-container [ngTemplateOutlet]="settingItem" [ngTemplateOutletContext]="{setting:setting}"></ng-container>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="loading">
+            <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
+            <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
+            <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
         </ng-container>
     </div>
+
 </div>
+
+<ng-template let-setting="setting" #settingItem>
+    <div class="container-fluid">
+        <div class="row setting-row">
+            <div class="col-5 wide-col">
+                <label for="setting-product-{{setting.id}}">Prodotto : </label>
+                <input id="setting-product-{{setting.id}}" value="{{setting.type}}" type="text" class="status-type-input" disabled>
+            </div>
+            <div class="col-3-half wide-col">
+                <label for="setting-single-service-time-{{setting.id}}">Tempo di servizio singolo</label>
+                <input id="setting-single-service-time-{{setting.id}}" (change)="edit($event, 'single_time', setting)" value="{{setting.single_time}}" type="number" class="single-service-time-input">
+                <span> Min.</span>
+            </div>
+            <div class="col-3-half wide-col">
+                <label for="setting-multiple-service-time-{{setting.id}}">Tempo di servizio singolo</label>
+                <input id="setting-multiple-service-time-{{setting.id}}" (change)="edit($event, 'multiple_time', setting)" value="{{setting.multiple_time}}" type="number" class="multiple-service-time-input">
+                <span> Min.</span>
+            </div>
+        </div>
+    </div>
+</ng-template>

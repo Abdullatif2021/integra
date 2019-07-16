@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {ApiResponseInterface} from '../../../../../core/models/api-response.interface';
 import {SettingsService} from '../../../../../service/settings.service';
+import {first, withLatestFrom} from 'rxjs/internal/operators';
 
 @Component({
   selector: 'app-maps',
@@ -14,16 +15,22 @@ export class MapsComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private settingsService: SettingsService
     ) { }
-    counter = -9999 ;
     settings = [];
     provider: number ;
+    loading = true ;
 
     ngOnInit() {
-        this.activatedRoute.data.subscribe((d) => {
-            this.settings = d.res.data ;
-        });
-        this.activatedRoute.params.subscribe((params) => {
+        this.activatedRoute.params.subscribe( (params) => {
             this.provider = params.provider ;
+            this.loadData();
+        });
+    }
+
+    loadData() {
+        this.loading = true;
+        this.settingsService.getProviderKeys(this.provider).subscribe((res: ApiResponseInterface) => {
+             this.settings = res.data ;
+             this.loading = false ;
         });
     }
 
@@ -39,12 +46,10 @@ export class MapsComponent implements OnInit {
 
     edit(event, field, setting) {
         setting[field] = event.target.value ;
-        console.log(setting[field]) ;
         this.settingsService.editProviderKey(setting, this.provider).subscribe();
     }
 
     create() {
-        this.counter++ ;
         this.settingsService.createEmpty(this.provider).subscribe((res: ApiResponseInterface) => {
            if (res.status === 'success') {
                this.settings = res.data;

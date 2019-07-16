@@ -19,7 +19,10 @@ export const AppConfig = {
         createProviderKeys: api_url + '/api/providerKey',
         editProviderKeys: api_url + '/api/providerKey',
         deleteProviderKeys: api_url + '/api/providerKey',
-        getProviderKeys: api_url + '/api/providerKey'
+        getProviderKeys: api_url + '/api/providerKey',
+        getProductStatusType: api_url + '/api/product/getProductStatusType',
+        updateProductStatusType: api_url + '/api/product/productStatusType',
+
     },
 
 };

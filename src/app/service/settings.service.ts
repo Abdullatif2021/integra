@@ -60,6 +60,23 @@ export class SettingsService {
         );
     }
 
+    getProductStatusType() {
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getProductStatusType).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    editProductStatusType(names) {
+        const options = {
+            body : {
+                names: names
+            }
+        }
+        return this.http.request<ApiResponseInterface>('put', AppConfig.endpoints.updateProductStatusType, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
     handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             console.error('An error occurred:', error.error.message);
