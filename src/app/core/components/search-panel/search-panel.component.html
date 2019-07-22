@@ -3,7 +3,7 @@
 
   <div class="row">
     <!-- easy search {  -->
-    <ng-container *ngIf="isCollapsed">
+    <ng-container *ngIf="isCollapsed && !_active_filters.length">
       <!-- easy search input { -->
       <div class="col-lg-2 wide-col" >
         <app-search-box *ngIf="!_search" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
@@ -36,9 +36,15 @@
       <!-- } easy search submit -->
     </ng-container>
     <!-- } easy search  -->
-
+    <div class="col-lg-11" *ngIf="isCollapsed && _active_filters.length">
+      <div class="search-inputs-container row">
+        <ng-container *ngFor="let field of filtersFields; let idx = index;">
+          <ng-container *ngIf="isActive(field.key)" [ngTemplateOutlet]="searchItem" [ngTemplateOutletContext]="{input: field, idx: idx}"></ng-container>
+        </ng-container>
+      </div>
+    </div>
     <!-- expanded search expand btn { -->
-    <div class="col-lg-2 offset-3" [ngClass]="{'offset-10':!isCollapsed}">
+    <div class="col-lg-1" [ngClass]="{'offset-11':!isCollapsed, 'offset-4':!_active_filters.length}">
       <button type="button" class="integraa-btn search-panel-collapse-btn float-right" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="isCollapsed" aria-controls="searchCollapse">
         <span class="mr-1">Filtra</span>
         <ng-container *ngIf="isCollapsed; else collapseArrowUp">
@@ -50,55 +56,14 @@
     <!-- } expanded search expand btn -->
   </div>
 
+
   <!-- Collapsed Area { -->
   <div id="searchCollapse" [ngbCollapse]="isCollapsed">
     <div class="expanded-search-container container-fluid">
       <!-- expanded search inputs {  -->
       <div class="search-inputs-container row">
         <ng-container *ngFor="let input of filtersFields; let idx = index">
-          <!-- If input is simple  -->
-          <ng-container *ngIf="!input.group; else groupInput">
-            <div class="search-input col-2 wide-col">
-              <label>{{input.label}}</label>
-              <ng-container *ngIf="input.type === 'text'">
-                <app-search-box [ngClass]="{'active-filter':isActive(input.key)}" class="{{input._class}}" (changed)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
-              </ng-container>
-              <ng-container *ngIf="input.type === 'simpleText'">
-                <input [ngClass]="{'active-filter':isActive(input.key)}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
-              </ng-container>
-              <ng-container *ngIf="input.type === 'number'">
-                <input type="number" [ngClass]="{'active-filter':isActive(input.key)}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
-              </ng-container>
-              <ng-container *ngIf="input.type === 'ng-select'">
-                <ng-select [(ngModel)]="input.selectedAttribute" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key)}" [loading]="input.loading" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
-                <ng-select [(ngModel)]="input.selectedAttribute" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
-              </ng-container>
-              <ng-container *ngIf="input.type === 'tag'">
-                <ng-select [addTag]="'any'" [multiple]="true" notFoundText="Add Item" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" class="filters-select-input {{input._class}}" [items]="input.items" placeholder="Cerca"></ng-select>
-              </ng-container>
-              <ng-container *ngIf="input.type === 'date'">
-                <input [ngClass]="{'active-filter':isActive(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" type="date" class="date-select {{input._class}}">
-              </ng-container>
-            </div>
-          </ng-container>
-
-          <!-- If input is group -->
-          <ng-template #groupInput>
-            <div class="search-input-group col-2" *ngIf="input.group">
-              <div class="row">
-                <div class="col-12 wide-col">
-                  <label>{{input.label}}</label>
-                </div>
-                <ng-container *ngFor="let subInputType of input.type; let idx = index ,first as isFirst">
-                  <!-- TODO handle all types -->
-                  <div class="search-input col-6 wide-col" [ngClass]="{'pl-1':!isFirst}">
-                    <input [ngClass]="{'active-filter':isActive(input.key[idx])}" (change)="changeFiltersValue($event, input.key[idx], subInputType, idx)" type="date" class="form-control date-select">
-                  </div>
-                </ng-container>
-              </div>
-            </div>
-          </ng-template>
-
+          <ng-container [ngTemplateOutlet]="searchItem" [ngTemplateOutletContext]="{input: input, idx: idx}"></ng-container>
         </ng-container>
       </div>
       <!-- } expanded search inputs -->
@@ -109,7 +74,7 @@
         <button class="integraa-btn ml-2" (click)="filter()">Search</button>
       </div>
       <!-- } expanded search buttons -->
-      <!-- TODO REMAKE IN A BETTER WAY -->
+
       <!-- Cap statistics/filters { -->
       <div *ngIf="filters_data && (fieldsData && fieldsData.fields.grouping) && filters_data.caps_group && grouping.active == 'cap'" class="cap-statistics-container row mt-4 justify-content-center d-flex">
         <div class="caps-inner-container">
@@ -185,4 +150,47 @@
 
 </div>
 
+<ng-template #searchItem let-input="input" let-idx="idx">
+  <ng-container *ngIf="!input.group">
+    <div class="search-input col-2 wide-col">
+      <label>{{input.label}}</label>
+      <ng-container *ngIf="input.type === 'text'">
+        <app-search-box [ngClass]="{'active-filter':isActive(input.key), 'filled-filter':isFilled(input.key)}" class="{{input._class}}" (changed)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
+      </ng-container>
+      <ng-container *ngIf="input.type === 'simpleText'">
+        <input value="{{input.value}}" [ngClass]="{'active-filter':isActive(input.key), 'filled-filter':isFilled(input.key)}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
+      </ng-container>
+      <ng-container *ngIf="input.type === 'number'">
+        <input value="{{input.value}}" type="number" [ngClass]="{'active-filter':isActive(input.key), 'filled-filter':isFilled(input.key)}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
+      </ng-container>
+      <ng-container *ngIf="input.type === 'ng-select'">
+        <ng-select [(ngModel)]="input.selectedAttribute" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key), 'filled-filter':isFilled(input.key)}" [loading]="input.loading" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+        <ng-select [(ngModel)]="input.selectedAttribute" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key), 'filled-filter':isFilled(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+      </ng-container>
+      <ng-container *ngIf="input.type === 'tag'">
+        <ng-select [addTag]="'any'" [multiple]="true" notFoundText="Add Item" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':isActive(input.key), 'filled-filter':isFilled(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" class="filters-select-input {{input._class}}" [items]="input.items" placeholder="Cerca"></ng-select>
+      </ng-container>
+      <ng-container *ngIf="input.type === 'date'">
+        <input [ngClass]="{'active-filter':isActive(input.key), 'filled-filter':isFilled(input.key)}" (change)="changeFiltersValue($event, input.key, input.type, idx)" type="date" class="date-select {{input._class}}">
+      </ng-container>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="input.group">
+    <div class="search-input-group col-2">
+      <div class="row">
+        <div class="col-12 wide-col">
+          <label>{{input.label}}</label>
+        </div>
+        <ng-container *ngFor="let subInputType of input.type; let subIdx = index ,first as isFirst">
+          <!-- TODO handle all types -->
+          <div class="search-input col-6 wide-col" [ngClass]="{'pl-1':!isFirst}">
+            <input value="{{  input.value ? input.value[input.key[subIdx]] : ''}}" [ngClass]="{'active-filter':isActive(input.key[subIdx]), 'filled-filter':isFilled(input.key[subIdx])}" (change)="changeFiltersValue($event, input.key[subIdx], subInputType, idx)" type="date" class="form-control date-select">
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+</ng-template>
+<!-- If input is group -->
 <ng-template appModal></ng-template>

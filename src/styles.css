@@ -138,7 +138,12 @@ body{
 .tags-select .ng-arrow-wrapper {
     display: none;
 }
-
+.filled-filter, .filled-filter > .ng-select-container {
+    background: #FFF58C!important;
+}
+.active-filter,  .active-filter > .ng-select-container{
+    background: #ccF58C!important;
+}
 
 /* bootstrap */
 .wide-col{

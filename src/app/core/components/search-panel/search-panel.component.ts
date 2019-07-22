@@ -108,15 +108,22 @@ export class SearchPanelComponent implements OnInit {
     if (typeof this.filtersFields[idx].change === 'function') {
         return this.filtersFields[idx].change(event) ;
     }
-    this._filters = this._filters.filter((elm) => {
-        return elm.key !== key ;
-    });
+    this._filters = this._filters.filter(elm => elm.key !== key);
+    this._active_filters = this._active_filters.filter(elm => elm.key !== key);
+
     const val = this.getInputValue(event, type) ;
     if (val && val !== '') {
         if ( typeof val === 'object' && !val.length ) { return ; }
         this._filters.push({key: key, value: val});
     }
-    this.filtersFields[idx].value = val ;
+    if (typeof this.filtersFields[idx].key === 'string') {
+        this.filtersFields[idx].value = val ;
+    } else {
+        if (!this.filtersFields[idx].value) {
+            this.filtersFields[idx].value = {} ;
+        }
+        this.filtersFields[idx].value[key] = val ;
+    }
   }
 
   // TODO remake in a better way
@@ -158,7 +165,14 @@ export class SearchPanelComponent implements OnInit {
   }
 
   isActive(key) {
+      if (typeof key === 'object') {
+          return this._active_filters.find( e => key.indexOf(e.key) !== -1) ;
+      }
       return this._active_filters.find(e => e.key === key) ;
+
+  }
+  isFilled(key) {
+      return this._filters.find(e => e.key === key) ;
   }
 
   clearFilters() {}

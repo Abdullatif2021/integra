@@ -97,5 +97,9 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges {
         }
     }
 
+    trackItems(item) {
+        return item.id ;
+    }
+
 }
 

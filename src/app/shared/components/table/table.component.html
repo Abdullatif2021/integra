@@ -64,7 +64,7 @@
             <tbody class="table-body">
 
             <!-- print table items -->
-            <ng-container *ngFor="let item of items; let idx = index">
+            <ng-container *ngFor="let item of items; let idx = index; trackBy: trackItems">
                 <!-- row item {  -->
                 <tr #tableRow class="table-item" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx, 'selected-row':isSelectedRow(item)}">
                     <!-- select row item <static item > {  -->
