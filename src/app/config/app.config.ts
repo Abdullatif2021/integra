@@ -1,4 +1,4 @@
-const api_url = 'http://apiplannerintegraa.storexweb.com'
+const api_url = 'https://apiplannerintegraa.storexweb.com'
 // const api_url = ''
 export const AppConfig = {
     api_url: api_url,

@@ -1,0 +1,28 @@
+<app-user-nav></app-user-nav>
+<div class="container-fluid page-container">
+  <div class="row mt-2">
+    <div class="col-4 v-wide-col">
+      <div class="schedule-nav">
+        <button class="btn schedule-nav-btn schedule-nav-left-btn active">Indirizzi</button>
+        <button class="btn schedule-nav-btn">Parametri</button>
+        <button class="btn schedule-nav-btn schedule-nav-right-btn">Risultato</button>
+      </div>
+    </div>
+    <div class="col-8 v-wide-col">
+      <div class="map-header">
+        <div class="localizza-btn integraa-btn">Localizza</div>
+        <div class="continue-btn integraa-btn">Prosegui</div>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-1">
+    <div class="col-4 v-wide-col">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="col-8 v-wide-col">
+      <agm-map class="map" [latitude]="40.8440337" [longitude]="14.3435834" [zoom]="11"></agm-map>
+    </div>
+  </div>
+</div>
+

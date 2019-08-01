@@ -19,7 +19,7 @@ export class PreDispatchService {
     ) { }
 
     httpOptions = {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+        headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Request-Headers': 'POST,GET,PUT,DELETE,OPTIONS' })
     };
     selectedPreDispatches = [] ;
 
