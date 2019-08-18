@@ -1,0 +1,96 @@
+<div class="planner-container">
+  <div class="addresses-container">
+
+    <!-- The location,add btn, edit btn -->
+    <div class="departure">
+      <div class="location-container">
+        <label class="d-block departure-label">Partenza</label>
+        <input type="text" class="location-input" value="Corso Italia 591, A - 80010 Villaricca (NA)">
+        <div class="location-actions">
+          <img src="/assets/images/edit.svg">
+          <img src="/assets/images/plus.svg">
+        </div>
+      </div>
+    </div>
+
+    <!-- groups -->
+    <div class="groups mt-2">
+      <div class="float-left group-cb found-cb">
+        <input type="checkbox" class="integraa-checkbox">
+        <label>Trovati (19)</label>
+      </div>
+      <div class="float-left group-cb not-found-cb">
+        <input type="checkbox" class="integraa-checkbox">
+        <label>Non Trovati (2)</label>
+      </div>
+
+      <div class="create-btn float-right">
+        <button class="integraa-btn">Crea nuovo gruppo</button>
+      </div>
+
+      <div class="clear-both"></div>
+    </div>
+
+
+    <!-- Search -->
+    <div class="search-container">
+      <app-search-box [placeholder]="'Cerca indirizzo'"></app-search-box>
+    </div>
+
+  </div>
+  <div class="items mt-2">
+    <ng-container *ngFor="let item of items; let idx = index">
+      <ng-container  [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx}"></ng-container>
+    </ng-container>
+  </div>
+
+
+  <div class="arrival-container mt-3">
+    <!-- Arrivo -->
+    <div class="arrival">
+      <div class="location-container">
+        <label class="d-block departure-label">Arrivo</label>
+        <input type="text" class="location-input" value="Corso Italia 591, A - 80010 Villaricca (NA)">
+        <div class="location-actions">
+          <img src="/assets/images/edit.svg">
+          <img src="/assets/images/plus.svg">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+  <!-- Items  -->
+
+
+
+
+<ng-template  let-item="item" let-idx="idx" let-next="next" #simpleItem>
+
+  <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" class="{{getLvlClass(next)}} {{getStatusClass(item)}}">
+    <div class="item-row">
+      <div class="more" *ngIf="item.children" (click)="more(next)">
+        <fa-icon *ngIf="!expanded[next]" [icon]="['fa','chevron-down']"></fa-icon>
+        <fa-icon *ngIf="expanded[next]" [icon]="['fa','chevron-up']"></fa-icon>
+      </div>
+
+      <div class="select-container">
+        <div class="selected" *ngIf="item.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+        <div class="not-selected" *ngIf="!item.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+      </div>
+      <div class="marker-container">
+        <div class="marker" *ngIf="item.marker">{{item.marker}}</div>
+      </div>
+      <div class="text">{{item.name}}</div>
+      <div class="right-side">
+        <div class="warning" *ngIf="item.warning">!</div>
+        <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
+        <div class="small-more"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
+      </div>
+      <div class="clear-both"></div>
+    </div>
+  </div>
+  <ng-container *ngFor="let child of getChildren(next); let i = index">
+    <ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
+  </ng-container>
+</ng-template>

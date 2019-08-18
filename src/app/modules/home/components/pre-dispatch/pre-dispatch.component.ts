@@ -14,6 +14,7 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../../shared/directives/modal.directive';
 import {PreDispatchDeleteComponent} from '../../modals/pre-dispatch-delete/pre-dispatch-delete.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-pre-dispatch',
@@ -41,7 +42,8 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       private actionsService: ActionsService,
       private integraaModalService: IntegraaModalService,
       private componentFactoryResolver: ComponentFactoryResolver,
-      private modalService: NgbModal
+      private modalService: NgbModal,
+      public router: Router,
   ) { }
 
   loadItems(reset: boolean) {
