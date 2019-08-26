@@ -156,6 +156,14 @@ body{
     flex: 0 0 29.1%;
     max-width: 29.1%;
 }
+.col-1-half{
+    flex: 0 0 12.4999%;
+    max-width: 12.49999%;
+}
+.col-2-half{
+    flex: 0 0 20.83333%;
+    max-width: 20.83333%;
+}
 
 /* snotify */
 .snotify-icon{

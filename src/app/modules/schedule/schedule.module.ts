@@ -12,6 +12,9 @@ import {faChevronDown} from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import {faChevronUp} from '@fortawesome/free-solid-svg-icons/faChevronUp';
 import {faCheck} from '@fortawesome/free-solid-svg-icons/faCheck';
 import {faSortDown} from '@fortawesome/free-solid-svg-icons/faSortDown';
+import { ParametersComponent } from './components/parameters/parameters.component';
+import {NgSelectModule} from '@ng-select/ng-select';
+import { ResultComponent } from './components/result/result.component';
 
 @NgModule({
   imports: [
@@ -23,8 +26,9 @@ import {faSortDown} from '@fortawesome/free-solid-svg-icons/faSortDown';
     AgmCoreModule.forRoot({
         apiKey: 'AIzaSyDc5fJyy9BGpFE4t6kh_4dH1-WRYzKd_wI'
     }),
+    NgSelectModule
   ],
-  declarations: [ScheduleComponent, AddressesComponent],
+  declarations: [ScheduleComponent, AddressesComponent, ParametersComponent, ResultComponent],
   exports: [
       ScheduleRoutingModule
   ]
