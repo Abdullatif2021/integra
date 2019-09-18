@@ -1,0 +1,10 @@
+<div class="loading-overlay" *ngIf="state && state.state">
+  <div class="progress-bar">
+    <span class="bar">
+      <span [ngStyle]="{width: state.progress+'%'}" [ngClass]="{'animated-progress': state.autProgress}" class="progress"></span>
+    </span>
+  </div>
+  <div class="loading-message">{{state.message}}</div>
+</div>
+
+

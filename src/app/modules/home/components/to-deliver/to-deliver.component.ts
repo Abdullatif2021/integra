@@ -37,7 +37,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   selectAllOnLoad = false ;
   unsubscribe: Subject<void> = new Subject();
   actions = [
-    {name: 'Crea nuova Pre-Distinta', fields: [
+    {
+        name: 'Crea nuova Pre-Distinta', fields: [
             { type: 'select', field: 'method', options: [
                     {name: 'Selezionati', value: 'selected'},
                     {name: 'Secondo i filtri applicati', value: 'filters'}
@@ -46,7 +47,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
         ],
         modal: PreDispatchNewComponent
     },
-    {name: 'Aggiungi a Pre-Distinta esistente', fields: [
+    {
+        name: 'Aggiungi a Pre-Distinta esistente', fields: [
             { type: 'select', field: 'method', options: [
                     {name: 'Selezionati', value: 'selected'},
                     {name: 'Secondo i filtri applicati', value: 'filters'}
@@ -55,10 +57,12 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
         ],
         modal: PreDispatchAddComponent,
     },
-    {name: 'Importa Prodotti da Codici a Barre', fields: [],
+    {
+        name: 'Importa Prodotti da Codici a Barre', fields: [],
         modal: ImportFromBarcodesComponent,
     },
-    {name: 'Carica prodotti da Scanner', fields: [
+    {
+        name: 'Carica prodotti da Scanner', fields: [
             { type: 'text', field: 'barcode', placeholder: 'Barcode'},
         ], submit: (data, event) => {
           this.filtersService.addBarcodeFilter(data.barcode);
@@ -72,6 +76,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
         finish: () => { this.filtersService.clearBarcodFilter(); }
     },
   ];
+
   citiesGetMethod = (page, rpp, name) => this.citiesService.getCities(page, rpp, name);
   streetsGetMethod = (page, rpp, name) => this.streetsService.getStreets(page, rpp, name, this.current_city)
 

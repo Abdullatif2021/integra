@@ -12,6 +12,7 @@ import { SimpleTableComponent } from './components/simple-table/simple-table.com
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { RouterModule } from '@angular/router';
 import { ModalDirective } from './directives/modal.directive';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   imports: [
@@ -27,14 +28,16 @@ import { ModalDirective } from './directives/modal.directive';
       PaginationComponent,
       TableComponent,
       SimpleTableComponent,
-      ModalDirective
+      ModalDirective,
+      LoadingComponent
   ],
   exports: [
       SearchBoxComponent,
       PaginationComponent,
       TableComponent,
       SimpleTableComponent,
-      ModalDirective
+      ModalDirective,
+      LoadingComponent
   ]
 })
 export class SharedModule {

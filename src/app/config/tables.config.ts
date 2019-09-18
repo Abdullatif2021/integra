@@ -116,7 +116,7 @@ export const TablesConfig = {
                     ]},
             ],
             collapsedActions: [
-                {label: 'Pianifica', _class: 'green-btn', click: (elm, container) => { container.router.navigate(['/schedule']); }},
+                {label: 'Pianifica', _class: 'green-btn', click: (elm, container) => { container.router.navigate(['/schedule', elm.id]); }},
                 {label: 'Metti in Consegna', _class: 'yellow-btn', click: (elm, container) => {console.log('clicked') ; }},
                 {label: 'Aggiungi Prodotti', _class: 'orange-btn', click: (elm, container) => {console.log('clicked') ; }},
                 {label: 'Elimina', _class: 'red-btn', click: (elm, container) => {

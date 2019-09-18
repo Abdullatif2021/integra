@@ -8,6 +8,7 @@ import { ServiceTimeComponent } from './components/general/service-time/service-
 import { SettingsHeaderComponent } from './components/_shared/settings-header/settings-header.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import { MapsComponent } from './components/map/maps/maps.component';
+import { PaginationOptionsComponent } from './components/general/pagination-options/pagination-options.component';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { MapsComponent } from './components/map/maps/maps.component';
       ServiceTimeComponent,
       SettingsHeaderComponent,
       MapsComponent,
+      PaginationOptionsComponent,
   ]
 })
 export class SettingsModule { }

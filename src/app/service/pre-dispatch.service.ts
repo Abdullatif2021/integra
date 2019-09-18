@@ -91,7 +91,7 @@ export class PreDispatchService {
             id: id,
             name: name
         }
-        return this.http.put<ApiResponseInterface>(AppConfig.endpoints.preDispatchedit, options).pipe(
+        return this.http.put<ApiResponseInterface>(AppConfig.endpoints.preDispatchEdit, options).pipe(
             catchError(this.handleError)
         );
     }
@@ -102,7 +102,7 @@ export class PreDispatchService {
                 ids: ids,
             }
         }
-        return this.http.request<ApiResponseInterface>('delete', AppConfig.endpoints.preDispatchedit, options).pipe(
+        return this.http.request<ApiResponseInterface>('delete', AppConfig.endpoints.preDispatchEdit, options).pipe(
             catchError(this.handleError)
         );
     }

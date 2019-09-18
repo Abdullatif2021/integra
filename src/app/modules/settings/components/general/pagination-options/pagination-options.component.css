@@ -1,0 +1,21 @@
+.settings-page{
+    padding-right: 10px;
+    font-size: 13px;
+    color: #333;
+}
+.settings-actual-page{
+    background-color: #fff;
+    height: calc( 100vh - 155px);
+    margin-top: 5px;
+    border-radius: 5px;
+    padding: 20px 10px;
+    overflow-y: scroll;
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+}
+.rpp-input {
+    width: 200px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #707070;
+}

@@ -45,3 +45,7 @@
     /*height: calc(100vh - 130px);*/
     height: 634px;
 }
+
+.nFoundItemModal, .nFoundItemModal input{
+    font-size: 14px;
+}

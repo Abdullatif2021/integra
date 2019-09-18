@@ -11,11 +11,33 @@ import {throwError} from 'rxjs';
 export class SettingsService {
 
     constructor(private http: HttpClient) { }
+    providersKeys ;
 
     getProviders() {
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getProvider).pipe(
             catchError(this.handleError)
         );
+    }
+
+    async getMapProviderKey(provider): Promise<any> {
+        return new Promise<any>(async (resolve, reject) => {
+            if (typeof this.providersKeys !== 'undefined') {
+                return resolve(typeof this.providersKeys[provider] !== 'undefined' ? this.providersKeys[provider] : []);
+            }
+            const data = await this.http.get<any>(AppConfig.endpoints.getProviders).toPromise();
+            if (typeof data[0] === 'undefined') {
+                return resolve([]) ;
+            }
+
+            const mapBoxProvider = data.find((elm) => elm.name === 'Mapbox') ;
+            const googleProvider = data.find((elm) => elm.name === 'Google maps') ;
+            this.providersKeys = {
+                google_maps: provider ? googleProvider.provider_keys : [],
+                mapbox: provider ? mapBoxProvider.provider_keys : []
+            }
+
+            return resolve(typeof this.providersKeys[provider] !== 'undefined' ? this.providersKeys[provider] : []);
+        });
     }
 
     getProviderKeys(provider) {
@@ -73,6 +95,21 @@ export class SettingsService {
             }
         }
         return this.http.request<ApiResponseInterface>('put', AppConfig.endpoints.updateProductStatusType, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    getPaginationOptions() {
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPaginationOptions, {}).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    updatePaginationOptions(streets_rpp, tree_rpp) {
+        const formData = new FormData();
+        formData.append('get_street_pagination', streets_rpp);
+        formData.append('get_tree_pagination', tree_rpp);
+        return this.http.post<any>(AppConfig.endpoints.updatePaginationOptions, formData).pipe(
             catchError(this.handleError)
         );
     }
