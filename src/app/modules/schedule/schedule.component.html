@@ -3,9 +3,9 @@
   <div class="row mt-2">
     <div class="col-4 v-wide-col">
       <div class="schedule-nav">
-        <button class="btn schedule-nav-btn schedule-nav-left-btn" [ngClass]="{'active': activeTab('/schedule')}" routerLink="/schedule">Indirizzi</button>
-        <button class="btn schedule-nav-btn" [ngClass]="{'active': activeTab('/schedule/parameters')}" routerLink="/schedule/parameters">Parametri</button>
-        <button class="btn schedule-nav-btn schedule-nav-right-btn" [ngClass]="{'active': activeTab('/schedule/result')}" routerLink="/schedule/result">Risultato</button>
+        <button class="btn schedule-nav-btn schedule-nav-left-btn" [ngClass]="{'active': activeTab('/schedule/'+preDispatch)}" routerLink="/schedule/{{preDispatch}}">Indirizzi</button>
+        <button class="btn schedule-nav-btn" [ngClass]="{'active': activeTab('/schedule/'+preDispatch+'/parameters')}" routerLink="/schedule/{{preDispatch}}/parameters">Parametri</button>
+        <button class="btn schedule-nav-btn schedule-nav-right-btn" [ngClass]="{'active': activeTab('/schedule/'+preDispatch+'/result')}" routerLink="/schedule/{{preDispatch}}/result">Risultato</button>
       </div>
     </div>
     <div class="col-8 v-wide-col">
