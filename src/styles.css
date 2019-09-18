@@ -95,6 +95,9 @@ body{
 .v-large-table{
     flex: 0 0 78%;
 }
+.color-primary{
+    color: #fcda4b;
+}
 
 /*.integraa-select .dropdown-menu{*/
     /*width: 100% !important;*/

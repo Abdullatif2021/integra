@@ -205,15 +205,15 @@ export class SearchPanelComponent implements OnInit {
       if (!event.term || event.term === '') {
           field.items = field.originalItems ? field.originalItems : [] ;
           this.unsubscribeTo('fieldRemoteData') ;
-          field.loading = false ;
+          field.loadingState = false ;
       } else if (typeof field.getMethod === 'function') {
           this.unsubscribeTo('fieldRemoteData') ;
-          field.loading = true ;
+          field.loadingState = true ;
           this.subscriptions.fieldRemoteData = field.getMethod(event.term).subscribe((res: ApiResponseInterface) => {
               if (res.status === 'success') {
                   field.originalItems = field.items ;
                   field.items = res.data ;
-                  field.loading = false ;
+                  field.loadingState = false ;
               }
           });
       }

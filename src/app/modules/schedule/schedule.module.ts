@@ -15,6 +15,11 @@ import {faSortDown} from '@fortawesome/free-solid-svg-icons/faSortDown';
 import { ParametersComponent } from './components/parameters/parameters.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import { ResultComponent } from './components/result/result.component';
+import {LocatingService} from './service/locating.service';
+import {GoogleGeocodeService} from './service/google.geocode.service';
+import {TuttocittaGeocodeService} from './service/tuttocitta.geocode.service';
+import {MapBoxGeocodeService} from './service/map-box.geocode.service';
+import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 
 @NgModule({
   imports: [
@@ -23,15 +28,29 @@ import { ResultComponent } from './components/result/result.component';
     SharedModule,
     FontAwesomeModule,
     CoreModule,
+    // TODO get apiKey From google api key settings.
     AgmCoreModule.forRoot({
         apiKey: 'AIzaSyDc5fJyy9BGpFE4t6kh_4dH1-WRYzKd_wI'
     }),
-    NgSelectModule
+    NgSelectModule,
   ],
-  declarations: [ScheduleComponent, AddressesComponent, ParametersComponent, ResultComponent],
+  declarations: [
+      ScheduleComponent,
+      AddressesComponent,
+      ParametersComponent,
+      ResultComponent,
+  ],
   exports: [
       ScheduleRoutingModule
-  ]
+  ],
+  providers: [
+      LocatingService,
+      GoogleGeocodeService,
+      TuttocittaGeocodeService,
+      MapBoxGeocodeService
+  ],
+
+
 })
 export class ScheduleModule {
     constructor() {
@@ -39,5 +58,6 @@ export class ScheduleModule {
         library.add(faChevronDown);
         library.add(faCheck);
         library.add(faSortDown);
+        library.add(faExclamationTriangle);
     }
 }

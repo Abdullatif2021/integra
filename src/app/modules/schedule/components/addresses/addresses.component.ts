@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {LocatingService} from '../../service/locating.service';
 
 @Component({
   selector: 'app-addresses',
@@ -7,8 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddressesComponent implements OnInit {
 
-  constructor() { }
+  preDispatch: number ;
 
+  constructor(
+      private route: ActivatedRoute,
+  ) {
+      this.preDispatch = this.route.snapshot.params.id;
+  }
   // DUMMY DATA {
 
   items = [
@@ -85,8 +92,7 @@ export class AddressesComponent implements OnInit {
   // } DUMMY DATA
 
   expanded = {} ;
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   more(next) {
     if (! this.expanded[next]) {
@@ -119,4 +125,6 @@ export class AddressesComponent implements OnInit {
       }
       return 'status-' + item.status ;
   }
+
+
 }

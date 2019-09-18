@@ -13,13 +13,14 @@ export class SettingsComponent implements OnInit {
 
   subSettings: any = {
     general: [
-      {id: 'service-time', name: 'Tempo di servizio', route: '/settings'}
+      {id: 'service-time', name: 'Tempo di servizio', route: '/settings'},
+      {id: 'pagination-options', name: 'Pagination Options', route: '/settings/pagination'}
     ],
     mapProvider: [
       // {id: 'map-box', name: 'MapBox', route: '/settings/map-box'},
       // {id: 'google-maps', name: 'Google Maps', route: '/settings/google-maps'},
       // {id: 'all-cities', name: 'Tutto città', route: '/settings/all-cities'}
-    ]
+    ],
   }
   settings = [
     {id: 'general', name: 'General'},

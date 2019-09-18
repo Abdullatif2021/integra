@@ -1,0 +1,30 @@
+<div class="settings-page">
+  <app-settings-header [create_btn]="false"></app-settings-header>
+
+  <div class="settings-actual-page">
+    <ng-container *ngIf="!loading">
+      <div class="container-fluid">
+        <div class="row pagination-option-row">
+          <div class="col-2 wide-col">
+            <label for="street_pagination_input">Setreet Pagination</label>
+          </div>
+          <div class="col-10 wide-col">
+            <input type="number" (change)="edit($event, 'get_street_pagination')" id="street_pagination_input" value="{{data.get_street_pagination}}" class="rpp-input">
+          </div>
+        </div>
+        <div class="row mt-2 pagination-option-row">
+          <div class="col-2 wide-col">
+            <label for="tree_pagination_input">Tree Pagination</label>
+          </div>
+          <div class="col-10 wide-col">
+            <input type="number" (change)="edit($event, 'get_tree_pagination')" id="tree_pagination_input" value="{{data.get_tree_pagination}}" type="text" class="rpp-input">
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+      <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
+      <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
+    </ng-container>
+  </div>
+</div>

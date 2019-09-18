@@ -1,0 +1,83 @@
+.loading-overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    background-color: #0000008c;
+}
+
+.loading-message{
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 400;
+    position: absolute;
+    width: 100%;
+    top: calc(40% + 15px);
+}
+
+@-webkit-keyframes loader {
+    0% {
+        width: 0;
+    }
+    20% {
+        width: 10%;
+    }
+    25% {
+        width: 24%;
+    }
+    43% {
+        width: 41%;
+    }
+    56% {
+        width: 50%;
+    }
+    66% {
+        width: 52%;
+    }
+    71% {
+        width: 60%;
+    }
+    75% {
+        width: 76%;
+    }
+    94% {
+        width: 86%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+.progress-bar {
+    border-radius: 60px;
+    overflow: hidden;
+    width: 100%;
+}
+.progress-bar span {
+    display: block;
+}
+.bar {
+    background: #171616f2;
+}
+.progress {
+    background: #fcda4b;
+    color: #fff;
+    padding: 5px;
+    width: 0;
+    transition: all 1000ms;
+}
+.animated-progress {
+    -webkit-animation: loader 1s ease infinite;
+    animation: loader 1s ease infinite;
+}
+.progress-bar {
+    left: 50%;
+    max-width: 50%;
+    position: absolute;
+    top: 40%;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
+}
