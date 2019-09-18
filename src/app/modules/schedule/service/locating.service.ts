@@ -51,6 +51,8 @@ export class LocatingService {
 
         if (this.nfound.length) {
             this.relocate.emit(this.nfound[0]) ;
+        } else if (this.streets.length) {
+            await this.save();
         }
 
         if (!this.streets.length && !this.fixed.length && !this.nfound.length) {
@@ -110,10 +112,10 @@ export class LocatingService {
 
     async save(): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            if (!this.streets.length && !this.fixed.length) {
+            if (!this.streets.length) {
                 return resolve(true);
             }
-            this.http.post<ApiResponseInterface>(AppConfig.endpoints.updateStreetsData, {'streets': this.streets.concat(this.fixed)})
+            this.http.post<ApiResponseInterface>(AppConfig.endpoints.updateStreetsData, {'streets': this.streets})
                 .subscribe(
                     data => { resolve(data) ; },
                     error => { reject(error) ; }
