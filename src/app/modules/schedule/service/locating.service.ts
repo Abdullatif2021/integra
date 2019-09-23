@@ -132,9 +132,7 @@ export class LocatingService {
     createTree(): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.loadingService.setLoadingState({state: true, message: 'Creating Tree', progress: 0, autProgress: true});
-            const options = { params: new HttpParams()};
-            options.params = options.params.set('id', this.preDispatch) ;
-            return this.http.get(AppConfig.endpoints.createTree, options).subscribe(
+            return this.http.post(AppConfig.endpoints.createTree, {'id': this.preDispatch}).subscribe(
                 data => {
                     resolve(data) ;
                     this.loadingService.state(false);
