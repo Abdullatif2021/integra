@@ -20,6 +20,7 @@ import {GoogleGeocodeService} from './service/google.geocode.service';
 import {TuttocittaGeocodeService} from './service/tuttocitta.geocode.service';
 import {MapBoxGeocodeService} from './service/map-box.geocode.service';
 import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
+import {ListTreeService} from './service/list-tree.service';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
       LocatingService,
       GoogleGeocodeService,
       TuttocittaGeocodeService,
-      MapBoxGeocodeService
+      MapBoxGeocodeService,
+      ListTreeService
   ],
 
 

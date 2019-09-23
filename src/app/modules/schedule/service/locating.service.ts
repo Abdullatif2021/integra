@@ -11,6 +11,7 @@ import {SettingsService} from '../../../service/settings.service';
 import {GoogleGeocodeResponseInterface} from '../../../core/models/google-geocode-responce.interface';
 import {AppConfig} from '../../../config/app.config';
 import {SnotifyService} from 'ng-snotify';
+import {takeUntil} from 'rxjs/internal/operators';
 
 @Injectable()
 export class LocatingService {
@@ -26,9 +27,11 @@ export class LocatingService {
     ) {}
 
     relocate = new EventEmitter<StreetInterface>()
+    treeCreated = new EventEmitter<boolean>()
     streets = [] ;
     nfound = [] ;
     fixed = [] ;
+    preDispatch ;
 
     async fix(street: StreetInterface, name: string, lat: number, lng: number) {
 
@@ -56,6 +59,7 @@ export class LocatingService {
         }
 
         if (!this.streets.length && !this.fixed.length && !this.nfound.length) {
+            await this.createTree();
             this.snotifyService.success('All Streets are localized !', { showProgressBar: false});
         }
     }
@@ -63,6 +67,7 @@ export class LocatingService {
     async startLocating(preDispatch) {
 
         let page = 0;
+        this.preDispatch = preDispatch ;
         this.loadingService.setLoadingState({state: true, message: 'initializing...', progress: 0, autProgress: false});
         while (true) {
             this.loadingService.message('Fetching routes data to process');
@@ -78,6 +83,7 @@ export class LocatingService {
         }
 
         if (!this.streets.length && !this.fixed.length && !this.nfound.length) {
+            await this.createTree();
             this.snotifyService.success('All Streets are localized !', { showProgressBar: false});
         }
     }
@@ -111,7 +117,7 @@ export class LocatingService {
     }
 
     async save(): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<any>(async(resolve, reject) => {
             if (!this.streets.length) {
                 return resolve(true);
             }
@@ -120,6 +126,25 @@ export class LocatingService {
                     data => { resolve(data) ; },
                     error => { reject(error) ; }
                 );
+        });
+    }
+
+    createTree(): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            this.loadingService.setLoadingState({state: true, message: 'Creating Tree', progress: 0, autProgress: true});
+            const options = { params: new HttpParams()};
+            options.params = options.params.set('id', this.preDispatch) ;
+            return this.http.get(AppConfig.endpoints.createTree, options).subscribe(
+                data => {
+                    resolve(data) ;
+                    this.loadingService.state(false);
+                    this.treeCreated.emit(true);
+                },
+                error => {
+                    reject(error) ;
+                    this.loadingService.state(false);
+                }
+            );
         });
     }
 

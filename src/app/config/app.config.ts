@@ -26,7 +26,9 @@ export const AppConfig = {
         getPreDispatchStreets: (id) => `${api_url}/api/preDispatch/${id}/streets`,
         getPaginationOptions: `${api_url}/api/config`,
         updatePaginationOptions: `${api_url}/api/config/update`,
-        updateStreetsData: `${api_url}/api/street/update`
+        updateStreetsData: `${api_url}/api/street/update`,
+        getTreeNode: (id) => `${api_url}/api/preDispatch/${id}/tree`,
+        createTree: `${api_url}/api/preDispatch/tree/create`
     },
 
 };
