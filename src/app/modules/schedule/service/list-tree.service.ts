@@ -15,7 +15,7 @@ export class ListTreeService implements OnDestroy {
     unsubscribe = new EventEmitter();
     levels = ['root', 'cityId', 'capId', 'streetId', 'oet', 'building', 'end'] ;
 
-   listNode(preDispatchId: number, node: TreeNodeInterface, page = 1, namespace = '_'): Promise<TreeNodeInterface[]> {
+   listNode(preDispatchId: number, node: TreeNodeInterface, page = 1): Promise<TreeNodeInterface[]> {
        return new Promise<TreeNodeInterface[]>(async(resolve, reject) => {
            let result = <TreeNodeInterface[]>[];
            const type = this.getNextNodeType(node) ;
@@ -25,10 +25,10 @@ export class ListTreeService implements OnDestroy {
                result = result.concat(this.handleBuildings(node, data));
            } else {
                data.data.forEach((elm) => {
-                   result.push({id: elm.id, type: type, children: [], parent: node, text: elm.name, _end: false, status: 0});
+                   result.push({id: elm.id, type: type, children: [], subtype: '', parent: node, text: elm.name, _end: false, status: 0});
                });
            }
-           return resolve(node.children = result);
+           return resolve(result);
        });
    }
 
@@ -47,7 +47,7 @@ export class ListTreeService implements OnDestroy {
 
 
    getNextNodeType(node: TreeNodeInterface) {
-       return this.levels[this.levels.indexOf(node.type) + 1];
+       return node.type === 'oet' ? 'oet' : this.levels[this.levels.indexOf(node.type) + 1];
    }
 
    handleBuildings(parent: TreeNodeInterface, data: TreeNodeResponseInterface): TreeNodeInterface[] {
@@ -55,7 +55,7 @@ export class ListTreeService implements OnDestroy {
        for (const [key, children] of Object.entries(data.data)) {
            if (!children.length) { continue; }
            const randId = Math.random().toString(36).substr(2, 6) ;
-           const item = <TreeNodeInterface>{id: randId, type: 'oet', parent: parent, children: [],
+           const item = <TreeNodeInterface>{id: randId, type: 'oet', subtype: key, parent: parent, children: [],
                text: key === 'odd' ? 'Civici Dispari' : (key === 'even' ? 'Civici Pari' : key), status: 0};
            item.children = this.productsToTreeNodes(children, item);
            items.push(item);
@@ -64,6 +64,7 @@ export class ListTreeService implements OnDestroy {
    }
 
     nameBuilding(parent, elm): string {
+        if (parent.type === 'oet') { parent = parent.parent ; }
         let name = parent.text + ' ' + elm.house_number + ' , ';
         parent = parent.parent ;
         while (true) {
@@ -77,7 +78,7 @@ export class ListTreeService implements OnDestroy {
     productsToTreeNodes(items, parent: TreeNodeInterface): TreeNodeInterface[] {
        const result = <TreeNodeInterface[]>[];
        items.forEach((elm) => {
-           result.push( {id: elm.id, type: 'building', text: this.nameBuilding(parent.parent, elm),
+           result.push( {id: elm.id, type: 'building', subtype: '', text: this.nameBuilding(parent.parent, elm),
                parent: parent, children: [], _end: true, status: 1} );
        });
        return result ;

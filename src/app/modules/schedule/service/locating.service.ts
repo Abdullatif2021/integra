@@ -60,19 +60,23 @@ export class LocatingService {
 
         if (!this.streets.length && !this.fixed.length && !this.nfound.length) {
             await this.createTree();
-            this.snotifyService.success('All Streets are localized !', { showProgressBar: false});
+            this.snotifyService.success('All streets are localized !', { showProgressBar: false});
         }
     }
 
     async startLocating(preDispatch) {
 
         let page = 0;
+        this.streets = [] ;
+        this.nfound = [] ;
+        this.fixed = [] ;
+
         this.preDispatch = preDispatch ;
         this.loadingService.setLoadingState({state: true, message: 'initializing...', progress: 0, autProgress: false});
         while (true) {
             this.loadingService.message('Fetching routes data to process');
             const streets: ApiResponseInterface = await this.streetsService.getPreDisptachStreets(preDispatch, ++page).toPromise();
-            if (! await this.process(streets.data) ) {
+            if (streets.statusCode !== 200 || ! await this.process(streets.data) ) {
                 break ;
             }
         }
@@ -84,7 +88,7 @@ export class LocatingService {
 
         if (!this.streets.length && !this.fixed.length && !this.nfound.length) {
             await this.createTree();
-            this.snotifyService.success('All Streets are localized !', { showProgressBar: false});
+            this.snotifyService.success('All streets are localized !', { showProgressBar: false});
         }
     }
 

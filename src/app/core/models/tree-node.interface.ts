@@ -6,6 +6,7 @@ export interface TreeNodeInterface {
     children: TreeNodeInterface[];
     _end: boolean;
     status: number;
+    subtype: string;
 }
 
 export interface TreeNodeResponseInterface {

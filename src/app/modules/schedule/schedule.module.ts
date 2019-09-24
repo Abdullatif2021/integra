@@ -21,6 +21,7 @@ import {TuttocittaGeocodeService} from './service/tuttocitta.geocode.service';
 import {MapBoxGeocodeService} from './service/map-box.geocode.service';
 import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 import {ListTreeService} from './service/list-tree.service';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import {ListTreeService} from './service/list-tree.service';
         apiKey: 'AIzaSyDc5fJyy9BGpFE4t6kh_4dH1-WRYzKd_wI'
     }),
     NgSelectModule,
+    InfiniteScrollModule
   ],
   declarations: [
       ScheduleComponent,
