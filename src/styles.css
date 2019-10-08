@@ -180,3 +180,7 @@ body{
     width: 363px;
     float: right;
 }
+a:hover {
+    text-decoration: none !important;
+}
+

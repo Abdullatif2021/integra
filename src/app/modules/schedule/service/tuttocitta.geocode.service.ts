@@ -48,7 +48,9 @@ export class TuttocittaGeocodeService {
                 id: street.id,
                 name: res.topo.split(',')[0],
                 lat: res.lat,
-                long: res.lon
+                long: res.lon,
+                cap_id: street.cap.id,
+                city_id: street.city.id,
             });
 
         });

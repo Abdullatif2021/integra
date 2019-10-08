@@ -19,9 +19,11 @@ import {LocatingService} from './service/locating.service';
 import {GoogleGeocodeService} from './service/google.geocode.service';
 import {TuttocittaGeocodeService} from './service/tuttocitta.geocode.service';
 import {MapBoxGeocodeService} from './service/map-box.geocode.service';
-import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
+import {faAllergies, faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 import {ListTreeService} from './service/list-tree.service';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
+import {DndModule} from 'ngx-drag-drop';
+import {ContextMenuModule, ContextMenuService} from 'ngx-contextmenu';
 
 @NgModule({
   imports: [
@@ -35,7 +37,10 @@ import {InfiniteScrollModule} from 'ngx-infinite-scroll';
         apiKey: 'AIzaSyDc5fJyy9BGpFE4t6kh_4dH1-WRYzKd_wI'
     }),
     NgSelectModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    DndModule,
+    ContextMenuModule
+
   ],
   declarations: [
       ScheduleComponent,
@@ -51,7 +56,8 @@ import {InfiniteScrollModule} from 'ngx-infinite-scroll';
       GoogleGeocodeService,
       TuttocittaGeocodeService,
       MapBoxGeocodeService,
-      ListTreeService
+      ListTreeService,
+      ContextMenuService,
   ],
 
 
@@ -63,5 +69,6 @@ export class ScheduleModule {
         library.add(faCheck);
         library.add(faSortDown);
         library.add(faExclamationTriangle);
+        library.add(faAllergies);
     }
 }

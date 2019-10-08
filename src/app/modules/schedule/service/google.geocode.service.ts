@@ -48,7 +48,9 @@ export class GoogleGeocodeService {
                 id: street.id,
                 name: gRes.results[0].formatted_address.split(',')[0],
                 lat: gRes.results[0].geometry.location.lat,
-                long: gRes.results[0].geometry.location.lng
+                long: gRes.results[0].geometry.location.lng,
+                cap_id: street.cap.id,
+                city_id: street.city.id,
             });
         });
     }

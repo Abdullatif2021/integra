@@ -63,7 +63,9 @@ export class MapBoxGeocodeService {
                 id: street.id,
                 name: res.place_name.split(',')[0],
                 lat: res.center[0],
-                long: res.center[1]
+                long: res.center[1],
+                cap_id: street.cap.id,
+                city_id: street.city.id,
             });
 
         });

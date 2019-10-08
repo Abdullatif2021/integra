@@ -28,7 +28,11 @@ export const AppConfig = {
         updatePaginationOptions: `${api_url}/api/config/update`,
         updateStreetsData: `${api_url}/api/street/update`,
         getTreeNode: (id) => `${api_url}/api/preDispatch/${id}/tree`,
-        createTree: `${api_url}/api/preDispatch/tree/create`
+        createTree: `${api_url}/api/preDispatch/tree/create`,
+        moveStreet: `${api_url}/api/preDispatch/tree/moveStreet`,
+        moveCap: `${api_url}/api/preDispatch/tree/moveCap`,
+        getMoveToCity: (id) => `${api_url}/api/preDispatch/${id}/tree/moveCap/availableCities`,
+        getMoveToCap: (id) => `${api_url}/api/preDispatch/${id}/tree/moveStreet/availableCities`
     },
 
 };

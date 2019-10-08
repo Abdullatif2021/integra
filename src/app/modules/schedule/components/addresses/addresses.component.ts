@@ -5,6 +5,7 @@ import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {LocatingService} from '../../service/locating.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {SettingsService} from '../../../../service/settings.service';
+import {isInteger} from '@ng-bootstrap/ng-bootstrap/util/util';
 
 @Component({
   selector: 'app-addresses',
@@ -35,6 +36,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
   loading = {} ;
   paginationOptions: any ;
   expanded = {} ;
+  dragging: TreeNodeInterface ;
 
   async ngOnInit() {
       this.locatingService.treeCreated.pipe(takeUntil(this.unsubscribe)).subscribe(
@@ -90,6 +92,67 @@ export class AddressesComponent implements OnInit, OnDestroy {
       if (_data && _data.length >= this.paginationOptions.get_tree_pagination) {
           this.loading[next] = false ;
       }
+  }
+
+  onDrop(event, parent) {
+      const item = this.getItem(event.data.next);
+      const oldParent = item.parent ;
+      if (this.listTreeService.relocateItem(item, parent, this.preDispatch)) {
+          this.loading[event.data.next] = false ;
+          this.expanded[event.data.next] = false ;
+      }
+      if (!oldParent.children.length) {
+          const location = event.data.next.split(':').slice(0, -1).join(',') ;
+          this.loading[location] = false ;
+          this.expanded[location] = false ;
+      }
+      this.dragging = null;
+  }
+
+  onDragStart(event, item) {
+      this.dragging = item ;
+      // document.body.style.cursor = 'grabbing';
+  }
+
+  isDropLocation(item): boolean {
+      if (!this.dragging) {
+          return false;
+      }
+      if (this.dragging.parent.id === item.id) {
+          return false ;
+      }
+      if (this.dragging.parent.type === item.type && this.dragging.parent.parent.id === item.parent.id) {
+          return true ;
+      }
+      return false ;
+  }
+  isNonDropLocation(item): boolean {
+      if (!this.dragging) {
+          return false;
+      }
+      if (this.dragging.parent.type === item.type && this.dragging.parent.parent.id === item.parent.id) {
+          return false ;
+      }
+      return true;
+  }
+
+  getItem(next: string, id = null) {
+      const location = next.split(':');
+
+      let item: TreeNodeInterface = this.tree[0] ;
+      location.forEach((elm) => {
+          if (elm === '') { return ; }
+          item = item.children[elm] ;
+      });
+      if (id) {
+          const temp = item.children.filter((elm) => elm.id === id) ;
+          item = temp.length ? temp[0] : null;
+      }
+      return item ;
+  }
+
+  openRelocateModal(event) {
+      alert('Feature Not Ready yet!');
   }
 
   ngOnDestroy() {

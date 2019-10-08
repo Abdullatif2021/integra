@@ -4,12 +4,15 @@ import {TreeNodeInterface, TreeNodeResponseInterface} from '../../../core/models
 import {AppConfig} from '../../../config/app.config';
 import {takeUntil} from 'rxjs/internal/operators';
 import {Observable} from 'rxjs';
+import {ApiResponseInterface} from '../../../core/models/api-response.interface';
+import {SnotifyService} from 'ng-snotify';
 
 @Injectable()
 export class ListTreeService implements OnDestroy {
 
     constructor(
         private http: HttpClient,
+        private snotifyService: SnotifyService,
     ) {}
 
     unsubscribe = new EventEmitter();
@@ -65,7 +68,7 @@ export class ListTreeService implements OnDestroy {
 
     nameBuilding(parent, elm): string {
         if (parent.type === 'oet') { parent = parent.parent ; }
-        let name = parent.text + ' ' + elm.house_number + ' , ';
+        let name = parent.text + ' ' + (elm.house_number ? elm.house_number : (elm.extra ? elm.extra.house_number : '')) + ' , ';
         parent = parent.parent ;
         while (true) {
             if (!parent.id) { break ; }
@@ -79,15 +82,64 @@ export class ListTreeService implements OnDestroy {
        const result = <TreeNodeInterface[]>[];
        items.forEach((elm) => {
            result.push( {id: elm.id, type: 'building', subtype: '', text: this.nameBuilding(parent.parent, elm),
-               parent: parent, children: [], _end: true, status: 1} );
+               parent: parent, children: [], _end: true, status: 1, extra: {house_number: elm.house_number}} );
        });
        return result ;
+   }
+
+
+   relocateItem(item, parent, preDispatch) {
+       // if (parent.parent.type === item.parent.type) {parent = parent.parent ;}
+       if (parent.type !== item.parent.type || parent.id === item.parent.id) { return ; }
+       if (item.type === 'streetId' && parent.parent.id !== item.parent.parent.id) { return ; }
+
+       if (item.type === 'streetId') {
+           this.sendMoveStreetRequest(item.parent.parent.id, item.parent.id, parent.id, item.id, preDispatch)
+               .subscribe(
+                   data => {
+                       this.snotifyService.success('Street moved successfully', { showProgressBar: false});
+                   }
+               );
+       } else if (item.type === 'capId') {
+           this.sendMoveCapRequest(item.parent.id, parent.id, item.id, preDispatch)
+               .subscribe(
+                   data => {
+                       this.snotifyService.success('Cap moved successfully', { showProgressBar: false});
+                   }
+               );
+       }
+       item.parent.children = item.parent.children.filter((elm) => elm.id !== item.id);
+       item.parent = parent ;
+       item.children = [] ;
+       if (parent.children.length) {
+           parent.children.push(item);
+       }
+
+       return true ;
+   }
+
+   sendMoveStreetRequest(city, cap_from, cap_to, street, preDispatch): Observable<ApiResponseInterface> {
+       const formData = new FormData();
+       formData.set('city_id', city);
+       formData.set('cap_from_id', cap_from);
+       formData.set('cap_to_id', cap_to);
+       formData.set('street_id', street);
+       formData.set('pre_dispatch_id', preDispatch);
+       return this.http.post<ApiResponseInterface>(AppConfig.endpoints.moveStreet, formData);
+   }
+
+   sendMoveCapRequest(city_from, city_to, cap, preDispatch): Observable<ApiResponseInterface> {
+       const formData = new FormData();
+       formData.set('city_from_id', city_from);
+       formData.set('city_to_id', city_to);
+       formData.set('cap_id', cap);
+       formData.set('pre_dispatch_id', preDispatch);
+       return this.http.post<ApiResponseInterface>(AppConfig.endpoints.moveCap, formData);
    }
 
    ngOnDestroy() {
        this.unsubscribe.next();
        this.unsubscribe.complete();
    }
-
 
 }

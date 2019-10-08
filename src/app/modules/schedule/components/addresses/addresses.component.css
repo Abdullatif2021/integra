@@ -186,10 +186,32 @@
     color: #ffffff;
 }
 
-
 .schedule-skeleton {
     height: 33px;
     border-radius: 0px;
     margin: 0px;
     display: block;
+}
+
+.cursor-grab:active{
+    cursor: grab;
+}
+.drop-location > .node {
+    background-color: #c6edb6 !important;
+    transition: all ease .3s;
+    border: 1px dotted #777;
+
+}
+.cant-drop-location > .node {
+    color: #e2e2e2 !important;
+    background-color: #f3f3f3 !important;
+}
+
+.context-menu-item {
+    padding: 2px 10px;
+    color: #444;
+    font-size: 14px;
+}
+.context-menu-item:hover {
+    background: #fcda4b7d;
 }

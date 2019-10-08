@@ -7,6 +7,7 @@ export interface TreeNodeInterface {
     _end: boolean;
     status: number;
     subtype: string;
+    extra?: any;
 }
 
 export interface TreeNodeResponseInterface {

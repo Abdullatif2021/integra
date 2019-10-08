@@ -8,7 +8,6 @@ import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import {LoadingBarHttpClientModule} from '@ngx-loading-bar/http-client';
 import {SnotifyModule, SnotifyService, ToastDefaults} from 'ng-snotify';
-import {HomeModule} from './modules/home/home.module';
 
 @NgModule({
   declarations: [

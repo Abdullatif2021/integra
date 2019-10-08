@@ -130,6 +130,7 @@ export class LocatingService {
                     data => { resolve(data) ; },
                     error => { reject(error) ; }
                 );
+            resolve();
         });
     }
 

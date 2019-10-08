@@ -13,6 +13,7 @@
   "dependencies": {
     "@agm/core": "^1.0.0-beta.7",
     "@angular/animations": "^6.1.0",
+    "@angular/cdk": "^6.1.0",
     "@angular/common": "^6.1.0",
     "@angular/compiler": "^6.1.0",
     "@angular/core": "^6.1.0",
@@ -34,6 +35,8 @@
     "core-js": "^2.5.4",
     "jquery": "^3.4.0",
     "ng-snotify": "^4.3.1",
+    "ngx-contextmenu": "^5.1.1",
+    "ngx-drag-drop": "^2.0.0",
     "ngx-infinite-scroll": "6.0.0",
     "popper.js": "^1.15.0",
     "rxjs": "6.0.0",
