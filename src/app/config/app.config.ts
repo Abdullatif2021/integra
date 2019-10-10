@@ -32,7 +32,7 @@ export const AppConfig = {
         moveStreet: `${api_url}/api/preDispatch/tree/moveStreet`,
         moveCap: `${api_url}/api/preDispatch/tree/moveCap`,
         getMoveToCity: (id) => `${api_url}/api/preDispatch/${id}/tree/moveCap/availableCities`,
-        getMoveToCap: (id) => `${api_url}/api/preDispatch/${id}/tree/moveStreet/availableCities`
+        getMoveToCap: (id) => `${api_url}/api/preDispatch/${id}/tree/moveStreet/availableCaps`
     },
 
 };

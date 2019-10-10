@@ -24,6 +24,7 @@ import {ListTreeService} from './service/list-tree.service';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {DndModule} from 'ngx-drag-drop';
 import {ContextMenuModule, ContextMenuService} from 'ngx-contextmenu';
+import {faSync} from '@fortawesome/free-solid-svg-icons/faSync';
 
 @NgModule({
   imports: [
@@ -70,5 +71,6 @@ export class ScheduleModule {
         library.add(faSortDown);
         library.add(faExclamationTriangle);
         library.add(faAllergies);
+        library.add(faSync);
     }
 }

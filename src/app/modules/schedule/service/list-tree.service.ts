@@ -88,10 +88,10 @@ export class ListTreeService implements OnDestroy {
    }
 
 
-   relocateItem(item, parent, preDispatch) {
+   moveItem(item, parent, preDispatch, validated = false) {
        // if (parent.parent.type === item.parent.type) {parent = parent.parent ;}
-       if (parent.type !== item.parent.type || parent.id === item.parent.id) { return ; }
-       if (item.type === 'streetId' && parent.parent.id !== item.parent.parent.id) { return ; }
+       if (!validated && parent.type !== item.parent.type || parent.id === item.parent.id) { return ; }
+       if (!validated && item.type === 'streetId' && parent.parent.id !== item.parent.parent.id) { return ; }
 
        if (item.type === 'streetId') {
            this.sendMoveStreetRequest(item.parent.parent.id, item.parent.id, parent.id, item.id, preDispatch)
@@ -111,7 +111,7 @@ export class ListTreeService implements OnDestroy {
        item.parent.children = item.parent.children.filter((elm) => elm.id !== item.id);
        item.parent = parent ;
        item.children = [] ;
-       if (parent.children.length) {
+       if (parent.children && parent.children.length) {
            parent.children.push(item);
        }
 
@@ -135,6 +135,19 @@ export class ListTreeService implements OnDestroy {
        formData.set('cap_id', cap);
        formData.set('pre_dispatch_id', preDispatch);
        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.moveCap, formData);
+   }
+
+   getMoveToCaps(preDispatchId: number, city: string, cap: string) {
+       const options = { params: new HttpParams()};
+       options.params = options.params.set('cityId', city);
+       options.params = options.params.set('capId', cap);
+       return this.http.get<any>(AppConfig.endpoints.getMoveToCap(preDispatchId), options);
+   }
+
+   getMoveToCities(preDispatchId: number, city: string) {
+       const options = { params: new HttpParams()};
+       options.params = options.params.set('cityId', city);
+       return this.http.get<any>(AppConfig.endpoints.getMoveToCity(preDispatchId), options);
    }
 
    ngOnDestroy() {

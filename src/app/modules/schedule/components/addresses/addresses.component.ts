@@ -5,7 +5,7 @@ import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {LocatingService} from '../../service/locating.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {SettingsService} from '../../../../service/settings.service';
-import {isInteger} from '@ng-bootstrap/ng-bootstrap/util/util';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-addresses',
@@ -21,7 +21,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
       private route: ActivatedRoute,
       private listTreeService: ListTreeService,
       private locatingService: LocatingService,
-      private settingsService: SettingsService
+      private settingsService: SettingsService,
+      private modalService: NgbModal
   ) {
       this.preDispatch = this.route.snapshot.params.id;
   }
@@ -37,6 +38,9 @@ export class AddressesComponent implements OnInit, OnDestroy {
   paginationOptions: any ;
   expanded = {} ;
   dragging: TreeNodeInterface ;
+  move_to_items = [];
+  toMoveItem: any;
+
 
   async ngOnInit() {
       this.locatingService.treeCreated.pipe(takeUntil(this.unsubscribe)).subscribe(
@@ -57,11 +61,18 @@ export class AddressesComponent implements OnInit, OnDestroy {
   }
 
   async load(node, next) {
+      if (this.loading[next]) {
+          return ;
+      }
       this.loading[next] = true ;
       node.children.push({skeleton: true}) ;
-      const data: TreeNodeInterface[] = await this.listTreeService.listNode(this.preDispatch, node, this.pages[next]);
-      node.children.pop();
-      this.addData(node, data, next) ;
+      this.listTreeService.listNode(this.preDispatch, node, this.pages[next]).then(
+          data => {
+              node.children.pop();
+              this.addData(node, data, next) ;
+          }
+      );
+
   }
 
   getLvlClass(next) {
@@ -96,17 +107,21 @@ export class AddressesComponent implements OnInit, OnDestroy {
 
   onDrop(event, parent) {
       const item = this.getItem(event.data.next);
-      const oldParent = item.parent ;
-      if (this.listTreeService.relocateItem(item, parent, this.preDispatch)) {
-          this.loading[event.data.next] = false ;
-          this.expanded[event.data.next] = false ;
+      this.moveNode(item, parent, event.data.next);
+      this.dragging = null;
+  }
+
+  moveNode(node, to, next, validated = false ) {
+      const oldParent = node.parent ;
+      if (this.listTreeService.moveItem(node, to, this.preDispatch, validated)) {
+          this.loading[next] = false ;
+          this.expanded[next] = false ;
       }
       if (!oldParent.children.length) {
-          const location = event.data.next.split(':').slice(0, -1).join(',') ;
+          const location = next.split(':').slice(0, -1).join(',') ;
           this.loading[location] = false ;
           this.expanded[location] = false ;
       }
-      this.dragging = null;
   }
 
   onDragStart(event, item) {
@@ -126,6 +141,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
       }
       return false ;
   }
+
   isNonDropLocation(item): boolean {
       if (!this.dragging) {
           return false;
@@ -151,13 +167,54 @@ export class AddressesComponent implements OnInit, OnDestroy {
       return item ;
   }
 
-  openRelocateModal(event) {
-      alert('Feature Not Ready yet!');
+  openMoveItemModal(event, modal) {
+      this.modalService.open(modal);
+      this.move_to_items = [] ;
+      if (event.item.node.type === 'streetId') {
+          this.listTreeService.getMoveToCaps(this.preDispatch, event.item.node.parent.parent.id, event.item.node.parent.id).subscribe(
+              data => {
+                  this.move_to_items = data.data ;
+                  console.log(data);
+              }
+          );
+      } else if (event.item.node.type === 'capId') {
+          this.listTreeService.getMoveToCities(this.preDispatch, event.item.node.parent.id).subscribe(
+              data => {
+                  this.move_to_items = data.data ;
+                  console.log(data);
+              }
+          );
+      }
+      this.toMoveItem = event.item ;
+  }
+
+  submitMoveItem(select) {
+      if (!select.itemsList.selectedItems[0]) {
+          return ;
+      }
+      const moveTo = select.itemsList.selectedItems[0] ;
+      moveTo.type = this.toMoveItem.node.parent.type;
+      this.moveNode(this.toMoveItem.node, moveTo.value, this.toMoveItem.next, true);
+  }
+
+  isMovable(item) {
+      if (item.node) {
+          item = item.node;
+      }
+      return item.type === 'capId' || item.type === 'streetId' ;
+  }
+
+  async reloadNode(event) {
+      event.item.node.children = [] ;
+      this.loading[event.item.next] = false ;
+      this.pages[event.item.next] = 0 ;
+      await this.load(event.item.node, event.item.next);
   }
 
   ngOnDestroy() {
       this.unsubscribe.next();
       this.unsubscribe.complete();
   }
+
 
 }

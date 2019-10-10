@@ -110,7 +110,9 @@ export class LocatingService {
                 this.streets.push(result);
                 console.log(`${streets[i].name} located using MapBox`);
             } else {
-                this.nfound.push(streets[i]);
+                streets[i].cap_id = streets[i].cap.id ;
+                streets[i].city_id = streets[i].city.id;
+                this.nfound.push();
             }
 
             this.loadingService.progress((++processed / streets.length) * 100);
