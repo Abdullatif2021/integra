@@ -1,3 +1,4 @@
+// not used for now
 export interface LocatedStreetInterface {
     name: string;
     lat: number;

@@ -2,9 +2,9 @@ import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from 
 import {ActivatedRoute, Router} from '@angular/router';
 import {LocatingService} from './service/locating.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {StreetInterface} from '../../core/models/street.interface';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
+import {RecipientLocationInterface} from '../../core/models/recipient.interface';
 
 @Component({
   selector: 'app-schedules',
@@ -16,7 +16,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
   unsubscribe: Subject<void> = new Subject();
   preDispatch: number ;
   @ViewChild('modalRef') modalRef;
-  nFoundItem: StreetInterface ;
+  nFoundItem: RecipientLocationInterface ;
   latLngInputState = false ;
 
   constructor(
@@ -55,6 +55,10 @@ export class ScheduleComponent implements OnInit, OnDestroy {
           return this.locatingService.fix(this.nFoundItem, null, latInput.value, lngInput.value);
       }
       this.locatingService.fix(this.nFoundItem, locationInput.value, null, null);
+  }
+
+  skipLocatingItem() {
+      this.locatingService.fix(this.nFoundItem, null, null, null, true);
   }
 
   ngOnDestroy() {

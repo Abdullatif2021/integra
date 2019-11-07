@@ -23,7 +23,7 @@ export const AppConfig = {
         getProviderKeys: `${api_url}/api/providerKey`,
         getProductStatusType: `${api_url}/api/product/getProductStatusType`,
         updateProductStatusType: `${api_url}/api/product/productStatusType`,
-        getPreDispatchStreets: (id) => `${api_url}/api/preDispatch/${id}/streets`,
+        // getPreDispatchStreets: (id) => `${api_url}/api/preDispatch/${id}/streets`,
         getPaginationOptions: `${api_url}/api/config`,
         updatePaginationOptions: `${api_url}/api/config/update`,
         updateStreetsData: `${api_url}/api/street/update`,
@@ -32,7 +32,8 @@ export const AppConfig = {
         moveStreet: `${api_url}/api/preDispatch/tree/moveStreet`,
         moveCap: `${api_url}/api/preDispatch/tree/moveCap`,
         getMoveToCity: (id) => `${api_url}/api/preDispatch/${id}/tree/moveCap/availableCities`,
-        getMoveToCap: (id) => `${api_url}/api/preDispatch/${id}/tree/moveStreet/availableCaps`
+        getMoveToCap: (id) => `${api_url}/api/preDispatch/${id}/tree/moveStreet/availableCaps`,
+        getPreDispatchToLocateProducts: (id) => `${api_url}/api/preDispatch/${id}/products`
     },
 
 };

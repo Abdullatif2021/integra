@@ -5,6 +5,7 @@ import {MapBoxGeocodeResponceInterface} from '../../../core/models/map-box-geoco
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {SettingsService} from '../../../service/settings.service';
+import {LocatedRecipientInterface, RecipientLocationInterface} from '../../../core/models/recipient.interface';
 
 @Injectable()
 export class MapBoxGeocodeService {
@@ -26,24 +27,26 @@ export class MapBoxGeocodeService {
         });
     }
 
-    sendGeocodeRequest(street: StreetInterface): Observable<MapBoxGeocodeResponceInterface> {
+    sendGeocodeRequest(recipient: RecipientLocationInterface): Observable<MapBoxGeocodeResponceInterface> {
         const options = { params: new HttpParams()};
-        options.params = options.params.set('postcode', street.cap.name);
-        options.params = options.params.set('place', street.city.name);
+        options.params = options.params.set('postcode', recipient.cap);
+        options.params = options.params.set('place', recipient.city);
+        options.params = options.params.set('address', recipient.houseNumber);
         options.params = options.params.set('access_token', this.keys[0].name) ;
         return this.http.get<MapBoxGeocodeResponceInterface>
-        (`https://api.mapbox.com/geocoding/v5/mapbox.places/${street.name.replace('\\', '')}.json`, options);
+        (`https://api.mapbox.com/geocoding/v5/mapbox.places/${recipient.street.replace('\\', '')}.json`, options);
 
     }
 
-    locate(street: StreetInterface): Promise<LocatedStreetInterface> {
-        return new Promise<LocatedStreetInterface>(async (resolve) => {
+    locate(recipient: RecipientLocationInterface): Promise<LocatedRecipientInterface> {
+        return new Promise<LocatedRecipientInterface>(async (resolve) => {
             if (this.invalid_keys_alerted) { return resolve(null); }
             if (!this.keys) { await this.loadKeys(); }
-            const mRes = await this.sendGeocodeRequest(street).toPromise().catch((e) => {
+            const mRes = await this.sendGeocodeRequest(recipient).toPromise().catch((e) => {
                 if (e.statusText === 'Unauthorized' && !this.invalid_keys_alerted) {
                     alert('MapBox Keys are invalid, this provider will be ignored') ;
                     this.invalid_keys_alerted = true ;
+                    resolve(null);
                 }
             });
             if (!mRes || !mRes.features.length) {
@@ -51,8 +54,8 @@ export class MapBoxGeocodeService {
             }
             let res ;
             mRes.features.forEach((elm) => {
-                if (elm.place_name.indexOf(street.cap.name) !== -1  &&
-                    elm.place_name.toLocaleLowerCase().indexOf(street.city.name.toLocaleLowerCase()) !== -1) {
+                if (elm.place_name.indexOf(recipient.cap) !== -1  &&
+                    elm.place_name.toLocaleLowerCase().indexOf(recipient.city.toLocaleLowerCase()) !== -1) {
                     res = elm ;
                 }
             });
@@ -60,12 +63,11 @@ export class MapBoxGeocodeService {
                 return resolve(null);
             }
             return resolve({
-                id: street.id,
-                name: res.place_name.split(',')[0],
+                id: recipient.id,
                 lat: res.center[0],
                 long: res.center[1],
-                cap_id: street.cap.id,
-                city_id: street.city.id,
+                is_fixed: true,
+                name: res.place_name.split(',')[0],
             });
 
         });

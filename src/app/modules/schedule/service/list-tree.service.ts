@@ -82,7 +82,7 @@ export class ListTreeService implements OnDestroy {
        const result = <TreeNodeInterface[]>[];
        items.forEach((elm) => {
            result.push( {id: elm.id, type: 'building', subtype: '', text: this.nameBuilding(parent.parent, elm),
-               parent: parent, children: [], _end: true, status: 1, extra: {house_number: elm.house_number}} );
+               parent: parent, children: [], _end: true, status: elm.is_fixed ? 1 : 2, extra: {house_number: elm.house_number}} );
        });
        return result ;
    }

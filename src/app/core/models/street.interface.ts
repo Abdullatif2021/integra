@@ -1,3 +1,4 @@
+// not used for now
 export interface StreetInterface {
     id: number ;
     name: string ;

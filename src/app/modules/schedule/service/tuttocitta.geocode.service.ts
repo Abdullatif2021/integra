@@ -2,17 +2,18 @@ import { Injectable } from '@angular/core';
 import {StreetInterface} from '../../../core/models/street.interface';
 import {LocatedStreetInterface} from '../../../core/models/located-street.interface';
 import {TuttocittaGeocodeResponceInterface} from '../../../core/models/tuttocitta-geocode-responce.interface';
+import {LocatedRecipientInterface, RecipientLocationInterface} from '../../../core/models/recipient.interface';
 
 @Injectable()
 export class TuttocittaGeocodeService {
 
     constructor() { }
 
-    sendGeocodeRequest(street: StreetInterface): Promise<TuttocittaGeocodeResponceInterface> {
+    sendGeocodeRequest(recipient: RecipientLocationInterface): Promise<TuttocittaGeocodeResponceInterface> {
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
             const callback = '__tuttocitta_result = ' ;
-            const address = `${street.name} - ${street.cap.name} ${street.city.name}`;
+            const address = `${recipient.street}, ${recipient.houseNumber}, ${recipient.cap} ${recipient.city}`;
             // the following line only used to remove the annoying undefined variable IDE error
             const windoo: any = window ;
             script.src = `https://services.tuttocitta.it/lbs?callback=${callback}&&sito=ac_api&&dv=${address}&format=javascript`;
@@ -28,16 +29,16 @@ export class TuttocittaGeocodeService {
         });
     }
 
-    locate(street: StreetInterface): Promise<LocatedStreetInterface> {
-        return new Promise<LocatedStreetInterface>(async (resolve) => {
+    locate(recipient: RecipientLocationInterface): Promise<LocatedRecipientInterface> {
+        return new Promise<LocatedRecipientInterface>(async (resolve) => {
 
-            const tRes = await this.sendGeocodeRequest(street) ;
+            const tRes = await this.sendGeocodeRequest(recipient) ;
             if (tRes.t === '' || typeof tRes.r[0] === 'undefined' || typeof tRes.r[0].topo === 'undefined')  {
                 return resolve(null) ;
             }
             let res ;
             tRes.r.forEach((elm) => {
-               if (elm.cap === street.cap.name && elm.topo !== '') {
+               if (elm.cap === recipient.cap && elm.topo !== '') {
                    res = elm ;
                }
             });
@@ -45,12 +46,11 @@ export class TuttocittaGeocodeService {
                 return resolve(null);
             }
             return resolve({
-                id: street.id,
-                name: res.topo.split(',')[0],
+                id: recipient.id,
                 lat: res.lat,
                 long: res.lon,
-                cap_id: street.cap.id,
-                city_id: street.city.id,
+                is_fixed: true,
+                name: res.topo.split(',')[0],
             });
 
         });

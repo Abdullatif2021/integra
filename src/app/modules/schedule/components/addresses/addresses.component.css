@@ -175,7 +175,7 @@
 
 /* Statuses */
 
-.status-1 .item-row{
+.status-1 .item-row, .status-2 .item-row{
     padding-left: 20px;
 }
 .status-1 .item-row .text{
