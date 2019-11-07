@@ -26,13 +26,13 @@ export class StreetsService {
         );
     }
 
-    getPreDisptachStreets(preDispatch, page) {
-        const options = { params: new HttpParams().set('page', page)};
-        options.params = this.filtersService.getHttpParams(options.params) ;
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchStreets(preDispatch), options).pipe(
-            catchError(this.handleError)
-        );
-    }
+    // getPreDisptachStreets(preDispatch, page) {
+    //     const options = { params: new HttpParams().set('page', page)};
+    //     options.params = this.filtersService.getHttpParams(options.params) ;
+    //     return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchStreets(preDispatch), options).pipe(
+    //         catchError(this.handleError)
+    //     );
+    // }
 
     handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
