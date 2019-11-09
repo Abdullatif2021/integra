@@ -5,9 +5,9 @@
     <div class="departure">
       <div class="location-container">
         <label class="d-block departure-label">Partenza</label>
-        <input type="text" class="location-input" value="Corso Italia 591, A - 80010 Villaricca (NA)">
+        <input type="text" #startPointTextInput class="location-input" value="Corso Italia 591, A - 80010 Villaricca (NA)">
         <div class="location-actions">
-          <img src="/assets/images/edit.svg">
+          <img src="/assets/images/edit.svg" (click)="openChangeStartPointModal($event, ChangeStartPintModalRef)">
           <img src="/assets/images/plus.svg">
         </div>
       </div>
@@ -52,9 +52,9 @@
     <div class="arrival">
       <div class="location-container">
         <label class="d-block departure-label">Arrivo</label>
-        <input type="text" class="location-input" value="Corso Italia 591, A - 80010 Villaricca (NA)">
+        <input #endPointTextInput type="text" class="location-input" value="Corso Italia 591, A - 80010 Villaricca (NA)">
         <div class="location-actions">
-          <img src="/assets/images/edit.svg">
+          <img src="/assets/images/edit.svg" (click)="openChangeEndPointModal($event, ChangeEndPintModalRef)">
           <img src="/assets/images/plus.svg">
         </div>
       </div>
@@ -84,11 +84,15 @@
           <div class="marker-container">
             <div class="marker" *ngIf="item.marker">{{item.marker}}</div>
           </div>
-          <div class="text">{{item.text}}</div>
+          <div class="text" #itemText>{{item.text}}</div>
+          <div class="rename-input" #itemNameInput><input type="text" value="{{item.text}}" (change)="nameChanged($event, item, itemText, itemNameInput)"></div>
           <div class="right-side">
             <div class="warning" *ngIf="item.warning">!</div>
             <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
-            <div class="small-more"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
+            <div class="small-more" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
+            <div class="dropdown-menu" aria-labelledby="actions-dropdown">
+              <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rename</a>
+            </div>
           </div>
           <div class="clear-both"></div>
         </div>
@@ -123,7 +127,6 @@
   <!--<ng-template contextMenuItem divider="true"></ng-template>-->
 </context-menu>
 
-
 <ng-template  #MoveItemModalRef let-modal>
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
@@ -139,6 +142,50 @@
       </div>
       <div class="btns-container mt-3">
         <button type="button" (click)="modal.close();submitMoveItem(moveToSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #ChangeStartPintModalRef let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <h6>
+        <fa-icon class="text-warning" [icon]="['fa','allergies']"></fa-icon>
+        Change pre dispatch start point
+      </h6>
+      <div class="mt-3">
+        <div class="form-group">
+          <label>Change start point</label>
+          <ng-select #startPointSelect [clearable]="false" [bindLabel]="'text'" [items]="all_start_points" placeholder="Select Start Point"></ng-select>
+        </div>
+      </div>
+      <div class="btns-container mt-3">
+        <button type="button" (click)="modal.close();submitChangeStartPoint(startPointSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #ChangeEndPintModalRef let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <h6>
+        <fa-icon class="text-warning" [icon]="['fa','allergies']"></fa-icon>
+        Change pre dispatch end point
+      </h6>
+      <div class="mt-3">
+        <div class="form-group">
+          <label>Change end point</label>
+          <ng-select #endPointSelect [clearable]="false" [bindLabel]="'text'" [items]="all_end_points" placeholder="Select Start Point"></ng-select>
+        </div>
+      </div>
+      <div class="btns-container mt-3">
+        <button type="button" (click)="modal.close();submitChangeEndPoint(endPointSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
         <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
         <div class="clear-both"></div>
       </div>

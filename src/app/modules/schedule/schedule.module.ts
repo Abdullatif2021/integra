@@ -25,6 +25,8 @@ import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {DndModule} from 'ngx-drag-drop';
 import {ContextMenuModule, ContextMenuService} from 'ngx-contextmenu';
 import {faSync} from '@fortawesome/free-solid-svg-icons/faSync';
+import { ToPlanComponent } from './components/to-plan/to-plan.component';
+import {AddressesActionsService} from './service/addresses.actions.service';
 
 @NgModule({
   imports: [
@@ -48,6 +50,7 @@ import {faSync} from '@fortawesome/free-solid-svg-icons/faSync';
       AddressesComponent,
       ParametersComponent,
       ResultComponent,
+      ToPlanComponent,
   ],
   exports: [
       ScheduleRoutingModule
@@ -59,6 +62,7 @@ import {faSync} from '@fortawesome/free-solid-svg-icons/faSync';
       MapBoxGeocodeService,
       ListTreeService,
       ContextMenuService,
+      AddressesActionsService
   ],
 
 

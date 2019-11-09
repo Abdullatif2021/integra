@@ -215,3 +215,6 @@
 .context-menu-item:hover {
     background: #fcda4b7d;
 }
+.rename-input{
+    display: none;
+}

@@ -33,7 +33,13 @@ export const AppConfig = {
         moveCap: `${api_url}/api/preDispatch/tree/moveCap`,
         getMoveToCity: (id) => `${api_url}/api/preDispatch/${id}/tree/moveCap/availableCities`,
         getMoveToCap: (id) => `${api_url}/api/preDispatch/${id}/tree/moveStreet/availableCaps`,
-        getPreDispatchToLocateProducts: (id) => `${api_url}/api/preDispatch/${id}/products`
+        getPreDispatchToLocateProducts: (id) => `${api_url}/api/preDispatch/${id}/products`,
+        updateCityName: `${api_url}/api/preDispatch/tree/updateCityName`,
+        updateStreetName: `${api_url}/api/preDispatch/tree/updateStreetName`,
+        getAllStartPoints: `${api_url}/api/startPoint`,
+        getAllEndPoints: `${api_url}/api/endPoint`,
+        updatePreDispatchStartPoint: `${api_url}/api/preDispatch/startPoint/update`,
+        updatePreDispatchEndPoint: `${api_url}/api/preDispatch/endPoint/update`
     },
 
 };

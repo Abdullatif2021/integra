@@ -1,6 +1,9 @@
+.schedule-nav{
+    display: flex;
+}
 .schedule-nav-btn{
-    width: 33.33%;
-    font-size: 14px;
+    flex: 0 0 25%;
+    font-size: 13px;
     color: #212121;
     background-color: #E8E8E8;
     border: 1px solid #D3D3D3;

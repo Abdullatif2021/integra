@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ListTreeService} from '../../service/list-tree.service';
 import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
@@ -6,6 +6,8 @@ import {LocatingService} from '../../service/locating.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {SettingsService} from '../../../../service/settings.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AddressesActionsService} from '../../service/addresses.actions.service';
+import {SnotifyService} from 'ng-snotify';
 
 @Component({
   selector: 'app-addresses',
@@ -22,7 +24,9 @@ export class AddressesComponent implements OnInit, OnDestroy {
       private listTreeService: ListTreeService,
       private locatingService: LocatingService,
       private settingsService: SettingsService,
-      private modalService: NgbModal
+      private modalService: NgbModal,
+      private addressesActionsService: AddressesActionsService,
+      private snotifyService: SnotifyService,
   ) {
       this.preDispatch = this.route.snapshot.params.id;
   }
@@ -39,12 +43,21 @@ export class AddressesComponent implements OnInit, OnDestroy {
   expanded = {} ;
   dragging: TreeNodeInterface ;
   move_to_items = [];
+  all_start_points = [];
+  all_end_points = [];
   toMoveItem: any;
+  @ViewChild('startPointTextInput') startPointTextInput: ElementRef;
+  @ViewChild('endPointTextInput') endPointTextInput: ElementRef;
 
 
-  async ngOnInit() {
+    async ngOnInit() {
       this.locatingService.treeCreated.pipe(takeUntil(this.unsubscribe)).subscribe(
-          async data => {this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0]) ; }
+          async data => {
+              this.pages = {} ;
+              this.loading = {};
+              this.expanded = [];
+              this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0]) ;
+          }
       );
       this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0]) ;
       this.settingsService.getPaginationOptions().pipe(takeUntil(this.unsubscribe)).subscribe(
@@ -174,18 +187,33 @@ export class AddressesComponent implements OnInit, OnDestroy {
           this.listTreeService.getMoveToCaps(this.preDispatch, event.item.node.parent.parent.id, event.item.node.parent.id).subscribe(
               data => {
                   this.move_to_items = data.data ;
-                  console.log(data);
               }
           );
       } else if (event.item.node.type === 'capId') {
           this.listTreeService.getMoveToCities(this.preDispatch, event.item.node.parent.id).subscribe(
               data => {
                   this.move_to_items = data.data ;
-                  console.log(data);
               }
           );
       }
       this.toMoveItem = event.item ;
+  }
+
+  openChangeStartPointModal(event, modal) {
+      this.modalService.open(modal);
+      this.all_start_points = [] ;
+      this.addressesActionsService.getAllStartPoints().subscribe(
+          data => {
+              this.all_start_points = data.data ;
+      });
+  }
+  openChangeEndPointModal(event, modal) {
+      this.modalService.open(modal);
+      this.all_start_points = [] ;
+      this.addressesActionsService.getAllEndPoints().subscribe(
+          data => {
+              this.all_end_points = data.data ;
+      });
   }
 
   submitMoveItem(select) {
@@ -211,6 +239,74 @@ export class AddressesComponent implements OnInit, OnDestroy {
       await this.load(event.item.node, event.item.next);
   }
 
+
+  rename(text, input) {
+      text.style.display = 'none';
+      input.style.display = 'inline-block';
+  }
+
+  nameChanged(event, item, text, input) {
+      text.style.display = 'inline-block';
+      input.style.display = 'none';
+      if (!event.target.value.trim()){
+          return ;
+      }
+      const old = item.text ;
+      item.text = event.target.value ;
+
+      if (item.type === 'cityId') {
+          this.addressesActionsService.renameCity(item.id, this.preDispatch, event.target.value).subscribe(
+              data => {
+                  this.snotifyService.success('City renamed successfully', { showProgressBar: false});
+              },
+              error => {
+                  item.text = old ;
+                  this.snotifyService.error('City was not renamed', { showProgressBar: false, timeout: 3000 });
+              }
+          );
+      } else if (item.type === 'streetId') {
+          this.addressesActionsService.renameStreet(item.parent.parent.id, this.preDispatch, item.parent.id, item.id, event.target.value)
+              .subscribe(
+              data => {
+                  this.snotifyService.success('Street renamed successfully', { showProgressBar: false});
+              },
+              error => {
+                  item.text = old ;
+                  this.snotifyService.error('Street was not renamed', { showProgressBar: false, timeout: 3000 });
+              }
+          );
+      }
+  }
+
+  submitChangeStartPoint(select) {
+      if (!select.itemsList.selectedItems[0]) {
+          return ;
+      }
+      this.addressesActionsService.updatePoreDispatchStartPoint(this.preDispatch, select.itemsList.selectedItems[0].value.id).subscribe(
+          data => {
+              this.snotifyService.success('Start Point updated successfully', { showProgressBar: false});
+              this.startPointTextInput.nativeElement.value = select.itemsList.selectedItems[0].value.text ;
+          },
+          error => {
+              this.snotifyService.error('Start point was not updated', { showProgressBar: false});
+          }
+      );
+  }
+
+  submitChangeEndPoint(select) {
+      if (!select.itemsList.selectedItems[0]) {
+          return ;
+      }
+      this.addressesActionsService.updatePoreDispatchEndPoint(this.preDispatch, select.itemsList.selectedItems[0].value.id).subscribe(
+          data => {
+              this.snotifyService.success('End Point updated successfully', { showProgressBar: false});
+              this.endPointTextInput.nativeElement.value = select.itemsList.selectedItems[0].value.text ;
+          },
+          error => {
+              this.snotifyService.error('End point was not updated', { showProgressBar: false});
+          }
+      );
+  }
   ngOnDestroy() {
       this.unsubscribe.next();
       this.unsubscribe.complete();
