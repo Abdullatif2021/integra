@@ -46,6 +46,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
   all_start_points = [];
   all_end_points = [];
   toMoveItem: any;
+  found_count = 0;
+  not_found_count = 0 ;
+  filter = 0 ;
+
   @ViewChild('startPointTextInput') startPointTextInput: ElementRef;
   @ViewChild('endPointTextInput') endPointTextInput: ElementRef;
 
@@ -56,10 +60,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
               this.pages = {} ;
               this.loading = {};
               this.expanded = [];
-              this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0]) ;
+              this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter) ;
           }
       );
-      this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0]) ;
+      this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1,  this.filter) ;
       this.settingsService.getPaginationOptions().pipe(takeUntil(this.unsubscribe)).subscribe(
           data => { if (data.statusCode === 200) { this.paginationOptions = data.data; console.log(this.paginationOptions); } },
           error => { console.log(error); }
@@ -79,7 +83,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
       }
       this.loading[next] = true ;
       node.children.push({skeleton: true}) ;
-      this.listTreeService.listNode(this.preDispatch, node, this.pages[next]).then(
+      this.listTreeService.listNode(this.preDispatch, node, this.pages[next], this.filter).then(
           data => {
               node.children.pop();
               this.addData(node, data, next) ;
@@ -306,6 +310,20 @@ export class AddressesComponent implements OnInit, OnDestroy {
               this.snotifyService.error('End point was not updated', { showProgressBar: false});
           }
       );
+  }
+
+  async filterChanged(event, type) {
+
+      if (event.target.checked) {
+          this.filter += type === 'found' ? 1 : -1 ;
+      } else {
+          this.filter -= type === 'found' ? 1 : -1 ;
+      }
+
+      this.pages = {} ;
+      this.loading = {};
+      this.expanded = [];
+      this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter) ;
   }
   ngOnDestroy() {
       this.unsubscribe.next();

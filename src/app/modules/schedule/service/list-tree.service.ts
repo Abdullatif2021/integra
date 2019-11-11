@@ -18,11 +18,11 @@ export class ListTreeService implements OnDestroy {
     unsubscribe = new EventEmitter();
     levels = ['root', 'cityId', 'capId', 'streetId', 'oet', 'building', 'end'] ;
 
-   listNode(preDispatchId: number, node: TreeNodeInterface, page = 1): Promise<TreeNodeInterface[]> {
+   listNode(preDispatchId: number, node: TreeNodeInterface, page = 1, filter = 0): Promise<TreeNodeInterface[]> {
        return new Promise<TreeNodeInterface[]>(async(resolve, reject) => {
            let result = <TreeNodeInterface[]>[];
            const type = this.getNextNodeType(node) ;
-           const data: any = await this.loadNode(preDispatchId, node, page.toString()).pipe(takeUntil(this.unsubscribe)).toPromise();
+           const data: any = await this.loadNode(preDispatchId, node, page.toString(), filter).pipe(takeUntil(this.unsubscribe)).toPromise();
            if (!data) { return reject(); }
            if (type === 'oet') {
                result = result.concat(this.handleBuildings(node, data));
@@ -35,7 +35,7 @@ export class ListTreeService implements OnDestroy {
        });
    }
 
-   loadNode(preDispatchId: number, node: TreeNodeInterface, page = '1'): Observable<TreeNodeResponseInterface> {
+   loadNode(preDispatchId: number, node: TreeNodeInterface, page = '1', filter = 0): Observable<TreeNodeResponseInterface> {
        const options = { params: new HttpParams()};
        options.params = options.params.set(node.type, node.id);
        let parent: TreeNodeInterface = node.parent ;
@@ -45,6 +45,11 @@ export class ListTreeService implements OnDestroy {
            parent = parent.parent ;
        }
        options.params = options.params.set('page', page);
+       if (filter === 1){
+           options.params = options.params.set('filter', '1');
+       } else if (filter === -1){
+           options.params = options.params.set('filter', '0');
+       }
        return this.http.get<TreeNodeResponseInterface>(AppConfig.endpoints.getTreeNode(preDispatchId), options);
    }
 
