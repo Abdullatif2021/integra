@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import {StreetInterface} from '../../../core/models/street.interface';
-import {LocatedStreetInterface} from '../../../core/models/located-street.interface';
 import {MapBoxGeocodeResponceInterface} from '../../../core/models/map-box-geocode-responce.interface';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {SettingsService} from '../../../service/settings.service';
-import {LocatedRecipientInterface, RecipientLocationInterface} from '../../../core/models/recipient.interface';
+import {LocatedBuildingInterface, BuildingLocationInterface} from '../../../core/models/building.interface';
 
 @Injectable()
 export class MapBoxGeocodeService {
@@ -27,22 +25,23 @@ export class MapBoxGeocodeService {
         });
     }
 
-    sendGeocodeRequest(recipient: RecipientLocationInterface): Observable<MapBoxGeocodeResponceInterface> {
+    sendGeocodeRequest(building: BuildingLocationInterface): Observable<MapBoxGeocodeResponceInterface> {
         const options = { params: new HttpParams()};
-        options.params = options.params.set('postcode', recipient.cap);
-        options.params = options.params.set('place', recipient.city);
-        options.params = options.params.set('address', recipient.houseNumber);
+        const houseNumber = building.houseNumber ? building.houseNumber : '1' ;
+        options.params = options.params.set('postcode', building.cap);
+        options.params = options.params.set('place', building.city);
+        options.params = options.params.set('address', houseNumber);
         options.params = options.params.set('access_token', this.keys[0].name) ;
         return this.http.get<MapBoxGeocodeResponceInterface>
-        (`https://api.mapbox.com/geocoding/v5/mapbox.places/${recipient.street.replace('\\', '')}.json`, options);
+        (`https://api.mapbox.com/geocoding/v5/mapbox.places/${building.street.replace('\\', '')}.json`, options);
 
     }
 
-    locate(recipient: RecipientLocationInterface): Promise<LocatedRecipientInterface> {
-        return new Promise<LocatedRecipientInterface>(async (resolve) => {
+    locate(building: BuildingLocationInterface): Promise<LocatedBuildingInterface> {
+        return new Promise<LocatedBuildingInterface>(async (resolve) => {
             if (this.invalid_keys_alerted) { return resolve(null); }
             if (!this.keys) { await this.loadKeys(); }
-            const mRes = await this.sendGeocodeRequest(recipient).toPromise().catch((e) => {
+            const mRes = await this.sendGeocodeRequest(building).toPromise().catch((e) => {
                 if (e.statusText === 'Unauthorized' && !this.invalid_keys_alerted) {
                     alert('MapBox Keys are invalid, this provider will be ignored') ;
                     this.invalid_keys_alerted = true ;
@@ -54,8 +53,8 @@ export class MapBoxGeocodeService {
             }
             let res ;
             mRes.features.forEach((elm) => {
-                if (elm.place_name.indexOf(recipient.cap) !== -1  &&
-                    elm.place_name.toLocaleLowerCase().indexOf(recipient.city.toLocaleLowerCase()) !== -1) {
+                if (elm.place_name.indexOf(building.cap) !== -1  &&
+                    elm.place_name.toLocaleLowerCase().indexOf(building.city.toLocaleLowerCase()) !== -1) {
                     res = elm ;
                 }
             });
@@ -63,7 +62,7 @@ export class MapBoxGeocodeService {
                 return resolve(null);
             }
             return resolve({
-                id: recipient.id,
+                id: building.id,
                 lat: res.center[0],
                 long: res.center[1],
                 is_fixed: true,

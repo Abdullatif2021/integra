@@ -84,7 +84,7 @@
                               <div class="separator" *ngIf="idx && col.value_separator == 'dashed'"></div>
                               <div class="line-separator" *ngIf="idx && col.value_separator == 'line'"></div>
                               <div *ngIf="typeof(field) === 'string'"><span [ngClass]="getFieldClass(col,field)">{{item[field]}}</span></div>
-                              <div *ngIf="typeof(field) === 'function'"><span [ngClass]="getFieldClass(col,idx)">{{field(item)}}</span></div>
+                              <div *ngIf="typeof(field) === 'function'"><span [ngClass]="getFieldClass(col,idx)" [innerHTML]="field(item)"></span></div>
                             </ng-container>
                         </span>
                             <ng-container *ngFor="let action of col.actions">

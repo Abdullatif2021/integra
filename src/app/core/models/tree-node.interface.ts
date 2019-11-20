@@ -1,13 +1,16 @@
 export interface TreeNodeInterface {
-    id: string;
-    text: string;
-    type: string;
-    parent: TreeNodeInterface;
-    children: TreeNodeInterface[];
-    _end: boolean;
-    status: number;
-    subtype: string;
+    id?: string;
+    text?: string;
+    type?: string;
+    parent?: TreeNodeInterface;
+    children?: TreeNodeInterface[];
+    _end?: boolean;
+    status?: number;
+    subtype?: string;
     extra?: any;
+    qta?: number;
+    warning?: boolean;
+    skeleton?: boolean;
 }
 
 export interface TreeNodeResponseInterface {

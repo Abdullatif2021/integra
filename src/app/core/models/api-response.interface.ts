@@ -3,4 +3,6 @@ export interface ApiResponseInterface {
     data: any ;
     pagination: any ;
     statusCode: number ;
+    success?: boolean ;
+    message?: string ;
 }

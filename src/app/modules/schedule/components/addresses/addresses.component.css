@@ -72,6 +72,7 @@
 .item-row .qta {
     display: inline-block;
     margin-right: 5px;
+    font-size: 12px;
     font-weight: 600;
 }
 .item-row .select-container .selected, .item-row .select-container .not-selected, .item-row .marker {
@@ -117,7 +118,7 @@
     font-size: 13px;
     text-align: center;
     font-weight: 600;
-    margin: 0px 10px;
+    margin: 0px 5px;
 }
 
 
@@ -185,6 +186,19 @@
     background-color: #8d2827 !important;
     color: #ffffff;
 }
+.status-3 {
+    background-color: #FFCC00 !important
+}
+.odd-bg.status-2 {
+    background-color: #ad3130 !important;
+}
+.odd-bg.status-3 {
+    background-color: #fbd84d !important;
+}
+.status-4 {
+    opacity: 0.7;
+    pointer-events: none;
+}
 
 .schedule-skeleton {
     height: 33px;
@@ -217,4 +231,65 @@
 }
 .rename-input{
     display: none;
+}
+.node {
+    background-color: #dfdfdf;
+}
+.error-msg {
+    font-size: 13px;
+    color: #F44336;
+}
+.building-error-msg {
+    color: #ffbf00 ;
+    padding-left: 20px ;
+}
+.flex-container{
+    display: flex;
+}
+.edit-start-end-point-input, .change-start-end-point-input{
+    flex: 0 0 90%;
+}
+.edit-start-end-point-btn{
+    flex: 0 0 10%;
+}
+.cancel-edit-start-end-point-btn {
+    flex: 0 0 10%;
+    padding: 2px 15px;
+    font-weight: bolder;
+    color: #F44336;
+    cursor: pointer;
+}
+.edit-start-end-point-btn img{
+    width: 25px;
+    margin: 5px 10px;
+    cursor: pointer;
+}
+.modal-label{
+    margin: 5px 0px;
+    font-size: 15px;
+    color: #333;
+}
+.small-note {
+    font-size: 11px;
+    margin: 0px;
+    color: #607D8B;
+}
+.edit-building-address-container{
+    display: flex;
+    padding: 0px 20px;
+}
+.edit-building-address-input{
+    flex: 0 0 80%;
+}
+.edit-building-address-submit{
+    flex: 0 0 20%;
+}
+.small-circle-btn{
+    color: #4CAF50;
+    font-size: 17px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.modal-icon {
+    font-size: 24px;
 }

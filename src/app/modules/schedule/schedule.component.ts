@@ -4,7 +4,7 @@ import {LocatingService} from './service/locating.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
-import {RecipientLocationInterface} from '../../core/models/recipient.interface';
+import {BuildingLocationInterface} from '../../core/models/building.interface';
 
 @Component({
   selector: 'app-schedules',
@@ -16,7 +16,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
   unsubscribe: Subject<void> = new Subject();
   preDispatch: number ;
   @ViewChild('modalRef') modalRef;
-  nFoundItem: RecipientLocationInterface ;
+  nFoundItem: BuildingLocationInterface ;
   latLngInputState = false ;
 
   constructor(

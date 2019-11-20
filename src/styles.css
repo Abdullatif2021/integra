@@ -75,7 +75,16 @@ body{
 .h-45{
     height: 45px !important;
 }
-
+.success-text{
+    color: #4CAF50;
+}
+.d-flex {
+    display: flex;
+}
+.pointy-drop-down{
+    border-radius: 0px !important;
+    padding: 5px !important;
+}
 /*  TODO change this styling system */
 .small-table{
     flex: 0 0 18%;
@@ -98,7 +107,9 @@ body{
 .color-primary{
     color: #fcda4b;
 }
-
+b {
+    font-weight: 600 !important;
+}
 /*.integraa-select .dropdown-menu{*/
     /*width: 100% !important;*/
 /*}*/
@@ -184,3 +195,11 @@ a:hover {
     text-decoration: none !important;
 }
 
+.hidden{
+    display: none;
+}
+
+/* Google places autocomplete */
+.pac-container {
+    z-index: 9999;
+}

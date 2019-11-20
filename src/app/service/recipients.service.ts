@@ -28,10 +28,4 @@ export class RecipientsService {
       return throwError('');
   }
 
-  getPreDispatchToLocateRecipients(preDispatch, page = 1): Observable<ApiResponseInterface> {
-        const options = { params: new HttpParams().set('page', '' + page)};
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchToLocateProducts(preDispatch), options).pipe(
-          catchError(this.handleError)
-      );
-  }
 }

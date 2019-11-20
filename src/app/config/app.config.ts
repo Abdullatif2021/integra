@@ -39,7 +39,14 @@ export const AppConfig = {
         getAllStartPoints: `${api_url}/api/startPoint`,
         getAllEndPoints: `${api_url}/api/endPoint`,
         updatePreDispatchStartPoint: `${api_url}/api/preDispatch/startPoint/update`,
-        updatePreDispatchEndPoint: `${api_url}/api/preDispatch/endPoint/update`
+        updatePreDispatchEndPoint: `${api_url}/api/preDispatch/endPoint/update`,
+        searchTree: (id) => `${api_url}/api/preDispatch/${id}/search`,
+        getPreDispatchData: (id) => `${api_url}/api/preDispatch/${id}`,
+        createStartPoint: `${api_url}/api/startPoint/create`,
+        createEndPoint: `${api_url}/api/endPoint/create`,
+        editStartPoint: `${api_url}/api/startPoint/update`,
+        editEndPoint: `${api_url}/api/endPoint/update`,
+        editBuildingAddress: `${api_url}/api/preDispatch/product/updateLocation`
     },
 
 };

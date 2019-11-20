@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
-import {StreetInterface} from '../../../core/models/street.interface';
-import {LocatedStreetInterface} from '../../../core/models/located-street.interface';
-import {TuttocittaGeocodeResponceInterface} from '../../../core/models/tuttocitta-geocode-responce.interface';
-import {LocatedRecipientInterface, RecipientLocationInterface} from '../../../core/models/recipient.interface';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
 import {AppConfig} from '../../../config/app.config';
 import {catchError} from 'rxjs/operators';
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {throwError} from 'rxjs';
+import {ACAddress} from '../../../core/models/address.interface';
 
 @Injectable()
 export class AddressesActionsService {
@@ -45,7 +42,7 @@ export class AddressesActionsService {
         );
     }
 
-    updatePoreDispatchStartPoint(preDispatch, startPoint) {
+    updatePreDispatchStartPoint(preDispatch, startPoint) {
         const options = {
             id: preDispatch,
             start_id: startPoint,
@@ -62,10 +59,74 @@ export class AddressesActionsService {
 
     updatePoreDispatchEndPoint(preDispatch, endPoint) {
         const options = {
-            id: preDispatch,
+            id: parseInt(preDispatch, 10),
             end_id: endPoint,
         };
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.updatePreDispatchEndPoint, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    createStartPoint(startPoint: ACAddress) {
+        const options = {
+            lat: startPoint.address.lat,
+            long: startPoint.address.lng,
+            text: startPoint.text
+        };
+        return this.http.post<any>(AppConfig.endpoints.createStartPoint, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    createEndPoint(startPoint: ACAddress) {
+        const options = {
+            lat: startPoint.address.lat,
+            long: startPoint.address.lng,
+            text: startPoint.text
+        };
+        return this.http.post<any>(AppConfig.endpoints.createEndPoint, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    editStartPoint(startPoint: ACAddress, id) {
+        const options = {
+            lat: startPoint.address.lat,
+            long: startPoint.address.lng,
+            text: startPoint.text,
+            start_id: id
+        };
+        return this.http.post<any>(AppConfig.endpoints.editStartPoint, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    editEndPoint(endPoint: ACAddress, id) {
+        const options = {
+            lat: endPoint.address.lat,
+            long: endPoint.address.lng,
+            text: endPoint.text,
+            end_id: id
+        };
+        return this.http.post<any>(AppConfig.endpoints.editEndPoint, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    changeBuldinAddress(address, id, preDispatch) {
+        const options = {
+            lat: address.lat,
+            long: address.lng,
+            pre_dispatch_id: preDispatch,
+            product_id: id,
+            address: {
+                city: address.city,
+                cap: address.cap,
+                street: address.street,
+                houseNumber: address.houseNumber
+            }
+        };
+        return this.http.post<any>(AppConfig.endpoints.editBuildingAddress, options).pipe(
             catchError(this.handleError)
         );
     }
@@ -76,6 +137,7 @@ export class AddressesActionsService {
         } else {
             console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
         }
+        console.log(error);
         return throwError('');
     }
 

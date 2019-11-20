@@ -5,10 +5,11 @@
     <div class="departure">
       <div class="location-container">
         <label class="d-block departure-label">Partenza</label>
-        <input type="text" #startPointTextInput class="location-input" value="Corso Italia 591, A - 80010 Villaricca (NA)">
+        <!--Corso Italia 591, A - 80010 Villaricca (NA)-->
+        <input type="text" #startPointTextInput class="location-input" value="{{preDispatchData.startPoint.text}}">
         <div class="location-actions">
           <img src="/assets/images/edit.svg" (click)="openChangeStartPointModal($event, ChangeStartPintModalRef)">
-          <img src="/assets/images/plus.svg">
+          <img src="/assets/images/plus.svg" (click)="openModal(CreateStartPintModalRef)">
         </div>
       </div>
     </div>
@@ -34,7 +35,7 @@
 
     <!-- Search -->
     <div class="search-container">
-      <app-search-box [placeholder]="'Cerca indirizzo'"></app-search-box>
+      <app-search-box [placeholder]="'Cerca indirizzo'" (changed)="searchTree($event)"></app-search-box>
     </div>
 
   </div>
@@ -52,10 +53,10 @@
     <div class="arrival">
       <div class="location-container">
         <label class="d-block departure-label">Arrivo</label>
-        <input #endPointTextInput type="text" class="location-input" value="Corso Italia 591, A - 80010 Villaricca (NA)">
+        <input #endPointTextInput type="text" class="location-input" value="{{preDispatchData.endPoint.text}}">
         <div class="location-actions">
           <img src="/assets/images/edit.svg" (click)="openChangeEndPointModal($event, ChangeEndPintModalRef)">
-          <img src="/assets/images/plus.svg">
+          <img src="/assets/images/plus.svg" (click)="openModal(CreateEndPintModalRef)">
         </div>
       </div>
     </div>
@@ -70,8 +71,9 @@
     <div class="rect-loading-skeleton full-width schedule-skeleton"></div>
   </ng-container>
   <ng-template #actualItem >
+      <!-- [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" -->
     <div dndDropzone class="drop-area" (dndDrop)="onDrop($event, item)" [ngClass]="{'drop-location': isDropLocation(item), 'cant-drop-location': isNonDropLocation(item)}">
-      <div [contextMenu]="contextMenu" [contextMenuSubject]="{node: item, next: next}" [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" class="node {{getLvlClass(next)}} {{getStatusClass(item)}}">
+      <div [contextMenu]="contextMenu" [ngClass]="{'odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
         <div class="item-row">
           <div class="more" *ngIf="!item._end" (click)="listNode(item, next)">
             <fa-icon *ngIf="!expanded[next]" [icon]="['fa','chevron-down']"></fa-icon>
@@ -90,11 +92,30 @@
             <div class="warning" *ngIf="item.warning">!</div>
             <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
             <div class="small-more" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
-            <div class="dropdown-menu" aria-labelledby="actions-dropdown">
+            <div class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
               <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rename</a>
+              <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingAddressContainer, [EditBuildingLatLngContainer])">Change Address</a>
+              <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">Edit Location</a>
             </div>
           </div>
           <div class="clear-both"></div>
+          <div #EditBuildingAddressContainer class="hidden">
+            <div class="edit-building-address-container">
+              <div class="edit-building-address-input"><app-address-input [_class]="'edit-building-input'" #EditBuildingAddressInput ></app-address-input></div>
+              <div class="edit-building-address-submit"><fa-icon class="small-circle-btn" (click)="editBuildingAddress(EditBuildingAddressInput, item, EditBuildingAddressContainer)" [icon]="['fa','check-circle']"></fa-icon></div>
+            </div>
+            <div *ngIf="errors['editBuildingAddress-'+item.id]" class="error-msg building-error-msg">{{errors['editBuildingAddress-'+item.id]}}</div>
+          </div>
+          <div #EditBuildingLatLngContainer class="hidden">
+            <div class="edit-building-address-container">
+              <div class="edit-building-address-input d-flex">
+                <input type="text" #EditBuildingLatInput placeholder="Lat">
+                <input type="text" #EditBuildingLngInput placeholder="Lng">
+              </div>
+              <div class="edit-building-address-submit"><fa-icon class="small-circle-btn" (click)="editBuildingLocation(EditBuildingLatInput, EditBuildingLngInput, item, EditBuildingLatLngContainer)" [icon]="['fa','check-circle']"></fa-icon></div>
+            </div>
+            <div *ngIf="errors['editBuildingLocation-'+item.id]" class="error-msg building-error-msg">{{errors['editBuildingLocation-'+item.id]}}</div>
+          </div>
         </div>
       </div>
       <ng-container *ngIf="expanded[next]">
@@ -114,7 +135,7 @@
 <context-menu #contextMenu>
   <ng-template contextMenuItem [visible]="isMovable" (execute)="openMoveItemModal($event, MoveItemModalRef)">
     <div class="context-menu-item">
-      <fa-icon class="text-warning" [icon]="['fa','allergies']"></fa-icon>
+      <fa-icon class="text-warning modal-icon" [icon]="['fa','allergies']"></fa-icon>
       <span> Move Item </span>
     </div>
   </ng-template>
@@ -131,12 +152,12 @@
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
       <h6>
-        <fa-icon class="text-warning" [icon]="['fa','allergies']"></fa-icon>
+        <fa-icon class="text-warning modal-icon" [icon]="['fa','allergies']"></fa-icon>
         Move item to
       </h6>
       <div class="mt-3">
         <div class="form-group">
-          <label>Change address</label>
+          <label class="modal-label">Change address</label>
           <ng-select #moveToSelect [clearable]="false" [bindLabel]="'name'" [items]="move_to_items" placeholder="Select Target"></ng-select>
         </div>
       </div>
@@ -153,19 +174,36 @@
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
       <h6>
-        <fa-icon class="text-warning" [icon]="['fa','allergies']"></fa-icon>
+        <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marker-alt']"></fa-icon>
         Change pre dispatch start point
       </h6>
       <div class="mt-3">
-        <div class="form-group">
-          <label>Change start point</label>
-          <ng-select #startPointSelect [clearable]="false" [bindLabel]="'text'" [items]="all_start_points" placeholder="Select Start Point"></ng-select>
+        <div class="form-group" *ngIf="!editingPoint['startPoint']">
+          <label class="modal-label">Change start point</label>
+          <div class="flex-container">
+            <ng-select #StartPointSelect class="change-start-end-point-input" [clearable]="false" [bindLabel]="'text'" [items]="all_start_points" placeholder="Select Start Point"></ng-select>
+            <div class="edit-start-end-point-btn"><img src="/assets/images/edit.svg" (click)="editPoint('startPoint', StartPointSelect)"></div>
+          </div>
+          <div class="btns-container mt-3">
+            <button type="button" (click)="modal.close();submitChangeStartPoint(StartPointSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+            <div class="clear-both"></div>
+          </div>
         </div>
-      </div>
-      <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close();submitChangeStartPoint(startPointSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
-        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
-        <div class="clear-both"></div>
+        <div class="form-group" *ngIf="editingPoint['startPoint']">
+          <label class="modal-label">Edit start point</label>
+          <p class="small-note">editing this start point will cause editing it on all pre-dispatches</p>
+          <div class="flex-container">
+            <div class="edit-start-end-point-input"><app-address-input [point]="editingPoint['startPoint']" #EditStartPointInput ></app-address-input></div>
+            <div class="cancel-edit-start-end-point-btn" (click)="cancelEditPoint('startPoint')">X</div>
+          </div>
+          <div *ngIf="errors['editStartPoint']" class="error-msg">{{errors['editStartPoint']}}</div>
+          <div class="btns-container mt-3">
+            <button type="button" (click)="submitEditStartPoint(EditStartPointInput)" class="integraa-btn ml-2 float-right" >Esegui</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+            <div class="clear-both"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -175,20 +213,90 @@
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
       <h6>
-        <fa-icon class="text-warning" [icon]="['fa','allergies']"></fa-icon>
+        <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marker-alt']"></fa-icon>
         Change pre dispatch end point
       </h6>
       <div class="mt-3">
+        <div class="form-group" *ngIf="!editingPoint['endPoint']">
+          <label class="modal-label">Change end point</label>
+          <div class="flex-container">
+            <ng-select #EndPointSelect class="change-start-end-point-input" [clearable]="false" [bindLabel]="'text'" [items]="all_end_points" placeholder="Select End Point"></ng-select>
+            <div class="edit-start-end-point-btn"><img src="/assets/images/edit.svg" (click)="editPoint('endPoint', EndPointSelect)"></div>
+          </div>
+          <div class="btns-container mt-3">
+            <button type="button" (click)="modal.close();submitChangeEndPoint(EndPointSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+            <div class="clear-both"></div>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="editingPoint['endPoint']">
+          <label class="modal-label">Edit end point</label>
+          <p class="small-note">editing this end point will cause editing it on all pre-dispatches</p>
+          <div class="flex-container">
+            <div class="edit-start-end-point-input"><app-address-input [point]="editingPoint['endPoint']" #EditEndPointInput ></app-address-input></div>
+            <div class="cancel-edit-start-end-point-btn" (click)="cancelEditPoint('endPoint')">X</div>
+          </div>
+          <div *ngIf="errors['editEndPoint']" class="error-msg">{{errors['editEndPoint']}}</div>
+          <div class="btns-container mt-3">
+            <button type="button" (click)="submitEditEndPoint(EditEndPointInput)" class="integraa-btn ml-2 float-right" >Esegui</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+            <div class="clear-both"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #CreateStartPintModalRef let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <h6>
+        <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marked-alt']"></fa-icon>
+        Create Start Point
+      </h6>
+      <div class="mt-3">
         <div class="form-group">
-          <label>Change end point</label>
-          <ng-select #endPointSelect [clearable]="false" [bindLabel]="'text'" [items]="all_end_points" placeholder="Select Start Point"></ng-select>
+          <label class="modal-label">Start Point Address</label>
+          <app-address-input #StartPontAddressInput></app-address-input>
+          <div *ngIf="errors['createStartPoint']" class="error-msg">{{errors['createStartPoint']}}</div>
         </div>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close();submitChangeEndPoint(endPointSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
-        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+        <button type="button" (click)="createStartPoint(StartPontAddressInput)" class="integraa-btn ml-2 float-right" >Esegui</button>
         <div class="clear-both"></div>
       </div>
     </div>
   </div>
+</ng-template>
+
+<ng-template #CreateEndPintModalRef let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <h6>
+        <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marked-alt']"></fa-icon>
+        Create End Point
+      </h6>
+      <div class="mt-3">
+        <div class="form-group">
+          <label class="modal-label">End Point Address</label>
+          <app-address-input #EndPontAddressInput></app-address-input>
+          <div *ngIf="errors['createEndPoint']" class="error-msg">{{errors['createEndPoint']}}</div>
+        </div>
+      </div>
+      <div class="btns-container mt-3">
+        <button type="button" (click)="createEndPoint(EndPontAddressInput)" class="integraa-btn ml-2 float-right" >Esegui</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #autoCompleteItemTemplate let-item>
+  <a [innerHTML]="item.description"></a>
+</ng-template>
+
+<ng-template #autoCompleteNotFoundTemplate let-notFound>
+  <div [innerHTML]="notFound"></div>
 </ng-template>

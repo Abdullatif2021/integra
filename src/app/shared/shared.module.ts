@@ -13,6 +13,9 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { RouterModule } from '@angular/router';
 import { ModalDirective } from './directives/modal.directive';
 import { LoadingComponent } from './components/loading/loading.component';
+import { AddressInputComponent } from './components/address-input/address-input.component';
+import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
+import {PlacesAutocompleteService} from './service/places.autocomplete.service';
 
 @NgModule({
   imports: [
@@ -22,6 +25,8 @@ import { LoadingComponent } from './components/loading/loading.component';
     NgSelectModule,
     InfiniteScrollModule,
     RouterModule,
+    GooglePlaceModule,
+
   ],
   declarations: [
       SearchBoxComponent,
@@ -29,7 +34,8 @@ import { LoadingComponent } from './components/loading/loading.component';
       TableComponent,
       SimpleTableComponent,
       ModalDirective,
-      LoadingComponent
+      LoadingComponent,
+      AddressInputComponent
   ],
   exports: [
       SearchBoxComponent,
@@ -37,8 +43,12 @@ import { LoadingComponent } from './components/loading/loading.component';
       TableComponent,
       SimpleTableComponent,
       ModalDirective,
-      LoadingComponent
-  ]
+      LoadingComponent,
+      AddressInputComponent
+  ],
+  providers: [
+      PlacesAutocompleteService
+  ],
 })
 export class SharedModule {
 

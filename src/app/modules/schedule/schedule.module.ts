@@ -19,7 +19,7 @@ import {LocatingService} from './service/locating.service';
 import {GoogleGeocodeService} from './service/google.geocode.service';
 import {TuttocittaGeocodeService} from './service/tuttocitta.geocode.service';
 import {MapBoxGeocodeService} from './service/map-box.geocode.service';
-import {faAllergies, faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
+import {faAllergies, faCheckCircle, faExclamationTriangle, faMapMarkedAlt, faMapMarkerAlt} from '@fortawesome/free-solid-svg-icons';
 import {ListTreeService} from './service/list-tree.service';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {DndModule} from 'ngx-drag-drop';
@@ -27,6 +27,7 @@ import {ContextMenuModule, ContextMenuService} from 'ngx-contextmenu';
 import {faSync} from '@fortawesome/free-solid-svg-icons/faSync';
 import { ToPlanComponent } from './components/to-plan/to-plan.component';
 import {AddressesActionsService} from './service/addresses.actions.service';
+import {PreDispatchDataResolver} from './resolvers/pre-dispatch-data.resolver';
 
 @NgModule({
   imports: [
@@ -42,8 +43,7 @@ import {AddressesActionsService} from './service/addresses.actions.service';
     NgSelectModule,
     InfiniteScrollModule,
     DndModule,
-    ContextMenuModule
-
+    ContextMenuModule,
   ],
   declarations: [
       ScheduleComponent,
@@ -62,7 +62,8 @@ import {AddressesActionsService} from './service/addresses.actions.service';
       MapBoxGeocodeService,
       ListTreeService,
       ContextMenuService,
-      AddressesActionsService
+      AddressesActionsService,
+      PreDispatchDataResolver,
   ],
 
 
@@ -76,5 +77,8 @@ export class ScheduleModule {
         library.add(faExclamationTriangle);
         library.add(faAllergies);
         library.add(faSync);
+        library.add(faCheckCircle);
+        library.add(faMapMarkerAlt);
+        library.add(faMapMarkedAlt);
     }
 }

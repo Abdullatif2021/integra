@@ -81,7 +81,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   search(event) {
     this.searchValue = event ;
     this.page = 1 ;
-    if (this.table.searchMethod && typeof this.table.searchMethod) {
+    if (this.table.searchMethod && typeof this.table.searchMethod === 'function') {
       return this.items = this.table.searchMethod(this._items, event) ;
     }
     this.loadData(false) ;
@@ -98,6 +98,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this.loading = true ;
     this.loadData(false) ;
   }
+
   clearData() {
     this.page = 1;
     this.loaded = false ;

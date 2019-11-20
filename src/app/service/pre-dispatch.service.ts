@@ -117,6 +117,12 @@ export class PreDispatchService {
         return throwError('');
     }
 
+    getPreDispatchData(preDispatchId) {
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchData(preDispatchId), {}).pipe(
+            catchError(this.handleError)
+        );
+    }
+
     merge(items, name) {
         const options = {
             name: name,
