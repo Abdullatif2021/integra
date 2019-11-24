@@ -75,8 +75,8 @@ export const TablesConfig = {
                 {title: ['CLIENTE', 'MITTENTE', 'DESTINARIO'], field: [
                     'customer_name',
                     'sender_name',
-                    (elm: ProductInterface) => `<b>${elm.recipient_name}</b> - ${elm.recipient_house_number} -
-                        ${elm.recipient_street} - ${elm.recipient_cap} ${elm.recipient_city}`
+                    (elm: ProductInterface) => `<b>${elm.recipient_name}</b> - ${elm.recipient_street},
+                        ${elm.recipient_house_number}, ${elm.recipient_cap} ${elm.recipient_city}`
                     ], separator: false,
                     value_separator: 'line', classes: {
                         'sender_name': 'text-gray',

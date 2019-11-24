@@ -44,6 +44,7 @@ export class IntegraaModalComponent implements OnInit {
   minimize(modal: IntegraaModal) {
       modal.options.minimized = !modal.options.minimized ;
   }
+
   expand(modal: IntegraaModal) {
       modal.options.expanded = !modal.options.expanded;
       modal.options.fullWidth = false ;
@@ -97,7 +98,7 @@ export class IntegraaModalComponent implements OnInit {
   }
 
   display(modal) {
-      modal.displayed++ ;
+      modal.displayed = !modal.displayed ;
   }
 
 }
@@ -114,7 +115,7 @@ class IntegraaModal {
         height: 300,
         position: {x: 20, y: 20},
     }
-    displayed = -1 ;
+    displayed = false ;
     _status = {
         change: null
     };

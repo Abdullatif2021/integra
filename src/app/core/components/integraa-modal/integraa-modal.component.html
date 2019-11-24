@@ -31,10 +31,10 @@
         <div class="clear-both"></div>
       </div>
       <div class="integraa-modal-body">
-        <div class="loading-container" [ngClass]="{'hidden':modal.displayed}">
+        <div class="loading-container" [ngClass]="{'hidden':!modal.displayed}">
           <div class="loader"></div>
         </div>
-        <iframe class="m-frame" [ngClass]="{'hidden':modal.displayed < 1}" (load)="display(modal)" [src]="modal.options.url"></iframe>
+        <iframe class="m-frame" [ngClass]="{'hidden':modal.displayed}" (load)="display(modal)" [src]="modal.options.url"></iframe>
       </div>
     </div>
   </div>
