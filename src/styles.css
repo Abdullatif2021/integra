@@ -81,6 +81,9 @@ body{
 .d-flex {
     display: flex;
 }
+.font-size-13{
+    font-size: 13px;
+}
 .pointy-drop-down{
     border-radius: 0px !important;
     padding: 5px !important;
