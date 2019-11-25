@@ -18,11 +18,11 @@
     <div class="groups mt-2">
       <div class="float-left group-cb found-cb">
         <input type="checkbox" (change)="filterChanged($event, 'found')" class="integraa-checkbox">
-        <label>Trovati ({{found_count}})</label>
+        <label>Trovati ({{preDispatchData.fixedProductCount}})</label>
       </div>
       <div class="float-left group-cb not-found-cb">
         <input type="checkbox" (change)="filterChanged($event, 'not-found')" class="integraa-checkbox">
-        <label>Non Trovati ({{not_found_count}})</label>
+        <label>Non Trovati ({{preDispatchData.notFixedProductCount}})</label>
       </div>
 
       <div class="create-btn float-right">

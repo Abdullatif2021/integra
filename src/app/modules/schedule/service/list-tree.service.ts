@@ -18,7 +18,7 @@ export class ListTreeService implements OnDestroy {
 
     unsubscribe = new EventEmitter();
     levels = ['root', 'cityId', 'capId', 'streetId', 'oet', 'building', 'end'];
-    searchLevels = {cityId: 'data', capId: 'cap', streetId: 'streets'} ;
+    searchLevels = {cityId: 'data', capId: 'caps', streetId: 'streets'} ;
 
     // List Tree Methods
     listNode(preDispatchId: number, node: TreeNodeInterface, page = 1, filter = 0): Promise<TreeNodeInterface[]> {
@@ -36,8 +36,7 @@ export class ListTreeService implements OnDestroy {
                 data.data.forEach((elm) => {
                     result.push({
                         id: elm.id, type: type, children: [], subtype: '', parent: node, text: elm.name, _end: false,
-                        status: 0, qta: elm.productCount ? elm.productCount : elm.productsCount,
-                        warning: typeof elm.is_fixed !== 'undefined' ? !elm.is_fixed : !elm.isFixed
+                        status: 0, qta: elm.productCount ? elm.productCount : elm.productsCount, warning: !elm.isFixed
                     });
                 });
             }
@@ -125,35 +124,32 @@ export class ListTreeService implements OnDestroy {
         return this.http.get<any>(AppConfig.endpoints.searchTree(preDispatchId), options);
     }
 
-    createTreeFromSearchResponse(data): [TreeNodeInterface] {
-        const tree = {} ;
-        const root = this.createSearchResponseNode({id: 0, name: 'root'}, 'root', null);
-        let currentCap ;
-        data.forEach((elm) => {
-           if (typeof tree[elm.id] === 'undefined') {
-               tree[elm.id] = this.createSearchResponseNode(elm, 'cityId', root);
+    createTreeFromSearchResponse(data, type = 'cityId', parent = null): [TreeNodeInterface] {
+       const tree = <[TreeNodeInterface]>[] ;
+       data.forEach((elm) => {
+           const node = this.createSearchResponseNode(elm, type, parent) ;
+           const nextType = this.getNextNodeType(node) ;
+           if (elm[this.searchLevels[nextType]]) {
+               node.children = this.createTreeFromSearchResponse(elm[this.searchLevels[nextType]], nextType, node);
            }
-           if (elm.cap) {
-               currentCap = this.createSearchResponseNode(elm.cap, 'capId', tree[elm.id]) ;
-               tree[elm.id].children.push(currentCap);
+           // if the node has no children set the node status no unclickable
+           if (!node.children.length) {
+               node.status = 4;
            }
-           if (elm.cap && elm.cap.streets) {
-               elm.cap.streets.forEach((street) => {
-                   currentCap.children.push(this.createSearchResponseNode(street, 'streetId', currentCap));
-               });
-           }
-        });
-        root.children = Object.values(tree);
-        return [root] ;
+           tree.push(node) ;
+       });
+       // handle the root node
+       if (type === 'cityId') {
+           return [{id: '0', text: '', subtype: '', children: tree, parent: <TreeNodeInterface>{}, type: 'root', status: 0}];
+       }
+       return tree ;
     }
 
     createSearchResponseNode(elm, type, parent) {
         return {
-            id: elm.street_id ? elm.street_id : (elm.cap_id ? elm.cap_id : (elm.city_id ? elm.city_id : elm.id)),
-            type: type, children: [], subtype: '', parent: parent,
-            text: elm.street_name ? elm.street_name : (elm.cap_name ? elm.cap_name : (elm.city_name ? elm.city_name : elm.name)),
-            status: elm.cap_id || elm.city_id ? 4 : 0, qta: elm.productCount ? elm.productCount : elm.productsCount,
-            warning: typeof elm.is_fixed !== 'undefined' ? !elm.is_fixed : false
+            id: elm.id, type: type, children: [], subtype: '', parent: parent, text: elm.name ,
+            status: 0, qta: elm.productCount ? elm.productCount : elm.productsCount,
+            warning: typeof elm.is_fixed !== 'undefined' ? !elm.is_fixed : elm.isFixed
         } ;
     }
 

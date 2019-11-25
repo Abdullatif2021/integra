@@ -13,7 +13,7 @@ export const AppConfig = {
         preDispatchAddProducts: `${api_url}/api/preDispatch/addProducts`,
         mergePreDispatches: `${api_url}/api/preDispatch/merge`,
         exportPreDispatches: `${api_url}/api/preDispatch/export`,
-        getPreDispatchProducts: `${api_url}/api/preDispatch/getProducts`,
+        getPreDispatchProducts: `${api_url}/api/preDispatchProduct`,
         preDispatchEdit: `${api_url}/api/preDispatch`,
         getProvider: `${api_url}/api/provider`,
         getProviders: `${api_url}/api/providers`,

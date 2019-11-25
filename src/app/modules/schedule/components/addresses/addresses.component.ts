@@ -49,8 +49,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
     all_start_points = [];
     all_end_points = [];
     toMoveItem: any;
-    found_count = 0;
-    not_found_count = 0;
     filter = 0;
     itemsCount = 0;
     searchSubscription: any ;
@@ -95,7 +93,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
     async load(node, next) {
-        if (this.loading[next] || (node.type !== 'streetId' && this.searchMode))  {
+        if (this.loading[next] || this.searchMode)  {
             return;
         }
         this.loading[next] = true;
