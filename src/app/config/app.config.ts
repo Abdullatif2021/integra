@@ -46,7 +46,9 @@ export const AppConfig = {
         createEndPoint: `${api_url}/api/endPoint/create`,
         editStartPoint: `${api_url}/api/startPoint/update`,
         editEndPoint: `${api_url}/api/endPoint/update`,
-        editBuildingAddress: `${api_url}/api/preDispatch/product/updateLocation`
+        editBuildingAddress: `${api_url}/api/preDispatch/product/updateLocation`,
+        moveToInPlanning: `${api_url}/api/preDispatch/toPlanning`,
+
     },
 
 };

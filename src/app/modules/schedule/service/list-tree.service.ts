@@ -6,6 +6,7 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {Observable} from 'rxjs';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
 import {SnotifyService} from 'ng-snotify';
+import {Tree} from '@angular/router/src/utils/tree';
 
 @Injectable()
 export class ListTreeService implements OnDestroy {
@@ -19,13 +20,14 @@ export class ListTreeService implements OnDestroy {
     unsubscribe = new EventEmitter();
     levels = ['root', 'cityId', 'capId', 'streetId', 'oet', 'building', 'end'];
     searchLevels = {cityId: 'data', capId: 'caps', streetId: 'streets'} ;
+    select = new NodeSelectHelper() ;
 
     // List Tree Methods
-    listNode(preDispatchId: number, node: TreeNodeInterface, page = 1, filter = 0): Promise<TreeNodeInterface[]> {
+    listNode(preDispatchId: number, node: TreeNodeInterface, page = 1, filter = 0, mode = 'created'): Promise<TreeNodeInterface[]> {
         return new Promise<TreeNodeInterface[]>(async (resolve, reject) => {
             let result = <TreeNodeInterface[]>[];
             const type = this.getNextNodeType(node);
-            const data: any = await this.loadNode(preDispatchId, node, page.toString(), filter)
+            const data: any = await this.loadNode(preDispatchId, node, page.toString(), filter, mode)
                 .pipe(takeUntil(this.unsubscribe)).toPromise();
             if (!data) {
                 return reject();
@@ -36,7 +38,8 @@ export class ListTreeService implements OnDestroy {
                 data.data.forEach((elm) => {
                     result.push({
                         id: elm.id, type: type, children: [], subtype: '', parent: node, text: elm.name, _end: false,
-                        status: 0, qta: elm.productCount ? elm.productCount : elm.productsCount, warning: !elm.isFixed
+                        status: 0, qta: elm.productCount ? elm.productCount : elm.productsCount, warning: !elm.is_fixed,
+                        selected: node.selected, page: 0
                     });
                 });
             }
@@ -44,7 +47,7 @@ export class ListTreeService implements OnDestroy {
         });
     }
 
-    loadNode(preDispatchId: number, node: TreeNodeInterface, page = '1', filter = 0): Observable<TreeNodeResponseInterface> {
+    loadNode(preDispatchId: number, node: TreeNodeInterface, page = '1', filter = 0, mode): Observable<TreeNodeResponseInterface> {
         const options = {params: new HttpParams()};
         options.params = options.params.set(node.type, node.id);
         let parent: TreeNodeInterface = node.parent;
@@ -61,6 +64,8 @@ export class ListTreeService implements OnDestroy {
         } else if (filter === -1) {
             options.params = options.params.set('filter', 'false');
         }
+        options.params = options.params.set('planningMode', mode);
+
         return this.http.get<TreeNodeResponseInterface>(AppConfig.endpoints.getTreeNode(preDispatchId), options);
     }
 
@@ -78,7 +83,8 @@ export class ListTreeService implements OnDestroy {
             const randId = Math.random().toString(36).substr(2, 6);
             const item = <TreeNodeInterface>{
                 id: randId, type: 'oet', subtype: key, parent: parent, children: [], warning: !children.is_fixed,
-                text: key === 'odd' ? 'Civici Dispari' : (key === 'even' ? 'Civici Pari' : key), status: 0, qta: children.count
+                text: key === 'odd' ? 'Civici Dispari' : (key === 'even' ? 'Civici Pari' : key), status: 0, qta: children.count,
+                selected: parent.selected
             };
             item.children = this.productsToTreeNodes(children.data, item);
             items.push(item);
@@ -90,7 +96,6 @@ export class ListTreeService implements OnDestroy {
         if (parent.type === 'oet') {
             parent = parent.parent;
         }
-        console.log((elm.house_number ? elm.house_number : (elm.extra ? elm.extra.house_number : '')));
         let name = parent.text.trim() + ', ' + (elm.house_number ? elm.house_number : (elm.extra ? elm.extra.house_number : '')) + ' , ';
         parent = parent.parent;
         while (true) {
@@ -110,7 +115,7 @@ export class ListTreeService implements OnDestroy {
             result.push({
                 id: elm.id, type: 'building', subtype: '', text: this.nameBuilding(parent.parent, elm),
                 parent: parent, children: [], _end: true, status: !elm.house_number ? 3 : (elm.is_fixed ? 1 : 2),
-                extra: {house_number: elm.house_number}, qta: elm.productsCount
+                extra: {house_number: elm.house_number}, qta: elm.productsCount, selected: parent.selected, page: 0
             });
         });
         return result;
@@ -127,7 +132,7 @@ export class ListTreeService implements OnDestroy {
     createTreeFromSearchResponse(data, type = 'cityId', parent = null): [TreeNodeInterface] {
        const tree = <[TreeNodeInterface]>[] ;
        data.forEach((elm) => {
-           const node = this.createSearchResponseNode(elm, type, parent) ;
+           const node = <TreeNodeInterface>this.createSearchResponseNode(elm, type, parent) ;
            const nextType = this.getNextNodeType(node) ;
            if (elm[this.searchLevels[nextType]]) {
                node.children = this.createTreeFromSearchResponse(elm[this.searchLevels[nextType]], nextType, node);
@@ -140,7 +145,7 @@ export class ListTreeService implements OnDestroy {
        });
        // handle the root node
        if (type === 'cityId') {
-           return [{id: '0', text: '', subtype: '', children: tree, parent: <TreeNodeInterface>{}, type: 'root', status: 0}];
+           return [{id: '0', text: '', subtype: '', children: tree, parent: <TreeNodeInterface>{}, type: 'root', status: 0, page: 0}];
        }
        return tree ;
     }
@@ -149,7 +154,7 @@ export class ListTreeService implements OnDestroy {
         return {
             id: elm.id, type: type, children: [], subtype: '', parent: parent, text: elm.name ,
             status: 0, qta: elm.productCount ? elm.productCount : elm.productsCount,
-            warning: typeof elm.is_fixed !== 'undefined' ? !elm.is_fixed : elm.isFixed
+            warning: typeof elm.is_fixed !== 'undefined' ? !elm.is_fixed : false,
         } ;
     }
 
@@ -224,6 +229,123 @@ export class ListTreeService implements OnDestroy {
     ngOnDestroy() {
         this.unsubscribe.next();
         this.unsubscribe.complete();
+    }
+
+}
+
+
+class NodeSelectHelper {
+
+    types = {'cityId': 1, 'capId': 2, 'streetId': 3, 'building': 4, 'oet': 5};
+
+    select(node) {
+        node.selected = !node.selected ;
+        node.partiallySelected = false ;
+        this.selectChildren(node, node.selected);
+        this.reEvaluateNode(node.parent);
+    }
+
+    selectChildren(node: any, selected: boolean) {
+        node.children.forEach((child: TreeNodeInterface) => {
+            child.selected = selected ;
+            child.partiallySelected = false ;
+            this.selectChildren(child, selected);
+        });
+    }
+
+    reEvaluateNode(node: any) {
+        const current = node.partiallySelected ;
+        let skip = false ;
+        if (!node.children) {
+            return false ;
+        }
+        node.children.forEach((child) => {
+            if (child.partiallySelected || (child.selected ? 1 : 0) !== (node.selected ? 1 : 0)) {
+                node.partiallySelected = true ;
+                if (!current && node.parent) {
+                    this.reEvaluateNode(node.parent) ;
+                }
+                return skip = true  ;
+            }
+        });
+        if (!skip) {
+            node.partiallySelected = false ;
+            if (current && node.parent) {
+                this.reEvaluateNode(node.parent) ;
+            }
+        }
+        return false ;
+    }
+
+    fetchSelectedItems(root: any) {
+        let data = [] ;
+        root.children.forEach((elm) => {
+            if (elm.selected && !elm.partiallySelected) {
+                data = data.concat(this.createSelectedNodeObject(elm));
+            } else if (!elm.selected && elm.partiallySelected) {
+                data = data.concat(this.fetchSelectedItems(elm)) ;
+            } else if (elm.selected && elm.partiallySelected) {
+                const _elm = this.createSelectedNodeObject(elm) ;
+                const excluded = this.getExcluded(elm) ;
+                // the street node cannot have any excluded items
+                _elm[0].expected = excluded.excluded;
+                data = data.concat(_elm);
+                data = data.concat(excluded.selected);
+            }
+        });
+        return data ;
+    }
+
+    getExcluded(node: any): any {
+        let excluded = [] ;
+        let selected = [] ;
+        if (!node.children) {
+            return [];
+        }
+        node.children.forEach((elm) => {
+           if (elm.selected && elm.partiallySelected) {
+               const _excluded = this.getExcluded(elm) ;
+               excluded = excluded.concat(_excluded.excluded);
+               selected = selected.concat(_excluded.selected);
+           } else if (!elm.selected && !elm.partiallySelected) {
+               excluded = excluded.concat(this.createSelectedNodeObject(elm));
+           } else if (!elm.selected && elm.partiallySelected) {
+               excluded = excluded.concat(this.createSelectedNodeObject(elm));
+               selected = selected.concat(this.fetchSelectedItems(elm));
+           }
+        });
+        return {excluded: excluded, selected: selected} ;
+    }
+
+    createSelectedNodeObject(node: any): any {
+        const data = [] ;
+        if (node.type === 'oet') {
+            if (node.children) {
+                node.children.forEach((child) => {
+                    data.push({
+                        id: child.id, root: this.types[child.type], parent: this.getParent(child), expected: [],
+                        debugName: node.text
+                    });
+                });
+            }
+        } else {
+            data.push({
+                id: node.id, root: this.types[node.type], parent: this.getParent(node), expected: [],
+                debugName: node.text
+            }) ;
+        }
+        return data;
+    }
+
+    getParent(node: TreeNodeInterface) {
+        const typeAliases = {'cityId': 'city_id', 'capId': 'cap_id', 'streetId': 'street_id', 'building': 'building_id', 'root': 'root'} ;
+        const parent = {} ;
+        while (node = node.parent) {
+            if (node.id) {
+                parent[typeAliases[node.type]] = node.id ;
+            }
+        }
+        return parent ;
     }
 
 }

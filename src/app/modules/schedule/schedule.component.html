@@ -4,7 +4,7 @@
     <div class="col-4 v-wide-col">
       <div class="schedule-nav">
         <button class="btn schedule-nav-btn schedule-nav-left-btn" [ngClass]="{'active': activeTab('/schedule/'+preDispatch)}" routerLink="/schedule/{{preDispatch}}">Indirizzi</button>
-        <button class="btn schedule-nav-btn" [ngClass]="{'active': activeTab('/toPlan/'+preDispatch)}" routerLink="/schedule/{{preDispatch}}/toPlan">Da pianificare</button>
+        <button class="btn schedule-nav-btn" [ngClass]="{'active': activeTab('/schedule/'+preDispatch+'/toPlan')}" routerLink="/schedule/{{preDispatch}}/toPlan">Da pianificare</button>
         <button class="btn schedule-nav-btn" [ngClass]="{'active': activeTab('/schedule/'+preDispatch+'/parameters')}" routerLink="/schedule/{{preDispatch}}/parameters">Parametri</button>
         <button class="btn schedule-nav-btn schedule-nav-right-btn" [ngClass]="{'active': activeTab('/schedule/'+preDispatch+'/result')}" routerLink="/schedule/{{preDispatch}}/result">Risultato</button>
       </div>

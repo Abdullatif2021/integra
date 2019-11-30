@@ -3,7 +3,7 @@ export interface TreeNodeInterface {
     text?: string;
     type?: string;
     parent?: TreeNodeInterface;
-    children?: TreeNodeInterface[];
+    children?: TreeNodeInterface[] | [{skeleton: boolean}];
     _end?: boolean;
     status?: number;
     subtype?: string;
@@ -11,6 +11,11 @@ export interface TreeNodeInterface {
     qta?: number;
     warning?: boolean;
     skeleton?: boolean;
+    selected?: boolean;
+    partiallySelected?: boolean;
+    page: number;
+    expanded?: boolean;
+    loading?: boolean;
 }
 
 export interface TreeNodeResponseInterface {

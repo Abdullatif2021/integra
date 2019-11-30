@@ -8,8 +8,8 @@ import {SettingsService} from '../../../../service/settings.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AddressesActionsService} from '../../service/addresses.actions.service';
 import {SnotifyService} from 'ng-snotify';
-import {MapsAPILoader} from '@agm/core';
 import {ACAddress} from '../../../../core/models/address.interface';
+import {PlanningService} from '../../../../service/planning.service';
 
 @Component({
     selector: 'app-addresses',
@@ -17,9 +17,6 @@ import {ACAddress} from '../../../../core/models/address.interface';
     styleUrls: ['./addresses.component.css']
 })
 export class AddressesComponent implements OnInit, OnDestroy {
-
-    preDispatch: number;
-    unsubscribe = new EventEmitter();
 
     constructor(
         private route: ActivatedRoute,
@@ -29,21 +26,20 @@ export class AddressesComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private addressesActionsService: AddressesActionsService,
         private snotifyService: SnotifyService,
+        private planningService: PlanningService,
     ) {
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data ;
     }
 
 // { id: 1, selected: true, marker: 'A', name: 'Bologna', warning: true, qta: 14, children: [], status: 1}
-
+    preDispatch: number;
+    unsubscribe = new EventEmitter();
     tree = <TreeNodeInterface[]>[
         // The root node of the tree .
-        {id: '0', text: '', subtype: '', children: [], parent: <TreeNodeInterface>{}, type: 'root', status: 0}
+        {id: '0', text: '', subtype: '', children: <[TreeNodeInterface]>[], parent: <TreeNodeInterface>{}, type: 'root', status: 0, page: 0}
     ];
-    pages = {};
-    loading = {};
-    paginationOptions: any;
-    expanded = {};
+    paginationOptions: any = {};
     dragging: TreeNodeInterface;
     move_to_items = [];
     all_start_points = [];
@@ -63,9 +59,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
     async ngOnInit() {
         this.locatingService.treeCreated.pipe(takeUntil(this.unsubscribe)).subscribe(
             async data => {
-                this.pages = {};
-                this.loading = {};
-                this.expanded = [];
                 this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);
             }
         );
@@ -74,7 +67,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
             data => {
                 if (data.statusCode === 200) {
                     this.paginationOptions = data.data;
-                    console.log(this.paginationOptions);
                 }
             },
             error => {
@@ -86,19 +78,19 @@ export class AddressesComponent implements OnInit, OnDestroy {
     // List Tree Methods
 
     async listNode(node, next) {
-        if (!this.expanded[next] && !node.children.length) {
+        if (!node.expanded && !node.children.length) {
             await this.load(node, next);
         }
-        this.expanded[next] = !this.expanded[next];
+        node.expanded = !node.expanded;
     }
 
     async load(node, next) {
-        if (this.loading[next] || this.searchMode)  {
+        if (node.loading || this.searchMode || (node.page && node.type === 'oet'))  {
             return;
         }
-        this.loading[next] = true;
+        node.loading = true;
         node.children.push({skeleton: true});
-        this.listTreeService.listNode(this.preDispatch, node, this.pages[next], this.filter).then(
+        this.listTreeService.listNode(this.preDispatch, node, node.page, this.filter).then(
             data => {
                 node.children.pop();
                 this.addData(node, data, next);
@@ -111,8 +103,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
         if (node.type === 'streetId' || (node.type !== 'oet' && this.searchMode)) {
             return;
         } // ignore the node where its children are static
-        if (node.children.length && !this.loading[next]) {
-            this.pages[next] = !this.pages[next] ? 2 : ++this.pages[next];
+        if (node.children.length && !node.loading) {
+            node.page = !node.page ? 2 : ++node.page;
             await this.load(node, next);
         }
     }
@@ -133,14 +125,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
         }
         // if the results was lass than the tree pagination results count, keep this node in loading state.
         if (_data && _data.length >= this.paginationOptions.get_tree_pagination) {
-            this.loading[next] = false;
+            node.loading = false;
         }
-    }
-
-    clearTreeMeta() {
-        this.pages = {};
-        this.loading = {};
-        this.expanded = [];
     }
 
     // Move Node Methods
@@ -154,13 +140,12 @@ export class AddressesComponent implements OnInit, OnDestroy {
     moveNode(node, to, next, validated = false) {
         const oldParent = node.parent;
         if (this.listTreeService.moveItem(node, to, this.preDispatch, validated)) {
-            this.loading[next] = false;
-            this.expanded[next] = false;
+            node.loading = false;
+            node.expanded = false;
         }
         if (!oldParent.children.length) {
-            const location = next.split(':').slice(0, -1).join(',');
-            this.loading[location] = false;
-            this.expanded[location] = false;
+            oldParent.loading = false;
+            oldParent.expanded = false;
         }
     }
 
@@ -191,9 +176,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
     getItem(next: string, id = null) {
+        console.log('here');
         const location = next.split(':');
 
-        let item: TreeNodeInterface = this.tree[0];
+        let item: any = this.tree[0];
         location.forEach((elm) => {
             if (elm === '') {
                 return;
@@ -219,8 +205,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
     // Actions on Nodes
     async reloadNode(event) {
         event.item.node.children = [];
-        this.loading[event.item.next] = false;
-        this.pages[event.item.next] = 0;
+        event.item.node.loading = false;
+        event.item.node.page = 0;
         await this.load(event.item.node, event.item.next);
     }
 
@@ -295,7 +281,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 }
                 const res = await this.addressesActionsService.updatePreDispatchStartPoint(this.preDispatch, input.address.id).toPromise();
                 if (!res.success) {
-                    return this.snotifyService.error('Start point was not updated', {showProgressBar: false}); ;
+                    return this.snotifyService.error('Start point was not updated', {showProgressBar: false});
                 }
                 this.snotifyService.success('Start Point updated successfully', {showProgressBar: false});
                 this.startPointTextInput.nativeElement.value = input.address.text;
@@ -303,7 +289,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 this.snotifyService.error('Start point was not updated', {showProgressBar: false});
             }
         }).catch((e) => {
-
+            console.log(e);
         });
     }
 
@@ -424,7 +410,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
             this.filter -= type === 'found' ? 1 : -1;
         }
 
-        this.clearTreeMeta();
         this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);
     }
 
@@ -435,19 +420,20 @@ export class AddressesComponent implements OnInit, OnDestroy {
         if (query === '') {
             this.tree = [
                 // The root node of the tree .
-                {id: '0', text: '', subtype: '', children: [{skeleton: true}], parent: <TreeNodeInterface>{}, type: 'root', status: 0}
+                {
+                    id: '0', text: '', subtype: '', children: [{skeleton: true}], parent: <TreeNodeInterface>{}, type: 'root',
+                    status: 0, page: 0
+                }
             ];
-            this.clearTreeMeta();
             this.searchMode = false ;
             return this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);
         }
         this.tree = [{id: '0', text: '', subtype: '', children: [{skeleton: true}], parent: <TreeNodeInterface>{},
-            type: 'root', status: 0}] ;
+            type: 'root', status: 0, page: 0}] ;
         this.searchSubscription = this. listTreeService.sendSearchTreeRequest(this.preDispatch, query).subscribe(
             data => {
                 this.searchMode = true ;
                 this.tree = this.listTreeService.createTreeFromSearchResponse(data.data) ;
-                this.clearTreeMeta();
             },
         );
     }
@@ -492,16 +478,25 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.addressesActionsService.changeBuldinAddress({lat: latInput.value, lng: lngInput.value}, item.id, this.preDispatch).subscribe(
             data => {
                 latInput.value = '' ;
-                lngInput.value = ''
+                lngInput.value = '' ;
                 this.snotifyService.success('Coordinates Were Changed successfully', {showProgressBar: false});
             },
             error => {
                 this.snotifyService.error('Error Updating address', {showProgressBar: false});
-                this.expanded[item.parent.id] = false ;
-                this.loading[item.parent.id] = false ;
+                item.parent.expanded = false ;
+                item.parent.loading = false ;
                 this.reloadNode({item: {node: item.parent}});
             }
         );
+    }
+
+
+    async moveToInPlanning() {
+        const data = this.listTreeService.select.fetchSelectedItems(this.tree[0]);
+        this.planningService.moveToInPlanning(this.preDispatch, data, () => {
+            this.reloadNode({item: {node: this.tree[0]}});
+            return 'Items moved successfully';
+        });
     }
 
     // Modals Methods
@@ -564,12 +559,19 @@ export class AddressesComponent implements OnInit, OnDestroy {
         return !item.status ? '' : 'status-' + item.status;
     }
 
-    showElement(element, hideEelments = []) {
+    showElement(element, hideElements = []) {
         element.style.display = 'block';
-        hideEelments.forEach((elm) => {
+        hideElements.forEach((elm) => {
             elm.style.display = 'none' ;
         });
     }
+
+    select(node: TreeNodeInterface) {
+        this.listTreeService.select.select(node);
+    }
+
+
+
     // Life Cycle OnDestroy
 
     ngOnDestroy() {

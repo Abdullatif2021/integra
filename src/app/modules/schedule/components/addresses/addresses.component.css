@@ -94,6 +94,9 @@
     border: 1px solid #444 ;
     color: #fff;
 }
+.item-row .select-container {
+    cursor: pointer;
+}
 .item-row .marker{
     background-color: #000000;
     border: 1px solid #000000;

@@ -26,7 +26,7 @@
       </div>
 
       <div class="create-btn float-right">
-        <button class="integraa-btn">Crea nuovo gruppo</button>
+        <button class="integraa-btn" (click)="moveToInPlanning()">Crea nuovo gruppo</button>
       </div>
 
       <div class="clear-both"></div>
@@ -76,12 +76,13 @@
       <div [contextMenu]="contextMenu" [ngClass]="{'odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
         <div class="item-row">
           <div class="more" *ngIf="!item._end" (click)="listNode(item, next)">
-            <fa-icon *ngIf="!expanded[next]" [icon]="['fa','chevron-down']"></fa-icon>
-            <fa-icon *ngIf="expanded[next]" [icon]="['fa','chevron-up']"></fa-icon>
+            <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
+            <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
           </div>
-          <div class="select-container">
-            <div class="selected" *ngIf="item.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
-            <div class="not-selected" *ngIf="!item.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+          <div class="select-container" (click)="select(item)">
+            <div class="selected" *ngIf="item.selected && !item.partiallySelected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+            <div class="selected" *ngIf="item.partiallySelected"><fa-icon [icon]="['fa','minus']"></fa-icon></div>
+            <div class="not-selected" *ngIf="!item.selected && !item.partiallySelected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
           </div>
           <div class="marker-container">
             <div class="marker" *ngIf="item.marker">{{item.marker}}</div>
@@ -118,7 +119,7 @@
           </div>
         </div>
       </div>
-      <ng-container *ngIf="expanded[next]">
+      <ng-container *ngIf="item.expanded">
         <div infiniteScroll (scrolled)="loadMore(item, next)" [scrollWindow]="true">
           <ng-container *ngFor="let child of item.children; let i = index">
             <div (dndStart)="onDragStart($event, child)" [ngClass]="{'cursor-grab': isMovable(child)}" [dndEffectAllowed]="'move'" [dndDraggable]="{next: next+':'+i, id: child.id}" [dndDisableIf]="!isMovable(child)">
@@ -145,7 +146,6 @@
       <span> Reload </span>
     </div>
   </ng-template>
-  <!--<ng-template contextMenuItem divider="true"></ng-template>-->
 </context-menu>
 
 <ng-template  #MoveItemModalRef let-modal>

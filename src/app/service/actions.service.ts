@@ -23,7 +23,7 @@ export class ActionsService {
     this.actionsChanges.emit(actions);
   }
 
-  run(method, msg, success, faild) {
+  run(method, msg, success, failed) {
       const promise = new Promise(function(resolve, reject) {
           method.subscribe(
               data => {
@@ -39,15 +39,14 @@ export class ActionsService {
               },
               error => {
                   let body = error.msg ? error.msg : 'Error' ;
-                  if (typeof faild === 'function') {
-                      body = faild(error) ;
+                  if (typeof failed === 'function') {
+                      body = failed(error) ;
                   }
                   reject({body: body, config: { showProgressBar: false, timeout: 3000 }});
               }
           );
       });
       this.snotifyService.async(msg, promise, { showProgressBar: true, timeout: 10000 });
-
   }
 
   addToPreDispatch(data, preDispatchId) {

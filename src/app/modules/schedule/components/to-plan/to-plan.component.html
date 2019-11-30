@@ -1,3 +1,63 @@
-<p>
-  to-plan works!
-</p>
+<div class="to-plan-container">
+  <div class="items">
+    <div infiniteScroll (scrolled)="loadMore(tree[0], -1)" [scrollWindow]="true" >
+      <ng-container *ngFor="let item of tree[0].children; let idx = index">
+        <ng-container  [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx+''}"></ng-container>
+      </ng-container>
+    </div>
+  </div>
+
+</div>
+
+<ng-template  let-item="item" let-idx="idx" let-next="next" #simpleItem>
+  <ng-container *ngIf="item.skeleton; else actualItem">
+    <div class="rect-loading-skeleton full-width schedule-skeleton"></div>
+  </ng-container>
+  <ng-template #actualItem >
+    <div class="drop-area not-used">
+      <div [contextMenu]="contextMenu" [ngClass]="{'odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
+        <div class="item-row">
+          <div class="more" *ngIf="!item._end" (click)="listNode(item)">
+            <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
+            <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
+          </div>
+          <div class="select-container" (click)="select(item)">
+            <div class="selected" *ngIf="item.selected && !item.partiallySelected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+            <div class="selected" *ngIf="item.partiallySelected"><fa-icon [icon]="['fa','minus']"></fa-icon></div>
+            <div class="not-selected" *ngIf="!item.selected && !item.partiallySelected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+          </div>
+          <div class="marker-container">
+            <div class="marker" *ngIf="item.marker">{{item.marker}}</div>
+          </div>
+          <div class="text" #itemText>{{item.text}}</div>
+          <div class="right-side">
+            <div class="warning" *ngIf="item.warning">!</div>
+            <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
+            <div class="small-more" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
+            <div class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown"></div>
+          </div>
+          <div class="clear-both"></div>
+        </div>
+      </div>
+      <ng-container *ngIf="item.expanded">
+        <div infiniteScroll (scrolled)="loadMore(item, next)" [scrollWindow]="true">
+          <ng-container *ngFor="let child of item.children; let i = index">
+            <div [dndEffectAllowed]="'move'" [dndDraggable]="{next: next+':'+i, id: child.id}">
+              <ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </ng-template>
+</ng-template>
+
+
+<context-menu #contextMenu>
+  <ng-template contextMenuItem  (execute)="reloadNode($event)">
+    <div class="context-menu-item">
+      <fa-icon class="text-warning" [icon]="['fa','sync']"></fa-icon>
+      <span> Reload </span>
+    </div>
+  </ng-template>
+</context-menu>

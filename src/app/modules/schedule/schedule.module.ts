@@ -19,7 +19,13 @@ import {LocatingService} from './service/locating.service';
 import {GoogleGeocodeService} from './service/google.geocode.service';
 import {TuttocittaGeocodeService} from './service/tuttocitta.geocode.service';
 import {MapBoxGeocodeService} from './service/map-box.geocode.service';
-import {faAllergies, faCheckCircle, faExclamationTriangle, faMapMarkedAlt, faMapMarkerAlt} from '@fortawesome/free-solid-svg-icons';
+import {
+    faAllergies,
+    faCheckCircle,
+    faExclamationTriangle,
+    faMapMarkedAlt,
+    faMapMarkerAlt, faMinus,
+} from '@fortawesome/free-solid-svg-icons';
 import {ListTreeService} from './service/list-tree.service';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {DndModule} from 'ngx-drag-drop';
@@ -80,5 +86,7 @@ export class ScheduleModule {
         library.add(faCheckCircle);
         library.add(faMapMarkerAlt);
         library.add(faMapMarkedAlt);
+        library.add(faMinus);
+
     }
 }
