@@ -106,7 +106,12 @@ export class ToPlanComponent implements OnInit, OnDestroy {
         }
     }
 
-
+    async reloadNode(event) {
+        event.item.node.children = [];
+        event.item.node.loading = false;
+        event.item.node.page = 0;
+        await this.load(event.item.node);
+    }
 
 
     // View Related Methods
