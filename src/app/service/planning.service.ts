@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs/index';
@@ -15,6 +15,18 @@ export class PlanningService {
         private http: HttpClient,
         private snotifyService: SnotifyService,
     ) { }
+
+    preDispatchDataChanges = new EventEmitter() ;
+    moveItemsToInPlaningChanges = new EventEmitter() ;
+
+    changePreDispatchData(data) {
+        this.preDispatchDataChanges.emit(data);
+    }
+
+    moveItemsToInPlaning() {
+        this.moveItemsToInPlaningChanges.emit(true) ;
+    }
+
 
     sendMoveToInPlanningRequest(preDispatchId, data) {
         data = {

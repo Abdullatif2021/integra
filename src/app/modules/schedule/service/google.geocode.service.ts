@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {GoogleGeocodeResponseInterface} from '../../../core/models/google-geocode-responce.interface';
 import {SettingsService} from '../../../service/settings.service';
-import {LocatedBuildingInterface, BuildingLocationInterface} from '../../../core/models/building.interface';
+import {LocatedBuildingInterface, BuildingLocationInterface, FormattedAddress} from '../../../core/models/building.interface';
 
 @Injectable()
 export class GoogleGeocodeService {
@@ -46,14 +46,49 @@ export class GoogleGeocodeService {
                 }
                 return resolve(null) ;
             }
+
+            const address = this.getAddressObject(gRes) ;
             return resolve({
                 id: building.id,
                 lat: gRes.results[0].geometry.location.lat,
                 long: gRes.results[0].geometry.location.lng,
                 is_fixed: true,
-                name: gRes.results[0].formatted_address.split(',')[0],
+                name: address.street,
+                formattedAddress: address
             });
         });
+    }
+
+
+    getAddressObject(address): FormattedAddress {
+
+        const formattedAddress = <FormattedAddress>{
+          street: '',
+          city: '',
+          houseNumber: '',
+          cap: null,
+          country: '',
+        };
+
+        if (!address.results[0].address_components){
+            return formattedAddress;
+        }
+
+        address.results[0].address_components.forEach((elm) => {
+            if (elm.types.indexOf('route') !== -1) {
+                formattedAddress.street = elm.long_name ;
+            } else if (elm.types.indexOf('locality') !== -1) {
+                formattedAddress.city = elm.long_name ;
+            } else if (elm.types.indexOf('country') !== -1) {
+                formattedAddress.country = elm.long_name ;
+            } else if (elm.types.indexOf('postal_code') !== -1) {
+                formattedAddress.cap = elm.long_name ;
+            } else if (elm.types.indexOf('street_number') !== -1) {
+                formattedAddress.houseNumber = elm.long_name ;
+            }
+        });
+
+        return formattedAddress ;
     }
 
     handleExpiredToken() {

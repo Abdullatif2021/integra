@@ -159,8 +159,9 @@
 .to-plan-container{
     background-color: #fff;
     padding: 15px 0px;
-    min-height: 634px;
+    height: 634px;
     border-radius: 4px;
+    overflow-y: scroll;
 }
 .node {
     background-color: #dfdfdf;

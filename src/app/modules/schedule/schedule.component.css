@@ -52,3 +52,9 @@
 .nFoundItemModal, .nFoundItemModal input{
     font-size: 14px;
 }
+.mote-to-in-plan-btn {
+    width: 130px;
+    float: left;
+    margin: 10px;
+    cursor: pointer;
+}

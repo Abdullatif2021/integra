@@ -1,7 +1,8 @@
 .planner-container{
     background-color: #fff;
-    min-height: 634px;
+    height: 634px;
     border-radius: 4px;
+    overflow-y: scroll;
 }
 .addresses-container,.arrival-container{
     padding: 12px 20px;
@@ -179,7 +180,7 @@
 
 /* Statuses */
 
-.status-1 .item-row, .status-2 .item-row{
+.status-1 .item-row, .status-2 .item-rowM .status-3 .item-row, .status-4 .item-row{
     padding-left: 20px;
 }
 .status-1 .item-row .text{

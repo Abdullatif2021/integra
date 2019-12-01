@@ -1,4 +1,4 @@
-<div class="to-plan-container">
+<div class="to-plan-container" #ToPlanContainer>
   <div class="items">
     <div infiniteScroll (scrolled)="loadMore(tree[0], -1)" [scrollWindow]="true" >
       <ng-container *ngFor="let item of tree[0].children; let idx = index">
@@ -40,7 +40,7 @@
         </div>
       </div>
       <ng-container *ngIf="item.expanded">
-        <div infiniteScroll (scrolled)="loadMore(item, next)" [scrollWindow]="true">
+        <div infiniteScroll (scrolled)="loadMore(item, next)" [scrollWindow]="true" [infiniteScrollContainer]="ToPlanContainer" infiniteScrollDistance="30">
           <ng-container *ngFor="let child of item.children; let i = index">
             <div [dndEffectAllowed]="'move'" [dndDraggable]="{next: next+':'+i, id: child.id}">
               <ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>

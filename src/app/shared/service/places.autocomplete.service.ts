@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SettingsService} from '../../service/settings.service';
 import {ACAddress} from '../../core/models/address.interface';
+import {FormattedAddress} from '../../core/models/building.interface';
 
 @Injectable()
 export class PlacesAutocompleteService {
@@ -67,6 +68,36 @@ export class PlacesAutocompleteService {
                 strict: strict
             }
         };
+    }
+
+    getAddressObject(address): FormattedAddress {
+        const formattedAddress = <FormattedAddress>{
+            street: '',
+            city: '',
+            houseNumber: '',
+            cap: null,
+            country: '',
+        };
+
+        if (!address.address_components) {
+            return formattedAddress;
+        }
+
+        address.address_components.forEach((elm) => {
+            if (elm.types.indexOf('route') !== -1) {
+                formattedAddress.street = elm.long_name;
+            } else if (elm.types.indexOf('locality') !== -1) {
+                formattedAddress.city = elm.long_name;
+            } else if (elm.types.indexOf('country') !== -1) {
+                formattedAddress.country = elm.long_name;
+            } else if (elm.types.indexOf('postal_code') !== -1) {
+                formattedAddress.cap = elm.long_name;
+            } else if (elm.types.indexOf('street_number') !== -1) {
+                formattedAddress.houseNumber = elm.long_name;
+            }
+        });
+
+        return formattedAddress;
     }
 
 

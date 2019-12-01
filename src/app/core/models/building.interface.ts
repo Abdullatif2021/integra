@@ -14,4 +14,13 @@ export interface LocatedBuildingInterface {
     long?: number;
     is_fixed: boolean;
     name?: string;
+    formattedAddress?: FormattedAddress;
+}
+
+export interface FormattedAddress {
+    city: string;
+    cap: number;
+    houseNumber: string;
+    country: string;
+    street: string;
 }

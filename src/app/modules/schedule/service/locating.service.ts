@@ -92,9 +92,7 @@ export class LocatingService {
     }
 
     async startLocating(preDispatch) {
-
-
-
+        let result = false ;
         let page = 0;
         this.buildings = [] ;
         this.nfound = [] ;
@@ -116,9 +114,11 @@ export class LocatingService {
         }
 
         if (!this.buildings.length && !this.fixed.length && !this.nfound.length) {
-            await this.createTree();
+            result = await this.createTree();
             this.snotifyService.success('All buildings are localized !', { showProgressBar: false});
         }
+
+        return result ;
     }
 
     async process(buildings) {

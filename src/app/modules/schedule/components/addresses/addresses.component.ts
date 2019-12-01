@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ListTreeService} from '../../service/list-tree.service';
 import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
@@ -49,7 +49,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     itemsCount = 0;
     searchSubscription: any ;
     searchMode = false ;
-    preDispatchData: any ;
+    @Input() preDispatchData: any ;
     errors = {} ;
     editingPoint = {};
     @ViewChild('startPointTextInput') startPointTextInput: ElementRef;
@@ -71,6 +71,16 @@ export class AddressesComponent implements OnInit, OnDestroy {
             },
             error => {
                 console.log(error);
+            }
+        );
+        this.planningService.preDispatchDataChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
+            data => {
+                this.preDispatchData = data ;
+            }
+        );
+        this.planningService.moveItemsToInPlaningChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
+            data => {
+                this.moveToInPlanning();
             }
         );
     }
@@ -126,6 +136,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
         // if the results was lass than the tree pagination results count, keep this node in loading state.
         if (_data && _data.length >= this.paginationOptions.get_tree_pagination) {
             node.loading = false;
+        }else {
+            console.log('loading stopped for node', next);
         }
     }
 
@@ -452,6 +464,21 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 const locatedAddress = await this.locatingService.locateAddress(address.address) ;
                 address.address.lat = locatedAddress.lat ;
                 address.address.lng = locatedAddress.long ;
+                // use the located formatted address if it was found.
+                if (locatedAddress.formattedAddress) {
+                    if (locatedAddress.formattedAddress.cap) {
+                        address.address.cap = locatedAddress.formattedAddress.cap ;
+                    }
+                    if (locatedAddress.formattedAddress.city) {
+                        address.address.city = locatedAddress.formattedAddress.city ;
+                    }
+                    if (locatedAddress.formattedAddress.street) {
+                        address.address.street = locatedAddress.formattedAddress.street ;
+                    }
+                    if (locatedAddress.formattedAddress.houseNumber) {
+                        address.address.houseNumber = locatedAddress.formattedAddress.houseNumber ;
+                    }
+                }
             } catch (e) {
                 return this.errors['editBuildingAddress-' + item.id] = 'We was not able to locate this address' ;
             }

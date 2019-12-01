@@ -5,6 +5,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {BuildingLocationInterface} from '../../core/models/building.interface';
+import {PlanningService} from '../../service/planning.service';
 
 @Component({
   selector: 'app-schedules',
@@ -24,6 +25,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
       private route: ActivatedRoute,
       private locatingService: LocatingService,
       private modalService: NgbModal,
+      private planningService: PlanningService
 
   ) {
       this.preDispatch = this.route.snapshot.params.id;
@@ -42,8 +44,15 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     return route === this.router.url;
   }
 
-  locate() {
-      this.locatingService.startLocating(this.preDispatch);
+  async locate() {
+      const result: any = await this.locatingService.startLocating(this.preDispatch);
+      if (result && result.data && result.data.preDispatch) {
+          this.planningService.changePreDispatchData(result.data.preDispatch);
+      }
+  }
+
+  moveToInPlan() {
+      this.planningService.moveItemsToInPlaning();
   }
 
   latLngInputActivate(event) {
