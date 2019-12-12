@@ -69,9 +69,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
                     this.paginationOptions = data.data;
                 }
             },
-            error => {
-                console.log(error);
-            }
         );
         this.planningService.preDispatchDataChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
@@ -80,7 +77,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
         );
         this.planningService.moveItemsToInPlaningChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
-                this.moveToInPlanning();
+                this.moveToInPlanning(data.modalRef, data.force);
             }
         );
     }
@@ -136,8 +133,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
         // if the results was lass than the tree pagination results count, keep this node in loading state.
         if (_data && _data.length >= this.paginationOptions.get_tree_pagination) {
             node.loading = false;
-        }else {
-            console.log('loading stopped for node', next);
+        } else {
+            // console.log('loading stopped for node', next);
         }
     }
 
@@ -518,12 +515,28 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
 
-    async moveToInPlanning() {
+    async moveToInPlanning(modalRef, force = false) {
         const data = this.listTreeService.select.fetchSelectedItems(this.tree[0]);
-        this.planningService.moveToInPlanning(this.preDispatch, data, () => {
-            this.reloadNode({item: {node: this.tree[0]}});
-            return 'Items moved successfully';
-        });
+        if (force) {
+            return this.planningService.moveToInPlanning(this.preDispatch, data, () => {
+                this.reloadNode({item: {node: this.tree[0]}});
+                return 'Items moved successfully';
+            });
+        }
+        return this.planningService.moveToInPlanningCheck(this.preDispatch, data).subscribe(
+            result => {
+                if (result.data) {
+                    // show the modal
+                    this.modalService.open(modalRef);
+                    console.log('show the modal', result.data);
+                } else {
+                    this.planningService.moveToInPlanning(this.preDispatch, data, () => {
+                        this.reloadNode({item: {node: this.tree[0]}});
+                        return 'Items moved successfully';
+                    });
+                }
+            }
+        );
     }
 
     // Modals Methods

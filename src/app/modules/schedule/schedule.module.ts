@@ -34,6 +34,7 @@ import {faSync} from '@fortawesome/free-solid-svg-icons/faSync';
 import { ToPlanComponent } from './components/to-plan/to-plan.component';
 import {AddressesActionsService} from './service/addresses.actions.service';
 import {PreDispatchDataResolver} from './resolvers/pre-dispatch-data.resolver';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
@@ -50,6 +51,7 @@ import {PreDispatchDataResolver} from './resolvers/pre-dispatch-data.resolver';
     InfiniteScrollModule,
     DndModule,
     ContextMenuModule,
+    NgbModule
   ],
   declarations: [
       ScheduleComponent,

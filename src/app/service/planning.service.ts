@@ -4,6 +4,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs/index';
 import { AppConfig } from '../config/app.config';
 import {SnotifyService} from 'ng-snotify';
+import {reject} from 'q';
 
 @Injectable({
     providedIn: 'root'
@@ -17,21 +18,24 @@ export class PlanningService {
     ) { }
 
     preDispatchDataChanges = new EventEmitter() ;
-    moveItemsToInPlaningChanges = new EventEmitter() ;
+    moveItemsToInPlaningChanges = new EventEmitter<any>() ;
 
     changePreDispatchData(data) {
         this.preDispatchDataChanges.emit(data);
     }
 
-    moveItemsToInPlaning() {
-        this.moveItemsToInPlaningChanges.emit(true) ;
+    moveItemsToInPlaning(modalRef, force) {
+        this.moveItemsToInPlaningChanges.emit({modalRef: modalRef, force: force}) ;
     }
 
 
-    sendMoveToInPlanningRequest(preDispatchId, data) {
+    sendMoveToInPlanningRequest(preDispatchId, data, confirm = false) {
         data = {
-            pre_dispatch_id: preDispatchId,
+            pre_dispatch_id: parseInt(preDispatchId, 10),
             data: data
+        }
+        if (confirm) {
+            data.confirm = 1 ;
         }
         return this.http.post<any>(AppConfig.endpoints.moveToInPlanning, data).pipe(
             catchError(this.handleError)
@@ -39,9 +43,13 @@ export class PlanningService {
     }
 
     moveToInPlanning(preDispatchId, data, success) {
-        this.run(this.sendMoveToInPlanningRequest(preDispatchId, data), 'Moving Items', success, () => {
+        this.run(this.sendMoveToInPlanningRequest(preDispatchId, data, true), 'Moving Items', success, () => {
             console.log('error');
         });
+    }
+
+    moveToInPlanningCheck(preDispatchId, data) {
+        return this.sendMoveToInPlanningRequest(preDispatchId, data, false);
     }
 
     run(method, msg, success, failed) {

@@ -22,6 +22,7 @@ export class AddressInputComponent implements OnInit, OnChanges {
     @Output() changed = new EventEmitter<ACAddress>();
     @Input() point;
     @Input() _class = '';
+    @Input() disabled = false ;
     inputValue = '';
     appendId: number;
 

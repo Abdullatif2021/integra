@@ -12,7 +12,7 @@
     <div class="col-8 v-wide-col">
       <div class="map-header">
         <div class="localizza-btn integraa-btn" (click)="locate()">Localizza</div>
-        <div class="mote-to-in-plan-btn integraa-btn" (click)="moveToInPlan()">Move to in plan</div>
+        <div class="mote-to-in-plan-btn integraa-btn" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Move to in plan</div>
         <div class="continue-btn integraa-btn">Prosegui</div>
         <div class="clear-both"></div>
       </div>
@@ -31,31 +31,51 @@
 <ng-template  #modalRef let-modal>
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
-      <h6>
+      <h6 class="mb-3">
         <fa-icon class="text-warning" [icon]="['fa','exclamation-triangle']"></fa-icon>
-        The system was not able to locate ( <span class="text-warning font-size-13">{{nFoundItem.street}}, {{nFoundItem.houseNumber}}, {{nFoundItem.cap}}, {{nFoundItem.city}}</span> )
+        The system was not able to locate this Addresses
       </h6>
-      <div class="mt-3">
-        <div class="form-group">
-          <label>Change address</label>
-          <input #locationInput [disabled]="latLngInputState" type="text" class="form-control" placeholder="address">
-        </div>
-        <div class="form-group mb-1">
-          <input id="lat-lng-input-activate" (change)="latLngInputActivate($event)" type="checkbox"> &nbsp;
-          <label for="lat-lng-input-activate">Enter lat,lng instead </label>
-        </div>
-        <div class="row">
-          <div class="col-6 col-xs-12">
-            <input #latInput [disabled]="!latLngInputState" type="text" class="form-control" placeholder="latitude">
+      <div *ngFor="let nFoundItem of nFoundItems" class="mt-2 pr-5 pl-5">
+        <h6 class="mb-0"><span class="text-warning font-size-13">{{nFoundItem.street}}, {{nFoundItem.houseNumber}}, {{nFoundItem.cap}} {{nFoundItem.city}}</span></h6>
+        <div>
+          <div class="form-group">
+            <label>Change address</label>
+            <app-address-input (changed)="notFoundAddressChanged($event, nFoundItem)" [disabled]="latLngInputState[nFoundItem.id]" [_class]="'full-size-ac'" ></app-address-input>
+            <div *ngIf="errors['invalid-building-'+nFoundItem.id] && !latLngInputState[nFoundItem.id]" class="error-msg">Invalid Building Address</div>
           </div>
-          <div class="col-6 col-xs-12">
-            <input #lngInput [disabled]="!latLngInputState" type="text" class="form-control" placeholder="longitude">
+          <div class="form-group mb-1">
+            <input id="lat-lng-input-activate" (change)="latLngInputActivate($event, nFoundItem, latInput, lngInput)" type="checkbox"> &nbsp;
+            <label for="lat-lng-input-activate">Enter lat,lng instead </label>
+          </div>
+          <div class="row">
+            <div class="col-6 col-xs-12">
+              <input #latInput (change)="notFoundCoordinatesChanged($event, 'lat', nFoundItem)" [disabled]="!latLngInputState[nFoundItem.id]" type="text" class="form-control" placeholder="latitude">
+            </div>
+            <div class="col-6 col-xs-12">
+              <input #lngInput (change)="notFoundCoordinatesChanged($event, 'long', nFoundItem)" [disabled]="!latLngInputState[nFoundItem.id]" type="text" class="form-control" placeholder="longitude">
+            </div>
           </div>
         </div>
+        <hr>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close();fixLocation(locationInput, latInput, lngInput)" class="integraa-btn ml-2 float-right" >Esegui</button>
-        <button type="button" (click)="modal.close();skipLocatingItem()" class="integraa-btn integraa-btn-dark ml-2 float-right" >Skip</button>
+        <button type="button" (click)="modal.close();fixLocation()" class="integraa-btn ml-2 float-right" >Esegui</button>
+        <button type="button" (click)="modal.close();fixLocation(true)" class="integraa-btn integraa-btn-dark ml-2 float-right" >Skip</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template  #notFoundItemsWarnongModalRef let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <h6 class="mb-3">
+        <fa-icon class="text-warning notFoundItemsWarnongModalWarningIcon" [icon]="['fa','exclamation-triangle']"></fa-icon>
+      </h6>
+      <h6 class="text-center">Some not located items was found, are you sure you want to continue ?</h6>
+      <div class="btns-container mt-3">
+        <button type="button" (click)="modal.close();moveToInPlan(notFoundItemsWarnongModalRef, true)" class="integraa-btn integraa-btn-danger ml-2 float-right" >Esegui</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Close</button>
         <div class="clear-both"></div>
       </div>
     </div>

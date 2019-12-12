@@ -23,4 +23,8 @@ export class LoadingComponent implements OnInit {
     );
   }
 
+  floor(x) {
+    return Math.floor(x);
+  }
+
 }

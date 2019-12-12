@@ -8,8 +8,8 @@ import {ToPlanComponent} from './components/to-plan/to-plan.component';
 import {PreDispatchDataResolver} from './resolvers/pre-dispatch-data.resolver';
 
 const routes: Routes = [
-    {path: '', component: ScheduleComponent, children: [
-            {path: '', component: AddressesComponent, resolve: { data: PreDispatchDataResolver}},
+    {path: '', component: ScheduleComponent, resolve: { data: PreDispatchDataResolver}, children: [
+            {path: '', component: AddressesComponent},
             {path: 'parameters', component: ParametersComponent},
             {path: 'result', component: ResultComponent},
             {path: 'toPlan', component: ToPlanComponent},

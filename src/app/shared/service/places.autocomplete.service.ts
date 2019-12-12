@@ -40,32 +40,28 @@ export class PlacesAutocompleteService {
     }
 
     formattedAddressToObject(address: string): ACAddress {
-        let strict = true ;
         const address_array = address.split(',') ;
-        if (address_array.length < 4) {
-            strict = false ;
-        }
         if (address_array.length < 3) {
             return null ;
         }
-        const city_cap = address_array.length > 3 ? address_array[2].trim().split(' ') : address_array[1].trim().split(' ');
-        let cap: any = parseInt(city_cap[0], 10) ;
+        const city_cap = address_array[2].trim().split(' ');
+        let cap: any = parseInt(city_cap[0], 10) ? parseInt(city_cap[0], 10) : '' ;
         if (!cap) {
             cap = '' ;
-            strict = false ;
         } else {
             delete city_cap[0] ;
         }
         const city = city_cap.join(' ');
+
         return {
             text: address,
             hasObject: true,
             address: {
                 street: address_array[0].trim(),
-                houseNumber: address_array.length > 3 ? address_array[1].trim() : '',
+                houseNumber: address_array[1].trim(),
                 city: city.trim(),
                 cap: cap,
-                strict: strict
+                strict: (address_array[0].trim() && address_array[1].trim() && city.trim() && cap) ? true : false ,
             }
         };
     }

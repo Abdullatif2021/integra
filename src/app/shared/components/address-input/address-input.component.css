@@ -12,3 +12,12 @@
     background-color: #fff;
     height: 25px;
 }
+.full-size-ac{
+    border-radius: 4px;
+    height: 35px;
+    background: white;
+}
+.place-ac-input:disabled, .place-ac-input[readonly] {
+    background-color: #e9ecef !important;
+    opacity: 1;
+}

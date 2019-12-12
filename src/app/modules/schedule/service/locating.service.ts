@@ -24,64 +24,53 @@ export class LocatingService {
     }
 
     // output events .
-    relocate = new EventEmitter<BuildingLocationInterface>();
+    relocate = new EventEmitter<[BuildingLocationInterface]>();
     treeCreated = new EventEmitter<boolean>();
     // the located items
-    buildings = [] ;
+    buildings = <[BuildingLocationInterface]>[] ;
     // the items that no provider was able to locate
-    nfound = [] ;
+    nfound = <[BuildingLocationInterface]>[] ;
     // the items that was manually changed by the user and waiting to be relocated.
-    fixed = [] ;
+    fixed = <[BuildingLocationInterface]>[] ;
     // the pre dispatch that is being located
     preDispatch ;
+    processed = 0 ;
 
-    async fix(building: BuildingLocationInterface, address: string, lat: number, lng: number, skip = false) {
-        // define pseudo located building
-        const _recipient = <LocatedBuildingInterface>{id: building.id, name: null, is_fixed: true} ;
+    async fix(buildings: [BuildingLocationInterface], skip = false) {
+
         if (skip) {
-            // if the user wants to skip this building
-            // uncomment this when this feature is ready on the backend
-            // _recipient.is_fixed = false ;
-            // this.buildings.push(_recipient) ;
-        } else if (lat && lng) {
-            // if the user entered the lat,lng manually
-            _recipient.lat = lat ;
-            _recipient.long = lng ;
-            this.buildings.push(_recipient);
-        } else {
-            // if the user had entered a new address
-            const _address = address.split(',');
-            // the inputted address, can be a house number, street, cap... in this exact order
-            if (_address[0] && _address[0].trim()) {
-                building.street = _address[1].trim() ;
-            }
-            if (_address[1] && _address[1].trim()) {
-                building.houseNumber = _address[0].trim() ;
-            }
-            if (_address[2] && _address[2].trim()) {
-                building.cap = _address[2].trim() ;
-            }
-
-            // queue this building to be relocated.
-            this.fixed.push(building) ;
+            await this.createTree();
+            return this.snotifyService.success('Tree was created successfully', { showProgressBar: false});
         }
 
-        // remove the items that was skipped or manually located from the unlocated items
-        this.nfound = this.nfound.filter((elm) => elm.id !== building.id);
+        Object.keys(buildings).forEach((key) => {
+            if (buildings[key].lat && buildings[key].long) {
+                buildings[key].is_fixed = true ;
+                buildings[key].name = buildings[key].street ;
+                this.buildings.push(buildings[key]) ;
+            } else {
+                buildings[key].name = buildings[key].street ;
+                this.fixed.push(buildings[key]) ;
+            }
+        });
 
+        this.nfound = <[BuildingLocationInterface]>[] ;
         // if there is items waiting to be located when there is no more items waiting user action, start locating them
-        if (!this.nfound.length && this.fixed.length) {
+        if (this.fixed.length) {
             this.loadingService.setLoadingState({state: true, message: 'initializing...', progress: 0, autProgress: false});
-            await this.process(this.fixed);
+            this.processed = 0 ;
+            await this.process(this.fixed, this.fixed.length);
             this.loadingService.state(false);
-            this.fixed = [] ;
+            this.fixed = <[BuildingLocationInterface]>[] ;
         }
 
-        // if there is more items waiting user action, dispatch an event informing other components.
-        if (this.nfound.length) {
-            this.relocate.emit(this.nfound[0]) ;
-        } else if (this.buildings.length) { // else if there is new located items, save them
+        // if there is new located items, save them
+        if (this.buildings.length) {
             await this.save();
+        }
+
+        if (this.nfound.length) {
+            this.relocate.emit(this.nfound);
         }
 
         // if the process is done, create the tree.
@@ -91,28 +80,38 @@ export class LocatingService {
         }
     }
 
-    async startLocating(preDispatch) {
+    async startLocating(preDispatch, total) {
+
         let result = false ;
         let page = 0;
-        this.buildings = [] ;
-        this.nfound = [] ;
-        this.fixed = [] ;
+        this.processed = 0 ;
+        this.buildings = <[BuildingLocationInterface]>[] ;
+        this.nfound = <[BuildingLocationInterface]>[] ;
+        this.fixed = <[BuildingLocationInterface]>[] ;
 
         this.preDispatch = preDispatch ;
         this.loadingService.setLoadingState({state: true, message: 'initializing...', progress: 0, autProgress: false});
+
+        // start locating .
         while (true) {
             this.loadingService.message('Fetching routes data to process');
             const response = <ApiResponseInterface> await this.getPreDispatchToLocateBuildings(preDispatch, ++page).toPromise();
-            if (response.statusCode !== 200 || ! await this.process(response.data) ) {
+            // break when the api returns error, or there is no more items to process
+            if (response.statusCode !== 200 || ! await this.process(response.data, total) ) {
                 break ;
             }
         }
+
+        // remove the loader.
         this.loadingService.state(false);
-        this.buildings = [] ;
+        // reset buildings to start the fix not found process .
+        this.buildings = <[BuildingLocationInterface]>[] ;
         if (this.nfound.length) {
-            this.relocate.emit(this.nfound[0]) ;
+            // emit fix the not found items event.
+            this.relocate.emit(this.nfound) ;
         }
 
+        // if every thing is done, create the tree.
         if (!this.buildings.length && !this.fixed.length && !this.nfound.length) {
             result = await this.createTree();
             this.snotifyService.success('All buildings are localized !', { showProgressBar: false});
@@ -121,10 +120,9 @@ export class LocatingService {
         return result ;
     }
 
-    async process(buildings) {
+    async process(buildings, total) {
 
         if (!buildings.length) { return ; }
-        let processed = 0 ;
         let result ;
 
         for (let i = 0; i < buildings.length; ++i) {
@@ -142,32 +140,31 @@ export class LocatingService {
             } else {
                 this.nfound.push(buildings[i]);
             }
-            this.loadingService.progress((++processed / buildings.length) * 100);
+            this.loadingService.progress((++this.processed / total) * 100);
         }
         this.loadingService.message(`Saving data...`);
-        console.log(this.buildings);
         await this.save();
         return true ;
     }
 
     async locateAddress(address): Promise<LocatedBuildingInterface> {
-      return new Promise<LocatedBuildingInterface>(async (resolve, reject) => {
-          this.loadingService.setLoadingState({
+        return new Promise<LocatedBuildingInterface>(async (resolve, reject) => {
+            this.loadingService.setLoadingState({
                 state: true, message: `Locating '${address.street}, ${address.houseNumber}, ${address.cap} ${address.city}'`,
                 progress: 0, autProgress: true
-              });
-          let result: LocatedBuildingInterface ;
-          if ( result = await this.tuttocittaGeocodeService.locate(address) ) {
-              resolve(result) ;
-          } else if ( result = await this.googleGeocodeService.locate(address) ) {
-              resolve(result) ;
-          } else if ( result = await this.mapBoxGeocodeService.locate(address)) {
-              resolve(result) ;
-          } else {
-              reject(null) ;
-          }
-          this.loadingService.state(false);
-      });
+            });
+            let result: LocatedBuildingInterface ;
+            if ( result = await this.tuttocittaGeocodeService.locate(address) ) {
+                resolve(result) ;
+            } else if ( result = await this.googleGeocodeService.locate(address) ) {
+                resolve(result) ;
+            } else if ( result = await this.mapBoxGeocodeService.locate(address)) {
+                resolve(result) ;
+            } else {
+                reject(null) ;
+            }
+            this.loadingService.state(false);
+        });
     }
 
     async save(): Promise<any> {
@@ -177,7 +174,7 @@ export class LocatingService {
             }
             this.http.post<ApiResponseInterface>(AppConfig.endpoints.updateStreetsData, {'streets': this.buildings})
                 .subscribe(
-                    data => { this.buildings = []; resolve(data) ; },
+                    data => { this.buildings = <[BuildingLocationInterface]>[]; resolve(data) ; },
                     error => { reject(error) ; }
                 );
         });
@@ -206,3 +203,4 @@ export class LocatingService {
     }
 
 }
+

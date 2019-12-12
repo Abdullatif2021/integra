@@ -5,15 +5,18 @@
     <div class="parameters-section-title">Impostazioni Generali</div>
     <div class="row parameter-item">
       <div class="col-5"> <label>Giorno di Partenza</label> </div>
-      <div class="col-7"> <input type="text" class="parameter-text-input"> </div>
+      <div class="col-7"> <input type="text" ngbDatepicker #timeOfServiceDP="ngbDatepicker" (focus)="timeOfServiceDP.toggle()" placeholder="YYYY-MM-DD" class="parameter-text-input"> </div>
     </div>
     <div class="row parameter-item">
       <div class="col-5"> <label>Ora di Partenza</label> </div>
-      <div class="col-7"> <input type="text" class="parameter-text-input"> </div>
+      <div class="col-7">
+        <input type="text" placeholder="H:i" (change)="formatTime($event)">
+      </div>
     </div>
     <div class="row parameter-item">
       <div class="col-5"> <label>Tempo di Servizio</label> </div>
       <div class="col-7"> <input type="text" class="parameter-text-input"> </div>
+
     </div>
     <div class="row parameter-item">
       <div class="col-5"> <label>Tempo di pauza</label> </div>

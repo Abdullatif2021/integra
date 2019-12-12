@@ -81,3 +81,10 @@
     -webkit-transform: translate3d(-50%, -50%, 0);
     transform: translate3d(-50%, -50%, 0);
 }
+.progress-label{
+    top: calc(40% - 9px);
+    position: absolute;
+    color: white;
+    left: 50%;
+    font-size: 13px;
+}

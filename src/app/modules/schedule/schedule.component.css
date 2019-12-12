@@ -58,3 +58,17 @@
     margin: 10px;
     cursor: pointer;
 }
+
+.error-msg{
+    font-size: 13px;
+    color: #ff5722;
+}
+
+.notFoundItemsWarnongModalWarningIcon{
+    font-size: 58px;
+    margin: auto;
+    display: block;
+    text-align: center;
+    padding: 20px 0px;
+    color: #F44336!important;
+}
