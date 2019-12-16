@@ -5,26 +5,32 @@
     <div class="parameters-section-title">Impostazioni Generali</div>
     <div class="row parameter-item">
       <div class="col-5"> <label>Giorno di Partenza</label> </div>
-      <div class="col-7"> <input type="text" ngbDatepicker #timeOfServiceDP="ngbDatepicker" (focus)="timeOfServiceDP.toggle()" placeholder="YYYY-MM-DD" class="parameter-text-input"> </div>
+      <div class="col-7"> <input  [(ngModel)]="data.departure_date" type="text" ngbDatepicker #timeOfServiceDP="ngbDatepicker" (focus)="timeOfServiceDP.toggle()" placeholder="YYYY-MM-DD" class="parameter-text-input"> </div>
     </div>
     <div class="row parameter-item">
       <div class="col-5"> <label>Ora di Partenza</label> </div>
       <div class="col-7">
-        <input type="text" placeholder="H:i" (change)="formatTime($event)">
+        <input type="text" [(ngModel)]="data.departure_time" class="parameter-text-input parameter-small-input" placeholder="H:i" (change)="formatTime($event.target.value, 'departure_time')">
       </div>
     </div>
     <div class="row parameter-item">
-      <div class="col-5"> <label>Tempo di Servizio</label> </div>
-      <div class="col-7"> <input type="text" class="parameter-text-input"> </div>
-
+      <div class="col-5"> <label>Tempo di Servizio (single)</label> </div>
+      <div class="col-7"> <ng-select class="integraa-select parameter-select-input" [bindLabel]="'label'" [clearable]="false" [(ngModel)]="data.service_time_single" [items]="options.serviceTimeOptions"></ng-select> </div>
+    </div>
+    <div class="row parameter-item">
+      <div class="col-5"> <label>Tempo di Servizio (multi)</label> </div>
+      <div class="col-7"> <ng-select class="integraa-select parameter-select-input" [bindLabel]="'label'" [clearable]="false" [(ngModel)]="data.service_time_multiple" [items]="options.serviceTimeOptions"></ng-select> </div>
     </div>
     <div class="row parameter-item">
       <div class="col-5"> <label>Tempo di pauza</label> </div>
-      <div class="col-7"> <input type="text" class="parameter-number-input"> Min.</div>
+      <div class="col-7">
+        Da : <input type="text" [(ngModel)]="data.pause_time_start" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_start')" >
+        A : <input type="text" [(ngModel)]="data.pause_time_end" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_end')" >
+      </div>
     </div>
     <div class="row parameter-item mt-0">
       <div class="col-5 pt-2"> <label>Modalità di viaggio</label> </div>
-      <div class="col-7"> <ng-select class="integraa-select parameter-select-input"></ng-select> </div>
+      <div class="col-7"> <ng-select [bindLabel]="'label'" [clearable]="false" [(ngModel)]="data.travel_mode" [items]="options.travelModes" class="integraa-select parameter-select-input"></ng-select></div>
     </div>
   </div>
 
@@ -35,19 +41,22 @@
     <div class="parameters-section-title">Postini multipli</div>
     <div class="row parameter-item mt-0">
       <div class="col-5 pt-2"> <label>Numero di Postini</label> </div>
-      <div class="col-7"> <ng-select class="integraa-select parameter-select-input"></ng-select> </div>
+      <div class="col-7"> <input [(ngModel)]="data.post_man_number" min="0" type="number" (change)="validateNumber($event.target.value, 'post_man_number', 0)"class="parameter-number-input"> postino. </div>
     </div>
     <div class="row parameter-item">
       <div class="col-5"> <label>Ore di lavoro al gg.</label> </div>
-      <div class="col-7"> <input type="text" class="parameter-number-input"> Ore. <input type="text" class="parameter-number-input"> Min.</div>
+      <div class="col-7">
+        <input type="text" [(ngModel)]="data.hours_per_day_hour" type="number" min="0" max="24" (change)="validateNumber($event.target.value, 'hours_per_day_hour', 0, 24, 2)" class="parameter-number-input"> Ore.
+        <input type="text" [(ngModel)]="data.hours_per_day_minute" type="number" min="0" max="60" (change)="validateNumber($event.target.value, 'hours_per_day_minute', 0, 60, 2)" class="parameter-number-input"> Min.
+      </div>
     </div>
     <div class="row parameter-item">
       <div class="col-5"> <label>Massimo di prodotti al gg.</label> </div>
-      <div class="col-7"> <input type="text" class="parameter-text-input"> </div>
+      <div class="col-7"> <input [(ngModel)]="data.max_product" type="text" type="number" min="0" (change)="validateNumber($event.target.value, 'max_product', 0)" class="parameter-text-input parameter-number-input"> prodotti. </div>
     </div>
     <div class="row parameter-item mt-0">
       <div class="col-5 pt-2"> <label>Consenti deviazione</label> </div>
-      <div class="col-7"><ng-select class="integraa-select parameter-select-input"></ng-select></div>
+      <div class="col-7"><ng-select class="integraa-select parameter-select-input" [(ngModel)]="data.deviation" [clearable]="false" [items]="options.devision"></ng-select></div>
     </div>
   </div>
 
@@ -57,15 +66,15 @@
     <div class="parameters-section-title">Opzioni di Ottimizzazione</div>
     <div class="row parameter-item mt-0">
       <div class="col-5 pt-2"> <label>Obiettivo</label> </div>
-      <div class="col-7"> <ng-select class="integraa-select parameter-select-input"></ng-select> </div>
+      <div class="col-7"> <ng-select [(ngModel)]="data.target" [clearable]="false" [bindLabel]="'label'" [items]="options.target" class="integraa-select parameter-select-input"></ng-select> </div>
     </div>
     <div class="row parameter-item mt-0">
       <div class="col-5 pt-2"> <label>Città mischiati</label> </div>
-      <div class="col-7"><ng-select class="integraa-select parameter-select-input"></ng-select></div>
+      <div class="col-7"><ng-select [(ngModel)]="data.mixed_cities" [clearable]="false" [bindLabel]="'label'" [items]="options.mixedCities" class="integraa-select parameter-select-input"></ng-select></div>
     </div>
     <div class="row parameter-item mt-0">
       <div class="col-5 pt-2"> <label>Percorso inizia</label> </div>
-      <div class="col-7"><ng-select class="integraa-select parameter-select-input"></ng-select></div>
+      <div class="col-7"><ng-select [(ngModel)]="data.path_start" [clearable]="false" [bindLabel]="'label'" [items]="options.pathStart" class="integraa-select parameter-select-input"></ng-select></div>
     </div>
   </div>
 
@@ -82,7 +91,7 @@
   <!-- Submit section -->
 
   <div class="submit-section mt-3">
-    <button class="integraa-btn float-right">Pianifica</button>
+    <button class="integraa-btn float-right" (click)="save()">Pianifica</button>
     <div class="clear-both"></div>
   </div>
 </div>

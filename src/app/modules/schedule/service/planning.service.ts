@@ -2,7 +2,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs/index';
-import { AppConfig } from '../config/app.config';
+import { AppConfig } from '../../../config/app.config';
 import {SnotifyService} from 'ng-snotify';
 import {reject} from 'q';
 
@@ -27,7 +27,6 @@ export class PlanningService {
     moveItemsToInPlaning(modalRef, force) {
         this.moveItemsToInPlaningChanges.emit({modalRef: modalRef, force: force}) ;
     }
-
 
     sendMoveToInPlanningRequest(preDispatchId, data, confirm = false) {
         data = {
@@ -56,14 +55,14 @@ export class PlanningService {
         const promise = new Promise(function(resolve, reject) {
             method.subscribe(
                 data => {
-                    if (data.success) {
+                    if (data && data.success) {
                         let body = 'Success' ;
                         if (typeof success === 'function') {
                             body = success(data);
                         }
                         resolve({body: body, config: { showProgressBar: false, timeout: 3000 }});
                     } else {
-                        reject({body: data.status, config: { showProgressBar: false, timeout: 3000 }});
+                        reject({body: data ? data.status : 'Something went wrong', config: { showProgressBar: false, timeout: 3000 }});
                     }
                 },
                 error => {
@@ -77,6 +76,18 @@ export class PlanningService {
         });
         this.snotifyService.async(msg, promise, { showProgressBar: true, timeout: 10000 });
     }
+
+    sendSaveParametersRequest(data) {
+        return this.http.post<any>(AppConfig.endpoints.changePreDispatchParameters, data).pipe(
+            catchError(this.handleError)
+        );
+    }
+    async saveParameters(data, success) {
+        await this.run(this.sendSaveParametersRequest(data), 'Saving', success, () => {
+            console.log('error');
+        });
+    }
+
 
     handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {

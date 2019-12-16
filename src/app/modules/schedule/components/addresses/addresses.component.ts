@@ -9,7 +9,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AddressesActionsService} from '../../service/addresses.actions.service';
 import {SnotifyService} from 'ng-snotify';
 import {ACAddress} from '../../../../core/models/address.interface';
-import {PlanningService} from '../../../../service/planning.service';
+import {PlanningService} from '../../service/planning.service';
 
 @Component({
     selector: 'app-addresses',

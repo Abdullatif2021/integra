@@ -35,6 +35,8 @@ import { ToPlanComponent } from './components/to-plan/to-plan.component';
 import {AddressesActionsService} from './service/addresses.actions.service';
 import {PreDispatchDataResolver} from './resolvers/pre-dispatch-data.resolver';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {PlanningService} from './service/planning.service';
 
 @NgModule({
   imports: [
@@ -51,7 +53,9 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     InfiniteScrollModule,
     DndModule,
     ContextMenuModule,
-    NgbModule
+    NgbModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   declarations: [
       ScheduleComponent,
@@ -72,6 +76,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
       ContextMenuService,
       AddressesActionsService,
       PreDispatchDataResolver,
+      PlanningService
   ],
 
 

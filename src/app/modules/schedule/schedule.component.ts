@@ -5,7 +5,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {BuildingLocationInterface} from '../../core/models/building.interface';
-import {PlanningService} from '../../service/planning.service';
+import {PlanningService} from './service/planning.service';
 
 @Component({
   selector: 'app-schedules',

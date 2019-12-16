@@ -21,5 +21,8 @@
     width: 75%;
 }
 .parameter-item{
-    margin-top: 10px;
+    margin-top: 11px;
+}
+.parameter-small-input {
+    width: 80px;
 }
