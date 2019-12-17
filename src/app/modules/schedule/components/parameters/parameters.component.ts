@@ -58,7 +58,7 @@ export class ParametersComponent implements OnInit {
         hours_per_day_hour: '',
         hours_per_day_minute: '',
         max_product: '',
-    }
+    };
 
     preDispatch;
     preDispatchData;
@@ -71,7 +71,7 @@ export class ParametersComponent implements OnInit {
         departure_date = departure_date ?
             <NgbDate>{year: parseInt(departure_date[0], 10), month: parseInt(departure_date[1], 10),
             day: parseInt(departure_date[2], 10) } : false;
-        const hours_per_day = this.preDispatchData.hours_per_day ? this.preDispatchData.hours_per_day.split(':') : [] ;
+        const hours_per_day = this.preDispatchData.hours_per_day ? '' + this.preDispatchData.hours_per_day.split('.') : [] ;
         this.data = {
             service_time_single: this.findOption('service_time_single', this.options.serviceTimeOptions),
             service_time_multiple: this.findOption('service_time_multiple', this.options.serviceTimeOptions),
@@ -93,7 +93,6 @@ export class ParametersComponent implements OnInit {
 
     findOption(option, options) {
         for (const [key, _option] of Object.entries(options)) {
-            console.log(_option, _option['value'], this.preDispatchData[option], option)
             if (_option['value'] === this.preDispatchData[option]) {
                 return _option ;
             }
@@ -130,9 +129,9 @@ export class ParametersComponent implements OnInit {
         const data: any = {...this.data} ;
         data['departure_date'] = (data.departure_date ? (typeof data.departure_date === 'object' ?
             Object.values(data.departure_date).join('-') :  data.departure_date) : '') +
-            (data.departure_time ? ' ' + data.departure_time : '')
-        data['hours_per_day'] = (data.hours_per_day_hour ? parseInt(data.hours_per_day_hour, 10) * 60 : 0 ) +
-            (data.hours_per_day_minute ? parseInt(data.hours_per_day_minute, 10) : 0)
+            (data.departure_time ? ' ' + data.departure_time : '');
+        data['hours_per_day'] = (data.hours_per_day_hour ? parseInt(data.hours_per_day_hour, 10)  : 0 ) +
+            (data.hours_per_day_minute ? parseInt(data.hours_per_day_minute, 10) / Math.pow(10, data.hours_per_day_minute.length) : 0);
         data['pre_dispatch_id'] = this.preDispatch ;
         for (const [key, value] of Object.entries(data)) {
             if (typeof value === 'object') {
@@ -143,6 +142,7 @@ export class ParametersComponent implements OnInit {
     }
 
     async save() {
+        // console.log(this.getData());
         await this.planningService.saveParameters(this.getData(), () => 'Data Saved !');
     }
 

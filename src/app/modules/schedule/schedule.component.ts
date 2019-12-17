@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LocatingService} from './service/locating.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -6,101 +6,125 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {BuildingLocationInterface} from '../../core/models/building.interface';
 import {PlanningService} from './service/planning.service';
+import {MapService} from './service/map.service';
+import {MapMarker} from '../../core/models/map-marker.interface';
 
 @Component({
-  selector: 'app-schedules',
-  templateUrl: './schedule.component.html',
-  styleUrls: ['./schedule.component.css']
+    selector: 'app-schedules',
+    templateUrl: './schedule.component.html',
+    styleUrls: ['./schedule.component.css']
 })
 export class ScheduleComponent implements OnInit, OnDestroy {
 
-  unsubscribe: Subject<void> = new Subject();
-  preDispatch: number ;
-  @ViewChild('modalRef') modalRef;
-  nFoundItems = <[BuildingLocationInterface]>[] ;
-  fixedItems = {} ;
-  errors = {} ;
-  latLngInputState = [] ;
-  preDispatchData: any ;
-  constructor(
-      private router: Router,
-      private route: ActivatedRoute,
-      private locatingService: LocatingService,
-      private modalService: NgbModal,
-      private planningService: PlanningService
+    unsubscribe: Subject<void> = new Subject();
+    preDispatch: number;
+    @ViewChild('modalRef') modalRef;
+    nFoundItems = <[BuildingLocationInterface]>[];
+    fixedItems = {};
+    errors = {};
+    latLngInputState = [];
+    preDispatchData: any;
+    markers: [MapMarker];
 
-  ) {
-      this.preDispatch = this.route.snapshot.params.id;
-      this.preDispatchData = this.route.snapshot.data.data;
-  }
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        private locatingService: LocatingService,
+        private modalService: NgbModal,
+        private planningService: PlanningService,
+        private mapService: MapService,
+    ) {
+        this.preDispatch = this.route.snapshot.params.id;
+        this.preDispatchData = this.route.snapshot.data.data;
+    }
 
-  ngOnInit() {
-    this.locatingService.relocate.pipe(takeUntil(this.unsubscribe)).subscribe(
-        nFoundItems => {
-            this.nFoundItems = nFoundItems ;
-            this.modalService.open(this.modalRef, { windowClass: 'animated slideInDown'}) ;
+    latitude = 40.8440337;
+    longitude = 14.3435834;
+    zoom = 11;
+
+    ngOnInit() {
+        this.locatingService.relocate.pipe(takeUntil(this.unsubscribe)).subscribe(
+            nFoundItems => {
+                this.nFoundItems = nFoundItems;
+                this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown'});
+            }
+        );
+        this.mapService.markersChanges.subscribe(
+            data => {this.markers = data ;}
+        );
+    }
+
+    activeTab(route) {
+        return route === this.router.url;
+    }
+
+    async locate() {
+        const result: any = await this.locatingService.startLocating(this.preDispatch, this.preDispatchData.notFixedProductCount);
+        if (result && result.data && result.data.preDispatch) {
+            this.planningService.changePreDispatchData(result.data.preDispatch);
         }
-    );
-  }
+    }
 
-  activeTab(route) {
-    return route === this.router.url;
-  }
+    moveToInPlan(modalRef, force = false) {
+        this.planningService.moveItemsToInPlaning(modalRef, force);
+    }
 
-  async locate() {
-      const result: any = await this.locatingService.startLocating(this.preDispatch, this.preDispatchData.notFixedProductCount);
-      if (result && result.data && result.data.preDispatch) {
-          this.planningService.changePreDispatchData(result.data.preDispatch);
-      }
-  }
+    latLngInputActivate(event, nFoundItem, latInput, lngInput) {
+        nFoundItem.lat = null;
+        nFoundItem.long = null;
+        latInput.value = '';
+        lngInput.value = '';
+        this.latLngInputState[nFoundItem.id] = event.target.checked;
+    }
 
-  moveToInPlan(modalRef, force = false) {
-      this.planningService.moveItemsToInPlaning(modalRef, force);
-  }
+    fixLocation(skip = false) {
+        this.locatingService.fix(<[BuildingLocationInterface]>this.fixedItems, skip);
+        this.fixedItems = <[BuildingLocationInterface]>[];
+    }
 
-  latLngInputActivate(event, nFoundItem, latInput, lngInput) {
-      nFoundItem.lat = null ;
-      nFoundItem.long = null ;
-      latInput.value = '' ;
-      lngInput.value = '' ;
-      this.latLngInputState[nFoundItem.id] = event.target.checked;
-  }
+    notFoundAddressChanged(data, item) {
+        console.log(data.address, item);
 
-  fixLocation(skip = false) {
-      this.locatingService.fix(<[BuildingLocationInterface]>this.fixedItems, skip) ;
-      this.fixedItems = <[BuildingLocationInterface]>[] ;
-  }
+        if (!data.hasObject || !data.address.strict) {
+            return this.errors['invalid-building-' + item.id] = true;
+        } else {
+            this.errors['invalid-building-' + item.id] = false;
+        }
+        item.street = data.address.street;
+        item.cap = data.address.cap;
+        item.city = data.address.city;
+        item.houseNumber = data.address.houseNumber;
+        item.lat = data.address.lat;
+        item.long = data.address.lng;
 
-  notFoundAddressChanged(data, item) {
-      console.log(data.address, item) ;
+        this.fixedItems[item.id] = item;
+    }
 
-      if (!data.hasObject || !data.address.strict) {
-          return this.errors['invalid-building-' + item.id] = true ;
-      } else {
-          this.errors['invalid-building-' + item.id] = false ;
-      }
-      item.street = data.address.street ;
-      item.cap = data.address.cap ;
-      item.city = data.address.city ;
-      item.houseNumber = data.address.houseNumber ;
-      item.lat = data.address.lat ;
-      item.long = data.address.lng ;
+    notFoundCoordinatesChanged(event, type, item) {
+        item[type] = event.target.value;
+        this.fixedItems[item.id] = item;
+    }
 
-      this.fixedItems[item.id] = item ;
-  }
+    // skipLocatingItem() {
+    //     this.locatingService.fix(this.nFoundItem, null, null, null, true);
+    // }
 
-  notFoundCoordinatesChanged(event, type, item) {
-      item[type] = event.target.value ;
-      this.fixedItems[item.id] = item ;
-  }
+    navigateMap(event) {
+        if (!event.hasObject || !event.address.lat || !event.address.lng) {
+            return ;
+        }
+        this.latitude = event.address.lat ;
+        this.longitude = event.address.lng ;
+        this.zoom = 15.5;
+    }
 
-  // skipLocatingItem() {
-  //     this.locatingService.fix(this.nFoundItem, null, null, null, true);
-  // }
+    mapClick(event) {
+        this.mapService.mapClicked(event);
+    }
 
-  ngOnDestroy() {
-      this.unsubscribe.next();
-      this.unsubscribe.complete();
-  }
+    ngOnDestroy() {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+    }
 
 }

@@ -8,6 +8,7 @@ import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import {LoadingBarHttpClientModule} from '@ngx-loading-bar/http-client';
 import {SnotifyModule, SnotifyService, ToastDefaults} from 'ng-snotify';
+import {IntegraaPreloadingStrategy} from './core/strategy/integraa-preloading.strategy';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {SnotifyModule, SnotifyService, ToastDefaults} from 'ng-snotify';
   ],
   providers: [
       { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
-      SnotifyService
+      SnotifyService,
+      IntegraaPreloadingStrategy
   ],
   bootstrap: [AppComponent]
 })

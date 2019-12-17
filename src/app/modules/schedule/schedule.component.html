@@ -23,7 +23,16 @@
       <router-outlet></router-outlet>
     </div>
     <div class="col-8 v-wide-col">
-      <agm-map class="map" [latitude]="40.8440337" [longitude]="14.3435834" [zoom]="11"></agm-map>
+      <div class="map-container">
+        <div class="map-search">
+          <app-address-input (changed)="navigateMap($event)" [_class]="'bg-white'"></app-address-input>
+        </div>
+        <agm-map class="map" (mapClick)="mapClick($event)" [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+          <ng-container *ngFor="let marker of markers">
+            <agm-marker [latitude]="marker.lat" [longitude]="marker.lng" [label]="marker.label"></agm-marker>
+          </ng-container>
+        </agm-map>
+      </div>
     </div>
   </div>
 </div>

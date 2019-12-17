@@ -37,6 +37,7 @@ import {PreDispatchDataResolver} from './resolvers/pre-dispatch-data.resolver';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PlanningService} from './service/planning.service';
+import {MapService} from './service/map.service';
 
 @NgModule({
   imports: [
@@ -76,7 +77,8 @@ import {PlanningService} from './service/planning.service';
       ContextMenuService,
       AddressesActionsService,
       PreDispatchDataResolver,
-      PlanningService
+      PlanningService,
+      MapService
   ],
 
 

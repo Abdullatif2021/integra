@@ -63,8 +63,8 @@
   </div>
 
 </div>
-<!-- Items  -->
 
+<!-- Items  -->
 
 <ng-template  let-item="item" let-idx="idx" let-next="next" #simpleItem>
   <ng-container *ngIf="item.skeleton; else actualItem">
@@ -96,7 +96,7 @@
             <div class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
               <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rename</a>
               <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingAddressContainer, [EditBuildingLatLngContainer])">Change Address</a>
-              <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">Edit Location</a>
+              <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="changeLocationOnMap(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">Edit Location</a>
             </div>
           </div>
           <div class="clear-both"></div>
@@ -110,8 +110,8 @@
           <div #EditBuildingLatLngContainer class="hidden">
             <div class="edit-building-address-container">
               <div class="edit-building-address-input d-flex">
-                <input type="text" #EditBuildingLatInput placeholder="Lat">
-                <input type="text" #EditBuildingLngInput placeholder="Lng">
+                <input type="text" #EditBuildingLatInput placeholder="Lat" class="edit-location-lat-input">
+                <input type="text" #EditBuildingLngInput placeholder="Lng" class="edit-location-lng-input">
               </div>
               <div class="edit-building-address-submit"><fa-icon class="small-circle-btn" (click)="editBuildingLocation(EditBuildingLatInput, EditBuildingLngInput, item, EditBuildingLatLngContainer)" [icon]="['fa','check-circle']"></fa-icon></div>
             </div>

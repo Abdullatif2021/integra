@@ -10,6 +10,7 @@ import {AddressesActionsService} from '../../service/addresses.actions.service';
 import {SnotifyService} from 'ng-snotify';
 import {ACAddress} from '../../../../core/models/address.interface';
 import {PlanningService} from '../../service/planning.service';
+import {MapService} from '../../service/map.service';
 
 @Component({
     selector: 'app-addresses',
@@ -27,6 +28,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
         private addressesActionsService: AddressesActionsService,
         private snotifyService: SnotifyService,
         private planningService: PlanningService,
+        private mapService: MapService
     ) {
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data ;
@@ -503,6 +505,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
             data => {
                 latInput.value = '' ;
                 lngInput.value = '' ;
+                this.mapService.removeMarker('EditLocationMarker');
+                this.mapService.onClick(null);
                 this.snotifyService.success('Coordinates Were Changed successfully', {showProgressBar: false});
             },
             error => {
@@ -580,6 +584,21 @@ export class AddressesComponent implements OnInit, OnDestroy {
 
     async openModal(modal) {
         this.modalService.open(modal);
+    }
+
+    changeLocationOnMap(element, hideElements = []) {
+        this.showElement(element, hideElements);
+        this.mapService.onClick((event: any) => {
+            let marker = this.mapService.getMarker('EditLocationMarker');
+            if (!marker) {
+                marker = this.mapService.createMarker('EditLocationMarker', event.coords.lat, event.coords.lng, '');
+            } else {
+                marker.lat = event.coords.lat ;
+                marker.lng = event.coords.lng ;
+            }
+            element.querySelector('.edit-location-lat-input').value = event.coords.lat ;
+            element.querySelector('.edit-location-lng-input').value = event.coords.lng ;
+        });
     }
 
     // View Related Methods

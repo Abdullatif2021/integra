@@ -14,10 +14,7 @@ export class PreDispatchDataResolver implements Resolve<any> {
     ) {
     }
 
-    resolve(
-        route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot
-    ): Observable<any> | Promise<any> | any {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
         return new Promise(async (resolve, reject) => {
             await this.placesAutocompleteService.loadAutoComplete();
             this.preDispatchService.getPreDispatchData(route.paramMap.get('id')).subscribe(

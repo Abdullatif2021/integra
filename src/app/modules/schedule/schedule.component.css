@@ -72,3 +72,11 @@
     padding: 20px 0px;
     color: #F44336!important;
 }
+.map-search{
+    position: absolute;
+    z-index: 999;
+    width: 250px;
+    top: 5px;
+    left: 10px;
+    opacity: 0.9;
+}
