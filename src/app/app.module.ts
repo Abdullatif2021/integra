@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import {LoadingBarHttpClientModule} from '@ngx-loading-bar/http-client';
 import {SnotifyModule, SnotifyService, ToastDefaults} from 'ng-snotify';
 import {IntegraaPreloadingStrategy} from './core/strategy/integraa-preloading.strategy';
+import {BackProcessingService} from './service/back-processing.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import {IntegraaPreloadingStrategy} from './core/strategy/integraa-preloading.st
   providers: [
       { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
       SnotifyService,
-      IntegraaPreloadingStrategy
+      IntegraaPreloadingStrategy,
+      BackProcessingService
   ],
   bootstrap: [AppComponent]
 })

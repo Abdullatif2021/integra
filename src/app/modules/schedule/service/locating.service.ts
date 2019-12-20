@@ -57,7 +57,7 @@ export class LocatingService {
         this.nfound = <[BuildingLocationInterface]>[] ;
         // if there is items waiting to be located when there is no more items waiting user action, start locating them
         if (this.fixed.length) {
-            this.loadingService.setLoadingState({state: true, message: 'initializing...', progress: 0, autProgress: false});
+            this.loadingService.setLoadingState({state: true, message: 'initializing...', progress: 0, autProgress: false, hide_btn: true});
             this.processed = 0 ;
             await this.process(this.fixed, this.fixed.length);
             this.loadingService.state(false);
@@ -90,8 +90,7 @@ export class LocatingService {
         this.fixed = <[BuildingLocationInterface]>[] ;
 
         this.preDispatch = preDispatch ;
-        this.loadingService.setLoadingState({state: true, message: 'initializing...', progress: 0, autProgress: false});
-
+        this.loadingService.setLoadingState({state: true, message: 'initializing...', progress: 0, autProgress: false, hide_btn: true});
         // start locating .
         while (true) {
             this.loadingService.message('Fetching routes data to process');
@@ -200,6 +199,10 @@ export class LocatingService {
     getPreDispatchToLocateBuildings(preDispatch, page = 1): Observable<{} | ApiResponseInterface> {
         const options = { params: new HttpParams().set('page', '' + page)};
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchToLocateProducts(preDispatch), options);
+    }
+
+    group(preDispatch){
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.groupProducts(preDispatch), {});
     }
 
 }

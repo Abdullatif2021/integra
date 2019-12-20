@@ -6,6 +6,9 @@
   </div>
   <span class="progress-label" *ngIf="state.progress">{{floor(state.progress)+'%'}}</span>
   <div class="loading-message">{{state.message}}</div>
+
+
+  <div class="hide-btn-container" *ngIf="state.hide_btn"><button class="integraa-btn hide-btn" (click)="hide()">Hide</button></div>
 </div>
 
 

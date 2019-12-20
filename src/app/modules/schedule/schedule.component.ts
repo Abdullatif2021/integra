@@ -8,6 +8,9 @@ import {BuildingLocationInterface} from '../../core/models/building.interface';
 import {PlanningService} from './service/planning.service';
 import {MapService} from './service/map.service';
 import {MapMarker} from '../../core/models/map-marker.interface';
+import {SnotifyService} from 'ng-snotify';
+import {BackProcessingService} from '../../service/back-processing.service';
+import {LoadingService} from '../../service/loading.service';
 
 @Component({
     selector: 'app-schedules',
@@ -33,6 +36,9 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private planningService: PlanningService,
         private mapService: MapService,
+        private snotifyService: SnotifyService,
+        private backProcessingService: BackProcessingService,
+        private loadingService: LoadingService,
     ) {
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data;
@@ -59,10 +65,26 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     async locate() {
-        const result: any = await this.locatingService.startLocating(this.preDispatch, this.preDispatchData.notFixedProductCount);
-        if (result && result.data && result.data.preDispatch) {
-            this.planningService.changePreDispatchData(result.data.preDispatch);
+        if (this.backProcessingService.isRunning('locating')) {
+            return this.loadingService.state(true);
         }
+        this.backProcessingService.run('locating', async() => {
+            const result: any = await this.locatingService.startLocating(this.preDispatch, this.preDispatchData.notFixedProductCount);
+            if (result && result.data && result.data.preDispatch) {
+                this.planningService.changePreDispatchData(result.data.preDispatch);
+            }
+        });
+    }
+    group() {
+        this.locatingService.group(this.preDispatch).subscribe(
+            data => {
+                this.snotifyService.success('Products Grouped Successfully', {showProgressBar: false});
+                this.preDispatchData.status = 'in_planning' ;
+            },
+            error => {
+                this.snotifyService.error('Something went wrong', {showProgressBar: false});
+            }
+        );
     }
 
     moveToInPlan(modalRef, force = false) {

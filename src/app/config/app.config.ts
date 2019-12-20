@@ -48,7 +48,8 @@ export const AppConfig = {
         editEndPoint: `${api_url}/api/endPoint/update`,
         editBuildingAddress: `${api_url}/api/preDispatch/product/updateLocation`,
         moveToInPlanning: `${api_url}/api/preDispatch/toPlanning`,
-        changePreDispatchParameters: `${api_url}/api/preDispatch/update`
+        changePreDispatchParameters: `${api_url}/api/preDispatch/update`,
+        groupProducts: (id) => `${api_url}/api/preDispatch/${id}/grouping`
     },
 
 };

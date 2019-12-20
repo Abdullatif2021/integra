@@ -27,4 +27,8 @@ export class LoadingComponent implements OnInit {
     return Math.floor(x);
   }
 
+  hide() {
+    this.state.state = false;
+  }
+
 }

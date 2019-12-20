@@ -123,9 +123,9 @@ export class ListTreeService implements OnDestroy {
 
     // Search Tree Methods
 
-    sendSearchTreeRequest(preDispatchId: number, query: string) {
+    sendSearchTreeRequest(preDispatchId: number, query: string, mode = 'created') {
         const options = {params: new HttpParams()};
-        options.params = options.params.set('target', query);
+        options.params = options.params.set('target', query).set('planningMode', mode);
         return this.http.get<any>(AppConfig.endpoints.searchTree(preDispatchId), options);
     }
 

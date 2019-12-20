@@ -3,4 +3,5 @@ export interface LoadingStateInterface {
     message: string;
     progress: number;
     autProgress: boolean;
+    hide_btn?: boolean;
 }

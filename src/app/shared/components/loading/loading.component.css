@@ -88,3 +88,13 @@
     left: 50%;
     font-size: 13px;
 }
+.hide-btn-container{
+    position: absolute;
+    width: 100%;
+    bottom: 10%;
+}
+.hide-btn{
+    width: 100px;
+    display: block;
+    margin: auto;
+}

@@ -9,6 +9,7 @@ export class LoadingService {
 
   public loadingState = new EventEmitter<LoadingStateInterface>();
   private _state: LoadingStateInterface ;
+
   constructor() { }
 
 
@@ -29,6 +30,11 @@ export class LoadingService {
 
   state(state: boolean) {
     this._state.state = state ;
+    this.loadingState.emit(this._state);
+  }
+
+  setHideButton(state: boolean) {
+    this._state.hide_btn = state ;
     this.loadingState.emit(this._state);
   }
 
