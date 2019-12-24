@@ -1,4 +1,5 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -8,24 +9,47 @@ export class BackProcessingService {
     constructor() { }
     _states = {} ;
     _handles = {} ;
+    _queue = {} ;
 
     async run(key, action) {
         this._states[key] = true ;
-        this._handles[key] = {} ;
-        await action(this._handles[key]);
+        await action(this.getOrCreateHandle(key));
         this._states[key] = false ;
-
     }
 
     isRunning(key): boolean {
-        // console.log(this._handles[key]);
         return this._states[key] ? true : false ;
+    }
+
+    getHandle(key): EventEmitter<any> {
+        return this._handles[key];
+    }
+
+    getOrCreateHandle(key) {
+        if (this._handles[key]) {
+            return this._handles[key] ;
+        }
+        return this._handles[key] = new EventEmitter();
+    }
+
+    queue(key, item) {
+        this._queue[key] = item ;
+    }
+
+    release(key) {
+        this._queue[key] = null ;
+    }
+
+    getWaiting(key) {
+        if (typeof this._queue[key] !== 'undefined') {
+            return this._queue[key] ;
+        }
+        return null ;
     }
 
     checkLeaving() {
         let working = false ;
         Object.values(this._states).forEach((elm: boolean) => {
-            console.log('here we go', elm);
             working = working || elm ;
         });
         return working ? 'Some processes are working in background, leaving this page will cause them to stop \n' +

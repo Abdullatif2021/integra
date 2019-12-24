@@ -1,24 +1,32 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {LoadingService} from '../../../service/loading.service';
 import {LoadingStateInterface} from '../../../core/models/loading-state.interface';
+import {takeUntil} from 'rxjs/internal/operators';
 
 @Component({
   selector: 'app-loading',
   templateUrl: './loading.component.html',
   styleUrls: ['./loading.component.css']
 })
-export class LoadingComponent implements OnInit {
+export class LoadingComponent implements OnInit, OnDestroy {
 
   state: LoadingStateInterface ;
+  visible = true ;
+  unsubscribe = new EventEmitter();
 
   constructor(
       private loadingService: LoadingService
   ) { }
 
   ngOnInit() {
-    this.loadingService.loadingState.subscribe(
+    this.loadingService.loadingState.pipe(takeUntil(this.unsubscribe)).subscribe(
         state => {
           this.state = state ;
+        }
+    );
+    this.loadingService.visibility.pipe(takeUntil(this.unsubscribe)).subscribe(
+        visibility => {
+          this.visible = visibility ;
         }
     );
   }
@@ -28,7 +36,12 @@ export class LoadingComponent implements OnInit {
   }
 
   hide() {
-    this.state.state = false;
+    this.visible = false;
+  }
+
+  ngOnDestroy() {
+      this.unsubscribe.next();
+      this.unsubscribe.complete();
   }
 
 }

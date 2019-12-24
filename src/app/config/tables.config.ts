@@ -109,7 +109,10 @@ export const TablesConfig = {
                 {title: 'Q.TA’', field: 'quantity', actions: []},
                 {title: 'DATA', field: 'creation_date', actions: []},
                 {title: 'OPERAZIONE', actions: [
-                        {action: 'progress', field: 'progress'},
+                        {
+                            action: 'progress',
+                            progress: (item, container) => container.backProcessingService.getHandle('locating-' + item.id)
+                        },
                         {action: 'pp', field: 'p_status', print_if: (elm) =>  elm.progress !== 100 ,
                             click: (elm) => { console.log('status should change now'); }
                         }

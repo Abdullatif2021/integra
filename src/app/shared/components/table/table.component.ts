@@ -8,16 +8,15 @@ import {
     EventEmitter,
     Output,
     Host,
-    SimpleChanges, OnChanges
+    SimpleChanges, OnChanges, OnDestroy
 } from '@angular/core';
-import {PreDispatchComponent} from '../../../modules/home/components/pre-dispatch/pre-dispatch.component';
 
 @Component({
     selector: 'app-table',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit, AfterViewChecked, OnChanges {
+export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDestroy {
 
     constructor(private cdr: ChangeDetectorRef) { }
 
@@ -30,6 +29,10 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges {
     @Output() selected = new EventEmitter() ;
     selectedProducts = [] ;
     isCollapsed = {} ;
+    itemsProgressSubscriptions = {} ;
+    itemsProgress = {} ;
+    itemsProgressWarning = {} ;
+
     ngOnInit() {
     }
 
@@ -68,6 +71,27 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges {
     isSelectedRow(item) {
         return this.selectedProducts.find((elm) => elm.id === item.id ) ;
     }
+
+    subToProgress(item, action) {
+        if (typeof action.progress !== 'undefined' && typeof this.itemsProgressSubscriptions[item.id] === 'undefined') {
+            const handle = action.progress(item, this.parent);
+            if (!handle) {
+               return '';
+            }
+            this.itemsProgressSubscriptions[item.id] = handle.subscribe(
+                state => {
+                    if (state.progress) {
+                        this.itemsProgress[item.id] = state.progress.toFixed(1) ;
+                    }
+                    if (state.warning) {
+                        this.itemsProgressWarning[item.id] = true ;
+                    }
+                }
+            ) ;
+        }
+        return '';
+    }
+
     selectItem(item) {
         if (this.selectedProducts.find((elm) => elm.id === item.id  ) !== undefined) {
             this.selectedProducts = this.selectedProducts.filter((elm) => {
@@ -78,6 +102,7 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges {
         }
         this.selected.emit(this.selectedProducts);
     }
+
     selectAll() {
         if (this.selectedProducts && this.selectedProducts.length) {
             this.selectedProducts = [] ;
@@ -99,6 +124,12 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges {
 
     trackItems(item) {
         return item.id ;
+    }
+
+    ngOnDestroy() {
+        Object.values(this.itemsProgressSubscriptions).forEach((sub: EventEmitter<any>) => {
+            sub.unsubscribe();
+        });
     }
 
 }

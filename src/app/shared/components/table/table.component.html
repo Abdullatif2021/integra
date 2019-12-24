@@ -154,10 +154,12 @@
     <img *ngIf="!item[action.field] && (action.print_if?action.print_if(item):true)" (click)="action.click && action.click(item)" src="assets/images/play.svg" class="action-icon play-pause-icon">
 </ng-template>
 <ng-template #progress let-action="action" let-item="item">
-    <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngStyle]="{width:item[action.field]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz">{{item[action.field]}} %</div></div>
+    {{subToProgress(item, action)}}
+    <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': itemsProgressWarning[item.id]}" [ngStyle]="{width:itemsProgress[item.id]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz">{{itemsProgress[item.id]}} %</div></div>
 </ng-template>
 <ng-template #more let-item="item" let-action="action">
     <span class="collapse-arrow action-icon">
+
         <fa-icon *ngIf="!isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-right']"></fa-icon>
         <fa-icon *ngIf="isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-up']"></fa-icon>
     </span>

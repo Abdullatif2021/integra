@@ -15,7 +15,10 @@ import {LoadingService} from '../../service/loading.service';
 @Component({
     selector: 'app-schedules',
     templateUrl: './schedule.component.html',
-    styleUrls: ['./schedule.component.css']
+    styleUrls: ['./schedule.component.css'],
+    providers: [
+        LocatingService,
+    ]
 })
 export class ScheduleComponent implements OnInit, OnDestroy {
 
@@ -47,16 +50,24 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     latitude = 40.8440337;
     longitude = 14.3435834;
     zoom = 11;
+    locatingHandle: any ;
 
     ngOnInit() {
-        this.locatingService.relocate.pipe(takeUntil(this.unsubscribe)).subscribe(
-            nFoundItems => {
-                this.nFoundItems = nFoundItems;
+
+        this.locatingHandle = this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch);
+
+        this.locatingHandle.pipe(takeUntil(this.unsubscribe)).subscribe(
+            data => {
+                if (typeof data.nFoundItems === 'undefined') {
+                    return ;
+                }
+                this.backProcessingService.release('relocate-' + this.preDispatch);
+                this.nFoundItems = data.nFoundItems;
                 this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown'});
             }
         );
         this.mapService.markersChanges.subscribe(
-            data => {this.markers = data ;}
+            data => { this.markers = data ; }
         );
     }
 
@@ -65,16 +76,37 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     async locate() {
-        if (this.backProcessingService.isRunning('locating')) {
-            return this.loadingService.state(true);
+
+        this.loadingService.show();
+        this.loadingService.subscribeTo(this.locatingHandle);
+        if (this.backProcessingService.isRunning('locating-' + this.preDispatch)) {
+            this.loadingService.setLoadingState({
+                state: true, message: 'checking loading state for this pre-distinta ...', progress: 0, autProgress: false, hide_btn: true
+            });
+            return ;
         }
-        this.backProcessingService.run('locating', async() => {
-            const result: any = await this.locatingService.startLocating(this.preDispatch, this.preDispatchData.notFixedProductCount);
+
+        const notFound = this.backProcessingService.getWaiting('relocate-' + this.preDispatch);
+        if (notFound) {
+            this.loadingService.state(false);
+            this.nFoundItems = notFound;
+            this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown'});
+            this.backProcessingService.release('relocate-' + this.preDispatch);
+            return ;
+        }
+
+        this.backProcessingService.run('locating-' + this.preDispatch, async(handle) => {
+            const result: any = await this.locatingService.startLocating(
+                this.preDispatch,
+                this.preDispatchData.notFixedProductCount,
+                handle,
+            );
             if (result && result.data && result.data.preDispatch) {
                 this.planningService.changePreDispatchData(result.data.preDispatch);
             }
         });
     }
+
     group() {
         this.locatingService.group(this.preDispatch).subscribe(
             data => {
@@ -100,12 +132,11 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     fixLocation(skip = false) {
-        this.locatingService.fix(<[BuildingLocationInterface]>this.fixedItems, skip);
+        this.locatingService.fix(<[BuildingLocationInterface]>this.fixedItems, skip, this.locatingHandle);
         this.fixedItems = <[BuildingLocationInterface]>[];
     }
 
     notFoundAddressChanged(data, item) {
-        console.log(data.address, item);
 
         if (!data.hasObject || !data.address.strict) {
             return this.errors['invalid-building-' + item.id] = true;
