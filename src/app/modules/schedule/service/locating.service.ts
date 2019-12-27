@@ -85,7 +85,7 @@ export class LocatingService implements OnDestroy {
         }
     }
 
-    async startLocating(preDispatch, total, handle: EventEmitter<any>) {
+    async startLocating(preDispatch, handle: EventEmitter<any>) {
         let result = false ;
         let page = 0;
         this.processed = 0 ;
@@ -101,8 +101,14 @@ export class LocatingService implements OnDestroy {
             // this.loadingService.message('Fetching routes data to process');
             handle.emit({message: 'Fetching routes data to process'});
             const response = <ApiResponseInterface> await this.getPreDispatchToLocateBuildings(preDispatch, ++page).toPromise();
+            if (!response.data) {
+                break;
+            }
+            if (!this.processed) {
+                this.processed = response.data.localized_groups;
+            }
             // break when the api returns error, or there is no more items to process
-            if (response.statusCode !== 200 || ! await this.process(response.data, total, handle) ) {
+            if (response.statusCode !== 200 || ! await this.process(response.data.products, response.data.total_groups, handle) ) {
                 break ;
             }
         }

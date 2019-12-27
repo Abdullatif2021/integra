@@ -96,11 +96,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         }
 
         this.backProcessingService.run('locating-' + this.preDispatch, async(handle) => {
-            const result: any = await this.locatingService.startLocating(
-                this.preDispatch,
-                this.preDispatchData.notFixedProductCount,
-                handle,
-            );
+            const result: any = await this.locatingService.startLocating(this.preDispatch, handle);
             if (result && result.data && result.data.preDispatch) {
                 this.planningService.changePreDispatchData(result.data.preDispatch);
             }
