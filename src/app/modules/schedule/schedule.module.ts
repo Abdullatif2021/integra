@@ -15,9 +15,6 @@ import {faSortDown} from '@fortawesome/free-solid-svg-icons/faSortDown';
 import { ParametersComponent } from './components/parameters/parameters.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import { ResultComponent } from './components/result/result.component';
-import {GoogleGeocodeService} from './service/google.geocode.service';
-import {TuttocittaGeocodeService} from './service/tuttocitta.geocode.service';
-import {MapBoxGeocodeService} from './service/map-box.geocode.service';
 import {
     faAllergies,
     faCheckCircle,
@@ -68,9 +65,6 @@ import {MapService} from './service/map.service';
       ScheduleRoutingModule
   ],
   providers: [
-      GoogleGeocodeService,
-      TuttocittaGeocodeService,
-      MapBoxGeocodeService,
       ListTreeService,
       ContextMenuService,
       AddressesActionsService,

@@ -95,6 +95,7 @@
             <div class="small-more" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
             <div class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
               <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rename</a>
+              <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">Merge</a>
               <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingAddressContainer, [EditBuildingLatLngContainer])">Change Address</a>
               <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="changeLocationOnMap(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">Edit Location</a>
             </div>
@@ -163,6 +164,26 @@
       </div>
       <div class="btns-container mt-3">
         <button type="button" (click)="modal.close();submitMoveItem(moveToSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template  #MergeStreetsMosal let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <h6>
+        <fa-icon class="text-warning modal-icon" [icon]="['fa','allergies']"></fa-icon>
+        Merge Street With
+      </h6>
+      <div class="mt-3">
+        <div class="form-group">
+          <ng-select #mergeWithSelect [clearable]="false" [bindLabel]="'name'" [items]="merge_street_with_items" placeholder="Select Street"></ng-select>
+        </div>
+      </div>
+      <div class="btns-container mt-3">
+        <button type="button" (click)="modal.close();submitMergeStreets(mergeWithSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
         <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
         <div class="clear-both"></div>
       </div>

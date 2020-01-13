@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {MapBoxGeocodeResponceInterface} from '../../../core/models/map-box-geocode-responce.interface';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {MapBoxGeocodeResponceInterface} from '../../core/models/map-box-geocode-responce.interface';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {SettingsService} from '../../../service/settings.service';
-import {LocatedBuildingInterface, BuildingLocationInterface} from '../../../core/models/building.interface';
+import {SettingsService} from '../settings.service';
+import {LocatedBuildingInterface, BuildingLocationInterface} from '../../core/models/building.interface';
 
 @Injectable()
 export class MapBoxGeocodeService {
@@ -26,7 +26,7 @@ export class MapBoxGeocodeService {
     }
 
     sendGeocodeRequest(building: BuildingLocationInterface): Observable<MapBoxGeocodeResponceInterface> {
-        const options = { params: new HttpParams()};
+        const options = { params: new HttpParams(),  headers: new HttpHeaders({'ignoreLoadingBar': ''})};
         const houseNumber = building.houseNumber ? building.houseNumber : '1' ;
         options.params = options.params.set('postcode', building.cap);
         options.params = options.params.set('place', building.city);

@@ -19,9 +19,11 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   } ;
   @Input() items ;
   @Input() getMethod ;
+  @Input() multi = true ;
   @Output() changed = new EventEmitter<object>() ;
-  @Input() _selected: string = null ;
+  @Input() _selected = [] ;
   _items: any = [] ;
+  _all_selected = true ;
   page = 1 ;
   rpp = 25 ;
   searchValue: string = null ;
@@ -81,6 +83,9 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   search(event) {
     this.searchValue = event ;
     this.page = 1 ;
+    this._all_selected = true ;
+    this._selected = [] ;
+    this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue});
     if (this.table.searchMethod && typeof this.table.searchMethod === 'function') {
       return this.items = this.table.searchMethod(this._items, event) ;
     }
@@ -88,8 +93,30 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   }
 
   selectItem(item) {
-    this.changed.emit(item) ;
-    this._selected = item ;
+    if (!this.multi) {
+      this._selected = [item.id] ;
+      return this.changed.emit(item) ;
+    }
+    if (!item) {
+      this._selected = [] ;
+      this._all_selected = !this._all_selected;
+      return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue});
+    }
+    for (let i = 0; i < this._selected.length; ++i) {
+      if (this._selected[i] === item.id) {
+        delete this._selected[i];
+        return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue});
+      }
+    }
+    this._selected.push(item.id);
+    return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue});
+  }
+
+  isSelected(item) {
+    if (this._all_selected) {
+      return !this._selected.filter((_item) => item.id === _item).length;
+    }
+    return this._selected.filter((_item) => item.id === _item).length;
   }
 
   reload() {

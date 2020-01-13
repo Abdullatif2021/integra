@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {PlacesAutocompleteService} from '../../service/places.autocomplete.service';
 import {ACAddress} from '../../../core/models/address.interface';
-import {FormattedAddress} from '../../../core/models/building.interface';
 
 @Component({
     selector: 'app-address-input',
@@ -29,6 +28,7 @@ export class AddressInputComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
 
+    // outside changes
     ngOnChanges(changes) {
         if (changes.point) {
             const address = this.googlePlacesService.formattedAddressToObject(changes.point.currentValue.text);
@@ -56,6 +56,7 @@ export class AddressInputComponent implements OnInit, OnChanges {
         }
     }
 
+    // google auto complete changes
     handleAddressChange(event) {
         const address: any = this.googlePlacesService.formattedAddressToObject(event.formatted_address);
         const formattedAddress = this.googlePlacesService.getAddressObject(event) ;
@@ -80,7 +81,7 @@ export class AddressInputComponent implements OnInit, OnChanges {
         }
         address.address.lat = event.geometry.location.lat();
         address.address.lng = event.geometry.location.lng();
-        if (address.address.lat && address.address.lng) {
+        if (address.address.lat && address.address.lng){
             address.located = true;
         }
         address.located = true;
@@ -91,6 +92,7 @@ export class AddressInputComponent implements OnInit, OnChanges {
         this.changed.emit(this.address);
     }
 
+    // user input changes
     addressInputChange(event) {
         const address = this.googlePlacesService.formattedAddressToObject(event.target.value);
         if (!address) {

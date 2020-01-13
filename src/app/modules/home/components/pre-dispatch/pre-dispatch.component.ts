@@ -16,6 +16,7 @@ import {ModalDirective} from '../../../../shared/directives/modal.directive';
 import {PreDispatchDeleteComponent} from '../../modals/pre-dispatch-delete/pre-dispatch-delete.component';
 import {Router} from '@angular/router';
 import {BackProcessingService} from '../../../../service/back-processing.service';
+import {LocatingService} from '../../../../service/locating/locating.service';
 
 @Component({
   selector: 'app-pre-dispatch',
@@ -35,7 +36,9 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       {name: 'Elimina', modal: PreDispatchDeleteComponent, modalOptions: {}},
   ] ;
   unsubscribe: Subject<void> = new Subject();
-
+  order_field = null ;
+  order_method = '1' ;
+  refresh = 0 ;
   constructor(
       private paginationService: PaginationService,
       private filtersService: FiltersService,
@@ -45,7 +48,8 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       private componentFactoryResolver: ComponentFactoryResolver,
       private modalService: NgbModal,
       public router: Router,
-      public backProcessingService: BackProcessingService
+      public backProcessingService: BackProcessingService,
+      public locatingService: LocatingService
   ) { }
 
   loadItems(reset: boolean) {
@@ -58,14 +62,26 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
           this.paginationService.updateLoadingState(true);
           this._preDispatchTable.resetSelected();
       }
-      this.subscription = this.preDispatchService.getPreDispatchItems().pipe(takeUntil(this.unsubscribe))
+      this.subscription = this.preDispatchService.getPreDispatchItems(false, this.order_field, this.order_method).pipe(takeUntil(this.unsubscribe))
           .subscribe((res: ApiResponseInterface) => {
           this.paginationService.updateLoadingState(false);
           this.paginationService.updateResultsCount(res.pagination.total);
           this.preDispatchService.selectedPreDispatches = [];
           this.preDispatchList = res.data ;
           this._preDispatchTable.loading(false);
+          this.startLoadingInterval();
       });
+  }
+
+  startLoadingInterval() {
+      setTimeout(() => {
+          this.subscription = this.preDispatchService.getPreDispatchItems(true, this.order_field, this.order_method).pipe(takeUntil(this.unsubscribe))
+              .subscribe((res: ApiResponseInterface) => {
+                  this.preDispatchList = res.data ;
+                  this.refresh++ ;
+                  this.startLoadingInterval();
+              });
+      }, 2000);
   }
 
 
@@ -88,6 +104,12 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   }
   selectedItemsChanged(items) {
       this.preDispatchService.selectedPreDispatches = items ;
+  }
+
+  changeOrder(event) {
+      this.order_field = event.field;
+      this.order_method = event.order === 'DESC' ? '1' : '2';
+      this.loadItems(false);
   }
 
   openModal(modal, data) {

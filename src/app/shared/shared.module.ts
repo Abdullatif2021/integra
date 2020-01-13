@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faChevronRight, faChevronUp, faSearch } from '@fortawesome/free-solid-svg-icons';
+import {faCheck, faChevronRight, faChevronUp, faMinus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -56,6 +56,8 @@ export class SharedModule {
         library.add(faSearch);
         library.add(faChevronRight);
         library.add(faChevronUp);
+        library.add(faCheck);
+        library.add(faMinus);
     }
 
 }

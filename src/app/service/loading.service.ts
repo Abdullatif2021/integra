@@ -32,6 +32,9 @@ export class LoadingService implements OnDestroy{
   }
 
   state(state: boolean) {
+    if (!this._state) {
+        return ;
+    }
     this._state.state = state ;
     this.loadingState.emit(this._state);
   }

@@ -26,6 +26,7 @@
     font-weight: normal;
     line-height: 12px;
     height: 38px;
+    position: relative;
 }
 .hidden-head th{
     line-height: 0px;
@@ -44,10 +45,7 @@
     background-color: #e5e5ff !important;
 }
 .selected-row, .selected-row.table-item:hover {
-    background-color: #feda44 !important ;
-}
-.selected-row .select-row {
-    border: 2px solid #222222;
+    /*background-color: #feda44 !important ;*/
 }
 .select-row{
     width: 15px;
@@ -181,4 +179,54 @@
 }
 .warning-progress{
     background-color: orangered !important;
+}
+
+.order-container{
+    float: right;
+    margin-right: 1px;
+    margin-top: -4px;
+}
+.order-container-m{
+    float: none;
+    display: inline-block;
+    position: absolute;
+    top: 25%;
+    right: 0px;
+}
+.order-btn {
+    width: 11px;
+    height: 6px;
+    background-color: #fff;
+    opacity: 0.4;
+    margin: 1px 3px 0px 0px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+}
+.order-btn:hover, .active-order{
+    opacity: 1;
+}
+
+.order-asc{
+    background-image: url(/assets/images/asc.gif);
+    background-position: -5px 1px;
+}
+.order-desc{
+    background-image: url(/assets/images/desc.gif);
+    background-position: -6px 1px;
+}
+
+.selected-row .select-row{
+    background: #fcda4b;
+}
+.selected {
+    font-weight: bold;
+    font-size: 11px;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    padding: 1px;
+}
+.progress-error{
+    background-color: #f44336;
+    color: #fff;
 }

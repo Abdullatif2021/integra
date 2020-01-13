@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, ViewChild
 import {ActivatedRoute} from '@angular/router';
 import {ListTreeService} from '../../service/list-tree.service';
 import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
-import {LocatingService} from '../../service/locating.service';
+import {LocatingService} from '../../../../service/locating/locating.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {SettingsService} from '../../../../service/settings.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -56,6 +56,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     editingPoint = {};
     @ViewChild('startPointTextInput') startPointTextInput: ElementRef;
     @ViewChild('endPointTextInput') endPointTextInput: ElementRef;
+    merge_street_with_items = [];
 
 
     async ngOnInit() {
@@ -211,6 +212,14 @@ export class AddressesComponent implements OnInit, OnDestroy {
         const moveTo = select.itemsList.selectedItems[0];
         moveTo.type = this.toMoveItem.node.parent.type;
         this.moveNode(this.toMoveItem.node, moveTo.value, this.toMoveItem.next, true);
+    }
+
+    submitMergeStreets(select) {
+        if (!select.itemsList.selectedItems[0]) {
+            return;
+        }
+        const mergeWith = select.itemsList.selectedItems[0];
+        console.log(mergeWith);
     }
 
     // Actions on Nodes
@@ -582,7 +591,18 @@ export class AddressesComponent implements OnInit, OnDestroy {
             });
     }
 
-    async openModal(modal) {
+
+    openMergeStreetsModal(item, modal) {
+        this.modalService.open(modal);
+        this.listTreeService.getStreetMergeAvailableStreets(this.preDispatch, item.parent.parent.id, item.parent.id)
+            .pipe(takeUntil(this.unsubscribe)).subscribe(
+                data => {
+                    console.log(data);
+                }
+        )
+    }
+
+    openModal(modal) {
         this.modalService.open(modal);
     }
 

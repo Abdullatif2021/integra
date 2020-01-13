@@ -16,3 +16,7 @@
 .not-items-msg {
     color: #f18883;
 }
+.cant-delete-now {
+    color: #e33530;
+    padding: 10px 20px;
+}

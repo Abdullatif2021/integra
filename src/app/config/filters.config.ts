@@ -55,7 +55,7 @@ export const FilterConfig = {
             {type: ['date', 'date'], label: 'Data Articolo Legge:', group: true, key: ['fromArticleLawDate', 'toArticleLawDate']},
             {type: ['date', 'date'], label: 'Data Accettazione:', group: true, key: ['fromAcceptanceDate', 'toAcceptanceDate']},
         ],
-        grouping: true,
+        grouping: false,
     },
     pre_dispatch: {
         search: (container, sp) => [

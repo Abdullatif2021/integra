@@ -34,6 +34,7 @@ export const AppConfig = {
         getMoveToCity: (id) => `${api_url}/api/preDispatch/${id}/tree/moveCap/availableCities`,
         getMoveToCap: (id) => `${api_url}/api/preDispatch/${id}/tree/moveStreet/availableCaps`,
         getPreDispatchToLocateProducts: (id) => `${api_url}/api/preDispatch/${id}/products`,
+        getNotFoundProducts: (id) => `${api_url}/api/preDispatch/${id}/getNotFixedProducts`,
         updateCityName: `${api_url}/api/preDispatch/tree/updateCityName`,
         updateStreetName: `${api_url}/api/preDispatch/tree/updateStreetName`,
         getAllStartPoints: `${api_url}/api/startPoint`,
@@ -49,7 +50,10 @@ export const AppConfig = {
         editBuildingAddress: `${api_url}/api/preDispatch/product/updateLocation`,
         moveToInPlanning: `${api_url}/api/preDispatch/toPlanning`,
         changePreDispatchParameters: `${api_url}/api/preDispatch/update`,
-        groupProducts: (id) => `${api_url}/api/preDispatch/${id}/grouping`
+        groupProducts: (id) => `${api_url}/api/preDispatch/${id}/grouping`,
+        groupingProgress: (id) => `${api_url}/api/preDispatch/${id}/getGroupingPercent`,
+        getStreetMergeAvailableStreets: (id) => `${api_url}/api/preDispatch/${id}/getAvailableStreets`,
+        mergeTwoStreets: `${api_url}/api/preDispatch/mergerStreets`,
     },
 
 };

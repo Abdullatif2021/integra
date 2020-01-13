@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {LocatingService} from './service/locating.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
@@ -11,6 +10,7 @@ import {MapMarker} from '../../core/models/map-marker.interface';
 import {SnotifyService} from 'ng-snotify';
 import {BackProcessingService} from '../../service/back-processing.service';
 import {LoadingService} from '../../service/loading.service';
+import {LocatingService} from '../../service/locating/locating.service';
 
 @Component({
     selector: 'app-schedules',
@@ -56,16 +56,13 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
         this.locatingHandle = this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch);
 
-        this.locatingHandle.pipe(takeUntil(this.unsubscribe)).subscribe(
-            data => {
-                if (typeof data.nFoundItems === 'undefined') {
-                    return ;
-                }
-                this.backProcessingService.release('relocate-' + this.preDispatch);
-                this.nFoundItems = data.nFoundItems;
+        this.locatingService.productsNotFound.pipe(takeUntil(this.unsubscribe)).subscribe(
+            nfound => {
+                this.nFoundItems = nfound;
                 this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown'});
             }
-        );
+        )
+
         this.mapService.markersChanges.subscribe(
             data => { this.markers = data ; }
         );
@@ -86,33 +83,12 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             return ;
         }
 
-        const notFound = this.backProcessingService.getWaiting('relocate-' + this.preDispatch);
-        if (notFound) {
-            this.loadingService.state(false);
-            this.nFoundItems = notFound;
-            this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown'});
-            this.backProcessingService.release('relocate-' + this.preDispatch);
-            return ;
-        }
-
         this.backProcessingService.run('locating-' + this.preDispatch, async(handle) => {
-            const result: any = await this.locatingService.startLocating(this.preDispatch, handle);
+            const result: any = await this.locatingService.startLocating(this.preDispatch, handle, this.preDispatchData);
             if (result && result.data && result.data.preDispatch) {
                 this.planningService.changePreDispatchData(result.data.preDispatch);
             }
         });
-    }
-
-    group() {
-        this.locatingService.group(this.preDispatch).subscribe(
-            data => {
-                this.snotifyService.success('Products Grouped Successfully', {showProgressBar: false});
-                this.preDispatchData.status = 'in_planning' ;
-            },
-            error => {
-                this.snotifyService.error('Something went wrong', {showProgressBar: false});
-            }
-        );
     }
 
     moveToInPlan(modalRef, force = false) {
@@ -135,6 +111,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     notFoundAddressChanged(data, item) {
 
         if (!data.hasObject || !data.address.strict) {
+            console.log(data);
             return this.errors['invalid-building-' + item.id] = true;
         } else {
             this.errors['invalid-building-' + item.id] = false;

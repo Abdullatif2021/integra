@@ -6,14 +6,24 @@
         <tr *ngIf="cells_size.length">
             <!-- Select item col { -->
             <th class="table-head-item" [ngStyle]="{width:getCellWidth(0)}">
-                <div (click)="selectAll()" class="select-row rounded-circle"></div>
+                <div class="select-row rounded-circle" (click)="selectAll()">
+                    <div class="selected" *ngIf="this.selectedProducts.length === this.items.length"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                    <div class="selected" *ngIf="this.selectedProducts.length && (this.selectedProducts.length !== this.items.length)"><fa-icon [icon]="['fa','minus']"></fa-icon></div>
+                </div>
             </th>
+
             <!-- } Select item com -->
             <!-- Create the other cells using table data -->
             <!-- Table cols loop {  -->
             <ng-container *ngFor="let col of (table.cols);let idx = index">
                 <th scope="col" class="table-head-item border-left-white" [ngStyle]="{width:getCellWidth(idx+1)}" *ngIf="typeof(col.title) === 'string'">
                     {{col.title}}
+                    <ng-container *ngIf="col.order">
+                        <div class="order-container">
+                            <div (click)="changeOrder(col.order,'DESC')" [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-desc order-btn"></div>
+                            <div (click)="changeOrder(col.order,'ASC')" [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-asc order-btn"></div>
+                        </div>
+                    </ng-container>
                 </th>
                 <!-- if the col contains more than one field, print every one of them -->
                 <th scope="col" class="table-head-item border-left-white" [ngStyle]="{width:getCellWidth(idx+1)}" *ngIf="typeof(col.title) === 'object'">
@@ -22,6 +32,10 @@
                         <div class="separator" *ngIf="idx && col.separator"></div>
                         <div>{{title}}</div>
                     </ng-container>
+                    <div class="order-container-m" *ngIf="col.order">
+                        <div (click)="changeOrder(col.order,'DESC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-desc order-btn"></div>
+                        <div (click)="changeOrder(col.order,'ASC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-asc order-btn"></div>
+                    </div>
                 </th>
             </ng-container>
             <!-- } table cols loop -->
@@ -69,7 +83,9 @@
                 <tr #tableRow class="table-item" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx, 'selected-row':isSelectedRow(item)}">
                     <!-- select row item <static item > {  -->
                     <td class="table-item-cell" [ngStyle]="{width: '1%'}">
-                        <div class="select-row rounded-circle" (click)="selectItem(item)"></div>
+                        <div class="select-row rounded-circle" (click)="selectItem(item)">
+                            <div class="selected" *ngIf="isSelectedRow(item)"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                        </div>
                     </td>
                     <!-- } select row item  -->
                     <!-- print item cells loop {  -->
@@ -91,7 +107,9 @@
                                 <ng-container *ngIf="action.action=='view'" [ngTemplateOutlet]="view" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                                 <ng-container *ngIf="action.action=='book'" [ngTemplateOutlet]="book" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                                 <ng-container *ngIf="action.action=='progress'" [ngTemplateOutlet]="progress" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
-                                <ng-container *ngIf="action.action=='pp'" [ngTemplateOutlet]="pp" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='pPlay'" [ngTemplateOutlet]="pPlay" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='pPause'" [ngTemplateOutlet]="pPause" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='pDelete'" [ngTemplateOutlet]="pDelete" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                                 <ng-container *ngIf="action.action=='print'" [ngTemplateOutlet]="print" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                                 <ng-container *ngIf="action.action=='excel_export'" [ngTemplateOutlet]="excel_export" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                                 <ng-container *ngIf="action.action=='edit'" [ngTemplateOutlet]="edit" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
@@ -147,19 +165,22 @@
 </ng-template>
 <ng-template #book><img src="assets/images/notepad.svg" class="action-icon"></ng-template>
 <ng-template #print><img src="assets/images/printer.svg" class="action-icon"></ng-template>
-<ng-template #excel_export let-action="action" let-item="item"><img (click)="action.click && action.click(item)" src="assets/images/excel.svg" class="action-icon"></ng-template>
+<ng-template #excel_export let-action="action" let-item="item"><img (click)="action.click && action.click(item, parent)" src="assets/images/excel.svg" class="action-icon"></ng-template>
 <ng-template #edit let-action="action" let-item="item"><img src="assets/images/edit.svg" (click)="action.click && action.click(item, parent)" class="action-icon"></ng-template>
-<ng-template #pp let-action="action" let-item="item">
-    <img *ngIf="item[action.field] && (action.print_if?action.print_if(item):true)" (click)="action.click && action.click(item)" src="assets/images/pause.svg" class="action-icon play-pause-icon">
-    <img *ngIf="!item[action.field] && (action.print_if?action.print_if(item):true)" (click)="action.click && action.click(item)" src="assets/images/play.svg" class="action-icon play-pause-icon">
+<ng-template #pPlay let-action="action" let-item="item">
+    <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/play.svg" class="action-icon play-pause-icon">
+</ng-template>
+<ng-template #pPause let-action="action" let-item="item">
+    <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/pause.svg" class="action-icon play-pause-icon">
+</ng-template>
+<ng-template #pDelete let-action="action" let-item="item">
+    <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/delete.x.png" class="action-icon play-pause-icon">
 </ng-template>
 <ng-template #progress let-action="action" let-item="item">
-    {{subToProgress(item, action)}}
-    <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': itemsProgressWarning[item.id]}" [ngStyle]="{width:itemsProgress[item.id]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz">{{itemsProgress[item.id]}} %</div></div>
+    <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': itemsProgressWarning[item.id]}" [ngStyle]="{width:item[action.field]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz {{action.status(item)}}">{{item[action.field]}} %</div></div>
 </ng-template>
 <ng-template #more let-item="item" let-action="action">
     <span class="collapse-arrow action-icon">
-
         <fa-icon *ngIf="!isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-right']"></fa-icon>
         <fa-icon *ngIf="isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-up']"></fa-icon>
     </span>

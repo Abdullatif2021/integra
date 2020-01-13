@@ -45,14 +45,13 @@ export class PlacesAutocompleteService {
             return null ;
         }
         const city_cap = address_array[2].trim().split(' ');
-        let cap: any = parseInt(city_cap[0], 10) ? parseInt(city_cap[0], 10) : '' ;
+        let cap: any = parseInt(city_cap[0], 10) ? city_cap[0] : '' ;
         if (!cap) {
             cap = '' ;
         } else {
             delete city_cap[0] ;
         }
         const city = city_cap.join(' ');
-
         return {
             text: address,
             hasObject: true,

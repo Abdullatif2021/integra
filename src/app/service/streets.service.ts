@@ -16,23 +16,26 @@ export class StreetsService {
         private filtersService: FiltersService,
         ) { }
 
-    getStreets(page, rpp, name, city) {
+    getStreets(page, rpp, name, cities) {
         const options = { params: new HttpParams().set('page', page).set('pageSize', rpp)};
         if (name !== null) { options.params = options.params.set('streetName', name); }
-        if (city !== null) {options.params = options.params.set('cityId', city); }
+        if (cities.all) {
+            if (cities.items.length) {
+                options.params = options.params.set('exclude_cities_ids', cities.items);
+            }
+            if (cities.search) {
+                options.params = options.params.set('bySearch', cities.search);
+            }
+        } else {
+            if (cities.items.length) {
+                options.params = options.params.set('cities_ids', cities.items);
+            }
+        }
         options.params = this.filtersService.getHttpParams(options.params) ;
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getStreet, options).pipe(
             catchError(this.handleError)
         );
     }
-
-    // getPreDisptachStreets(preDispatch, page) {
-    //     const options = { params: new HttpParams().set('page', page)};
-    //     options.params = this.filtersService.getHttpParams(options.params) ;
-    //     return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchStreets(preDispatch), options).pipe(
-    //         catchError(this.handleError)
-    //     );
-    // }
 
     handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {

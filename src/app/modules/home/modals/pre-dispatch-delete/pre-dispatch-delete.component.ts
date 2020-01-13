@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ModalComponent} from '../modal.component';
 import {ActionsService} from '../../../../service/actions.service';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
+import {BackProcessingService} from '../../../../service/back-processing.service';
 
 @Component({
   selector: 'app-pre-dispatch-delete',
@@ -12,7 +13,8 @@ export class PreDispatchDeleteComponent extends ModalComponent implements OnInit
 
   constructor(
       private actionsService: ActionsService,
-      private preDispatchService: PreDispatchService
+      private preDispatchService: PreDispatchService,
+      private backProcessingService: BackProcessingService
   ) {
       super();
   }
@@ -35,4 +37,14 @@ export class PreDispatchDeleteComponent extends ModalComponent implements OnInit
     this.actionsService.deletePreDispatch(ids);
     modal.close();
   }
+
+  canDeleteNow() {
+    for (let i = 0; i < this.items.length; ++i) {
+        if (this.backProcessingService.isRunning('locating-' + this.items[i].id)) {
+            return false ;
+        }
+    }
+    return true ;
+  }
+
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {TuttocittaGeocodeResponceInterface} from '../../../core/models/tuttocitta-geocode-responce.interface';
-import {LocatedBuildingInterface, BuildingLocationInterface} from '../../../core/models/building.interface';
+import {TuttocittaGeocodeResponceInterface} from '../../core/models/tuttocitta-geocode-responce.interface';
+import {LocatedBuildingInterface, BuildingLocationInterface} from '../../core/models/building.interface';
 
 @Injectable()
 export class TuttocittaGeocodeService {

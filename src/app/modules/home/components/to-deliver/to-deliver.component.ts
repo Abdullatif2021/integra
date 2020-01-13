@@ -13,7 +13,6 @@ import {PreDispatchNewComponent} from '../../modals/pre-dispatch-new/pre-dispatc
 import {ImportFromBarcodesComponent} from '../../modals/import-from-barcodes/import-from-barcodes.component';
 import {SimpleTableComponent} from '../../../../shared/components/simple-table/simple-table.component';
 import {FilterConfig} from '../../../../config/filters.config';
-import {RecipientsService} from '../../../../service/recipients.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 
@@ -32,8 +31,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   @ViewChild('StreetsTable') _streetsTable: SimpleTableComponent ;
   @ViewChild('ProductsTable') _productsTable: TableComponent ;
   subscription: any = false ;
-  current_city: number = null ;
-  current_street: number = null ;
+  current_cities = {all: true, items: [], search: null} ;
+  current_streets = {all: true, items: [], search: null};
   selectAllOnLoad = false ;
   unsubscribe: Subject<void> = new Subject();
   actions = [
@@ -78,7 +77,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   ];
 
   citiesGetMethod = (page, rpp, name) => this.citiesService.getCities(page, rpp, name);
-  streetsGetMethod = (page, rpp, name) => this.streetsService.getStreets(page, rpp, name, this.current_city)
+  streetsGetMethod = (page, rpp, name) => this.streetsService.getStreets(page, rpp, name, this.current_cities)
 
   constructor(
       private citiesService: CitiesService,
@@ -87,20 +86,19 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private paginationService: PaginationService,
       private filtersService: FiltersService,
       private actionsService: ActionsService,
-      private recipientsService: RecipientsService
   ) {
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
   }
 
   cityChanged(event) {
-    this.current_city = event === null ? null : event.id ;
+    this.current_cities = event;
     this._streetsTable.loadData(false) ;
-    this._streetsTable.selectItem(null) ;
+    this._streetsTable.selectItem([]) ;
   }
 
   streetChanged(event) {
-      this.current_street = event === null ? null : event.id ;
+      this.current_streets = event ;
       this.loadProducts(true);
   }
 
@@ -141,8 +139,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
           this._productsTable.resetSelected();
       }
       this.subscription = this.productsService.getToDeliverProducts(
-          this.current_city,
-          this.current_street,
+          this.current_cities,
+          this.current_streets,
       ).pipe(takeUntil(this.unsubscribe)).subscribe((res: ApiResponseInterface) => {
           this.paginationService.updateLoadingState(false);
           this.paginationService.updateResultsCount(res.pagination.total);
@@ -153,6 +151,10 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
           }
           this.selectAllOnLoad = false ;
       });
+  }
+
+  changeOrder(event) {
+      console.log(event);
   }
 
   selectedItemsChanged(items) {

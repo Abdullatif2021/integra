@@ -24,7 +24,7 @@ export class PreDispatchService {
     selectedPreDispatches = [] ;
 
     getPreDispatchList() {
-        const options = { params: new HttpParams()};
+        const options = { params: new HttpParams() };
         options.params = options.params.set('page', '1') ;
         options.params = options.params.set('pageSize', '50') ;
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatched, options).pipe(
@@ -32,11 +32,18 @@ export class PreDispatchService {
         );
     }
 
-    getPreDispatchItems() {
-        const options = { params: new HttpParams()};
+    getPreDispatchItems(noProgress = false, order_field = null, order_method = '1') {
+        const options = { params: new HttpParams(), headers: new HttpHeaders()};
+        if (noProgress) {
+            options.headers = options.headers.append('ignoreLoadingBar', '');
+        }
         options.params = options.params.set('page', this.paginationService.current_page) ;
         options.params = options.params.set('pageSize', this.paginationService.rpp) ;
         options.params = this.filtersService.getHttpParams(options.params) ;
+        if (order_field) {
+            options.params = options.params.set('key', order_field) ;
+            options.params = options.params.set('order_method', order_method) ;
+        }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatched, options).pipe(
             catchError(this.handleError)
         );

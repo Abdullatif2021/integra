@@ -12,13 +12,18 @@ export class BackProcessingService {
     _queue = {} ;
 
     async run(key, action) {
-        this._states[key] = true ;
+        this._states[key] = 1 ;
         await action(this.getOrCreateHandle(key));
         this._states[key] = false ;
+        this._handles[key] = 0 ;
     }
 
     isRunning(key): boolean {
-        return this._states[key] ? true : false ;
+        return this._states[key] === 1;
+    }
+
+    pause(key) {
+        return this._states[key] = 2 ;
     }
 
     getHandle(key): EventEmitter<any> {

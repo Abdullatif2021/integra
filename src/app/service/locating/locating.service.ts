@@ -1,15 +1,16 @@
 import {EventEmitter, Injectable, OnDestroy} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {LoadingService} from '../../../service/loading.service';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {GoogleGeocodeService} from './google.geocode.service';
 import {TuttocittaGeocodeService} from './tuttocitta.geocode.service';
 import {MapBoxGeocodeService} from './map-box.geocode.service';
-import {LocatedBuildingInterface, BuildingLocationInterface} from '../../../core/models/building.interface';
-import {ApiResponseInterface} from '../../../core/models/api-response.interface';
-import {AppConfig} from '../../../config/app.config';
 import {SnotifyService} from 'ng-snotify';
 import {Observable} from 'rxjs';
-import {BackProcessingService} from '../../../service/back-processing.service';
+import {AppConfig} from '../../config/app.config';
+import {LoadingService} from '../loading.service';
+import {ApiResponseInterface} from '../../core/models/api-response.interface';
+import {BuildingLocationInterface, FormattedAddress, LocatedBuildingInterface} from '../../core/models/building.interface';
+import {BackProcessingService} from '../back-processing.service';
+import {reject} from 'q';
 
 @Injectable()
 export class LocatingService implements OnDestroy {
@@ -27,15 +28,17 @@ export class LocatingService implements OnDestroy {
 
     // output events .
     treeCreated = new EventEmitter<boolean>();
+    productsNotFound = new EventEmitter<[BuildingLocationInterface]>() ;
+
     // the located items
-    buildings = <[BuildingLocationInterface]>[] ;
-    // the items that no provider was able to locate
-    nfound = <[BuildingLocationInterface]>[] ;
+    buildings = <[LocatedBuildingInterface]>[] ;
     // the items that was manually changed by the user and waiting to be relocated.
     fixed = <[BuildingLocationInterface]>[] ;
+
     // the pre dispatch that is being located
     preDispatch ;
     processed = 0 ;
+    breakGroupingLoading = false ;
 
     async fix(buildings: [BuildingLocationInterface], skip = false, handle: EventEmitter<any>) {
 
@@ -55,13 +58,11 @@ export class LocatingService implements OnDestroy {
             }
         });
 
-        this.nfound = <[BuildingLocationInterface]>[] ;
         // if there is items waiting to be located when there is no more items waiting user action, start locating them
         if (this.fixed.length) {
-            handle.emit({stateObj:
-                    {state: true, message: 'initializing...', progress: 0, autProgress: false, hide_btn: true}
+            handle.emit({
+                stateObj: {state: true, message: 'initializing...', progress: 0, autProgress: false, hide_btn: true}
             });
-        // this.loadingService.setLoadingState({state: true, message: 'initializing...', progress: 0, autProgress: false, hide_btn: true});
             this.processed = 0 ;
             await this.process(this.fixed, this.fixed.length, handle);
             this.loadingService.state(false);
@@ -73,94 +74,106 @@ export class LocatingService implements OnDestroy {
             await this.save();
         }
 
-        if (this.nfound.length) {
-            handle.emit({nFoundItems: this.nfound, warning: true});
-            this.backProcessingService.queue('relocate-' + this.preDispatch, this.nfound);
+        // check if there is any more not localized buildings
+        const nfound = await this.getNotFoundProducts(this.preDispatch).toPromise();
+        if (nfound.data.length) {
+            this.productsNotFound.emit(nfound.data);
+            return false;
         }
 
         // if the process is done, create the tree.
-        if (!this.buildings.length && !this.fixed.length && !this.nfound.length) {
+        if (!this.buildings.length && !this.fixed.length) {
             await this.createTree(handle);
             this.snotifyService.success('All buildings are localized !', { showProgressBar: false});
         }
     }
 
-    async startLocating(preDispatch, handle: EventEmitter<any>) {
-        let result = false ;
-        let page = 0;
+    async startLocating(preDispatch, handle: EventEmitter<any>, preDispatchData, groupingProgress = true) {
+        if (preDispatchData.status === 'notPlanned') {
+            await this.group(preDispatch, handle, groupingProgress);
+        }
         this.processed = 0 ;
-        this.buildings = <[BuildingLocationInterface]>[] ;
-        this.nfound = <[BuildingLocationInterface]>[] ;
+        this.buildings = <[LocatedBuildingInterface]>[] ;
         this.fixed = <[BuildingLocationInterface]>[] ;
 
         this.preDispatch = preDispatch ;
         handle.emit({stateObj: {state: true, message: 'initializing...', progress: 0, autProgress: false, hide_btn: true}});
-        // this.loadingService.setLoadingState({state: true, message: 'initializing...', progress: 0, autProgress: false, hide_btn: true});
+
         // start locating .
         while (true) {
-            // this.loadingService.message('Fetching routes data to process');
             handle.emit({message: 'Fetching routes data to process'});
-            const response = <ApiResponseInterface> await this.getPreDispatchToLocateBuildings(preDispatch, ++page).toPromise();
-            if (!response.data) {
+            const response = <ApiResponseInterface> await this.getPreDispatchToLocateProducts(preDispatch).toPromise();
+            // break when the api returns error, or empty products list
+            if (response.statusCode !== 200 || !response.data) {
                 break;
             }
             if (!this.processed) {
                 this.processed = response.data.localized_groups;
             }
-            // break when the api returns error, or there is no more items to process
-            if (response.statusCode !== 200 || ! await this.process(response.data.products, response.data.total_groups, handle) ) {
+            // there is no more items to process
+            if (! await this.process(response.data.products, response.data.total_groups, handle) ) {
                 break ;
             }
         }
 
+        // If the process is paused.
+        if (!this.backProcessingService.isRunning('locating-' + this.preDispatch)) {
+            return false ;
+        }
+
         // remove the loader.
         handle.emit({state: false});
-        // this.loadingService.state(false);
+
         // reset buildings to start the fix not found process .
-        this.buildings = <[BuildingLocationInterface]>[] ;
-        if (this.nfound.length) {
+        this.buildings = <[LocatedBuildingInterface]>[] ;
+
+        const nfound = await this.getNotFoundProducts(preDispatch).toPromise() ;
+        if (nfound.data.length) {
             // emit fix the not found items event.
-            handle.emit({nFoundItems: this.nfound, warning: true}) ;
-            this.backProcessingService.queue('relocate-' + this.preDispatch, this.nfound);
+            return this.productsNotFound.emit(nfound.data);
         }
 
         // if every thing is done, create the tree.
-        if (!this.buildings.length && !this.fixed.length && !this.nfound.length) {
-            result = await this.createTree(handle);
+        if (!this.buildings.length && !this.fixed.length) {
+            // result = await this.createTree(handle);
             this.snotifyService.success('All buildings are localized !', { showProgressBar: false});
         }
 
-        return result ;
+        return true ;
     }
 
     async process(buildings, total, handle: EventEmitter<any>) {
 
-        if (!buildings.length) { return ; }
+        if (!buildings.length) { return false; }
         let result ;
 
+        const onePercent = Math.ceil(total / 100.0);
+
         for (let i = 0; i < buildings.length; ++i) {
-            // this.loadingService
-            //     .message(`Locating '${buildings[i].street}, ${buildings[i].houseNumber}, ${buildings[i].cap} ${buildings[i].city}'`);
             handle.emit({id: this.preDispatch,
                 message: `Locating '${buildings[i].street}, ${buildings[i].houseNumber}, ${buildings[i].cap} ${buildings[i].city}'`
             });
             if ( result = await this.tuttocittaGeocodeService.locate(buildings[i]) ) {
                 this.buildings.push(result);
-                // console.log(`${buildings[i].street} located using tuttocitta ========= ${this.preDispatch} ========= `);
             } else if ( result = await this.googleGeocodeService.locate(buildings[i]) ) {
                 this.buildings.push(result);
-                // console.log(`${buildings[i].street} located using google ========= ${this.preDispatch} ========= `);
             } else if ( result = await this.mapBoxGeocodeService.locate(buildings[i])) {
                 this.buildings.push(result);
-                // console.log(`${buildings[i].street} located using MapBox ========= ${this.preDispatch} ========= `);
             } else {
-                this.nfound.push(buildings[i]);
+                this.buildings.push({ id: buildings[i].id, lat: 0, long: 0, is_fixed: false, name: buildings[i].street});
             }
             handle.emit({progress: (++this.processed / total) * 100 });
-            // this.loadingService.progress((++this.processed / total) * 100);
+            // if the process is paused save and stop working.
+            if (!this.backProcessingService.isRunning('locating-' + this.preDispatch)) {
+                await this.save();
+                return false ;
+            }
+            // save every 1%
+            if (this.processed % onePercent === 0) {
+                await this.save();
+            }
         }
         handle.emit({message: `Saving data...`});
-        // this.loadingService.message(`Saving data...`);
         await this.save();
         return true ;
     }
@@ -190,20 +203,24 @@ export class LocatingService implements OnDestroy {
             if (!this.buildings.length) {
                 return resolve(true);
             }
-            this.http.post<ApiResponseInterface>(AppConfig.endpoints.updateStreetsData, {'streets': this.buildings})
+            this.http.post<ApiResponseInterface>(AppConfig.endpoints.updateStreetsData, {'streets': this.buildings}, {
+                headers: new HttpHeaders({ 'ignoreLoadingBar': '' })
+            })
                 .subscribe(
-                    data => { this.buildings = <[BuildingLocationInterface]>[]; resolve(data) ; },
+                    data => { this.buildings = <[LocatedBuildingInterface]>[]; resolve(data) ; },
                     error => { reject(error) ; }
                 );
-            resolve();
+            // resolve();
         });
     }
 
     createTree(handle: EventEmitter<any>): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             handle.emit({stateObj: {state: true, message: 'Creating Tree', progress: 0, autProgress: true, hide_btn: true}});
-            this.loadingService.setLoadingState({state: true, message: 'Creating Tree', progress: 0, autProgress: true});
-            return this.http.post(AppConfig.endpoints.createTree, {'id': this.preDispatch}).subscribe(
+            // this.loadingService.setLoadingState({state: true, message: 'Creating Tree', progress: 0, autProgress: true});
+            return this.http.post(AppConfig.endpoints.createTree, {'id': this.preDispatch}, {
+                headers: new HttpHeaders({ 'ignoreLoadingBar': '' })
+            }).subscribe(
                 data => {
                     resolve(data) ;
                     handle.emit({state: false});
@@ -214,16 +231,64 @@ export class LocatingService implements OnDestroy {
                     handle.emit({state: false});
                 }
             );
+            // resolve();
         });
     }
 
-    getPreDispatchToLocateBuildings(preDispatch, page = 1): Observable<{} | ApiResponseInterface> {
-        const options = { params: new HttpParams().set('page', '' + page)};
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchToLocateProducts(preDispatch), options);
+    getPreDispatchToLocateProducts(preDispatch): Observable<{} | ApiResponseInterface> {
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchToLocateProducts(preDispatch),
+            {headers: new HttpHeaders({'ignoreLoadingBar': ''})});
     }
 
-    group(preDispatch) {
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.groupProducts(preDispatch), {});
+    getNotFoundProducts(preDispatch): Observable<any> {
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getNotFoundProducts(preDispatch));
+    }
+
+    group(preDispatch, handle, progress = true): Promise<any> {
+        return new Promise<any>(async(_resolve) => {
+
+            // send the start grouping request and forget it.
+            this.http.get<ApiResponseInterface>(AppConfig.endpoints.groupProducts(preDispatch), {}).subscribe(
+                data => {
+                    this.breakGroupingLoading = true ;
+                    return _resolve(true);
+                }
+            );
+
+            // create the check loading interval
+            if (progress) {
+                await this.createGroupingProgressInterval(preDispatch, handle);
+                return _resolve(true);
+            }
+
+        });
+    }
+
+    getGroupingProgress(preDispatch) {
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.groupingProgress(preDispatch));
+    }
+
+    createGroupingProgressInterval(preDispatch, handle) {
+        return new Promise(async (_resolve) => {
+            let data = await this.getGroupingProgress(preDispatch).toPromise();
+            while (data.data !== 100) {
+                if (this.breakGroupingLoading) {
+                    return _resolve(true);
+                }
+                handle.emit({
+                    stateObj: {state: true, message: 'Grouping...', progress: data.data, autProgress: false, hide_btn: true}
+                });
+                await this.sleep(1000);
+                data = await this.getGroupingProgress(preDispatch).toPromise();
+            }
+            return _resolve(true);
+        });
+    }
+
+    sleep(time) {
+        return new Promise<any>((_resolve) => {
+            setTimeout(() => {_resolve(true)}, time);
+        });
     }
 
     ngOnDestroy() {

@@ -226,6 +226,22 @@ export class ListTreeService implements OnDestroy {
         return this.http.get<any>(AppConfig.endpoints.getMoveToCity(preDispatchId), options);
     }
 
+
+    getStreetMergeAvailableStreets(preDispatchId, cityId, capId) {
+        const options = {params: new HttpParams()};
+        options.params = options.params.set('cityId', cityId);
+        options.params = options.params.set('capId', capId);
+        return this.http.get<any>(AppConfig.endpoints.getStreetMergeAvailableStreets(preDispatchId), options);
+    }
+
+    mergeTwoStreets(preDispatchId, source, target): Observable<ApiResponseInterface> {
+        const formData = new FormData();
+        formData.set('pre_dispatch_id', preDispatchId);
+        formData.set('source', source);
+        formData.set('target', target);
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.mergeTwoStreets, formData);
+    }
+
     ngOnDestroy() {
         this.unsubscribe.next();
         this.unsubscribe.complete();

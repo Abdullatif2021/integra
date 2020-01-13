@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {GoogleGeocodeResponseInterface} from '../../../core/models/google-geocode-responce.interface';
-import {SettingsService} from '../../../service/settings.service';
-import {LocatedBuildingInterface, BuildingLocationInterface, FormattedAddress} from '../../../core/models/building.interface';
+import {LocatedBuildingInterface, BuildingLocationInterface, FormattedAddress } from '../../core/models/building.interface';
+import {GoogleGeocodeResponseInterface} from '../../core/models/google-geocode-responce.interface';
+import {SettingsService} from '../settings.service';
 
 @Injectable()
 export class GoogleGeocodeService {
@@ -24,7 +24,7 @@ export class GoogleGeocodeService {
     }
 
     sendGeocodeRequest(building: BuildingLocationInterface): Observable<GoogleGeocodeResponseInterface> {
-        const options = { params: new HttpParams()};
+        const options = { params: new HttpParams(),  headers: new HttpHeaders({'ignoreLoadingBar': ''})};
         const houseNumber = building.houseNumber ? building.houseNumber : 1 ;
         options.params = options.params.set('address',
             `${building.street}, ${houseNumber}, ${building.cap} ${building.city}`) ;

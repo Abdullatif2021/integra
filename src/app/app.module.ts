@@ -10,6 +10,10 @@ import {LoadingBarHttpClientModule} from '@ngx-loading-bar/http-client';
 import {SnotifyModule, SnotifyService, ToastDefaults} from 'ng-snotify';
 import {IntegraaPreloadingStrategy} from './core/strategy/integraa-preloading.strategy';
 import {BackProcessingService} from './service/back-processing.service';
+import {LocatingService} from './service/locating/locating.service';
+import {GoogleGeocodeService} from './service/locating/google.geocode.service';
+import {TuttocittaGeocodeService} from './service/locating/tuttocitta.geocode.service';
+import {MapBoxGeocodeService} from './service/locating/map-box.geocode.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,11 @@ import {BackProcessingService} from './service/back-processing.service';
       { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
       SnotifyService,
       IntegraaPreloadingStrategy,
-      BackProcessingService
+      BackProcessingService,
+      GoogleGeocodeService,
+      TuttocittaGeocodeService,
+      MapBoxGeocodeService,
+      LocatingService
   ],
   bootstrap: [AppComponent]
 })

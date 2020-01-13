@@ -55,5 +55,6 @@
 
 .pagination-loading{
     width: 380px;
-    height: 25px;
+    height: 30px;
+    margin-top: 0px;
 }

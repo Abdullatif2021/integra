@@ -100,21 +100,50 @@ export const TablesConfig = {
                             container.integraaModalService.open('/pages/pre-dispatch/' + elm.id + '/products', {width: 1250, height: 650});
                         }},
                     ]},
-                {title: 'NOME DISTINTA', field: 'name', actions: []},
+                {title: 'NOME DISTINTA', field: 'name', actions: [], order: '1'},
                 {title: 'DISTINTA', field: 'code', actions: []},
                 {title: 'STATO / ESITO', field: 'status', actions: [
                         {action: 'view', click: (elm) => { console.log('call back working 2 . '); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ]},
-                {title: 'Q.TA’', field: 'quantity', actions: []},
-                {title: 'DATA', field: 'creation_date', actions: []},
+                {title: 'Q.TA’', field: 'quantity', actions: [], order: '2'},
+                {title: 'DATA', field: 'creation_date', actions: [], order: '3'},
                 {title: 'OPERAZIONE', actions: [
                         {
                             action: 'progress',
-                            progress: (item, container) => container.backProcessingService.getHandle('locating-' + item.id)
+                            field: 'percent',
+                            status: (item) => {
+                                return item.percent === 100 && item.status === 'in_localize' ? 'progress-error' : 'progress-ok';
+                            }
                         },
-                        {action: 'pp', field: 'p_status', print_if: (elm) =>  elm.progress !== 100 ,
-                            click: (elm) => { console.log('status should change now'); }
+                        {action: 'pPlay', field: 'p_status', print_if: (item, container) => {
+                                return !container.backProcessingService.isRunning('locating-' + item.id);
+                            },
+                            click: (item, container) => {
+                                container.backProcessingService.run('locating-' + item.id, async(handle) => {
+                                    const locatingSrevice =  Object.assign(
+                                        Object.create( Object.getPrototypeOf(container.locatingService)), container.locatingService
+                                    );
+                                    const result: any = await locatingSrevice.startLocating(item.id, handle, item, false);
+                                    if (result && result.data && result.data.preDispatch) {
+                                        console.log('update table');
+                                    }
+                                });
+                            }
+                        },
+                        {action: 'pPause', field: 'p_status', print_if: (item, container) => {
+                                return container.backProcessingService.isRunning('locating-' + item.id);
+                            },
+                            click: (item, container) => {
+                                container.backProcessingService.pause('locating-' + item.id);
+                            }
+                        }, {
+                            action: 'pDelete', print_if: (item, container) => {
+                                return !container.backProcessingService.isRunning('locating-' + item.id);
+                            },
+                            click: (item, container) => {
+                                container.openModal(PreDispatchDeleteComponent, {deleteItem: true, item: item}) ;
+                            }
                         }
                     ]},
             ],

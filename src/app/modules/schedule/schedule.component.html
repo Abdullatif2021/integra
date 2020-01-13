@@ -11,8 +11,7 @@
     </div>
     <div class="col-8 v-wide-col">
       <div class="map-header">
-        <div class="localizza-btn integraa-btn" *ngIf="preDispatchData.status !== 'notPlanned'" (click)="locate()">Localizza</div>
-        <div class="localizza-btn integraa-btn" *ngIf="preDispatchData.status === 'notPlanned'" (click)="group()">Group</div>
+        <div class="localizza-btn integraa-btn" (click)="locate()">Localizza</div>
         <div class="mote-to-in-plan-btn integraa-btn" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Move to in plan</div>
         <div class="continue-btn integraa-btn">Prosegui</div>
         <div class="clear-both"></div>
