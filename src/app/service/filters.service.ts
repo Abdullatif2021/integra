@@ -5,7 +5,6 @@ import {catchError} from 'rxjs/operators';
 import {AppConfig} from '../config/app.config';
 import {throwError} from 'rxjs';
 import {FilterInterface} from '../core/models/filter.interface';
-import {FilterConfig} from '../config/filters.config';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +16,7 @@ export class FiltersService {
   cleared = new EventEmitter<number>() ;
   fields = new EventEmitter() ;
   filters = [];
+  specials: any = {};
   barcodes = [];
 
   getFiltersData() {
@@ -54,6 +54,31 @@ export class FiltersService {
           if (!filter.value || filter.value === '') { return ; }
           _filters[filter.key] = filter.value ;
       });
+
+      if (this.specials.cities && this.specials.cities.all) {
+          if (this.specials.cities.items.length) {
+              _filters['exclude_cities_ids'] = this.specials.cities.items;
+          }
+          if (this.specials.cities.search) {
+              _filters['byCitiesSearch'] = this.specials.cities.search;
+          }
+      } else if (this.specials.cities) {
+          if (this.specials.cities.items.length) {
+              _filters['cities_ids'] = this.specials.cities.items;
+          }
+      }
+      if (this.specials.streets && this.specials.streets.all) {
+          if (this.specials.streets.items.length) {
+              _filters['exclude_streets_ids'] = this.specials.streets.items;
+          }
+          if (this.specials.streets.search) {
+              _filters['byStreetsSearch'] = this.specials.streets.search;
+          }
+      } else if (this.specials.streets) {
+          if (this.specials.streets.items.length) {
+              _filters['streets_ids'] = this.specials.streets.items;
+          }
+      }
       return _filters ;
   }
 
@@ -78,6 +103,10 @@ export class FiltersService {
 
   setFields(fields, container) {
       this.fields.emit({fields: fields, container: container});
+  }
+
+  setSpecialFilter(key, value) {
+      this.specials[key] = value ;
   }
 
   clear() {

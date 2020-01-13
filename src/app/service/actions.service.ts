@@ -72,7 +72,6 @@ export class ActionsService {
   }
 
   createNewPreDispatch(data, name) {
-
       const products: any = this.productsService.selectedProducts ;
       let method ;
       if (!data.method || data.method === 'selected' ) {

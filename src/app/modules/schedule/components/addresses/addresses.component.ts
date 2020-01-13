@@ -56,7 +56,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     editingPoint = {};
     @ViewChild('startPointTextInput') startPointTextInput: ElementRef;
     @ViewChild('endPointTextInput') endPointTextInput: ElementRef;
-    merge_street_with_items = [];
+    merge_data = {targets: [], source: null};
 
 
     async ngOnInit() {
@@ -218,8 +218,29 @@ export class AddressesComponent implements OnInit, OnDestroy {
         if (!select.itemsList.selectedItems[0]) {
             return;
         }
-        const mergeWith = select.itemsList.selectedItems[0];
-        console.log(mergeWith);
+        const mergeWith = select.itemsList.selectedItems[0].value;
+        const source = {
+            city_id: this.merge_data.source.parent.parent.id,
+            cap_id: this.merge_data.source.parent.id,
+            street_id: this.merge_data.source.id
+        };
+        const target = {
+            city_id: mergeWith.city.id,
+            cap_id: mergeWith.cap.id,
+            street_id: mergeWith.id
+        };
+        this.listTreeService.mergeTwoStreets(this.preDispatch, source, target).pipe(takeUntil(this.unsubscribe)).subscribe(
+            async data => {
+                this.snotifyService.success('Streets Merged Successfully', {showProgressBar: false});
+                await this.reloadNode({item: {node: this.merge_data.source.parent, next: ''}});
+                this.merge_data = {source: null, targets: []};
+
+            },
+            error => {
+                this.snotifyService.error('Something went wrong !', {showProgressBar: false});
+                this.merge_data = {source: null, targets: []};
+            }
+        );
     }
 
     // Actions on Nodes
@@ -227,6 +248,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
         event.item.node.children = [];
         event.item.node.loading = false;
         event.item.node.page = 0;
+        console.log(event.item.node);
         await this.load(event.item.node, event.item.next);
     }
 
@@ -594,12 +616,13 @@ export class AddressesComponent implements OnInit, OnDestroy {
 
     openMergeStreetsModal(item, modal) {
         this.modalService.open(modal);
+        this.merge_data.source = item ;
         this.listTreeService.getStreetMergeAvailableStreets(this.preDispatch, item.parent.parent.id, item.parent.id)
             .pipe(takeUntil(this.unsubscribe)).subscribe(
                 data => {
-                    console.log(data);
+                    this.merge_data.targets = data.data;
                 }
-        )
+        );
     }
 
     openModal(modal) {

@@ -103,8 +103,10 @@ export class SimpleTableComponent implements OnInit, OnChanges {
       return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue});
     }
     for (let i = 0; i < this._selected.length; ++i) {
-      if (this._selected[i] === item.id) {
-        delete this._selected[i];
+      if (!this._selected[i]) {
+          this._selected.splice(i, 1);
+      } else if (this._selected[i] === item.id) {
+        this._selected.splice(i, 1);
         return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue});
       }
     }

@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable, OnDestroy} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {TreeNodeInterface, TreeNodeResponseInterface} from '../../../core/models/tree-node.interface';
 import {AppConfig} from '../../../config/app.config';
 import {takeUntil} from 'rxjs/internal/operators';
@@ -235,11 +235,12 @@ export class ListTreeService implements OnDestroy {
     }
 
     mergeTwoStreets(preDispatchId, source, target): Observable<ApiResponseInterface> {
-        const formData = new FormData();
-        formData.set('pre_dispatch_id', preDispatchId);
-        formData.set('source', source);
-        formData.set('target', target);
-        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.mergeTwoStreets, formData);
+        const data = {
+            pre_dispatch_id: preDispatchId,
+            source: source,
+            target: target
+        };
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.mergeTwoStreets, data);
     }
 
     ngOnDestroy() {

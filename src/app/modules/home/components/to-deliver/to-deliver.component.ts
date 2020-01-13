@@ -77,7 +77,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   ];
 
   citiesGetMethod = (page, rpp, name) => this.citiesService.getCities(page, rpp, name);
-  streetsGetMethod = (page, rpp, name) => this.streetsService.getStreets(page, rpp, name, this.current_cities)
+  streetsGetMethod = (page, rpp, name) => this.streetsService.getStreets(page, rpp, name, this.current_cities);
 
   constructor(
       private citiesService: CitiesService,
@@ -95,11 +95,13 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
     this.current_cities = event;
     this._streetsTable.loadData(false) ;
     this._streetsTable.selectItem([]) ;
+    this.filtersService.setSpecialFilter('cities', event);
   }
 
   streetChanged(event) {
       this.current_streets = event ;
       this.loadProducts(true);
+      this.filtersService.setSpecialFilter('streets', event);
   }
 
   ngOnInit() {
