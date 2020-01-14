@@ -135,7 +135,7 @@ export class LocatingService implements OnDestroy {
 
         // if every thing is done, create the tree.
         if (!this.buildings.length && !this.fixed.length) {
-            // result = await this.createTree(handle);
+            result = await this.createTree(handle);
             this.snotifyService.success('All buildings are localized !', { showProgressBar: false});
         }
 
