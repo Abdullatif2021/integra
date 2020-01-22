@@ -62,8 +62,8 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
           this.paginationService.updateLoadingState(true);
           this._preDispatchTable.resetSelected();
       }
-      this.subscription = this.preDispatchService.getPreDispatchItems(false, this.order_field, this.order_method).pipe(takeUntil(this.unsubscribe))
-          .subscribe((res: ApiResponseInterface) => {
+      this.subscription = this.preDispatchService.getPreDispatchItems(false, this.order_field, this.order_method)
+          .pipe(takeUntil(this.unsubscribe)).subscribe((res: ApiResponseInterface) => {
           this.paginationService.updateLoadingState(false);
           this.paginationService.updateResultsCount(res.pagination.total);
           this.preDispatchService.selectedPreDispatches = [];

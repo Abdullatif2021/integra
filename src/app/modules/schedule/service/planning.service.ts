@@ -21,6 +21,7 @@ export class PlanningService {
     moveItemsToInPlaningChanges = new EventEmitter<any>() ;
 
     changePreDispatchData(data) {
+        console.log(data, 'shit changes');
         this.preDispatchDataChanges.emit(data);
     }
 

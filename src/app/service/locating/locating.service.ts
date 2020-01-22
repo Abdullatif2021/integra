@@ -10,7 +10,6 @@ import {LoadingService} from '../loading.service';
 import {ApiResponseInterface} from '../../core/models/api-response.interface';
 import {BuildingLocationInterface, FormattedAddress, LocatedBuildingInterface} from '../../core/models/building.interface';
 import {BackProcessingService} from '../back-processing.service';
-import {reject} from 'q';
 
 @Injectable()
 export class LocatingService implements OnDestroy {
@@ -89,16 +88,20 @@ export class LocatingService implements OnDestroy {
     }
 
     async startLocating(preDispatch, handle: EventEmitter<any>, preDispatchData, groupingProgress = true) {
+        this.preDispatch = preDispatch ;
+        await this.updateLocalizationStatus(preDispatch, '1');
         if (preDispatchData.status === 'notPlanned') {
-            await this.group(preDispatch, handle, groupingProgress);
+            const grouping = await this.group(preDispatch, handle, groupingProgress);
+            // if grouping was interrupted, pause the process stop working.
+            if (!grouping) {
+                this.pause(preDispatch) ;
+                return ;
+            }
         }
         this.processed = 0 ;
         this.buildings = <[LocatedBuildingInterface]>[] ;
         this.fixed = <[BuildingLocationInterface]>[] ;
-
-        this.preDispatch = preDispatch ;
         handle.emit({stateObj: {state: true, message: 'initializing...', progress: 0, autProgress: false, hide_btn: true}});
-
         // start locating .
         while (true) {
             handle.emit({message: 'Fetching routes data to process'});
@@ -126,7 +129,7 @@ export class LocatingService implements OnDestroy {
 
         // reset buildings to start the fix not found process .
         this.buildings = <[LocatedBuildingInterface]>[] ;
-
+        await this.updateLocalizationStatus(preDispatch, null);
         const nfound = await this.getNotFoundProducts(preDispatch).toPromise() ;
         if (nfound.data.length) {
             // emit fix the not found items event.
@@ -139,7 +142,13 @@ export class LocatingService implements OnDestroy {
             this.snotifyService.success('All buildings are localized !', { showProgressBar: false});
         }
 
-        return true ;
+        return true;
+    }
+
+    pause(preDispatch) {
+        console.log('here we go;;;;;');
+        this.backProcessingService.pause('locating-' + preDispatch);
+        this.updateLocalizationStatus(preDispatch, null);
     }
 
     async process(buildings, total, handle: EventEmitter<any>) {
@@ -210,7 +219,6 @@ export class LocatingService implements OnDestroy {
                     data => { this.buildings = <[LocatedBuildingInterface]>[]; resolve(data) ; },
                     error => { reject(error) ; }
                 );
-            // resolve();
         });
     }
 
@@ -231,7 +239,6 @@ export class LocatingService implements OnDestroy {
                     handle.emit({state: false});
                 }
             );
-            // resolve();
         });
     }
 
@@ -251,14 +258,16 @@ export class LocatingService implements OnDestroy {
             this.http.get<ApiResponseInterface>(AppConfig.endpoints.groupProducts(preDispatch), {}).subscribe(
                 data => {
                     this.breakGroupingLoading = true ;
-                    return _resolve(true);
+                        return _resolve(true);
+                },
+                error => {
+                    return _resolve(false);
                 }
             );
 
             // create the check loading interval
             if (progress) {
-                await this.createGroupingProgressInterval(preDispatch, handle);
-                return _resolve(true);
+                this.createGroupingProgressInterval(preDispatch, handle);
             }
 
         });
@@ -271,7 +280,7 @@ export class LocatingService implements OnDestroy {
     createGroupingProgressInterval(preDispatch, handle) {
         return new Promise(async (_resolve) => {
             let data = await this.getGroupingProgress(preDispatch).toPromise();
-            while (data.data !== 100) {
+            while (data.data !== 100 && this.backProcessingService.isRunning('locating-' + preDispatch)) {
                 if (this.breakGroupingLoading) {
                     return _resolve(true);
                 }
@@ -290,6 +299,30 @@ export class LocatingService implements OnDestroy {
             setTimeout(() => {_resolve(true)}, time);
         });
     }
+
+    stopAllLocatingProcess() {
+        console.log('here we go!');
+        const process = this.backProcessingService.getAllByNameSpace('locating') ;
+        if (!process) {
+            return ;
+        }
+        process.forEach((elm) => {
+            this.updateLocalizationStatus(elm, null);
+        });
+    }
+    updateLocalizationStatus(id, status) {
+        return new Promise((_resolve, _reject) => {
+            const options = { params: new HttpParams()};
+            if (status) {
+                options.params = options.params.append('status', status);
+            }
+            return this.http.get<ApiResponseInterface>(AppConfig.endpoints.updateLocalizationStatus(id), options).subscribe(
+                data => { _resolve(data); },
+                error => {_reject(error); },
+            );
+        });
+    }
+
 
     ngOnDestroy() {
     }

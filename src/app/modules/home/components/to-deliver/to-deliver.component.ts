@@ -35,6 +35,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   current_streets = {all: true, items: [], search: null};
   selectAllOnLoad = false ;
   unsubscribe: Subject<void> = new Subject();
+  order_field = null ;
+  order_method = '1' ;
   actions = [
     {
         name: 'Crea nuova Pre-Distinta', fields: [
@@ -143,6 +145,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       this.subscription = this.productsService.getToDeliverProducts(
           this.current_cities,
           this.current_streets,
+          this.order_field,
+          this.order_method
       ).pipe(takeUntil(this.unsubscribe)).subscribe((res: ApiResponseInterface) => {
           this.paginationService.updateLoadingState(false);
           this.paginationService.updateResultsCount(res.pagination.total);
@@ -156,7 +160,9 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   }
 
   changeOrder(event) {
-      console.log(event);
+        this.order_field = event.field;
+        this.order_method = event.order === 'DESC' ? '1' : '2';
+        this.loadProducts(false);
   }
 
   selectedItemsChanged(items) {

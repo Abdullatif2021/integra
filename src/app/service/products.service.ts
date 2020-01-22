@@ -20,7 +20,7 @@ export class ProductsService {
 
   public selectedProducts ;
   selectAllOnLoadEvent = new EventEmitter() ;
-  getToDeliverProducts(cities, streets) {
+  getToDeliverProducts(cities, streets, order_field = null, order_method = '1') {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)
               .set('pageSize', this.paginationService.rpp)};
@@ -48,6 +48,10 @@ export class ProductsService {
           if (streets.items.length) {
               options.params = options.params.set('streets_ids', streets.items);
           }
+      }
+      if (order_field) {
+          options.params = options.params.set('key', order_field) ;
+          options.params = options.params.set('orderMethod', order_method) ;
       }
       options.params = this.filtersService.getHttpParams(options.params) ;
       return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getProducts, options).pipe(

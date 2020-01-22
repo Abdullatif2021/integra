@@ -16,7 +16,7 @@ export class PreDispatchService {
         private http: HttpClient,
         private filtersService: FiltersService,
         private paginationService: PaginationService
-    ) { }
+    ) {}
 
     httpOptions = {
         headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Request-Headers': 'POST,GET,PUT,DELETE,OPTIONS' })
@@ -103,17 +103,17 @@ export class PreDispatchService {
         );
     }
 
-    delete(ids) {
+    delete(ids, confirm = false) {
         const options = {
-            body :{
+            body : {
                 ids: ids,
+                confirm: confirm
             }
-        }
+        };
         return this.http.request<ApiResponseInterface>('delete', AppConfig.endpoints.preDispatchEdit, options).pipe(
             catchError(this.handleError)
         );
     }
-
 
     handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
@@ -124,7 +124,7 @@ export class PreDispatchService {
         return throwError('');
     }
 
-    getPreDispatchData(preDispatchId) {
+    getPreDispatchData(preDispatchId): any {
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchData(preDispatchId), {}).pipe(
             catchError(this.handleError)
         );

@@ -41,16 +41,24 @@
     font-size: 13px;
 }
 .group-cb{
-    padding: 7px;
+    padding: 7px 7px 0px 1px;
 }
 .group-cb label{
     margin-left: 3px;
+    margin-bottom: 3px;
+    font-size: 12px;
 }
 .found-cb label{
     color: #298D40;
 }
 .not-found-cb label{
     color: #8D2727;
+}
+.no-house-number-cb label {
+    color: #ff9800;
+}
+.all-cb label{
+    color: #212121
 }
 
 /* items */
@@ -163,7 +171,7 @@
 /* lvl-5 */
 
 .lvl-5{
-    padding-left: 46px;
+    padding-left: 54px;
 }
 .lvl-5 .item-row .select-container .selected, .lvl-5 .item-row .select-container .not-selected{
     width: 15px;
@@ -180,9 +188,6 @@
 
 /* Statuses */
 
-.status-1 .item-row, .status-2 .item-rowM .status-3 .item-row, .status-4 .item-row{
-    padding-left: 20px;
-}
 .status-1 .item-row .text{
     text-decoration: line-through;
 }
@@ -296,4 +301,7 @@
 }
 .modal-icon {
     font-size: 24px;
+}
+.search-container{
+    margin-top: 10px;
 }

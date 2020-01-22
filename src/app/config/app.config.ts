@@ -54,6 +54,7 @@ export const AppConfig = {
         groupingProgress: (id) => `${api_url}/api/preDispatch/${id}/getGroupingPercent`,
         getStreetMergeAvailableStreets: (id) => `${api_url}/api/preDispatch/${id}/getAvailableStreets`,
         mergeTwoStreets: `${api_url}/api/preDispatch/mergerStreets`,
+        updateLocalizationStatus: (id) => `${api_url}/api/preDispatch/${id}/changeLocalizeStatus`,
     },
 
 };

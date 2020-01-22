@@ -27,14 +27,18 @@ export class ActionsService {
       const promise = new Promise(function(resolve, reject) {
           method.subscribe(
               data => {
-                  if (data.status === 'success') {
+                  if (data.status === 'success' || data.success === true) {
                       let body = 'Success' ;
                       if (typeof success === 'function') {
                           body = success(data);
                       }
                       resolve({body: body, config: { showProgressBar: false, timeout: 3000 }});
                   } else {
-                      resolve({body: data.status, config: { showProgressBar: false, timeout: 3000 }});
+                      let body = data.message ? data.message : 'Error' ;
+                      if (typeof failed === 'function') {
+                          body = failed(data) ;
+                      }
+                      resolve({body: body, config: { showProgressBar: false, timeout: 3000 }});
                   }
               },
               error => {
@@ -122,12 +126,19 @@ export class ActionsService {
       }, (error) => error.error.message );
   }
 
-  deletePreDispatch(ids) {
-      const method = this.preDispatchService.delete(ids) ;
-      this.run(method, 'Elimina in corso', () => {
-          setTimeout(() => {this.reloadData.emit(true) ; }, 500 );
-          return 'Pre-Distinte Elimina con successo' ;
-      }, (error) => error.error.message );
+  deletePreDispatch(ids, confirm = false): Promise<any> {
+      return new Promise<any>((resolve, reject) => {
+          const method = this.preDispatchService.delete(ids, confirm) ;
+          this.run(method, 'Elimina in corso', (result) => {
+              setTimeout(() => {this.reloadData.emit(true) ; }, 500 );
+              resolve(result);
+              return 'Pre-Distinte Elimina con successo' ;
+          }, (error) => {
+              reject(error);
+              setTimeout(() => {this.reloadData.emit(true) ; }, 500 );
+              return error.error ? error.error.message : (error.message ? error.message : 'Error') ;
+          });
+      });
   }
 
 }

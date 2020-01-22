@@ -11,6 +11,7 @@ import {SnotifyService} from 'ng-snotify';
 import {BackProcessingService} from '../../service/back-processing.service';
 import {LoadingService} from '../../service/loading.service';
 import {LocatingService} from '../../service/locating/locating.service';
+import {PreDispatchService} from '../../service/pre-dispatch.service';
 
 @Component({
     selector: 'app-schedules',
@@ -42,6 +43,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private snotifyService: SnotifyService,
         private backProcessingService: BackProcessingService,
         private loadingService: LoadingService,
+        private preDispatchService: PreDispatchService,
     ) {
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data;
@@ -73,10 +75,10 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     async locate() {
-
         this.loadingService.show();
         this.loadingService.subscribeTo(this.locatingHandle);
         if (this.backProcessingService.isRunning('locating-' + this.preDispatch)) {
+            console.log('wtf it is running !');
             this.loadingService.setLoadingState({
                 state: true, message: 'checking loading state for this pre-distinta ...', progress: 0, autProgress: false, hide_btn: true
             });
@@ -88,7 +90,10 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             if (result && result.data && result.data.preDispatch) {
                 this.planningService.changePreDispatchData(result.data.preDispatch);
             }
-        });
+            // update pre-dispatch data
+            const data = await this.preDispatchService.getPreDispatchData(this.preDispatch).toPromise();
+            this.planningService.changePreDispatchData(data.data);
+        }, 'locating', this.preDispatch);
     }
 
     moveToInPlan(modalRef, force = false) {
@@ -103,9 +108,12 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         this.latLngInputState[nFoundItem.id] = event.target.checked;
     }
 
-    fixLocation(skip = false) {
-        this.locatingService.fix(<[BuildingLocationInterface]>this.fixedItems, skip, this.locatingHandle);
+    async fixLocation(skip = false) {
+        await this.locatingService.fix(<[BuildingLocationInterface]>this.fixedItems, skip, this.locatingHandle);
         this.fixedItems = <[BuildingLocationInterface]>[];
+        // update pre-dispatch data
+        const data = await this.preDispatchService.getPreDispatchData(this.preDispatch).toPromise();
+        this.planningService.changePreDispatchData(data.data);
     }
 
     notFoundAddressChanged(data, item) {

@@ -446,10 +446,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
 
     async filterChanged(event, type) {
 
-        if (event.target.checked) {
-            this.filter += type === 'found' ? 1 : -1;
+        if (event.target.checked && type !== -1) {
+            this.filter = type;
         } else {
-            this.filter -= type === 'found' ? 1 : -1;
+            this.filter = null;
         }
 
         this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);

@@ -23,7 +23,7 @@ export class ListTreeService implements OnDestroy {
     select = new NodeSelectHelper() ;
 
     // List Tree Methods
-    listNode(preDispatchId: number, node: TreeNodeInterface, page = 1, filter = 0, mode = 'created'): Promise<TreeNodeInterface[]> {
+    listNode(preDispatchId: number, node: TreeNodeInterface, page = 1, filter = null, mode = 'created'): Promise<TreeNodeInterface[]> {
         return new Promise<TreeNodeInterface[]>(async (resolve, reject) => {
             let result = <TreeNodeInterface[]>[];
             const type = this.getNextNodeType(node);
@@ -47,7 +47,7 @@ export class ListTreeService implements OnDestroy {
         });
     }
 
-    loadNode(preDispatchId: number, node: TreeNodeInterface, page = '1', filter = 0, mode): Observable<TreeNodeResponseInterface> {
+    loadNode(preDispatchId: number, node: TreeNodeInterface, page = '1', filter = null, mode): Observable<TreeNodeResponseInterface> {
         const options = {params: new HttpParams()};
         options.params = options.params.set(node.type, node.id);
         let parent: TreeNodeInterface = node.parent;
@@ -59,10 +59,8 @@ export class ListTreeService implements OnDestroy {
             parent = parent.parent;
         }
         options.params = options.params.set('page', page);
-        if (filter === 1) {
-            options.params = options.params.set('filter', 'true');
-        } else if (filter === -1) {
-            options.params = options.params.set('filter', 'false');
+        if (filter !== null) {
+            options.params = options.params.set('filter', '' + filter);
         }
         options.params = options.params.set('planningMode', mode);
 
@@ -96,7 +94,8 @@ export class ListTreeService implements OnDestroy {
         if (parent.type === 'oet') {
             parent = parent.parent;
         }
-        let name = parent.text.trim() + ', ' + (elm.house_number ? elm.house_number : (elm.extra ? elm.extra.house_number : '')) + ' , ';
+        let name = (elm.old_street_name ? (elm.old_street_name) : (parent.text.trim())) + ', ' +
+            (elm.house_number ? elm.house_number : (elm.extra ? elm.extra.house_number : '')) + ' , ';
         parent = parent.parent;
         while (true) {
             if (!parent.id) {

@@ -182,16 +182,9 @@
 }
 
 .order-container{
-    float: right;
-    margin-right: 1px;
-    margin-top: -4px;
-}
-.order-container-m{
-    float: none;
-    display: inline-block;
     position: absolute;
-    top: 25%;
-    right: 0px;
+    top: 30%;
+    right: 1px;
 }
 .order-btn {
     width: 11px;

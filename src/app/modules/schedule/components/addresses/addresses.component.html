@@ -16,13 +16,21 @@
 
     <!-- groups -->
     <div class="groups mt-2">
+      <div class="float-left group-cb all-cb">
+        <input type="radio" checked name="group-cb" (change)="filterChanged($event, -1)" class="integraa-checkbox">
+        <label>All ({{preDispatchData.quantity}})</label>
+      </div>
       <div class="float-left group-cb found-cb">
-        <input type="checkbox" (change)="filterChanged($event, 'found')" class="integraa-checkbox">
+        <input type="radio" name="group-cb" (change)="filterChanged($event, 1)" class="integraa-checkbox">
         <label>Trovati ({{preDispatchData.fixedProductCount}})</label>
       </div>
       <div class="float-left group-cb not-found-cb">
-        <input type="checkbox" (change)="filterChanged($event, 'not-found')" class="integraa-checkbox">
+        <input type="radio" name="group-cb" (change)="filterChanged($event, 0)" class="integraa-checkbox">
         <label>Non Trovati ({{preDispatchData.notFixedProductCount}})</label>
+      </div>
+      <div class="float-left group-cb no-house-number-cb">
+        <input type="radio" name="group-cb" (change)="filterChanged($event, 2)" class="integraa-checkbox">
+        <label>Senza numero civico ({{preDispatchData.withOutHouseNumber}})</label>
       </div>
 
       <div class="create-btn float-right">

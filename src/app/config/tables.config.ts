@@ -59,8 +59,8 @@ export const TablesConfig = {
                         {action: 'view'},
                         {action: 'book'},
                     ]},
-                {title: 'BARCODE', field : 'barcode'},
-                {title: 'ATTO', field : 'act_code'},
+                {title: 'BARCODE', field : 'barcode', order: '2'},
+                {title: 'ATTO', field : 'act_code', order: '1'},
                 {title: ['PRODOTTO', 'DISTINTA'], field: ['product_category', 'dispatch_code'], separator: true, value_separator: 'dashed'},
                 {title: 'STATO', field: 'product_status'},
                 {title: ['DATA/ORA', 'Q.TA', 'TENTATIVI'], field: [
@@ -101,13 +101,13 @@ export const TablesConfig = {
                         }},
                     ]},
                 {title: 'NOME DISTINTA', field: 'name', actions: [], order: '1'},
-                {title: 'DISTINTA', field: 'code', actions: []},
+                {title: 'DISTINTA', field: 'code', actions: [], order: '4'},
                 {title: 'STATO / ESITO', field: 'status', actions: [
                         {action: 'view', click: (elm) => { console.log('call back working 2 . '); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
-                    ]},
+                    ], order: '3'},
                 {title: 'Q.TA’', field: 'quantity', actions: [], order: '2'},
-                {title: 'DATA', field: 'creation_date', actions: [], order: '3'},
+                {title: 'DATA', field: 'creation_date', actions: [], order: '5'},
                 {title: 'OPERAZIONE', actions: [
                         {
                             action: 'progress',
@@ -117,10 +117,16 @@ export const TablesConfig = {
                             }
                         },
                         {action: 'pPlay', field: 'p_status', print_if: (item, container) => {
-                                return !container.backProcessingService.isRunning('locating-' + item.id);
+                                if (item.localize_status === 'pause' && container.backProcessingService.isRunning('locating-' + item.id) ) {
+                                    // pause pre-dispatch
+                                    container.backProcessingService.pause('locating-' + item.id);
+                                }
+                                return !container.backProcessingService.isRunning('locating-' + item.id) &&
+                                    item.localize_status === 'pause' ;
                             },
                             click: (item, container) => {
                                 container.backProcessingService.run('locating-' + item.id, async(handle) => {
+                                    item.localize_status = 'play';
                                     const locatingSrevice =  Object.assign(
                                         Object.create( Object.getPrototypeOf(container.locatingService)), container.locatingService
                                     );
@@ -128,18 +134,20 @@ export const TablesConfig = {
                                     if (result && result.data && result.data.preDispatch) {
                                         console.log('update table');
                                     }
-                                });
+                                }, 'locating', item.id);
                             }
                         },
                         {action: 'pPause', field: 'p_status', print_if: (item, container) => {
-                                return container.backProcessingService.isRunning('locating-' + item.id);
+                                return container.backProcessingService.isRunning('locating-' + item.id) || item.localize_status === 'play' ;
                             },
                             click: (item, container) => {
-                                container.backProcessingService.pause('locating-' + item.id);
+                                item.localize_status = 'pause';
+                                container.locatingService.pause(item.id);
                             }
                         }, {
                             action: 'pDelete', print_if: (item, container) => {
-                                return !container.backProcessingService.isRunning('locating-' + item.id);
+                                return !container.backProcessingService.isRunning('locating-' + item.id) &&
+                                    item.localize_status === 'pause' ;
                             },
                             click: (item, container) => {
                                 container.openModal(PreDispatchDeleteComponent, {deleteItem: true, item: item}) ;
