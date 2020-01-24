@@ -41,12 +41,11 @@
     font-size: 13px;
 }
 .group-cb{
-    padding: 7px 7px 0px 1px;
+    padding: 7px 7px 0px 7px;
 }
 .group-cb label{
     margin-left: 3px;
     margin-bottom: 3px;
-    font-size: 12px;
 }
 .found-cb label{
     color: #298D40;
@@ -56,9 +55,6 @@
 }
 .no-house-number-cb label {
     color: #ff9800;
-}
-.all-cb label{
-    color: #212121
 }
 
 /* items */

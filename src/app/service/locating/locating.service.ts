@@ -8,7 +8,7 @@ import {Observable} from 'rxjs';
 import {AppConfig} from '../../config/app.config';
 import {LoadingService} from '../loading.service';
 import {ApiResponseInterface} from '../../core/models/api-response.interface';
-import {BuildingLocationInterface, FormattedAddress, LocatedBuildingInterface} from '../../core/models/building.interface';
+import {BuildingLocationInterface, LocatedBuildingInterface} from '../../core/models/building.interface';
 import {BackProcessingService} from '../back-processing.service';
 
 @Injectable()
@@ -90,7 +90,7 @@ export class LocatingService implements OnDestroy {
     async startLocating(preDispatch, handle: EventEmitter<any>, preDispatchData, groupingProgress = true) {
         this.preDispatch = preDispatch ;
         await this.updateLocalizationStatus(preDispatch, '1');
-        if (preDispatchData.status === 'notPlanned') {
+        if (preDispatchData.status === 'notPlanned' || preDispatchData.status === 'in_grouping') {
             const grouping = await this.group(preDispatch, handle, groupingProgress);
             // if grouping was interrupted, pause the process stop working.
             if (!grouping) {
@@ -146,7 +146,6 @@ export class LocatingService implements OnDestroy {
     }
 
     pause(preDispatch) {
-        console.log('here we go;;;;;');
         this.backProcessingService.pause('locating-' + preDispatch);
         this.updateLocalizationStatus(preDispatch, null);
     }
@@ -293,15 +292,12 @@ export class LocatingService implements OnDestroy {
             return _resolve(true);
         });
     }
-
     sleep(time) {
         return new Promise<any>((_resolve) => {
-            setTimeout(() => {_resolve(true)}, time);
+            setTimeout(() => { _resolve(true); }, time);
         });
     }
-
     stopAllLocatingProcess() {
-        console.log('here we go!');
         const process = this.backProcessingService.getAllByNameSpace('locating') ;
         if (!process) {
             return ;
@@ -310,17 +306,17 @@ export class LocatingService implements OnDestroy {
             this.updateLocalizationStatus(elm, null);
         });
     }
-    updateLocalizationStatus(id, status) {
-        return new Promise((_resolve, _reject) => {
-            const options = { params: new HttpParams()};
+    async updateLocalizationStatus(id, status) {
+        return await this.backProcessingService.run('updating-status-' + id, () => new Promise((resolve, reject) => {
+            const options = { params: new HttpParams(), headers: new HttpHeaders({'ignoreLoadingBar': ''})};
             if (status) {
                 options.params = options.params.append('status', status);
             }
             return this.http.get<ApiResponseInterface>(AppConfig.endpoints.updateLocalizationStatus(id), options).subscribe(
-                data => { _resolve(data); },
-                error => {_reject(error); },
+                data => { resolve(data); },
+                error => { reject(error); },
             );
-        });
+        }), 'updating-status', id);
     }
 
 

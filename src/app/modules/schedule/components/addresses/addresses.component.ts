@@ -47,7 +47,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     all_start_points = [];
     all_end_points = [];
     toMoveItem: any;
-    filter = 0;
+    filter = [0,0,0];
     itemsCount = 0;
     searchSubscription: any ;
     searchMode = false ;
@@ -446,10 +446,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
 
     async filterChanged(event, type) {
 
-        if (event.target.checked && type !== -1) {
-            this.filter = type;
+        if (event.target.checked) {
+            this.filter[type] = 1;
         } else {
-            this.filter = null;
+            this.filter[type] = 0;
         }
 
         this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);

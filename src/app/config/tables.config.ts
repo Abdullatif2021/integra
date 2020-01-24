@@ -117,37 +117,36 @@ export const TablesConfig = {
                             }
                         },
                         {action: 'pPlay', field: 'p_status', print_if: (item, container) => {
-                                if (item.localize_status === 'pause' && container.backProcessingService.isRunning('locating-' + item.id) ) {
+                                if (item.localize_status === 'pause' && container.backProcessingService.isRunning('locating-' + item.id) &&
+                                    !container.backProcessingService.nameSpaceHasAny('updating-status')) {
                                     // pause pre-dispatch
-                                    container.backProcessingService.pause('locating-' + item.id);
+                                    container.locatingService.pause(item.id);
                                 }
                                 return !container.backProcessingService.isRunning('locating-' + item.id) &&
-                                    item.localize_status === 'pause' ;
+                                    item.localize_status === 'pause';
                             },
                             click: (item, container) => {
+                                item.localize_status = 'play';
                                 container.backProcessingService.run('locating-' + item.id, async(handle) => {
-                                    item.localize_status = 'play';
                                     const locatingSrevice =  Object.assign(
                                         Object.create( Object.getPrototypeOf(container.locatingService)), container.locatingService
                                     );
-                                    const result: any = await locatingSrevice.startLocating(item.id, handle, item, false);
-                                    if (result && result.data && result.data.preDispatch) {
-                                        console.log('update table');
-                                    }
+                                    await locatingSrevice.startLocating(item.id, handle, item, false);
                                 }, 'locating', item.id);
                             }
                         },
                         {action: 'pPause', field: 'p_status', print_if: (item, container) => {
-                                return container.backProcessingService.isRunning('locating-' + item.id) || item.localize_status === 'play' ;
+                                return (container.backProcessingService.isRunning('locating-' + item.id) ||
+                                    item.localize_status === 'play');
                             },
                             click: (item, container) => {
                                 item.localize_status = 'pause';
                                 container.locatingService.pause(item.id);
                             }
                         }, {
-                            action: 'pDelete', print_if: (item, container) => {
+                        action: 'pDelete', print_if: (item, container) => {
                                 return !container.backProcessingService.isRunning('locating-' + item.id) &&
-                                    item.localize_status === 'pause' ;
+                                    item.localize_status === 'pause';
                             },
                             click: (item, container) => {
                                 container.openModal(PreDispatchDeleteComponent, {deleteItem: true, item: item}) ;

@@ -52,6 +52,21 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       public locatingService: LocatingService
   ) { }
 
+
+   ngOnInit() {
+        this.actionsService.setActions(this.actions) ;
+        this.filtersService.clear();
+        this.loadItems(true);
+        this.actionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
+            this.loadItems(false) ;
+            this.preDispatchService.selectedPreDispatches = [] ;
+        });
+        this.filtersService.setFields(FilterConfig.pre_dispatch, this) ;
+        this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filters) => {
+            this.loadItems(true) ;
+        });
+  }
+
   loadItems(reset: boolean) {
       if ( this.subscription ) { this.subscription.unsubscribe(); }
       this.preDispatchList = [];
@@ -74,30 +89,21 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   }
 
   startLoadingInterval() {
-      setTimeout(() => {
-          this.subscription = this.preDispatchService.getPreDispatchItems(true, this.order_field, this.order_method).pipe(takeUntil(this.unsubscribe))
-              .subscribe((res: ApiResponseInterface) => {
-                  this.preDispatchList = res.data ;
-                  this.refresh++ ;
-                  this.startLoadingInterval();
+      if (!this.backProcessingService.nameSpaceHasAny('updating-status')) {
+          this.subscription = this.preDispatchService.getPreDispatchItems(true, this.order_field, this.order_method)
+              .pipe(takeUntil(this.unsubscribe)).subscribe((res: ApiResponseInterface) => {
+                  // if there was not status update request pending, update the status
+                  if (!this.backProcessingService.ignoreOne('updating-status')) {
+                      this.preDispatchList = res.data ;
+                      this.refresh++ ;
+                  }
               });
+      }
+      setTimeout(() => {
+          this.startLoadingInterval();
       }, 2000);
   }
 
-
-  ngOnInit() {
-      this.actionsService.setActions(this.actions) ;
-      this.filtersService.clear();
-      this.loadItems(true);
-      this.actionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
-          this.loadItems(false) ;
-          this.preDispatchService.selectedPreDispatches = [] ;
-      });
-      this.filtersService.setFields(FilterConfig.pre_dispatch, this) ;
-      this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filters) => {
-          this.loadItems(true) ;
-      });
-  }
   ngOnDestroy() {
       this.unsubscribe.next();
       this.unsubscribe.complete();

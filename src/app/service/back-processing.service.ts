@@ -14,6 +14,7 @@ export class BackProcessingService {
     _states = {} ;
     _actions = {} ;
     _handles = {} ;
+    _ignore_one = {} ;
     // _queue = {} ;
 
     async run(key, action, namespace = 'general', id = -1) {
@@ -23,10 +24,12 @@ export class BackProcessingService {
             this._actions[namespace] = [id] ;
         }
         this._states[key] = 1 ;
-        await action(this.getOrCreateHandle(key));
+        this._ignore_one[namespace] = true ;
+        const result = await action(this.getOrCreateHandle(key));
         this._states[key] = false ;
         this._handles[key] = 0 ;
         this._actions[namespace] = this._actions[namespace].filter((elm) => elm !== id) ;
+        return result ;
     }
 
     isRunning(key): boolean {
@@ -46,6 +49,18 @@ export class BackProcessingService {
 
     getAllByNameSpace(namespace) {
         return this._actions[namespace];
+    }
+
+    nameSpaceHasAny(namespace): boolean {
+        return this._actions[namespace] && this._actions[namespace].length ;
+    }
+
+    ignoreOne(namespace): boolean {
+        const state = this._ignore_one[namespace] ? true : false ;
+        if (this._ignore_one[namespace]) {
+            this._ignore_one[namespace] = false ;
+        }
+        return state;
     }
 
     checkLeaving() {
