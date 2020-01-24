@@ -31,6 +31,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   loaded = false ;
   loading = true ;
   subscription: any = false ;
+  currentOrder = null ;
 
   ngOnInit() {
     // this.loadData(false);
@@ -56,7 +57,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     if (!append) { this.items = [] ; }
     if ( this.subscription ) { this.subscription.unsubscribe(); }
 
-    this.subscription = this.getMethod(this.page, this.rpp, this.searchValue)
+    this.subscription = this.getMethod(this.page, this.rpp, this.searchValue, this.currentOrder)
         .subscribe((res: ApiResponseInterface) => {
           this.handleResponse(res);
         });
@@ -100,18 +101,18 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     if (!item) {
       this._selected = [] ;
       this._all_selected = !this._all_selected;
-      return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue});
+      return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
     }
     for (let i = 0; i < this._selected.length; ++i) {
       if (!this._selected[i]) {
           this._selected.splice(i, 1);
       } else if (this._selected[i] === item.id) {
         this._selected.splice(i, 1);
-        return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue});
+        return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
       }
     }
     this._selected.push(item.id);
-    return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue});
+    return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
   }
 
   isSelected(item) {
@@ -119,6 +120,12 @@ export class SimpleTableComponent implements OnInit, OnChanges {
       return !this._selected.filter((_item) => item.id === _item).length;
     }
     return this._selected.filter((_item) => item.id === _item).length;
+  }
+
+  changeOrder(order) {
+    this.currentOrder = order ;
+    this.page = 1 ;
+    this.loadData(false) ;
   }
 
   reload() {

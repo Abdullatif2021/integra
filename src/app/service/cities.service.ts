@@ -17,9 +17,9 @@ export class CitiesService {
         private filtersService: FiltersService,
     ) { }
 
-    getCities(page, rpp, name) {
-        const options = { params: new HttpParams().set('page', page).set('pageSize', rpp)};
-        if (name !== null) { console.log('here'); options.params = options.params.set('cityName', name); }
+    getCities(page, rpp, name, order) {
+        const options = { params: new HttpParams().set('page', page).set('pageSize', rpp).set('orderMethod', order)};
+        if (name !== null) { options.params = options.params.set('cityName', name); }
         options.params = this.filtersService.getHttpParams(options.params) ;
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCities, options).pipe(
             catchError(this.handleError)

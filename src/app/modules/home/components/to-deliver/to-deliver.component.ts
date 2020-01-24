@@ -78,8 +78,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
     },
   ];
 
-  citiesGetMethod = (page, rpp, name) => this.citiesService.getCities(page, rpp, name);
-  streetsGetMethod = (page, rpp, name) => this.streetsService.getStreets(page, rpp, name, this.current_cities);
+  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getCities(page, rpp, name, order);
+  streetsGetMethod = (page, rpp, name, order) => this.streetsService.getStreets(page, rpp, name, this.current_cities, order);
 
   constructor(
       private citiesService: CitiesService,

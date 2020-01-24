@@ -16,8 +16,8 @@ export class StreetsService {
         private filtersService: FiltersService,
         ) { }
 
-    getStreets(page, rpp, name, cities) {
-        const options = { params: new HttpParams().set('page', page).set('pageSize', rpp)};
+    getStreets(page, rpp, name, cities, order) {
+        const options = { params: new HttpParams().set('page', page).set('pageSize', rpp).set('orderMethod', order)};
         if (name !== null) { options.params = options.params.set('streetName', name); }
         if (cities.all) {
             if (cities.items.length) {

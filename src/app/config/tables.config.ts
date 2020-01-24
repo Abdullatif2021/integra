@@ -14,12 +14,14 @@ export const TablesConfig = {
             title: 'Paese',
             icon: 'assets/images/cityscape.svg',
             searchPlaceHolder: 'Cerca Paese',
+            order: '1'
         },
         // streets table structure
         streetsTable: {
             title: 'Strada',
             icon: 'assets/images/work-tools.svg',
-            searchPlaceHolder: 'Cerca Strada'
+            searchPlaceHolder: 'Cerca Strada',
+            order: '1'
         },
         // postmen table structure
         postmenTable: {

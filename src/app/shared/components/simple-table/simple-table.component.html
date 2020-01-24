@@ -1,5 +1,14 @@
 <div class="table-container">
-  <div class="table-head">{{table.title}}</div>
+  <div class="table-head">
+    <span>{{table.title}}</span>
+    <ng-container *ngIf="table.order">
+      <div class="order-container">
+        <div (click)="changeOrder('1')" [ngClass]="{'active-order': this.currentOrder === '1'}" class="order-desc order-btn"></div>
+        <div (click)="changeOrder('2')" [ngClass]="{'active-order': this.currentOrder === '2'}" class="order-asc order-btn"></div>
+      </div>
+    </ng-container>
+    <div *ngIf="pagination && pagination.total" class="header-qta">Q.t: {{pagination.total}}</div>
+  </div>
   <div class="search-section">
     <app-search-box [placeholder]="table.searchPlaceHolder" (changed)="search($event)" ></app-search-box>
   </div>
