@@ -124,8 +124,12 @@ export class PreDispatchService {
         return throwError('');
     }
 
-    getPreDispatchData(preDispatchId): any {
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchData(preDispatchId), {}).pipe(
+    getPreDispatchData(preDispatchId, ignoreProgress = false): any {
+        let options = {} ;
+        if (ignoreProgress) {
+            options = { headers: new HttpHeaders({'ignoreLoadingBar': ''})};
+        }
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchData(preDispatchId), options).pipe(
             catchError(this.handleError)
         );
     }

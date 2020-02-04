@@ -20,25 +20,38 @@ export class ProductsService {
 
   public selectedProducts ;
   selectAllOnLoadEvent = new EventEmitter() ;
-  getToDeliverProducts(cities, streets, order_field = null, order_method = '1') {
+  getToDeliverProducts(cities, streets, order_field = null, order_method = '1', citiesType = 'by_cap') {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)
               .set('pageSize', this.paginationService.rpp)};
 
       if (cities.all) {
           if (cities.items.length) {
-              options.params = options.params.set('exclude_cities_ids', cities.items);
+              if (citiesType === 'by_client') {
+                  options.params = options.params.set('exclude_clients_ids', cities.items);
+              } else {
+                  options.params = options.params.set('exclude_cities_ids', cities.items);
+              }
           }
           if (cities.search) {
-              options.params = options.params.set('byCitiesSearch', cities.search);
+              if (citiesType === 'by_client') {
+                  options.params = options.params.set('byClientsSearch', cities.items);
+              } else {
+                  options.params = options.params.set('byCitiesSearch', cities.search);
+              }
           }
       } else {
           if (cities.items.length) {
-              options.params = options.params.set('cities_ids', cities.items);
+              if (citiesType === 'by_client') {
+                  options.params = options.params.set('clients', cities.items);
+              } else {
+                  options.params = options.params.set('cities_ids', cities.items);
+              }
           }
       }
       if (streets.all) {
           if (streets.items.length) {
+              console.log('the fucking streets', streets.items);
               options.params = options.params.set('exclude_streets_ids', streets.items);
           }
           if (streets.search) {

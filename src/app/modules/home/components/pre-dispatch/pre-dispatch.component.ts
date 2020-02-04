@@ -67,7 +67,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
         });
   }
 
-  loadItems(reset: boolean) {
+  loadItems(reset: boolean, startInterval = true) {
       if ( this.subscription ) { this.subscription.unsubscribe(); }
       this.preDispatchList = [];
       this._preDispatchTable.loading(true);
@@ -84,7 +84,9 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
           this.preDispatchService.selectedPreDispatches = [];
           this.preDispatchList = res.data ;
           this._preDispatchTable.loading(false);
-          this.startLoadingInterval();
+          if (startInterval) {
+              this.startLoadingInterval();
+          }
       });
   }
 
@@ -115,7 +117,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   changeOrder(event) {
       this.order_field = event.field;
       this.order_method = event.order === 'DESC' ? '1' : '2';
-      this.loadItems(false);
+      this.loadItems(true, false);
   }
 
   openModal(modal, data) {

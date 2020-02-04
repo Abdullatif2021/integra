@@ -21,7 +21,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   @Input() getMethod ;
   @Input() multi = true ;
   @Output() changed = new EventEmitter<object>() ;
-  @Input() _selected = [] ;
+  @Input() _selected: any = [] ;
   _items: any = [] ;
   _all_selected = true ;
   page = 1 ;
@@ -54,7 +54,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     }
     this.loading = true ;
 
-    if (!append) { this.items = [] ; }
+    if (!append) { this.items = [] ; this._all_selected = true ; this._selected = [] }
     if ( this.subscription ) { this.subscription.unsubscribe(); }
 
     this.subscription = this.getMethod(this.page, this.rpp, this.searchValue, this.currentOrder)
@@ -95,7 +95,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
 
   selectItem(item) {
     if (!this.multi) {
-      this._selected = [item.id] ;
+      this._selected = item ;
       return this.changed.emit(item) ;
     }
     if (!item) {
@@ -116,6 +116,9 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   }
 
   isSelected(item) {
+    if (!this.multi) {
+      return this._selected && (this._selected.id === item.id);
+    }
     if (this._all_selected) {
       return !this._selected.filter((_item) => item.id === _item).length;
     }

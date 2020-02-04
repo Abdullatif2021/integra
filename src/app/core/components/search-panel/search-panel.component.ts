@@ -126,36 +126,36 @@ export class SearchPanelComponent implements OnInit {
     }
   }
 
-  // TODO remake in a better way
-  filterCap(cap) {
-      this.active_cap = cap ;
-      this._active_filters = this._active_filters.filter((elm) => {
-          return elm.key !== 'recipientCap' ;
-      });
-      let filters = [] ;
-      if (this.grouping.filters === 'filters' ) {
-          filters = this._active_filters.concat({key: 'recipientCap', value: cap.id}) ;
-      } else {
-          this._active_filters = [] ;
-          filters = [{key: 'recipientCap', value: cap.id}] ;
-      }
-      this.filtersService.updateFilters(filters) ;
-  }
-
-  filterCustomer(customer) {
-      this.active_cap = customer ;
-      this._active_filters = this._active_filters.filter((elm) => {
-          return elm.key !== 'customerId' ;
-      });
-      let filters = [] ;
-      if (this.grouping.filters === 'filters' ) {
-          filters = this._active_filters.concat({key: 'customerId', value: customer.id}) ;
-      } else {
-          this._active_filters = [] ;
-          filters = [{key: 'customerId', value: customer.id}] ;
-      }
-      this.filtersService.updateFilters(filters) ;
-  }
+  // // TODO remake in a better way
+  // filterCap(cap) {
+  //     this.active_cap = cap ;
+  //     this._active_filters = this._active_filters.filter((elm) => {
+  //         return elm.key !== 'recipientCap' ;
+  //     });
+  //     let filters = [] ;
+  //     if (this.grouping.filters === 'filters' ) {
+  //         filters = this._active_filters.concat({key: 'recipientCap', value: cap.id}) ;
+  //     } else {
+  //         this._active_filters = [] ;
+  //         filters = [{key: 'recipientCap', value: cap.id}] ;
+  //     }
+  //     this.filtersService.updateFilters(filters) ;
+  // }
+  //
+  // filterCustomer(customer) {
+  //     this.active_cap = customer ;
+  //     this._active_filters = this._active_filters.filter((elm) => {
+  //         return elm.key !== 'customerId' ;
+  //     });
+  //     let filters = [] ;
+  //     if (this.grouping.filters === 'filters' ) {
+  //         filters = this._active_filters.concat({key: 'customerId', value: customer.id}) ;
+  //     } else {
+  //         this._active_filters = [] ;
+  //         filters = [{key: 'customerId', value: customer.id}] ;
+  //     }
+  //     this.filtersService.updateFilters(filters) ;
+  // }
 
   filter() {
       this.filtersService.updateFilters(this._filters) ;
@@ -199,6 +199,7 @@ export class SearchPanelComponent implements OnInit {
               this.filtersFields[i] = selected ;
           }
       }
+      this.filtersService.updateGrouping(val);
   }
 
   getFieldRemoteData(event, field) {
@@ -242,8 +243,12 @@ export class SearchPanelComponent implements OnInit {
     this.active_action = action;
   }
 
-  runAction() {
+  runAction(force = false) {
     if ( this.active_action && this.active_action.modal ) {
+        if (!force && this.active_action.method && this.active_action.method === 'filters') {
+            // check if there is any non committed filters
+
+        }
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.active_action.modal);
         const viewContainerRef = this.modalHost.viewContainerRef ;
         viewContainerRef.clear() ;

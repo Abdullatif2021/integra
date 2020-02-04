@@ -37,6 +37,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   unsubscribe: Subject<void> = new Subject();
   order_field = null ;
   order_method = '1' ;
+  citiesType = 'by_cap' ;
+
   actions = [
     {
         name: 'Crea nuova Pre-Distinta', fields: [
@@ -78,8 +80,9 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
     },
   ];
 
-  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getCities(page, rpp, name, order);
-  streetsGetMethod = (page, rpp, name, order) => this.streetsService.getStreets(page, rpp, name, this.current_cities, order);
+  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getCities(page, rpp, name, order, this.citiesType);
+  streetsGetMethod = (page, rpp, name, order) =>
+      this.streetsService.getStreets(page, rpp, name, this.current_cities, order,  this.citiesType);
 
   constructor(
       private citiesService: CitiesService,
@@ -96,7 +99,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   cityChanged(event) {
     this.current_cities = event;
     this._streetsTable.loadData(false) ;
-    this._streetsTable.selectItem([]) ;
+    this.loadProducts(true);
     this.filtersService.setSpecialFilter('cities', event);
   }
 
@@ -120,6 +123,18 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
           this._streetsTable.reload();
           this._citiesTable.reload();
       });
+      this.filtersService.groupingChanges.pipe(takeUntil(this.unsubscribe)).subscribe((data) => {
+          if (data.id === 'client') {
+              this.citiesType = 'by_client' ;
+          } else {
+              this.citiesType = 'by_cap' ;
+          }
+          this.current_cities = {all: true, items: [], search: null} ;
+          this.current_streets = {all: true, items: [], search: null};
+          this._citiesTable.loadData(false);
+          this._streetsTable.loadData(false);
+          this.loadProducts(true);
+      })
       this.actionsService.setActions(this.actions);
       this.actionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
           this.loadProducts(false) ;
@@ -146,7 +161,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
           this.current_cities,
           this.current_streets,
           this.order_field,
-          this.order_method
+          this.order_method,
+          this.citiesType
       ).pipe(takeUntil(this.unsubscribe)).subscribe((res: ApiResponseInterface) => {
           this.paginationService.updateLoadingState(false);
           this.paginationService.updateResultsCount(res.pagination.total);

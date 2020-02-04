@@ -80,3 +80,51 @@
     left: 10px;
     opacity: 0.9;
 }
+
+.the-yellow-bar{
+    width: 100%;
+    height: 30px;
+    background-color: #fcda4b;
+}
+
+
+.progress-action-container{
+    width: 200px;
+    height: 20px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+    display: inline-block;
+    margin: 14px auto;
+    float: left;
+
+}
+.progress-action-value{
+    background-color: #2CA53A;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    min-width: 1px;
+    z-index: 1;
+    height: 100%;
+}
+.progress-action-text-value{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: #000;
+    background: transparent;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+    padding-top: 4px;
+    font-size: 9px;
+}
+
+.play-pause-icon{
+    width: 15px;
+    margin: 14px;
+    cursor: pointer;
+}

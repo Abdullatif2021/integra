@@ -12,7 +12,11 @@ import {FilterInterface} from '../core/models/filter.interface';
 export class FiltersService {
 
   constructor(private http: HttpClient) { }
+  // the filters was changed and the changes was committed
   filtersChanges = new EventEmitter<number>() ;
+  // the filters was changed but the changes was not committed
+  groupingChanges = new EventEmitter<any>();
+  groupingType = 'by_cap' ;
   cleared = new EventEmitter<number>() ;
   fields = new EventEmitter() ;
   filters = [];
@@ -28,6 +32,11 @@ export class FiltersService {
   updateFilters(filters) {
     this.filters = filters ;
     this.filtersChanges.emit(filters);
+  }
+
+  updateGrouping(value) {
+      this.groupingType = value ;
+      this.groupingChanges.emit(value);
   }
 
   getHttpParams(options: HttpParams) {
@@ -57,14 +66,14 @@ export class FiltersService {
 
       if (this.specials.cities && this.specials.cities.all) {
           if (this.specials.cities.items.length) {
-              _filters['exclude_cities_ids'] = this.specials.cities.items;
+              _filters[this.groupingType === 'by_cap' ? 'exclude_cities_ids' : 'exclude_clients_ids'] = this.specials.cities.items;
           }
           if (this.specials.cities.search) {
-              _filters['byCitiesSearch'] = this.specials.cities.search;
+              _filters[this.groupingType === 'by_cap' ? 'byCitiesSearch' : 'byClientsSearch'] = this.specials.cities.search;
           }
       } else if (this.specials.cities) {
           if (this.specials.cities.items.length) {
-              _filters['cities_ids'] = this.specials.cities.items;
+              _filters[this.groupingType === 'by_cap' ? 'cities_ids' : 'clients'] = this.specials.cities.items;
           }
       }
       if (this.specials.streets && this.specials.streets.all) {

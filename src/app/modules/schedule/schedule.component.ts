@@ -32,6 +32,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     latLngInputState = [];
     preDispatchData: any;
     markers: [MapMarker];
+    percent = 0 ;
 
     constructor(
         private router: Router,
@@ -55,18 +56,40 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     locatingHandle: any ;
 
     ngOnInit() {
-
         this.locatingHandle = this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch);
-
         this.locatingService.productsNotFound.pipe(takeUntil(this.unsubscribe)).subscribe(
             nfound => {
                 this.nFoundItems = nfound;
                 this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown'});
             }
-        )
-
+        );
         this.mapService.markersChanges.subscribe(
             data => { this.markers = data ; }
+        );
+        this.startInterval();
+    }
+
+    startInterval() {
+        this.preDispatchService.getPreDispatchData(this.preDispatch, true).subscribe(
+            data => {
+                this.preDispatchData = data.data ;
+                if (
+                    this.preDispatchData.localize_status === 'pause' &&
+                    this.backProcessingService.isRunning('locating-' + this.preDispatch)
+                    && !this.backProcessingService.nameSpaceHasAny('updating-status')
+                ) {
+                    // pause pre-dispatch
+                    this.locatingService.pause(this.preDispatch);
+                }
+                setTimeout(() => {
+                    this.startInterval();
+                }, 2000);
+            },
+            error => {
+                setTimeout(() => {
+                    this.startInterval();
+                }, 2000);
+            }
         );
     }
 
@@ -75,8 +98,8 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     async locate() {
-        this.loadingService.show();
-        this.loadingService.subscribeTo(this.locatingHandle);
+        // this.loadingService.show();
+        // this.loadingService.subscribeTo(this.locatingHandle);
         if (this.backProcessingService.isRunning('locating-' + this.preDispatch)) {
             console.log('wtf it is running !');
             this.loadingService.setLoadingState({
@@ -139,10 +162,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         this.fixedItems[item.id] = item;
     }
 
-    // skipLocatingItem() {
-    //     this.locatingService.fix(this.nFoundItem, null, null, null, true);
-    // }
-
     navigateMap(event) {
         if (!event.hasObject || !event.address.lat || !event.address.lng) {
             return ;
@@ -154,6 +173,14 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
     mapClick(event) {
         this.mapService.mapClicked(event);
+    }
+
+    isRunning() {
+        return this.preDispatchData.localize_status === 'play' || this.backProcessingService.isRunning('locating-' + this.preDispatch);
+    }
+
+    stopLocating() {
+        this.locatingService.pause(this.preDispatch);
     }
 
     ngOnDestroy() {

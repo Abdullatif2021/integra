@@ -16,19 +16,30 @@ export class StreetsService {
         private filtersService: FiltersService,
         ) { }
 
-    getStreets(page, rpp, name, cities, order) {
-        const options = { params: new HttpParams().set('page', page).set('pageSize', rpp).set('orderMethod', order)};
+    getStreets(page, rpp, name, cities, order, citiesType) {
+        const options = { params: new HttpParams().set('page', page).set('pageSize', rpp)};
+        if (order) {
+            options.params = options.params.set('orderMethod', order);
+        }
         if (name !== null) { options.params = options.params.set('streetName', name); }
         if (cities.all) {
             if (cities.items.length) {
-                options.params = options.params.set('exclude_cities_ids', cities.items);
+                if (citiesType === 'by_client') {
+                    options.params = options.params.set('exclude_clients_ids', cities.items);
+                } else {
+                    options.params = options.params.set('exclude_cities_ids', cities.items);
+                }
             }
             if (cities.search) {
                 options.params = options.params.set('bySearch', cities.search);
             }
         } else {
             if (cities.items.length) {
-                options.params = options.params.set('cities_ids', cities.items);
+                if (citiesType === 'by_client') {
+                    options.params = options.params.set('clients', cities.items);
+                } else {
+                    options.params = options.params.set('cities_ids', cities.items);
+                }
             }
         }
         options.params = this.filtersService.getHttpParams(options.params) ;

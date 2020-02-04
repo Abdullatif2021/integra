@@ -102,3 +102,7 @@
     background-image: url(/assets/images/desc.gif);
     background-position: -6px 1px;
 }
+
+.custom.active-item {
+    background-color: #feda44 !important;
+}

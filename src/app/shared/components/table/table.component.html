@@ -20,8 +20,8 @@
                     {{col.title}}
                     <ng-container *ngIf="col.order">
                         <div class="order-container">
-                            <div (click)="changeOrder(col.order,'DESC')" [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-desc order-btn"></div>
-                            <div (click)="changeOrder(col.order,'ASC')" [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-asc order-btn"></div>
+                            <div (click)="changeOrder(col.order,'ASC')" [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-desc order-btn"></div>
+                            <div (click)="changeOrder(col.order,'DESC')" [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-asc order-btn"></div>
                         </div>
                     </ng-container>
                 </th>
@@ -33,8 +33,8 @@
                         <div>{{title}}</div>
                     </ng-container>
                     <div class="order-container" *ngIf="col.order">
-                        <div (click)="changeOrder(col.order,'DESC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-desc order-btn"></div>
-                        <div (click)="changeOrder(col.order,'ASC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-asc order-btn"></div>
+                        <div (click)="changeOrder(col.order,'ASC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-desc order-btn"></div>
+                        <div (click)="changeOrder(col.order,'DESC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-asc order-btn"></div>
                     </div>
                 </th>
             </ng-container>

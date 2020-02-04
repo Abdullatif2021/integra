@@ -17,8 +17,16 @@ export class CitiesService {
         private filtersService: FiltersService,
     ) { }
 
-    getCities(page, rpp, name, order) {
-        const options = { params: new HttpParams().set('page', page).set('pageSize', rpp).set('orderMethod', order)};
+    getCities(page, rpp, name, order, citiesType) {
+        const options = {
+            params: new HttpParams().set('page', page).set('pageSize', rpp)
+        };
+        if (citiesType === 'by_client') {
+            options.params = options.params.set('type', citiesType);
+        }
+        if (order) {
+            options.params = options.params.set('orderMethod', order);
+        }
         if (name !== null) { options.params = options.params.set('cityName', name); }
         options.params = this.filtersService.getHttpParams(options.params) ;
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCities, options).pipe(
