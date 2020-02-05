@@ -49,7 +49,10 @@ body{
     background-color: #F44336 !important;
     color: #fff !important;
 }
-
+.integraa-btn-confirm{
+    background: #3a99cd;
+    color: white;
+}
 .page-container{
     padding: 0px 30px !important;
     margin: auto;
