@@ -158,7 +158,8 @@ export const TablesConfig = {
             ],
             collapsedActions: [
                 {label: 'Pianifica', _class: 'green-btn', click: (elm, container) => {
-                    container.integraaModalService.open('/schedule/' + elm.id, {width: 1400, height: 680});
+                    // container.integraaModalService.open('/schedule/' + elm.id, {width: 1400, height: 680});
+                    container.router.navigate(['/schedule', elm.id]);
                 }},
                 {label: 'Metti in Consegna', _class: 'yellow-btn', click: (elm, container) => {console.log('clicked') ; }},
                 {label: 'Aggiungi Prodotti', _class: 'orange-btn', click: (elm, container) => {console.log('clicked') ; }},

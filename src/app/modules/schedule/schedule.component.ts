@@ -101,7 +101,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         // this.loadingService.show();
         // this.loadingService.subscribeTo(this.locatingHandle);
         if (this.backProcessingService.isRunning('locating-' + this.preDispatch)) {
-            console.log('wtf it is running !');
             this.loadingService.setLoadingState({
                 state: true, message: 'checking loading state for this pre-distinta ...', progress: 0, autProgress: false, hide_btn: true
             });

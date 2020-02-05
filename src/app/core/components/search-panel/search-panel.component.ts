@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
+import {Component, ComponentFactoryResolver, ElementRef, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {FiltersService} from '../../../service/filters.service';
 import {ApiResponseInterface} from '../../models/api-response.interface';
 import {RecipientsService} from '../../../service/recipients.service';
@@ -39,7 +39,7 @@ export class SearchPanelComponent implements OnInit {
   actions: any = [];
   loaded = false ;
   @ViewChild(ModalDirective) modalHost: ModalDirective;
-
+  @ViewChild('confirmUnAppliedFiltersModalRef') confirmUnAppliedFiltersModalRef: ElementRef;
   unsubscribeTo(name) {
       if ( this.subscriptions[name] ) {
           this.subscriptions[name].unsubscribe() ;
@@ -247,7 +247,11 @@ export class SearchPanelComponent implements OnInit {
     if ( this.active_action && this.active_action.modal ) {
         if (!force && this.active_action.method && this.active_action.method === 'filters') {
             // check if there is any non committed filters
+            if (this._filters.length !== this._active_filters.length) {
 
+                this.modalService.open(this.confirmUnAppliedFiltersModalRef)
+                return false;
+            }
         }
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.active_action.modal);
         const viewContainerRef = this.modalHost.viewContainerRef ;

@@ -194,3 +194,16 @@
 </ng-template>
 <!-- If input is group -->
 <ng-template appModal></ng-template>
+<div l>
+  <ng-template  #confirmUnAppliedFiltersModalRef let-modal>
+    <div class="modal-container nFoundItemModal">
+      <div class="modal-body">
+        <h6 class="text-center">Some Filters Are changed but not applyed, are you sure you want to continue..</h6>
+        <div class="btns-container mt-3">
+          <button type="button" (click)="modal.close();runAction(true)" class="integraa-btn ml-2 float-right" >Esegui</button>
+          <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Close</button>
+          <div class="clear-both"></div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
