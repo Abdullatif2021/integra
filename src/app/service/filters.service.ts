@@ -69,7 +69,7 @@ export class FiltersService {
               _filters[this.groupingType === 'by_cap' ? 'exclude_cities_ids' : 'exclude_clients_ids'] = this.specials.cities.items;
           }
           if (this.specials.cities.search) {
-              _filters[this.groupingType === 'by_cap' ? 'byCitiesSearch' : 'byClientsSearch'] = this.specials.cities.search;
+              _filters[this.groupingType === 'by_cap' ? 'byCitiesSearch' : 'by_clients_search'] = this.specials.cities.search;
           }
       } else if (this.specials.cities) {
           if (this.specials.cities.items.length) {
@@ -87,6 +87,9 @@ export class FiltersService {
           if (this.specials.streets.items.length) {
               _filters['streets_ids'] = this.specials.streets.items;
           }
+      }
+      if (this.groupingType !== 'by_cap') {
+          _filters['by_clients_Filter'] = '1';
       }
       return _filters ;
   }

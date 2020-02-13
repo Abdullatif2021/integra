@@ -21,7 +21,7 @@ export class ToPlanComponent implements OnInit, OnDestroy {
   preDispatch;
   paginationOptions: any = {};
   searchMode = false ;
-  filter = 0;
+  filter = [0, 0, 0];
   itemsCount = 0;
 
   constructor(

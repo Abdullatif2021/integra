@@ -47,7 +47,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     all_start_points = [];
     all_end_points = [];
     toMoveItem: any;
-    filter = [0,0,0];
+    filter = [0, 0, 0];
     itemsCount = 0;
     searchSubscription: any ;
     searchMode = false ;
@@ -188,7 +188,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
     getItem(next: string, id = null) {
-        console.log('here');
         const location = next.split(':');
 
         let item: any = this.tree[0];

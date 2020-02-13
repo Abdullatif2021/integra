@@ -42,6 +42,9 @@ export class StreetsService {
                 }
             }
         }
+        if (citiesType === 'by_client') {
+            options.params = options.params.set('by_clients_Filter', '1');
+        }
         options.params = this.filtersService.getHttpParams(options.params) ;
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getStreet, options).pipe(
             catchError(this.handleError)

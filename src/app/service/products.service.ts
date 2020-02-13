@@ -25,6 +25,9 @@ export class ProductsService {
               .set('page', this.paginationService.current_page)
               .set('pageSize', this.paginationService.rpp)};
 
+      if (citiesType === 'by_client') {
+          options.params = options.params.set('by_clients_Filter', '1');
+      }
       if (cities.all) {
           if (cities.items.length) {
               if (citiesType === 'by_client') {
@@ -35,7 +38,7 @@ export class ProductsService {
           }
           if (cities.search) {
               if (citiesType === 'by_client') {
-                  options.params = options.params.set('byClientsSearch', cities.items);
+                  options.params = options.params.set('by_clients_search', cities.items);
               } else {
                   options.params = options.params.set('byCitiesSearch', cities.search);
               }
