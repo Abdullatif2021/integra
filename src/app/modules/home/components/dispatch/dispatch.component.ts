@@ -70,7 +70,7 @@ export class DispatchComponent implements OnInit, OnDestroy {
           });
   }
 
-  changeOrder() {
+  changeOrder(order) {
 
   }
 
