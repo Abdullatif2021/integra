@@ -97,6 +97,10 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         return route === this.router.url;
     }
 
+    async divideToDistenta() {
+        await this.planningService.divideToDistenta(this.preDispatch);
+    }
+
     async locate() {
         // this.loadingService.show();
         // this.loadingService.subscribeTo(this.locatingHandle);
@@ -139,7 +143,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     notFoundAddressChanged(data, item) {
-
         if (!data.hasObject || !data.address.strict) {
             console.log(data);
             return this.errors['invalid-building-' + item.id] = true;

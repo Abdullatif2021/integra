@@ -1,12 +1,11 @@
 import {EventEmitter, Injectable, OnDestroy} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {TreeNodeInterface, TreeNodeResponseInterface} from '../../../core/models/tree-node.interface';
 import {AppConfig} from '../../../config/app.config';
 import {takeUntil} from 'rxjs/internal/operators';
 import {Observable} from 'rxjs';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
 import {SnotifyService} from 'ng-snotify';
-import {Tree} from '@angular/router/src/utils/tree';
 
 @Injectable()
 export class ListTreeService implements OnDestroy {

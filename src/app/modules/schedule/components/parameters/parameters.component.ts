@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {PlanningService} from '../../service/planning.service';
 import {ActivatedRoute} from '@angular/router';
 import {NgbCalendar, NgbDate} from '@ng-bootstrap/ng-bootstrap';
+import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 
 @Component({
     selector: 'app-parameter',
@@ -14,6 +15,7 @@ export class ParametersComponent implements OnInit {
     constructor(
         private planningService: PlanningService,
         private route: ActivatedRoute,
+        private preDispatchService: PreDispatchService
     ) {
         this.preDispatch = this.route.snapshot.parent.params.id;
         this.preDispatchData = this.route.snapshot.parent.data.data ;
@@ -62,7 +64,8 @@ export class ParametersComponent implements OnInit {
 
     preDispatch;
     preDispatchData;
-
+    visibleView = '1' ;
+    allPreDispatches = [] ;
 
     ngOnInit() {
         let departure_date = this.preDispatchData.departure_date ? this.preDispatchData.departure_date.split(' ') : [] ;
@@ -141,8 +144,22 @@ export class ParametersComponent implements OnInit {
         return data ;
     }
 
+
+    changeView(event) {
+        this.visibleView = event.target.value ;
+        if (this.visibleView === '2' && !this.allPreDispatches.length) {
+            this.preDispatchService.getPreDispatchList('1', '9999').subscribe(
+                data => {
+                    this.allPreDispatches = data.data ;
+                });
+        }
+    }
+
+    changePreDispatch(event) {
+        console.log('change to ', event);
+    }
+
     async save() {
-        // console.log(this.getData());
         await this.planningService.saveParameters(this.getData(), () => 'Data Saved !');
     }
 

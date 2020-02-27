@@ -29,7 +29,7 @@
   <div *ngIf="!table.custom" class="select-row float-left select-row-n-selected"><div class="select-row-input rounded-circle"></div></div>
   <div *ngIf="!table.custom" class="select-row float-left select-row-selected"><div class="select-row-input rounded-circle"><fa-icon [icon]="['fa','check']"></fa-icon></div></div>
   <div *ngIf="table.icon" class="item-icon float-left ml-2"><img class="item-icon-img" src="{{table.icon}}"></div>
-  <div class="item-name ml-2 mt-1 float-left" [ngClass]="{'full-width': table.custom}">{{item.name}}</div>
+  <div class="item-name ml-2 mt-1 float-left" [ngClass]="{'full-width': table.custom}">{{item[table.text] ? item[table.text] : item.name }}</div>
   <div class="item-qt float-right mt-1" *ngIf="item.count !== undefined">Q.t: {{item.count+''}}</div>
   <div class="clear-both"></div>
 </ng-template>

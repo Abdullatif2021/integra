@@ -34,6 +34,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PlanningService} from './service/planning.service';
 import {MapService} from './service/map.service';
+import {ResultsService} from './service/results.service';
+import {ResultesResolver} from './resolvers/resultes.resolver';
 
 @NgModule({
   imports: [
@@ -70,7 +72,9 @@ import {MapService} from './service/map.service';
       AddressesActionsService,
       PreDispatchDataResolver,
       PlanningService,
-      MapService
+      MapService,
+      ResultsService,
+      ResultesResolver,
   ],
 
 

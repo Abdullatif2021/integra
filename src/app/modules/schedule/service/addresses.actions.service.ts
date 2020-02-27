@@ -9,7 +9,7 @@ import {ACAddress} from '../../../core/models/address.interface';
 @Injectable()
 export class AddressesActionsService {
 
-    constructor(private http: HttpClient,) { }
+    constructor(private http: HttpClient) { }
 
     renameCity(city, preDispatch, name) {
         const options = {

@@ -5,6 +5,8 @@
     font-size: 11px;
     padding-top: 1px;
     border: 1px solid #ffffff;
+    height: 634px;
+    overflow-y: scroll;
 }
 
 /* items */
@@ -108,4 +110,17 @@
 }
 .lvl-5 .item-row {
     padding: 3px 10px;
+}
+.postman-name, .item-name  {
+    font-size: 11px;
+    font-weight: 500;
+    padding-left: 2px;
+    word-break: break-word;
+}
+.results-skeleton {
+    display: block;
+}
+
+.postman-select {
+    font-size: 11px;
 }

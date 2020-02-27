@@ -54,7 +54,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     }
     this.loading = true ;
 
-    if (!append) { this.items = [] ; this._all_selected = true ; this._selected = [] }
+    if (!append) { this.items = [] ; this._all_selected = true ; this._selected = []; }
     if ( this.subscription ) { this.subscription.unsubscribe(); }
 
     this.subscription = this.getMethod(this.page, this.rpp, this.searchValue, this.currentOrder)
@@ -66,9 +66,9 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   }
 
   handleResponse(res: ApiResponseInterface) {
-    if (res.status === 'success') {
+    if (res.status === 'success' || res.success) {
       this.items = this.items.concat(res.data) ;
-      this.pagination = res.pagination ;
+      this.pagination = res.pagination ? res.pagination : {totalProduct: undefined} ;
       this.loaded = true ;
       this.loading = false ;
     }

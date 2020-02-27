@@ -33,15 +33,12 @@
     border-radius: 5px;
     padding: 0px 10px;
 }
-.localizza-btn, .continue-btn {
+.continue-btn {
     margin-top: 10px;
     cursor: pointer;
 }
 .continue-btn {
     float: right;
-}
-.localizza-btn {
-    float: left;
 }
 
 .map {

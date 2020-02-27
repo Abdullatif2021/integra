@@ -1,88 +1,114 @@
 
-<div class="results-container">
+<div class="results-container" #ResultsContainer>
   <div class="items mt-2">
-    <ng-container *ngFor="let item of items; let idx = index">
-      <ng-container  [ngTemplateOutlet]="dateItem" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx}"></ng-container>
+    <ng-container *ngFor="let item of scheduleResults; let idx = index">
+      <ng-container [ngTemplateOutlet]="dateItem" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx}"></ng-container>
     </ng-container>
   </div>
 </div>
 
-
-
 <ng-template let-item="item" let-idx="idx" let-next="next" #dateItem>
-  <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" class="mt-2 {{getLvlClass(next)}} {{getStatusClass(item)}}">
-    <div class="item-row">
-      <div class="more" *ngIf="item.children" (click)="more(next)">
-        <fa-icon *ngIf="!expanded[next]" [icon]="['fa','chevron-down']"></fa-icon>
-        <fa-icon *ngIf="expanded[next]" [icon]="['fa','chevron-up']"></fa-icon>
-      </div>
-      <div class="text">{{item.date}}</div>
-    </div>
-  </div>
-  <ng-container *ngFor="let child of getChildren(next); let i = index">
-    <ng-container [ngTemplateOutlet]="postManItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
+  <ng-container *ngIf="item.skeleton;">
+    <div class="rect-loading-skeleton full-width h-33 mt-1"></div>
   </ng-container>
-</ng-template>
-
-
-<ng-template  let-item="item" let-idx="idx" let-next="next" #postManItem>
-  <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" class="{{getLvlClass(next)}} {{getStatusClass(item)}}">
-    <div class="item-row">
-      <div class="row">
-        <div class="col-1-half wide-col">
-          <div class="more" *ngIf="item.children" (click)="more(next)">
-            <fa-icon *ngIf="!expanded[next]" [icon]="['fa','chevron-down']"></fa-icon>
-            <fa-icon *ngIf="expanded[next]" [icon]="['fa','chevron-up']"></fa-icon>
-          </div>
-
-          <div class="marker-container">
-            <div class="postman-marker"><img src="/assets/images/postman-icon.png" /></div>
-          </div>
+  <ng-container *ngIf="!item.skeleton">
+    <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" class="mt-2 {{getLvlClass(next)}} {{getStatusClass(item)}}">
+      <div class="item-row">
+        <div class="more" *ngIf="item.sets" (click)="expand(item)">
+          <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
+          <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
         </div>
-        <div class="col-2-half wide-col"> <div class="text">{{item.name}}</div> </div>
-        <div class="col-3"> <div class="count">{{item.count}}</div> </div>
-        <div class="col-3"> <div class="time">{{item.time}}</div> </div>
-        <div class="col-2"> <div class="distance">{{item.distance}}</div> </div>
+        <div class="text">{{item.day}}</div>
       </div>
     </div>
-  </div>
-  <ng-container *ngFor="let child of getChildren(next); let i = index">
-    <ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
-  </ng-container>
-</ng-template>
-
-<ng-template  let-item="item" let-idx="idx" let-next="next" #simpleItem>
-  <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" class="{{getLvlClass(next)}} {{getStatusClass(item)}}">
-    <div class="item-row">
-      <div class="row">
-        <div class="col-1-half v-wide-col">
-          <div class="more" *ngIf="item.children" (click)="more(next)">
-            <fa-icon *ngIf="!expanded[next]" [icon]="['fa','chevron-down']"></fa-icon>
-            <fa-icon *ngIf="expanded[next]" [icon]="['fa','chevron-up']"></fa-icon>
-          </div>
-
-          <div class="marker-container">
-            <div class="marker" *ngIf="item.marker">{{item.marker}}</div>
-          </div>
-        </div>
-        <div class="col-2-half v-wide-col"> <div class="text">{{item.name}}</div> </div>
-        <div class="col-3"> <div class="count">{{item.count}}</div> </div>
-        <div class="col-3"> <div class="time">{{item.time}}</div> </div>
-        <div class="col-2"> <div class="distance">{{item.distance}}</div> </div>
-      </div>
-    </div>
-  </div>
-  <ng-container  *ngIf="getLvl(next) <  4" >
-    <ng-container *ngFor="let child of getChildren(next); let i = index">
-      <ng-container  [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
+    <ng-container *ngIf="item.expanded" >
+      <ng-container *ngFor="let child of item.sets; let i = index">
+        <ng-container [ngTemplateOutlet]="postManItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i, parent: item}"></ng-container>
+      </ng-container>
     </ng-container>
   </ng-container>
-  <ng-container *ngIf="getLvl(next) ==  4">
-    <ng-container  [ngTemplateOutlet]="streetItems" [ngTemplateOutletContext]="{idx: idx, items:getChildren(next), next: next+':'+i}"></ng-container>
+</ng-template>
+
+<ng-template  let-item="item" let-idx="idx" let-next="next" let-parent="parent" #postManItem>
+  <ng-container *ngIf="item.skeleton;">
+    <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
+  </ng-container>
+  <ng-container *ngIf="!item.skeleton">
+    <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" class="{{getLvlClass(next)}} {{getStatusClass(item)}}">
+      <div class="item-row">
+        <div class="row">
+          <div class="col-1-half wide-col">
+            <div class="more" *ngIf="item.children" (click)="expand(item)">
+              <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
+              <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
+            </div>
+
+            <div class="marker-container">
+              <div class="postman-marker"><img src="/assets/images/postman-icon.png" /></div>
+            </div>
+          </div>
+          <div class="col-3 wide-col"> <div class="postman-name">
+            <ng-select class="integraa-select postman-select" [items]="postmen[parent.day]" [placeholder]="'Not Assigned'" (change)="assignPostman($event, item, parent)" [clearable]="false" [bindLabel]="'full_name'" [(ngModel)]="selectedPostmen[parent.day][item.id]"></ng-select>
+
+          </div> </div>
+          <div class="col-3 v-wide-col"> <div class="count mt-1">{{item.qta}} Consegne</div> </div>
+          <div class="col-3"> <div class="time mt-1">{{item.time}}</div> </div>
+          <div class="col-1-half"> <div class="distance mt-1">{{item.distance}}</div> </div>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="item.expanded" >
+      <div infiniteScroll (scrolled)="loadMore(item)" [scrollWindow]="true" infiniteScrollDistance="30">
+        <ng-container *ngFor="let child of item.children; let i = index">
+          <ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
   </ng-container>
 
 </ng-template>
-<ng-template  let-items="items" let-idx="idx" let-next="next" #streetItems>
+
+<ng-template let-item="item" let-idx="idx" let-next="next" #simpleItem>
+  <ng-container *ngIf="item.skeleton;">
+    <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
+  </ng-container>
+  <ng-container *ngIf="!item.skeleton">
+    <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" class="{{getLvlClass(next)}} {{getStatusClass(item)}}">
+      <div class="item-row">
+        <div class="row">
+          <div class="v-wide-col" [ngClass]="{'col-1-half': item.marker, 'col-half': !item.marker}">
+            <div class="more" *ngIf="item.children" (click)="expand(item)">
+              <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
+              <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
+            </div>
+            <div class="marker-container" *ngIf="item.marker">
+              <div class="marker">{{item.marker}}</div>
+            </div>
+          </div>
+          <div [ngClass]="{'col-2-half': item.marker, 'col-3 wide-col': !item.marker}"> <div class="item-name mt-1">{{item.text}}</div> </div>
+          <div class="col-3"> <div class="count mt-1">{{item.qta}} Consegne</div> </div>
+          <div class="col-3"> <div class="time mt-1">{{item.time}}</div> </div>
+          <div class="col-2"> <div class="distance mt-1">{{item.distance}}</div> </div>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="item.expanded">
+        <ng-container  *ngIf="getLvl(next) <  5" >
+          <div infiniteScroll (scrolled)="loadMore(item)" [scrollWindow]="true" infiniteScrollDistance="30">
+            <ng-container *ngFor="let child of item.children; let i = index">
+              <ng-container  [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="getLvl(next) ==  5">
+          <ng-container [ngTemplateOutlet]="streetItems" [ngTemplateOutletContext]="{idx: idx, item: item, items:item.children, next: next+':'+i}"></ng-container>
+        </ng-container>
+    </ng-container>
+  </ng-container>
+
+</ng-template>
+
+<ng-template let-items="items" let-idx="idx" let-next="next" let-item="item" #streetItems>
   <div class="street-items-header" *ngIf="items">
     <div class="row">
       <div class="col-5"><div class="street-items-header-cell">Indirizzo</div></div>
@@ -91,17 +117,22 @@
       <div class="col-3"><div class="street-items-header-cell">Distanza</div></div>
     </div>
   </div>
-  <div class="street-items">
+  <div class="street-items" infiniteScroll (scrolled)="loadMore(item)" [scrollWindow]="true" [infiniteScrollContainer]="ResultsContainer" infiniteScrollDistance="30">
     <ng-container *ngFor="let item of items; let i = index">
       <div [ngClass]="{'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" class="{{getStatusClass(item)}}">
-        <div class="street-item">
-          <div class="row">
-            <div class="col-5"> <div class="text">{{item.address}}</div> </div>
-            <div class="col-3"> <div class="count">{{item.time}}</div> </div>
-            <div class="col-1"> <div class="srv">{{item.srv}}</div> </div>
-            <div class="col-3"> <div class="distance">{{item.distance}}</div> </div>
+        <ng-container *ngIf="item.skeleton;">
+          <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
+        </ng-container>
+        <ng-container  *ngIf="!item.skeleton;">
+          <div class="street-item">
+            <div class="row">
+              <div class="col-5"> <div class="text">{{item.address}}</div> </div>
+              <div class="col-3"> <div class="count">{{item.time}}</div> </div>
+              <div class="col-1"> <div class="srv">{{item.srv}}</div> </div>
+              <div class="col-3"> <div class="distance">{{item.distance}}</div> </div>
+            </div>
           </div>
-        </div>
+        </ng-container>
       </div>
     </ng-container>
   </div>

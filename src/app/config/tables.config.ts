@@ -14,20 +14,23 @@ export const TablesConfig = {
             title: 'Paese',
             icon: 'assets/images/cityscape.svg',
             searchPlaceHolder: 'Cerca Paese',
-            order: '1'
+            order: '1',
+            text: 'name'
         },
         // streets table structure
         streetsTable: {
             title: 'Strada',
             icon: 'assets/images/work-tools.svg',
             searchPlaceHolder: 'Cerca Strada',
-            order: '1'
+            order: '1',
+            text: 'name',
         },
         // postmen table structure
         postmenTable: {
             title: 'Expected Postmen',
             icon: 'assets/images/postman-icon.png',
-            searchPlaceHolder: 'Cerca postino previsto'
+            searchPlaceHolder: 'Cerca postino previsto',
+            text: 'full_name'
         },
         settingsTable: {
             custom: true,
@@ -39,6 +42,7 @@ export const TablesConfig = {
                     return elm.name.toLowerCase().indexOf(term.toLowerCase()) !== -1;
                 });
             },
+            text: 'name',
         },
         subSettingsTable: {
             custom: true,
@@ -50,6 +54,7 @@ export const TablesConfig = {
                     return elm.name.toLowerCase().indexOf(term.toLowerCase()) !== -1;
                 });
             },
+            text: 'name',
         },
     },
     // normal tables structure
@@ -177,13 +182,13 @@ export const TablesConfig = {
                         {action: 'excel_export', click: (elm) => {console.log('export . '); }},
                         {action: 'view', click: (elm) => {console.log('call back working 1 . '); }},
                     ]},
-                {title: 'POSTMAN HELPER', field: 'postman', actions: []},
-                {title: 'Dispatch list', field: 'distinita', actions: []},
+                {title: 'POSTMAN', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
+                {title: 'Dispatch list', field: 'pre_dispatch_code', actions: []},
                 {title: 'STATE / RESULT', field: 'status', actions: []},
-                {title: 'Q.TY', field: 'qty', actions: []},
-                {title: 'DATE', field: 'date', actions: []},
-                {title: 'OPERATION', actions:[
-                        {action: 'progress', field: 'progress'},
+                {title: 'Q.TY', field: 'quantity', actions: []},
+                {title: 'DATE', field: 'started_at', actions: []},
+                {title: 'OPERATION', actions: [
+                        { action: 'progress',  field: 'percent',},
                     ]},
             ]
         },

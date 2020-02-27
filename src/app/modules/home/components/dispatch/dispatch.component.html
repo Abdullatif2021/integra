@@ -1,8 +1,8 @@
 <div class="d-flex tables-area full-width">
   <div class="medium-table v-wide-col">
-    <app-simple-table [items]="postmen" [table]="postmenTable"></app-simple-table>
+    <app-simple-table #postmenTable (changed)="changePostman($event)" [getMethod]="postmenGetMethod" [table]="postmenTableConfig"></app-simple-table>
   </div>
   <div class="v-large-table v-wide-col">
-    <app-table [items]="products" [table]="dispatchTable"></app-table>
+    <app-table #dispatchTable [items]="dispatchList" [table]="dispatchTableConfig" (orderChange)="changeOrder($event)" [parent]="this"></app-table>
   </div>
 </div>

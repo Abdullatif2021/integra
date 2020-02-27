@@ -21,7 +21,6 @@ export class PlanningService {
     moveItemsToInPlaningChanges = new EventEmitter<any>() ;
 
     changePreDispatchData(data) {
-        console.log(data, 'shit changes');
         this.preDispatchDataChanges.emit(data);
     }
 
@@ -83,6 +82,18 @@ export class PlanningService {
             catchError(this.handleError)
         );
     }
+
+
+    async divideToDistenta(preDispatch) {
+        await this.run(this.sendDivideToDistentaRequest(preDispatch), 'Dividing..', false, false);
+    }
+
+    sendDivideToDistentaRequest(preDispatch) {
+        return this.http.post<any>(AppConfig.endpoints.divideToDistenta(preDispatch), {}).pipe(
+            catchError(this.handleError)
+        );
+    }
+
     async saveParameters(data, success) {
         await this.run(this.sendSaveParametersRequest(data), 'Saving', success, () => {
             console.log('error');

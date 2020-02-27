@@ -23,10 +23,10 @@ export class PreDispatchService {
     };
     selectedPreDispatches = [] ;
 
-    getPreDispatchList() {
+    getPreDispatchList(page = '1', pageSize = '50') {
         const options = { params: new HttpParams() };
-        options.params = options.params.set('page', '1') ;
-        options.params = options.params.set('pageSize', '50') ;
+        options.params = options.params.set('page', page) ;
+        options.params = options.params.set('pageSize', pageSize) ;
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatched, options).pipe(
             catchError(this.handleError)
         );

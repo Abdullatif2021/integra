@@ -55,6 +55,15 @@ export const AppConfig = {
         getStreetMergeAvailableStreets: (id) => `${api_url}/api/preDispatch/${id}/getAvailableStreets`,
         mergeTwoStreets: `${api_url}/api/preDispatch/mergerStreets`,
         updateLocalizationStatus: (id) => `${api_url}/api/preDispatch/${id}/changeLocalizeStatus`,
+        divideToDistenta: (id) => `${api_url}/api/preDispatch/${id}/toSets`,
+        getScheduleResults: (id) => `${api_url}/api/preDispatch/${id}/scheduleResults`,
+        getSetTreeNode: (id) => `${api_url}/api/set/${id}/tree`,
+        getPostmenByPreDispatch: (id) => `${api_url}/api/preDispatch/${id}/schedulePostmen`,
+        updateSetPostman: (id) => `${api_url}/api/sets/${id}/updatePostman`,
+        getAllSets: `${api_url}/api/sets/get`,
+        getAssignedPostmen: `${api_url}/api/postmen/assigned/get`
+
     },
 
 };
+

@@ -214,3 +214,16 @@ a:hover {
 .pac-container {
     z-index: 9999;
 }
+
+
+
+.postman-select > .ng-select-container > .ng-value-container {
+    padding: 0px;
+}
+.postman-select .ng-dropdown-panel-items {
+    width: 135%;
+}
+.postman-select .ng-select-container {
+    height: 25px !important;
+    min-height: 25px !important;
+}

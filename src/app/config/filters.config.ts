@@ -83,5 +83,12 @@ export const FilterConfig = {
             {type: ['date', 'date'], label: 'Data :', group: true, key: ['formDate', 'toDate']},
         ],
         grouping: false
+    },
+    dispatch: {
+        search: (container, sp) => [],
+        filters: (container, sp) => [],
+        grouping: false
     }
+
+
 };
