@@ -1,14 +1,11 @@
 <div class="parameters-container">
 
   <div class="parameters-header-section pb-3">
-    <select class="form-control form-control-sm" (change)="changeView($event)">
-      <option value="1">First Mode</option>
-      <option value="2">Second Mode</option>
-    </select>
+    <ng-select class="integraa-select" [clearable]="false" (change)="changeView($event)" [(ngModel)]="visibleView" [items]="views"></ng-select>
   </div>
 
 
-  <ng-container *ngIf="visibleView == '1'">
+  <ng-container *ngIf="visibleView.value == 1">
     <!-- Section 1 -->
     <div class="parameters-section">
       <div class="parameters-section-title">Impostazioni Generali</div>
@@ -105,14 +102,34 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="visibleView == '2'">
+  <ng-container *ngIf="visibleView.value == 2">
     <div class="parameters-section">
-      <div class="all-pre-dispatches-select-label mt-2">Select Pre-dispatch</div>
-      <ng-select [items]="allPreDispatches" [bindLabel]="'name'"></ng-select>
-      <div class="mt-2">
-        <button class="integraa-btn float-right" (click)="changePreDispatch($event)">Save</button>
-        <div class="clear-both"></div>
+      <div class="all-pre-dispatches-select-section">Predistinte pianificate</div>
+      <div class="search-box-container">
+        <app-search-box (changed)="searchPreDispatches($event)" [placeholder]="'Nome'"></app-search-box>
       </div>
+
+      <div class="pre-dispatches-container mt-2" #preDispatchesContainer infiniteScroll (scrolled)="loadMorePreDispatched()" [scrollWindow]="false" [infiniteScrollContainer]="preDispatchesContainer" infiniteScrollDistance="30">
+        <ng-container *ngFor="let preDispatch of allPreDispatches; let idx = index">
+          <ng-container *ngIf="preDispatch.skeleton">
+            <div class="rect-loading-skeleton full-width schedule-skeleton h-33"></div>
+          </ng-container>
+          <ng-container *ngIf="!preDispatch.skeleton">
+            <div class="pre-dispatch-row" [ngClass]="{'odd-bg':(idx%2),'even-bg':!(idx%2),'active-item':selectedPreDispatch && preDispatch.id === selectedPreDispatch.id}">
+              <div class="pre-dispatch-select" (click)="selectPreDispatches(preDispatch)">
+                <div class="select-row float-left select-row-n-selected"><div class="select-row-input rounded-circle"></div></div>
+                <div class="select-row float-left select-row-selected"><div class="select-row-input rounded-circle"><fa-icon [icon]="['fa','check']"></fa-icon></div></div>
+              </div>
+              <div class="pre-dispatch-name">{{preDispatch.name}}</div>
+              <div class="pre-dispatch-code">{{preDispatch.code}}</div>
+              <div class="clear-both"></div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <button class="integraa-btn float-right mt-3" (click)="changePreDispatch()">Pianifica</button>
+
     </div>
   </ng-container>
 

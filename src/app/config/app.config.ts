@@ -61,7 +61,8 @@ export const AppConfig = {
         getPostmenByPreDispatch: (id) => `${api_url}/api/preDispatch/${id}/schedulePostmen`,
         updateSetPostman: (id) => `${api_url}/api/sets/${id}/updatePostman`,
         getAllSets: `${api_url}/api/sets/get`,
-        getAssignedPostmen: `${api_url}/api/postmen/assigned/get`
+        getAssignedPostmen: `${api_url}/api/postmen/assigned/get`,
+        getPlannedPreDispatches: `${api_url}/api/preDispatches/planned`,
 
     },
 

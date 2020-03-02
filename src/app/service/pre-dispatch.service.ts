@@ -23,11 +23,23 @@ export class PreDispatchService {
     };
     selectedPreDispatches = [] ;
 
-    getPreDispatchList(page = '1', pageSize = '50') {
+    getPreDispatchList(page = 1, pageSize = '50') {
         const options = { params: new HttpParams() };
-        options.params = options.params.set('page', page) ;
+        options.params = options.params.set('page', page + '') ;
         options.params = options.params.set('pageSize', pageSize) ;
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatched, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    getPlannedPreDispatches(page = 1, pageSize = '50', search = '') {
+        const options = { params: new HttpParams() };
+        options.params = options.params.set('page', page + '') ;
+        options.params = options.params.set('pageSize', pageSize) ;
+        if (search) {
+            options.params = options.params.set('filter', search) ;
+        }
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPlannedPreDispatches, options).pipe(
             catchError(this.handleError)
         );
     }

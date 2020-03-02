@@ -43,7 +43,7 @@ export class ParametersComponent implements OnInit {
         ],
     };
 
-
+    subscription;
     data: any = {
         service_time_single: '',
         service_time_multiple: '',
@@ -64,10 +64,15 @@ export class ParametersComponent implements OnInit {
 
     preDispatch;
     preDispatchData;
-    visibleView = '1' ;
+    visibleView;
     allPreDispatches = [] ;
+    allPreDispatchesPage = 1 ;
+    selectedPreDispatch;
+    allPreDispatchesLoaded = false ;
+    views = [{value: 1, label: 'Secondo i parametri impostati'}, {value: 2, label: 'Secondo predistinta pianificata'}];
 
     ngOnInit() {
+        this.visibleView = this.views[0];
         let departure_date = this.preDispatchData.departure_date ? this.preDispatchData.departure_date.split(' ') : [] ;
         const departure_time = departure_date[1];
         departure_date = departure_date[0] ? departure_date[0].split('-') : false  ;
@@ -145,18 +150,57 @@ export class ParametersComponent implements OnInit {
     }
 
 
-    changeView(event) {
-        this.visibleView = event.target.value ;
-        if (this.visibleView === '2' && !this.allPreDispatches.length) {
-            this.preDispatchService.getPreDispatchList('1', '9999').subscribe(
-                data => {
-                    this.allPreDispatches = data.data ;
-                });
+    changeView() {
+        if (this.visibleView.value === 2 && !this.allPreDispatches.length) {
+           this.loadAllPreDispatches();
         }
     }
 
+    loadAllPreDispatches(reset = true, search = '') {
+        this.allPreDispatchesLoaded = true ;
+        if (reset) {
+            this.allPreDispatchesPage = 1;
+            this.allPreDispatches = [{skeleton: true}, {skeleton: true}, {skeleton: true}];
+        } else {
+            this.allPreDispatches.push({skeleton: true});
+        }
+        this.subscription = this.preDispatchService.getPlannedPreDispatches(this.allPreDispatchesPage, '50', search).subscribe(
+            data => {
+                if (data.data.length) {
+                    this.allPreDispatchesLoaded = false ;
+                    if (reset) {
+                        this.allPreDispatches = data.data ;
+                    } else {
+                        this.allPreDispatches.pop();
+                        this.allPreDispatches = this.allPreDispatches.concat(data.data) ;
+                    }
+                } else if (!data.data.length && !reset) {
+                    this.allPreDispatches.pop();
+                }
+            });
+    }
+
+    loadMorePreDispatched() {
+        if (this.allPreDispatchesLoaded) {
+            return ;
+        }
+        this.allPreDispatchesPage++;
+        this.loadAllPreDispatches(false, '');
+    }
+
+    selectPreDispatches(item) {
+        this.selectedPreDispatch = item ;
+    }
+
+    searchPreDispatches(event) {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+        this.loadAllPreDispatches(true, event);
+    }
+
     changePreDispatch(event) {
-        console.log('change to ', event);
+        console.log('change to ', event, this.selectedPreDispatch);
     }
 
     async save() {

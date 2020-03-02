@@ -66,7 +66,6 @@ export class ToPlanComponent implements OnInit, OnDestroy {
         }
         node.loading = true;
         node.children.push({skeleton: true});
-        console.log(this.preDispatch);
         this.listTreeService.listNode(this.preDispatch, node, node.page, this.filter, 'to_planning').then(
             data => {
                 node.children.pop();

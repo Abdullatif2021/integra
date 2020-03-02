@@ -28,10 +28,64 @@
 .parameter-small-input {
     width: 80px;
 }
-.all-pre-dispatches-select-label {
-    text-align: center;
-    font-weight: bold;
-}
 .parameters-header-section {
-    border-bottom: 1px dotted;
+    margin-bottom: 5px;
+    width: 70%;
+}
+
+.all-pre-dispatches-select-section {
+    text-align: left;
+    font-weight: bold;
+    padding: 0px 10px;
+    border-bottom: 2px solid #b9b7b7;
+    margin-bottom: 10px;
+}
+
+.select-row-input{
+    width: 20px;
+    height: 20px;
+    border: 1px solid #333;
+    cursor: pointer;
+}
+.select-row-selected {
+    display: none;
+}
+
+.pre-dispatch-row {
+    padding: 6px 10px;
+}
+.pre-dispatch-select{
+    float: left;
+    width: 20px;
+}
+.pre-dispatch-name {
+    float: left;
+    margin-left: 10px;
+    width: calc( 30% - 30px );
+}
+.pre-dispatch-code {
+    float: right;
+    width: calc( 70% - 30px );
+    text-align: right;
+}
+.search-box-container {
+    padding: 0px 10px;
+}
+.active-item .select-row-n-selected {
+    display: none;
+}
+.active-item .select-row-selected {
+    display: block;
+}
+.select-row-selected .rounded-circle {
+    text-align: center;
+    font-size: 14px;
+    background-color: #fcda4b;
+}
+.rect-loading-skeleton{
+    border-radius: 0px;
+}
+.pre-dispatches-container {
+    height: 420px;
+    overflow-y: scroll;
 }
