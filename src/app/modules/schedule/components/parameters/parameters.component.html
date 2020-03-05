@@ -110,7 +110,7 @@
       </div>
 
       <div class="pre-dispatches-container mt-2" #preDispatchesContainer infiniteScroll (scrolled)="loadMorePreDispatched()" [scrollWindow]="false" [infiniteScrollContainer]="preDispatchesContainer" infiniteScrollDistance="30">
-        <ng-container *ngFor="let preDispatch of allPreDispatches; let idx = index">
+        <ng-container *ngFor="let preDispatch of preDispatchesList; let idx = index">
           <ng-container *ngIf="preDispatch.skeleton">
             <div class="rect-loading-skeleton full-width schedule-skeleton h-33"></div>
           </ng-container>
@@ -136,3 +136,33 @@
 
 
 </div>
+
+
+<!-- Modals -->
+
+<ng-template #verylowmatchesModal let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <div class="modal-warning-icon"><fa-icon class="text-warning modal-icon" [icon]="['fa','exclamation-circle']"></fa-icon></div>
+      <h6 class="text-center">{{matchRateData.message}}</h6>
+      <div class="btns-container mt-3">
+        <button type="button" (click)="modal.close()" class="integraa-btn integraa-btn-dark ml-2 float-right" >OK</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #lowmatchesModal let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <h6 class="text-center">{{matchRateData.message}}</h6>
+      <div class="btns-container mt-3">
+        <button type="button" (click)="modal.close(); changePreDispatch(true)" class="integraa-btn ml-2 float-right" >Continue and send to Tab 1</button>
+        <button type="button" (click)="modal.close();  changePreDispatch(true, 1)" class="integraa-btn integraa-btn-confirm ml-2 float-right" >Continue and rematch</button>
+        <button type="button" (click)="modal.close()" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {PlanningService} from '../../service/planning.service';
 import {ActivatedRoute} from '@angular/router';
-import {NgbCalendar, NgbDate} from '@ng-bootstrap/ng-bootstrap';
+import {NgbCalendar, NgbDate, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 
 @Component({
@@ -15,7 +15,8 @@ export class ParametersComponent implements OnInit {
     constructor(
         private planningService: PlanningService,
         private route: ActivatedRoute,
-        private preDispatchService: PreDispatchService
+        private preDispatchService: PreDispatchService,
+        private modalService: NgbModal
     ) {
         this.preDispatch = this.route.snapshot.parent.params.id;
         this.preDispatchData = this.route.snapshot.parent.data.data ;
@@ -65,10 +66,19 @@ export class ParametersComponent implements OnInit {
     preDispatch;
     preDispatchData;
     visibleView;
-    allPreDispatches = [] ;
-    allPreDispatchesPage = 1 ;
+
+    // match with other preDispatches
+    preDispatchesList = [] ;
+    preDispatchesPage = 1 ;
     selectedPreDispatch;
-    allPreDispatchesLoaded = false ;
+    preDispatchesLoaded = false ;
+    matchRateData;
+
+    // modals
+
+    @ViewChild('verylowmatchesModal') verylowmatchesModal: NgbModalRef ;
+    @ViewChild('lowmatchesModal') lowmatchesModal: NgbModalRef ;
+
     views = [{value: 1, label: 'Secondo i parametri impostati'}, {value: 2, label: 'Secondo predistinta pianificata'}];
 
     ngOnInit() {
@@ -151,40 +161,40 @@ export class ParametersComponent implements OnInit {
 
 
     changeView() {
-        if (this.visibleView.value === 2 && !this.allPreDispatches.length) {
+        if (this.visibleView.value === 2 && !this.preDispatchesList.length) {
            this.loadAllPreDispatches();
         }
     }
 
     loadAllPreDispatches(reset = true, search = '') {
-        this.allPreDispatchesLoaded = true ;
+        this.preDispatchesLoaded = true ;
         if (reset) {
-            this.allPreDispatchesPage = 1;
-            this.allPreDispatches = [{skeleton: true}, {skeleton: true}, {skeleton: true}];
+            this.preDispatchesPage = 1;
+            this.preDispatchesList = [{skeleton: true}, {skeleton: true}, {skeleton: true}];
         } else {
-            this.allPreDispatches.push({skeleton: true});
+            this.preDispatchesList.push({skeleton: true});
         }
-        this.subscription = this.preDispatchService.getPlannedPreDispatches(this.allPreDispatchesPage, '50', search).subscribe(
+        this.subscription = this.preDispatchService.getPlannedPreDispatches(this.preDispatchesPage, '50', search).subscribe(
             data => {
                 if (data.data.length) {
-                    this.allPreDispatchesLoaded = false ;
+                    this.preDispatchesLoaded = false ;
                     if (reset) {
-                        this.allPreDispatches = data.data ;
+                        this.preDispatchesList = data.data ;
                     } else {
-                        this.allPreDispatches.pop();
-                        this.allPreDispatches = this.allPreDispatches.concat(data.data) ;
+                        this.preDispatchesList.pop();
+                        this.preDispatchesList = this.preDispatchesList.concat(data.data) ;
                     }
                 } else if (!data.data.length && !reset) {
-                    this.allPreDispatches.pop();
+                    this.preDispatchesList.pop();
                 }
             });
     }
 
     loadMorePreDispatched() {
-        if (this.allPreDispatchesLoaded) {
+        if (this.preDispatchesLoaded) {
             return ;
         }
-        this.allPreDispatchesPage++;
+        this.preDispatchesPage++;
         this.loadAllPreDispatches(false, '');
     }
 
@@ -199,8 +209,30 @@ export class ParametersComponent implements OnInit {
         this.loadAllPreDispatches(true, event);
     }
 
-    changePreDispatch(event) {
-        console.log('change to ', event, this.selectedPreDispatch);
+    changePreDispatch(force = false, notMatchesOption = null) {
+
+        if (!this.selectedPreDispatch) {
+            return ;
+        }
+
+        if (force) {
+            return this.planningService.confirmPlanning(this.preDispatch, this.selectedPreDispatch.id, notMatchesOption);
+        }
+
+        this.planningService.getMatchesRate(this.preDispatch, this.selectedPreDispatch.id).subscribe(
+            data => {
+                this.matchRateData = data ;
+                if (data.data === 100) {
+                    return this.planningService.confirmPlanning(this.preDispatch, this.selectedPreDispatch.id, notMatchesOption);
+                } else if (data.data > 79) {
+                    this.modalService.open(this.lowmatchesModal);
+                } else {
+                    this.modalService.open(this.verylowmatchesModal);
+                }
+            }, error => {
+                console.log(error);
+            }
+        );
     }
 
     async save() {

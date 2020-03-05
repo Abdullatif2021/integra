@@ -17,7 +17,7 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import { ResultComponent } from './components/result/result.component';
 import {
     faAllergies,
-    faCheckCircle,
+    faCheckCircle, faExclamationCircle,
     faExclamationTriangle,
     faMapMarkedAlt,
     faMapMarkerAlt, faMinus,
@@ -36,6 +36,7 @@ import {PlanningService} from './service/planning.service';
 import {MapService} from './service/map.service';
 import {ResultsService} from './service/results.service';
 import {ResultesResolver} from './resolvers/resultes.resolver';
+import {faCross} from '@fortawesome/free-solid-svg-icons/faCross';
 
 @NgModule({
   imports: [
@@ -92,6 +93,7 @@ export class ScheduleModule {
         library.add(faMapMarkerAlt);
         library.add(faMapMarkedAlt);
         library.add(faMinus);
+        library.add(faExclamationCircle);
 
     }
 }

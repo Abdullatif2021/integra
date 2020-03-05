@@ -63,6 +63,8 @@ export const AppConfig = {
         getAllSets: `${api_url}/api/sets/get`,
         getAssignedPostmen: `${api_url}/api/postmen/assigned/get`,
         getPlannedPreDispatches: `${api_url}/api/preDispatches/planned`,
+        getMatchesRate: (id) => `${api_url}/api/preDispatch/${id}/getMatchRate`,
+        confirmPlanning: (id) => `${api_url}/api/preDispatch/${id}/confirmPlanning`,
 
     },
 

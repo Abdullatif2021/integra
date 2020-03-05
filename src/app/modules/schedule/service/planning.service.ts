@@ -94,6 +94,29 @@ export class PlanningService {
         );
     }
 
+
+    getMatchesRate(preDispatch, match) {
+        const options = {params: new HttpParams()};
+        options.params = options.params.set('match', match);
+        return this.http.get<any>(AppConfig.endpoints.getMatchesRate(preDispatch), options);
+    }
+
+
+    async confirmPlanning(preDispatch, match, notMatchesOption) {
+        await this.run(this.sendConfirmPlanningRequest(preDispatch, match, notMatchesOption), 'Matching', (data) => {
+            return 'Pre-Dispatches was matched';
+        }, (error) => {
+            return 'Something went wring';
+        });
+    }
+
+    sendConfirmPlanningRequest(preDispatch, match, notMatchesOption) {
+        return this.http.post<any>(AppConfig.endpoints.confirmPlanning(preDispatch), {
+            match: match,
+            notMatchesOption: notMatchesOption
+        });
+    }
+
     async saveParameters(data, success) {
         await this.run(this.sendSaveParametersRequest(data), 'Saving', success, () => {
             console.log('error');

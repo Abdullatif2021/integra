@@ -89,3 +89,7 @@
     height: 420px;
     overflow-y: scroll;
 }
+.modal-warning-icon {
+    font-size: 60px;
+    text-align: center;
+}
