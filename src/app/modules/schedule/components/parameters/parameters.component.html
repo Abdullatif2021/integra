@@ -16,7 +16,7 @@
       <div class="row parameter-item">
         <div class="col-5"> <label>Ora di Partenza</label> </div>
         <div class="col-7">
-          <input type="text" [(ngModel)]="data.departure_time" class="parameter-text-input parameter-small-input" placeholder="H:i" (change)="formatTime($event.target.value, 'departure_time')">
+          <input type="text" [(ngModel)]="data.departure_time" class="parameter-text-input parameter-medium-input" placeholder="H:i" type="time" min="0" max="24">
         </div>
       </div>
       <div class="row parameter-item">
@@ -156,10 +156,47 @@
 <ng-template #lowmatchesModal let-modal>
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
-      <h6 class="text-center">{{matchRateData.message}}</h6>
+      <h6 class="text-center">{{matchRateData.message}}</h6><hr>
+      <div class="departureDate-input-container">
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Giorno di Partenza</label> </div>
+          <div class="col-7"> <input  [(ngModel)]="options2Data.departure_date" type="text" ngbDatepicker #timeOfServiceDP2="ngbDatepicker" (focus)="timeOfServiceDP2.toggle()" placeholder="YYYY-MM-DD" class="parameter-text-input"> </div>
+        </div>
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Ora di Partenza</label> </div>
+          <div class="col-7">
+            <input type="text" [(ngModel)]="options2Data.departure_time" class="parameter-text-input parameter-medium-input" placeholder="H:i" type="time" min="0" max="24">
+          </div>
+        </div>
+      </div>
       <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close(); changePreDispatch(true)" class="integraa-btn ml-2 float-right" >Continue and send to Tab 1</button>
-        <button type="button" (click)="modal.close();  changePreDispatch(true, 1)" class="integraa-btn integraa-btn-confirm ml-2 float-right" >Continue and rematch</button>
+        <button type="button" (click)="changePreDispatch(true, null, modal)" class="integraa-btn ml-2 float-right" >Continue and send to Tab 1</button>
+        <button type="button" (click)="changePreDispatch(true, 1, modal)" class="integraa-btn integraa-btn-confirm ml-2 float-right" >Continue and rematch</button>
+        <button type="button" (click)="modal.close()" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #fullmatchesModal let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <h6 class="text-center">Enter new Departure Date and Time</h6><hr>
+      <div class="departureDate-input-container">
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Giorno di Partenza</label> </div>
+          <div class="col-7"> <input  [(ngModel)]="options2Data.departure_date" type="text" ngbDatepicker #timeOfServiceDP3="ngbDatepicker" (focus)="timeOfServiceDP3.toggle()" placeholder="YYYY-MM-DD" class="parameter-text-input"> </div>
+        </div>
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Ora di Partenza</label> </div>
+          <div class="col-7">
+            <input type="text" [(ngModel)]="options2Data.departure_time" class="parameter-text-input parameter-medium-input" placeholder="H:i" type="time" min="0" max="24">
+          </div>
+        </div>
+      </div>
+      <div class="btns-container mt-3">
+        <button type="button" (click)="changePreDispatch(true, null, modal)" class="integraa-btn ml-2 float-right" >Save</button>
         <button type="button" (click)="modal.close()" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
         <div class="clear-both"></div>
       </div>

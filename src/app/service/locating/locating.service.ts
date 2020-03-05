@@ -10,6 +10,7 @@ import {LoadingService} from '../loading.service';
 import {ApiResponseInterface} from '../../core/models/api-response.interface';
 import {BuildingLocationInterface, LocatedBuildingInterface} from '../../core/models/building.interface';
 import {BackProcessingService} from '../back-processing.service';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Injectable()
 export class LocatingService implements OnDestroy {
@@ -133,10 +134,10 @@ export class LocatingService implements OnDestroy {
         const nfound = await this.getNotFoundProducts(preDispatch).toPromise() ;
         if (nfound.data.length) {
             // emit fix the not found items event.
-            return this.productsNotFound.emit(nfound.data);
+            this.productsNotFound.emit(nfound.data);
         }
 
-        // if every thing is done, create the tree.
+        // if every thing is done or the user is not in the pre-dispatch page, create the tree.
         if (!this.buildings.length && !this.fixed.length) {
             await this.createTree(handle);
             this.snotifyService.success('All buildings are localized !', { showProgressBar: false});

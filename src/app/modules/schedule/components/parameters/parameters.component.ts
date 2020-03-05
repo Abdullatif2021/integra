@@ -1,15 +1,17 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {PlanningService} from '../../service/planning.service';
 import {ActivatedRoute} from '@angular/router';
 import {NgbCalendar, NgbDate, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/internal/operators';
 
 @Component({
     selector: 'app-parameter',
     templateUrl: './parameters.component.html',
     styleUrls: ['./parameters.component.css']
 })
-export class ParametersComponent implements OnInit {
+export class ParametersComponent implements OnInit, OnDestroy {
 
 
     constructor(
@@ -74,12 +76,19 @@ export class ParametersComponent implements OnInit {
     preDispatchesLoaded = false ;
     matchRateData;
 
+    options2Data = {
+        departure_date: null,
+        departure_time: null
+    };
+
     // modals
 
     @ViewChild('verylowmatchesModal') verylowmatchesModal: NgbModalRef ;
     @ViewChild('lowmatchesModal') lowmatchesModal: NgbModalRef ;
+    @ViewChild('fullmatchesModal') fullmatchesModal: NgbModalRef ;
 
     views = [{value: 1, label: 'Secondo i parametri impostati'}, {value: 2, label: 'Secondo predistinta pianificata'}];
+    unsubscribe: Subject<void> = new Subject();
 
     ngOnInit() {
         this.visibleView = this.views[0];
@@ -107,6 +116,15 @@ export class ParametersComponent implements OnInit {
             hours_per_day_minute: hours_per_day[1] ? hours_per_day[1] : '',
             max_product: this.preDispatchData.max_product,
         };
+        this.planningService.nextButtonClicked.pipe(takeUntil(this.unsubscribe)).subscribe(
+            data => {
+                if (this.visibleView.value === 2) {
+                    this.changePreDispatch();
+                } else {
+                    this.save();
+                }
+            }
+        );
     }
 
     findOption(option, options) {
@@ -209,26 +227,35 @@ export class ParametersComponent implements OnInit {
         this.loadAllPreDispatches(true, event);
     }
 
-    changePreDispatch(force = false, notMatchesOption = null) {
+    changePreDispatch(force = false, notMatchesOption = null, modal = null) {
 
         if (!this.selectedPreDispatch) {
             return ;
         }
 
         if (force) {
-            return this.planningService.confirmPlanning(this.preDispatch, this.selectedPreDispatch.id, notMatchesOption);
+            if (modal && this.options2Data.departure_date && this.options2Data.departure_time) {
+                modal.close();
+            } else if (!this.options2Data.departure_date || !this.options2Data.departure_time) {
+                return ;
+            }
+            const departureDate = (this.options2Data.departure_date ? (typeof this.options2Data.departure_date === 'object' ?
+                Object.values(this.options2Data.departure_date).join('-') :  this.options2Data.departure_date) : '') +
+                (this.options2Data.departure_time ? ' ' + this.options2Data.departure_time : '');
+            return this.planningService.confirmPlanning(this.preDispatch, this.selectedPreDispatch.id, notMatchesOption, departureDate);
         }
 
         this.planningService.getMatchesRate(this.preDispatch, this.selectedPreDispatch.id).subscribe(
             data => {
                 this.matchRateData = data ;
-                if (data.data === 100) {
-                    return this.planningService.confirmPlanning(this.preDispatch, this.selectedPreDispatch.id, notMatchesOption);
-                } else if (data.data > 79) {
+                if (data.data.percent === 100) {
+                    this.modalService.open(this.fullmatchesModal);
+                } else if (data.data.percent > 79) {
                     this.modalService.open(this.lowmatchesModal);
                 } else {
                     this.modalService.open(this.verylowmatchesModal);
                 }
+
             }, error => {
                 console.log(error);
             }
@@ -236,7 +263,15 @@ export class ParametersComponent implements OnInit {
     }
 
     async save() {
-        await this.planningService.saveParameters(this.getData(), () => 'Data Saved !');
+        await this.planningService.saveParameters(this.getData(), () => {
+            this.planningService.divideToDistenta(this.preDispatch);
+            return 'Data Saved !' ;
+        });
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
     }
 
 }

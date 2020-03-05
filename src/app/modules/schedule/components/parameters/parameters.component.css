@@ -28,6 +28,9 @@
 .parameter-small-input {
     width: 80px;
 }
+.parameter-medium-input {
+    width: 120px;
+}
 .parameters-header-section {
     margin-bottom: 5px;
     width: 70%;
@@ -92,4 +95,7 @@
 .modal-warning-icon {
     font-size: 60px;
     text-align: center;
+}
+.departureDate-input-container{
+    font-size: 14px;
 }

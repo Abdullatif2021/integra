@@ -19,9 +19,14 @@ export class PlanningService {
 
     preDispatchDataChanges = new EventEmitter() ;
     moveItemsToInPlaningChanges = new EventEmitter<any>() ;
+    nextButtonClicked = new EventEmitter<any>();
 
     changePreDispatchData(data) {
         this.preDispatchDataChanges.emit(data);
+    }
+
+    next(source) {
+        this.nextButtonClicked.emit(source);
     }
 
     moveItemsToInPlaning(modalRef, force) {
@@ -102,18 +107,19 @@ export class PlanningService {
     }
 
 
-    async confirmPlanning(preDispatch, match, notMatchesOption) {
-        await this.run(this.sendConfirmPlanningRequest(preDispatch, match, notMatchesOption), 'Matching', (data) => {
+    async confirmPlanning(preDispatch, match, notMatchesOption, departureDate) {
+        await this.run(this.sendConfirmPlanningRequest(preDispatch, match, notMatchesOption, departureDate), 'Matching', (data) => {
             return 'Pre-Dispatches was matched';
         }, (error) => {
             return 'Something went wring';
         });
     }
 
-    sendConfirmPlanningRequest(preDispatch, match, notMatchesOption) {
+    sendConfirmPlanningRequest(preDispatch, match, notMatchesOption, departureDate) {
         return this.http.post<any>(AppConfig.endpoints.confirmPlanning(preDispatch), {
             match: match,
-            notMatchesOption: notMatchesOption
+            notMatchesOption: notMatchesOption,
+            departureDate: departureDate
         });
     }
 

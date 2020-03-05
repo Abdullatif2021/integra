@@ -5,6 +5,7 @@
       <ng-container [ngTemplateOutlet]="dateItem" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx}"></ng-container>
     </ng-container>
   </div>
+  <button class="float-right integraa-btn" (click)="makeDispatchesVisible()">Create Dispatches</button>
 </div>
 
 <ng-template let-item="item" let-idx="idx" let-next="next" #dateItem>

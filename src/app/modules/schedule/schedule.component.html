@@ -13,11 +13,18 @@
     <div class="col-8 v-wide-col">
       <div class="map-header">
         <div class="mote-to-in-plan-btn integraa-btn" *ngIf="activeTab('/schedule/'+preDispatch)" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Move to in plan</div>
-        <div class="mote-to-in-plan-btn integraa-btn" *ngIf="activeTab('/schedule/'+preDispatch+'/toPlan')" (click)="divideToDistenta()">Divide</div>
+        <!--<div class="mote-to-in-plan-btn integraa-btn" *ngIf="activeTab('/schedule/'+preDispatch+'/toPlan')" (click)="divideToDistenta()">Divide</div>-->
         <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': false}" [ngStyle]="{width: preDispatchData.percent + '%'}">&nbsp;</div><div class="progress-action-text-value horiz"> {{preDispatchData.percent}} %</div></div>
         <img *ngIf="isRunning()" (click)="stopLocating()" src="assets/images/pause.svg" class="action-icon play-pause-icon">
         <img *ngIf="!isRunning()" (click)="locate()" src="assets/images/play.svg" class="action-icon play-pause-icon">
-        <div class="continue-btn integraa-btn">Prosegui</div>
+        <div class="continue-btn integraa-btn" (click)="next()">
+          <ng-container *ngIf="activeTab('/schedule/'+preDispatch+'/parameters')">
+            Pianifica
+          </ng-container>
+          <ng-container *ngIf="!activeTab('/schedule/'+preDispatch+'/parameters')">
+            Prosegui
+          </ng-container>
+        </div>
         <div class="clear-both"></div>
       </div>
     </div>

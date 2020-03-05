@@ -110,6 +110,19 @@ export class ResultComponent implements OnInit, OnDestroy {
       return (next + '').split(':').length;
   }
 
+  makeDispatchesVisible() {
+      this.resultsService.makeDispatchesVisible(this.preDispatch).subscribe(
+          data => {
+              if (data.success) {
+                  this.snotifyService.success('Dispatches was created !',  { showProgressBar: false, timeout: 1500 });
+              } else {
+                  this.snotifyService.error(data.message,  { showProgressBar: false, timeout: 1500 });
+              }
+          }, error => {
+              this.snotifyService.error('Something went wrong',  { showProgressBar: false, timeout: 1500 });
+          }
+      );
+  }
 
   getStatusClass(item) {
       if (!item.status) {

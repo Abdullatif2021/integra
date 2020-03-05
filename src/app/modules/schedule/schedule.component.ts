@@ -70,7 +70,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     startInterval() {
-        this.preDispatchService.getPreDispatchData(this.preDispatch, true).subscribe(
+        this.preDispatchService.getPreDispatchData(this.preDispatch, true).pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
                 this.preDispatchData = data.data ;
                 if (
@@ -97,9 +97,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         return route === this.router.url;
     }
 
-    async divideToDistenta() {
-        await this.planningService.divideToDistenta(this.preDispatch);
-    }
 
     async locate() {
         // this.loadingService.show();
@@ -183,6 +180,10 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
     stopLocating() {
         this.locatingService.pause(this.preDispatch);
+    }
+
+    next() {
+        this.planningService.next(this.router.url);
     }
 
     ngOnDestroy() {

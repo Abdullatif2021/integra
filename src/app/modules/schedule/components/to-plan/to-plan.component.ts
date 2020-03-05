@@ -51,94 +51,92 @@ export class ToPlanComponent implements OnInit, OnDestroy {
       );
   }
 
-    // List Tree Methods
+  // List Tree Methods
 
-    async listNode(node) {
-        if (!node.expanded && !node.children.length) {
-            await this.load(node);
-        }
-        node.expanded = !node.expanded;
-    }
+  async listNode(node) {
+      if (!node.expanded && !node.children.length) {
+          await this.load(node);
+      }
+      node.expanded = !node.expanded;
+  }
 
-    async load(node) {
-        if (node.loading || this.searchMode || (node.page && node.type === 'oet'))  {
-            return;
-        }
-        node.loading = true;
-        node.children.push({skeleton: true});
-        this.listTreeService.listNode(this.preDispatch, node, node.page, this.filter, 'to_planning').then(
-            data => {
-                node.children.pop();
-                this.addData(node, data);
-            }
-        );
+  async load(node) {
+      if (node.loading || this.searchMode || (node.page && node.type === 'oet'))  {
+          return;
+      }
+      node.loading = true;
+      node.children.push({skeleton: true});
+      this.listTreeService.listNode(this.preDispatch, node, node.page, this.filter, 'to_planning').then(
+          data => {
+              node.children.pop();
+              this.addData(node, data);
+          });
+  }
 
-    }
+  async loadMore(node, next) {
+      if (node.type === 'streetId' || (node.type !== 'oet' && this.searchMode)) {
+          return;
+      } // ignore the node where its children are static
+      if (node.children.length && !node.loading) {
+          node.page = !node.page ? 2 : ++node.page;
+          await this.load(node);
+      }
+  }
 
-    async loadMore(node, next) {
-        if (node.type === 'streetId' || (node.type !== 'oet' && this.searchMode)) {
-            return;
-        } // ignore the node where its children are static
-        if (node.children.length && !node.loading) {
-            node.page = !node.page ? 2 : ++node.page;
-            await this.load(node);
-        }
-    }
+  addData(node, data) {
+      let _data;
+      if (node.type !== 'oet') {
+          _data = data;
+      } else { // handle the leafs case, the api response is quit different.
+          data.forEach((_new) => {
+              if (node.subtype === _new.subtype) {
+                  _data = _new.children;
+              }
+          });
+      }
+      if (_data) {
+          node.children = node.children.concat(_data);
+      }
+      // if the results was lass than the tree pagination results count, keep this node in loading state.
+      if (_data && _data.length >= this.paginationOptions.get_tree_pagination) {
+          node.loading = false;
+      }
+  }
 
-    addData(node, data) {
-        let _data;
-        if (node.type !== 'oet') {
-            _data = data;
-        } else { // handle the leafs case, the api response is quit different.
-            data.forEach((_new) => {
-                if (node.subtype === _new.subtype) {
-                    _data = _new.children;
-                }
-            });
-        }
-        if (_data) {
-            node.children = node.children.concat(_data);
-        }
-        // if the results was lass than the tree pagination results count, keep this node in loading state.
-        if (_data && _data.length >= this.paginationOptions.get_tree_pagination) {
-            node.loading = false;
-        }
-    }
-
-    async reloadNode(event) {
-        event.item.node.children = [];
-        event.item.node.loading = false;
-        event.item.node.page = 0;
-        await this.load(event.item.node);
-    }
+  async reloadNode(event) {
+      event.item.node.children = [];
+      event.item.node.loading = false;
+      event.item.node.page = 0;
+      await this.load(event.item.node);
+  }
 
 
-    // View Related Methods
+  // View Related Methods
 
-    getStepIdx(idx) {
-        if (idx === 0) {
-            this.itemsCount = 0;
-        }
-        return this.itemsCount++;
-    }
+  getStepIdx(idx) {
+      if (idx === 0) {
+          this.itemsCount = 0;
+      }
+      return this.itemsCount++;
+  }
 
-    getLvlClass(next) {
-        return ('lvl-' + (next + '').split(':').length);
-    }
+  getLvlClass(next) {
+      return ('lvl-' + (next + '').split(':').length);
+  }
 
-    getStatusClass(item) {
-        return !item.status ? '' : 'status-' + item.status;
-    }
+  getStatusClass(item) {
+      return !item.status ? '' : 'status-' + item.status;
+  }
 
-    select(node: TreeNodeInterface) {
-        this.listTreeService.select.select(node);
-    }
+  select(node: TreeNodeInterface) {
+      this.listTreeService.select.select(node);
+  }
 
-    // Life Cycle OnDestroy
+  // Life Cycle OnDestroy
 
-    ngOnDestroy() {
-        this.unsubscribe.next();
-        this.unsubscribe.complete();
-    }
+  ngOnDestroy() {
+      this.unsubscribe.next();
+      this.unsubscribe.complete();
+  }
 
 }

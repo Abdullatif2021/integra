@@ -65,6 +65,7 @@ export const AppConfig = {
         getPlannedPreDispatches: `${api_url}/api/preDispatches/planned`,
         getMatchesRate: (id) => `${api_url}/api/preDispatch/${id}/getMatchRate`,
         confirmPlanning: (id) => `${api_url}/api/preDispatch/${id}/confirmPlanning`,
+        makeDispatchesVisible: (id) => `${api_url}/api/preDispatch/${id}/makeSetsVisible`,
 
     },
 

@@ -122,6 +122,9 @@ export class ResultsService implements OnDestroy {
             postman_id: postmanId
         });
     }
+    makeDispatchesVisible(postmanId) {
+        return this.http.post<any>(AppConfig.endpoints.makeDispatchesVisible(postmanId), {});
+    }
 
     ngOnDestroy() {
         this.unsubscribe.next();
