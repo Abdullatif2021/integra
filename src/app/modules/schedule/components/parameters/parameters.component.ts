@@ -5,6 +5,7 @@ import {NgbCalendar, NgbDate, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-boot
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
+import {RecipientsService} from '../../../../service/recipients.service';
 
 @Component({
     selector: 'app-parameter',
@@ -18,7 +19,8 @@ export class ParametersComponent implements OnInit, OnDestroy {
         private planningService: PlanningService,
         private route: ActivatedRoute,
         private preDispatchService: PreDispatchService,
-        private modalService: NgbModal
+        private modalService: NgbModal,
+        public recipientsService: RecipientsService
     ) {
         this.preDispatch = this.route.snapshot.parent.params.id;
         this.preDispatchData = this.route.snapshot.parent.data.data ;

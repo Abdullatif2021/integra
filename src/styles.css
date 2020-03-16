@@ -5,6 +5,7 @@
 @import "./assets/css/animate.css";
 @import "~ng-snotify/styles/material";
 @import "~angular2-draggable/css/resizable.css" ;
+
 body{
     background-color: #f2f2f2 !important;
     font-family: 'Roboto', sans-serif;
@@ -47,6 +48,10 @@ body{
 }
 .integraa-btn-danger{
     background-color: #F44336 !important;
+    color: #fff !important;
+}
+.integraa-btn-success{
+    background-color: #28a745 !important;
     color: #fff !important;
 }
 .integraa-btn-confirm{

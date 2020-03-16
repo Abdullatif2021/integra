@@ -54,15 +54,17 @@
           </div> </div>
           <div class="col-3 v-wide-col"> <div class="count mt-1">{{item.qta}} Consegne</div> </div>
           <div class="col-3"> <div class="time mt-1">{{item.time}}</div> </div>
-          <div class="col-1-half"> <div class="distance mt-1">{{item.distance}}</div> </div>
+          <div class="col-1"> <div class="distance mt-1">{{item.distance}}</div> </div>
         </div>
       </div>
     </div>
-    <ng-container *ngIf="item.expanded" >
-      <div infiniteScroll (scrolled)="loadMore(item)" [scrollWindow]="true" infiniteScrollDistance="30">
-        <ng-container *ngFor="let child of item.children; let i = index">
+    <ng-container *ngIf="item.expanded"  >
+      <div infiniteScroll class="ngx-dnd-container" (scrolled)="loadMore(item)" dndDropzone [dndDisableDropIf]="dragging && dragging.type !== 'cityId'" [dndHorizontal]="false" (dndDrop)="onDrop($event, item)"  [ngClass]="{'drop-location': dragging && dragging.type === 'cityId'}" [scrollWindow]="true" infiniteScrollDistance="30">
+        <div dndPlaceholderRef class="dndPlaceholder"></div>
+        <div *ngFor="let child of item.children; let i = index" [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"
+             (dndStart)="onDragStart($event, child)" class="ngx-dnd-item">
           <ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
-        </ng-container>
+        </div>
       </div>
     </ng-container>
   </ng-container>
@@ -95,22 +97,24 @@
     </div>
     <ng-container *ngIf="item.expanded">
         <ng-container  *ngIf="getLvl(next) <  5" >
-          <div infiniteScroll (scrolled)="loadMore(item)" [scrollWindow]="true" infiniteScrollDistance="30">
-            <ng-container *ngFor="let child of item.children; let i = index">
-              <ng-container  [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
-            </ng-container>
+          <div dndDropzone (dndDrop)="onDrop($event, item)" infiniteScroll (scrolled)="loadMore(item)" [dndDisableDropIf]="dragging && dragging.parent.type !== item.type" [scrollWindow]="true" infiniteScrollDistance="30" [ngClass]="{'drop-location': dragging && dragging.parent.type === item.type}">
+            <div dndPlaceholderRef class="dndPlaceholder"></div>
+            <div *ngFor="let child of item.children; let i = index"  [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"
+                 (dndStart)="onDragStart($event, child)">
+              <ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
+            </div>
           </div>
         </ng-container>
         <ng-container *ngIf="getLvl(next) ==  5">
-          <ng-container [ngTemplateOutlet]="streetItems" [ngTemplateOutletContext]="{idx: idx, item: item, items:item.children, next: next+':'+i}"></ng-container>
+          <ng-container [ngTemplateOutlet]="streetItems" [ngTemplateOutletContext]="{idx: idx, item: item, next: next+':'+i}"></ng-container>
         </ng-container>
     </ng-container>
   </ng-container>
 
 </ng-template>
 
-<ng-template let-items="items" let-idx="idx" let-next="next" let-item="item" #streetItems>
-  <div class="street-items-header" *ngIf="items">
+<ng-template let-idx="idx" let-next="next" let-item="item" #streetItems>
+  <div class="street-items-header" *ngIf="item.children">
     <div class="row">
       <div class="col-5"><div class="street-items-header-cell">Indirizzo</div></div>
       <div class="col-3"><div class="street-items-header-cell">Ora d’arrivo</div></div>
@@ -118,24 +122,24 @@
       <div class="col-3"><div class="street-items-header-cell">Distanza</div></div>
     </div>
   </div>
-  <div class="street-items" infiniteScroll (scrolled)="loadMore(item)" [scrollWindow]="true" [infiniteScrollContainer]="ResultsContainer" infiniteScrollDistance="30">
-    <ng-container *ngFor="let item of items; let i = index">
-      <div [ngClass]="{'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" class="{{getStatusClass(item)}}">
-        <ng-container *ngIf="item.skeleton;">
-          <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
-        </ng-container>
-        <ng-container  *ngIf="!item.skeleton;">
-          <div class="street-item">
-            <div class="row">
-              <div class="col-5"> <div class="text">{{item.address}}</div> </div>
-              <div class="col-3"> <div class="count">{{item.time}}</div> </div>
-              <div class="col-1"> <div class="srv">{{item.srv}}</div> </div>
-              <div class="col-3"> <div class="distance">{{item.distance}}</div> </div>
-            </div>
+  <div class="street-items" dndDropzone [dndDisableDropIf]="dragging && dragging.type !== 'building'" [dndHorizontal]="false" (dndDrop)="onDrop($event, item)"  [ngClass]="{'drop-location': dragging && dragging.type === 'building'}" infiniteScroll (scrolled)="loadMore(item)" [scrollWindow]="true" [infiniteScrollContainer]="ResultsContainer" infiniteScrollDistance="30">
+    <div dndPlaceholderRef class="dndPlaceholder"></div>
+    <div *ngFor="let child of item.children; let i = index" [ngClass]="{'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"
+         (dndStart)="onDragStart($event, child)" class="{{getStatusClass(child)}}">
+      <ng-container *ngIf="child.skeleton;">
+        <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
+      </ng-container>
+      <ng-container  *ngIf="!child.skeleton;">
+        <div class="street-item">
+          <div class="row">
+            <div class="col-5"> <div class="text">{{child.address}}</div> </div>
+            <div class="col-3"> <div class="count">{{child.time}}</div> </div>
+            <div class="col-1"> <div class="srv">{{child.srv}}</div> </div>
+            <div class="col-3"> <div class="distance">{{child.distance}}</div> </div>
           </div>
-        </ng-container>
-      </div>
-    </ng-container>
+        </div>
+      </ng-container>
+    </div>
   </div>
 
 </ng-template>

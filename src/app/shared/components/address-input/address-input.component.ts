@@ -59,6 +59,9 @@ export class AddressInputComponent implements OnInit, OnChanges {
     // google auto complete changes
     handleAddressChange(event) {
         const address: any = this.googlePlacesService.formattedAddressToObject(event.formatted_address);
+        if ( !address ) {
+            return ;
+        }
         const formattedAddress = this.googlePlacesService.getAddressObject(event) ;
         if (formattedAddress) {
             if (formattedAddress.cap) {

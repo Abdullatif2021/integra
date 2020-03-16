@@ -16,6 +16,7 @@ export interface TreeNodeInterface {
     page: number;
     expanded?: boolean;
     loading?: boolean;
+    addressId?: number;
 }
 
 export interface TreeNodeResponseInterface {

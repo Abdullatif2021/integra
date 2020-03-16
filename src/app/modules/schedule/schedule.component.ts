@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
@@ -12,6 +12,8 @@ import {BackProcessingService} from '../../service/back-processing.service';
 import {LoadingService} from '../../service/loading.service';
 import {LocatingService} from '../../service/locating/locating.service';
 import {PreDispatchService} from '../../service/pre-dispatch.service';
+import {ScheduleService} from './service/schedule.service';
+import {PageDirective} from '../../shared/directives/page.directive';
 
 @Component({
     selector: 'app-schedules',
@@ -31,8 +33,9 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     errors = {};
     latLngInputState = [];
     preDispatchData: any;
-    markers: [MapMarker];
+    markers: MapMarker[];
     percent = 0 ;
+    show_map = true ;
 
     constructor(
         private router: Router,
@@ -45,6 +48,8 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private backProcessingService: BackProcessingService,
         private loadingService: LoadingService,
         private preDispatchService: PreDispatchService,
+        private scheduleService: ScheduleService,
+        private componentFactoryResolver: ComponentFactoryResolver
     ) {
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data;
@@ -54,6 +59,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     longitude = 14.3435834;
     zoom = 11;
     locatingHandle: any ;
+    @ViewChild(PageDirective) pageHost: PageDirective;
 
     ngOnInit() {
         this.locatingHandle = this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch);
@@ -63,9 +69,19 @@ export class ScheduleComponent implements OnInit, OnDestroy {
                 this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown'});
             }
         );
-        this.mapService.markersChanges.subscribe(
+        this.mapService.markersChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => { this.markers = data ; }
         );
+        this.scheduleService.rightSideView.pipe(takeUntil(this.unsubscribe)).subscribe(
+            data => {
+                if (data) {
+                    this.show_map = false ;
+                    this.loadRightSideView((<any>data).view, (<any>data).data) ;
+                } else {
+                    this.show_map = true ;
+                }
+            }
+        )
         this.startInterval();
     }
 
@@ -184,6 +200,15 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
     next() {
         this.planningService.next(this.router.url);
+    }
+
+    loadRightSideView(view, data) {
+        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(view);
+        const viewContainerRef = this.pageHost.viewContainerRef;
+        viewContainerRef.clear();
+
+        const componentRef = viewContainerRef.createComponent(componentFactory);
+        (<any>componentRef.instance).data = data;
     }
 
     ngOnDestroy() {

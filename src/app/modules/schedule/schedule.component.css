@@ -125,3 +125,6 @@
     margin: 14px;
     cursor: pointer;
 }
+.hidden {
+    display: none;
+}

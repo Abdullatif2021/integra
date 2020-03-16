@@ -28,6 +28,7 @@ export const AppConfig = {
         updatePaginationOptions: `${api_url}/api/config/update`,
         updateStreetsData: `${api_url}/api/street/update`,
         getTreeNode: (id) => `${api_url}/api/preDispatch/${id}/tree`,
+        getNotMatchesTreeNode: (id) => `${api_url}/api/preDispatch/${id}/notMatchesTree`,
         createTree: `${api_url}/api/preDispatch/tree/create`,
         moveStreet: `${api_url}/api/preDispatch/tree/moveStreet`,
         moveCap: `${api_url}/api/preDispatch/tree/moveCap`,
@@ -66,6 +67,8 @@ export const AppConfig = {
         getMatchesRate: (id) => `${api_url}/api/preDispatch/${id}/getMatchRate`,
         confirmPlanning: (id) => `${api_url}/api/preDispatch/${id}/confirmPlanning`,
         makeDispatchesVisible: (id) => `${api_url}/api/preDispatch/${id}/makeSetsVisible`,
+        assignToSet: (id) => `${api_url}/api/set/${id}/assignManual`,
+        orderTreeNode: (id) => `${api_url}/api/preDispatch/${id}/shift`,
 
     },
 

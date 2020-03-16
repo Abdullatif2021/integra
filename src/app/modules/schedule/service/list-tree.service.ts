@@ -38,7 +38,7 @@ export class ListTreeService implements OnDestroy {
                     result.push({
                         id: elm.id, type: type, children: [], subtype: '', parent: node, text: elm.name, _end: false,
                         status: 0, qta: elm.productCount ? elm.productCount : elm.productsCount, warning: !elm.is_fixed,
-                        selected: node.selected, page: 0
+                        selected: node.selected, page: 0, addressId: elm.addressId
                     });
                 });
             }
@@ -63,7 +63,11 @@ export class ListTreeService implements OnDestroy {
         }
         options.params = options.params.set('planningMode', mode);
 
-        return this.http.get<TreeNodeResponseInterface>(AppConfig.endpoints.getTreeNode(preDispatchId), options);
+        let endPoint = AppConfig.endpoints.getTreeNode(preDispatchId) ;
+        if (mode === 'not-matches-tree') {
+            endPoint = AppConfig.endpoints.getNotMatchesTreeNode(preDispatchId) ;
+        }
+        return this.http.get<TreeNodeResponseInterface>(endPoint, options);
     }
 
 
@@ -113,7 +117,8 @@ export class ListTreeService implements OnDestroy {
             result.push({
                 id: elm.id, type: 'building', subtype: '', text: this.nameBuilding(parent.parent, elm),
                 parent: parent, children: [], _end: true, status: !elm.house_number ? 3 : (elm.is_fixed ? 1 : 2),
-                extra: {house_number: elm.house_number}, qta: elm.productsCount, selected: parent.selected, page: 0
+                extra: {house_number: elm.house_number}, qta: elm.productsCount, selected: parent.selected, page: 0,
+                addressId: elm.addressId
             });
         });
         return result;

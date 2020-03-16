@@ -12,6 +12,7 @@ export interface SetTreeNodeInterface {
     setId: number;
     marker?: any;
     loaded: boolean;
+    addressId?: number;
 };
 
 export interface SetClientTreeNodeInterface {
@@ -19,4 +20,5 @@ export interface SetClientTreeNodeInterface {
     arriveHour?: string;
     serviceTime?: string;
     distance?: string;
+    addressId?: number;
 }

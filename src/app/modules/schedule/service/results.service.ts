@@ -5,7 +5,6 @@ import {Observable} from 'rxjs';
 import {TreeNodeInterface, TreeNodeResponseInterface} from '../../../core/models/tree-node.interface';
 import {takeUntil} from 'rxjs/internal/operators';
 import {SetClientTreeNodeInterface, SetTreeNodeInterface} from '../../../core/models/set-tree-node.interface';
-import {catchError} from 'rxjs/operators';
 
 @Injectable()
 export class ResultsService implements OnDestroy {
@@ -32,7 +31,7 @@ export class ResultsService implements OnDestroy {
                         elm.sets.forEach((set) => {
                            sets.push({
                                id: set.id, type: 'set', children: [], parent: null, text: '', postman: set.postman,
-                               qta: set.products_count, page: 1, expanded: false, setId: set.id, loaded: false,
+                               qta: set.products_count, page: 1, expanded: false, setId: set.id, loaded: false, addressId: set.addressId
                            });
                         });
                         res.push({day: elm.day, sets: sets});
@@ -61,11 +60,11 @@ export class ResultsService implements OnDestroy {
     createNode(elm, type, parent): SetTreeNodeInterface | SetClientTreeNodeInterface {
         if (type === 'client') {
             return {
-                id: elm.id, address: this.getAddress(elm, parent), loaded: false,
+                id: elm.id, address: this.getAddress(elm, parent), loaded: false, parent: parent, type: 'building', addressId: elm.addressId
             };
         } else {
             return {
-                id: elm.id, type: type, children: [], parent: parent, text: elm.name, loaded: false,
+                id: elm.id, type: type, children: [], parent: parent, text: elm.name, loaded: false, addressId: elm.addressId,
                 qta: elm.count, page: 1, expanded: false, setId: parent.setId, marker: this.getMarker(type, parent)
             };
         }
@@ -124,6 +123,34 @@ export class ResultsService implements OnDestroy {
     }
     makeDispatchesVisible(postmanId) {
         return this.http.post<any>(AppConfig.endpoints.makeDispatchesVisible(postmanId), {});
+    }
+
+    assignToSet(setId, addressId, assignTo, level, type) {
+        const roots = {cityId: 1, capId: 2, streetId: 3, building: 4}
+        const data = {
+            data: [
+                {
+                    root: roots[type],
+                    addressId: addressId,
+                    assignTo: assignTo,
+                    level: level
+                }
+            ]
+        }
+        return this.http.post<any>(AppConfig.endpoints.assignToSet(setId), data);
+    }
+    orderTreeNode(setId, addressId, level, type) {
+        const roots = {cityId: 1, capId: 2, streetId: 3, building: 4}
+        const data = {
+            data: [
+                {
+                    root: roots[type],
+                    element_id: addressId,
+                    level: level
+                }
+            ]
+        }
+        return this.http.post<any>(AppConfig.endpoints.orderTreeNode(setId), data);
     }
 
     ngOnDestroy() {

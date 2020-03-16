@@ -1,0 +1,171 @@
+.not-matches-container {
+    background-color: #fff;
+    min-height: 634px;
+    border-radius: 4px;
+    font-size: 11px;
+    padding-top: 1px;
+    border: 1px solid #ffffff;
+    height: 634px;
+    overflow-y: scroll;
+}
+/* items */
+.node {
+    background-color: #dfdfdf;
+}
+.items{
+    min-height: 360px;
+}
+.right-side{
+    float: right;
+}
+.item-row .more, .item-row .select-container, .item-row .marker-container, .item-row .marker, .item-row .text, .item-row .warning, .item-row .qty, .item-row .small-more {
+    display: inline-block;
+}
+.item-row .more{
+    cursor: pointer;
+}
+.item-row {
+    padding: 5px 10px;
+    font-size: 13px;
+}
+.item-row .qta {
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.item-row .select-container .selected, .item-row .select-container .not-selected, .item-row .marker {
+    width: 21px;
+    height: 21px;
+    border-radius: 20px;
+    margin: 0px 5px;
+    font-size: 13px;
+    text-align: center;
+    padding: 0px 0px;
+}
+.item-row .select-container .selected{
+    background-color: #fcda4b;
+    border: 1px solid #fcda4b ;
+    color: #000000;
+}
+.item-row .select-container .not-selected{
+    background-color: #fff;
+    border: 1px solid #444 ;
+    color: #fff;
+}
+.item-row .select-container {
+    cursor: pointer;
+}
+.item-row .marker{
+    background-color: #000000;
+    border: 1px solid #000000;
+    color: white;
+    margin-left: 10px;
+    font-size: 11px;
+    padding: 1.3px 0px;
+    font-weight: 600;
+    vertical-align: middle;
+}
+.item-row .text {
+    font-size: 13px;
+    padding-left: 5px;
+    font-weight: 500;
+}
+.item-row .warning {
+    background-color: #8D2727;
+    border-radius: 20px;
+    color: white;
+    width: 20px;
+    height: 20px;
+    font-size: 13px;
+    text-align: center;
+    font-weight: 600;
+    margin: 0px 5px;
+}
+
+
+/* lvl-2 */
+.lvl-2{
+    padding-left: 12px;
+}
+.lvl-2 .item-row .select-container .selected, .lvl-2 .item-row .select-container .not-selected{
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+}
+/* lvl-3 */
+.lvl-3{
+    padding-left: 22px;
+}
+
+.lvl-3 .item-row .select-container .selected, .lvl-3 .item-row .select-container .not-selected{
+    width: 15px;
+    height: 15px;
+    font-size: 10px;
+}
+.lvl-3 .item-row {
+    padding: 3px 10px;
+}
+/* lvl-4 */
+.lvl-4{
+    padding-left: 34px;
+}
+.lvl-4 .item-row .select-container .selected, .lvl-4 .item-row .select-container .not-selected{
+    width: 15px;
+    height: 15px;
+    font-size: 10px;
+}
+.lvl-4 .item-row {
+    padding: 3px 10px;
+}
+/* lvl-5 */
+
+.lvl-5{
+    padding-left: 54px;
+}
+.lvl-5 .item-row .select-container .selected, .lvl-5 .item-row .select-container .not-selected{
+    width: 15px;
+    height: 15px;
+    font-size: 10px;
+}
+.lvl-5 .item-row {
+    padding: 3px 10px;
+}
+.lvl-5 .item-row .text{
+    font-size: 11px ;
+}
+
+
+/* Statuses */
+
+.status-1 .item-row .text{
+    text-decoration: line-through;
+}
+.status-2 {
+    background-color: #8d2827 !important;
+    color: #ffffff;
+}
+.status-3 {
+    background-color: #FFCC00 !important
+}
+.odd-bg.status-2 {
+    background-color: #ad3130 !important;
+}
+.odd-bg.status-3 {
+    background-color: #fbd84d !important;
+}
+.status-4 {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.schedule-skeleton {
+    height: 33px;
+    border-radius: 0px;
+    margin: 0px;
+    display: block;
+}
+
+.cursor-grab:active{
+    cursor: grab;
+}

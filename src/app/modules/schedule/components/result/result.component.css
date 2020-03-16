@@ -125,6 +125,19 @@
     font-size: 11px;
 }
 
+.dndDragging {
+    opacity: 0.4;
+}
+.dndDragover.drop-location {
+    /*border: 1px solid green;*/
+    transition: all ease .3s;
+    border: 2px dotted green;
+}
+.dndPlaceholder {
+    height: 42px;
+    background-color: #c6edb6;
+}
+
 .items{
     height: 575px;
     overflow-y: scroll;

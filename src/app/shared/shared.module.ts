@@ -16,6 +16,7 @@ import { LoadingComponent } from './components/loading/loading.component';
 import { AddressInputComponent } from './components/address-input/address-input.component';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import {PlacesAutocompleteService} from './service/places.autocomplete.service';
+import {PageDirective} from './directives/page.directive';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import {PlacesAutocompleteService} from './service/places.autocomplete.service';
       TableComponent,
       SimpleTableComponent,
       ModalDirective,
+      PageDirective,
       LoadingComponent,
       AddressInputComponent
   ],
@@ -43,6 +45,7 @@ import {PlacesAutocompleteService} from './service/places.autocomplete.service';
       TableComponent,
       SimpleTableComponent,
       ModalDirective,
+      PageDirective,
       LoadingComponent,
       AddressInputComponent
   ],

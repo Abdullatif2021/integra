@@ -15,6 +15,7 @@ import {SimpleTableComponent} from '../../../../shared/components/simple-table/s
 import {FilterConfig} from '../../../../config/filters.config';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
+import {RecipientsService} from '../../../../service/recipients.service';
 
 @Component({
   selector: 'app-to-deliver',
@@ -91,6 +92,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private paginationService: PaginationService,
       private filtersService: FiltersService,
       private actionsService: ActionsService,
+      protected recipientsService: RecipientsService
   ) {
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;

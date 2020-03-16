@@ -34,7 +34,7 @@
       <router-outlet></router-outlet>
     </div>
     <div class="col-8 v-wide-col">
-      <div class="map-container">
+      <div class="map-container" [ngClass]="{'hidden': !show_map}">
         <div class="map-search">
           <app-address-input (changed)="navigateMap($event)" [_class]="'bg-white'"></app-address-input>
         </div>
@@ -43,6 +43,9 @@
             <agm-marker [latitude]="marker.lat" [longitude]="marker.lng" [label]="marker.label"></agm-marker>
           </ng-container>
         </agm-map>
+      </div>
+      <div class="right-side-container"[ngClass]="{'hidden': show_map}">
+        <ng-template #rightSideRef appPage></ng-template>
       </div>
     </div>
   </div>

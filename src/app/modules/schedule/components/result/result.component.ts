@@ -1,8 +1,14 @@
-import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ResultsService} from '../../service/results.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {SnotifyService} from 'ng-snotify';
+import {ScheduleService} from '../../service/schedule.service';
+import {NotMatchesTreeComponent} from '../../parts-components/not-matches-tree/not-matches-tree.component';
+import {DropEffect} from 'ngx-drag-drop';
+import {DragAndDropService} from '../../../../service/drag-and-drop.service';
+import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
+import {ListTreeService} from '../../service/list-tree.service';
 
 @Component({
   selector: 'app-result',
@@ -15,6 +21,9 @@ export class ResultComponent implements OnInit, OnDestroy {
       private route: ActivatedRoute,
       private resultsService: ResultsService,
       private snotifyService: SnotifyService,
+      private scheduleService: ScheduleService,
+      private dragAndDropService: DragAndDropService,
+      private listTreeService: ListTreeService
   ) {
       this.route.parent.params.subscribe(
           data => {
@@ -23,6 +32,12 @@ export class ResultComponent implements OnInit, OnDestroy {
       );
       this.scheduleResults = this.route.snapshot.data.data.scheduleResults;
       this.selectedPostmen = this.route.snapshot.data.data.selectedPostmen;
+
+      this.dragAndDropService.dragged.pipe(takeUntil(this.unsubscribe)).subscribe(
+          elm => {
+              this.dragging = elm ;
+          }
+      );
   }
 
   scheduleResults: any;
@@ -32,9 +47,16 @@ export class ResultComponent implements OnInit, OnDestroy {
   postmen = {} ;
   _postmen = {} ;
   selectedPostmen: any = {} ;
+  dragging;
 
-  ngOnInit() {
+  async ngOnInit() {
       this.loadPostmen();
+      const results = await this.listTreeService.listNode(this.preDispatch,
+          {id: '0', text: '', subtype: '', children: <[TreeNodeInterface]>[], parent: <TreeNodeInterface>{},
+              type: 'root', status: 0, page: 0}, 1, null, 'not-matches-tree');
+      if (results && results.length) {
+          this.scheduleService.changeRightSideView(NotMatchesTreeComponent, results);
+      }
   }
 
   async assignPostman(event, set, day) {
@@ -131,8 +153,44 @@ export class ResultComponent implements OnInit, OnDestroy {
       return 'status-' + item.status ;
   }
 
+
+  onDragStart(event, item) {
+      this.dragAndDropService.drag(item);
+  }
+
+
+  onDrop(event, target) {
+      let index = event.index;
+      if ( typeof index === 'undefined' ) {
+          index = target.children.length;
+      }
+      const result = this.dragAndDropService.drop(index, target);
+      if (result) {
+          result.item.marker = this.resultsService.getMarker(result.item.type, result.item.parent);
+      }
+
+      if (result.remote) {
+          console.log('remote');
+          this.resultsService.assignToSet(target.setId, result.item.addressId,
+              target.addressId ? target.addressId : target.id, index, result.item.type).subscribe(
+              data => {
+                  console.log('data', data);
+              }
+          );
+      } else {
+          console.log('local');
+          this.resultsService.orderTreeNode(target.setId, result.item.addressId, index, result.item.type).subscribe(
+              data => {
+                  console.log('data', data);
+              }
+          )
+      }
+
+  }
+
   ngOnDestroy() {
       this.unsubscribe.next();
       this.unsubscribe.complete();
+      this.scheduleService.showRightSideMap();
   }
 }

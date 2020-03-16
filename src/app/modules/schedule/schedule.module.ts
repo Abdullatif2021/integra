@@ -24,7 +24,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {ListTreeService} from './service/list-tree.service';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
-import {DndModule} from 'ngx-drag-drop';
 import {ContextMenuModule, ContextMenuService} from 'ngx-contextmenu';
 import {faSync} from '@fortawesome/free-solid-svg-icons/faSync';
 import { ToPlanComponent } from './components/to-plan/to-plan.component';
@@ -37,6 +36,10 @@ import {MapService} from './service/map.service';
 import {ResultsService} from './service/results.service';
 import {ResultesResolver} from './resolvers/resultes.resolver';
 import {faCross} from '@fortawesome/free-solid-svg-icons/faCross';
+import {ScheduleService} from './service/schedule.service';
+import { NotMatchesTreeComponent } from './parts-components/not-matches-tree/not-matches-tree.component';
+import {DndModule} from 'ngx-drag-drop';
+
 
 @NgModule({
   imports: [
@@ -63,6 +66,7 @@ import {faCross} from '@fortawesome/free-solid-svg-icons/faCross';
       ParametersComponent,
       ResultComponent,
       ToPlanComponent,
+      NotMatchesTreeComponent,
   ],
   exports: [
       ScheduleRoutingModule
@@ -76,7 +80,10 @@ import {faCross} from '@fortawesome/free-solid-svg-icons/faCross';
       MapService,
       ResultsService,
       ResultesResolver,
+      ScheduleService
   ],
+  entryComponents: [ NotMatchesTreeComponent ],
+
 
 
 })
