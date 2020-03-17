@@ -142,13 +142,9 @@ export class ResultsService implements OnDestroy {
     orderTreeNode(preDispatch, addressId, level, type) {
         const roots = {cityId: 1, capId: 2, streetId: 3, building: 4}
         const data = {
-            data: [
-                {
-                    root: roots[type],
-                    element_id: addressId,
-                    level: level
-                }
-            ]
+            root: roots[type],
+            element_id: addressId,
+            level: level
         }
         return this.http.post<any>(AppConfig.endpoints.orderTreeNode(preDispatch), data);
     }
