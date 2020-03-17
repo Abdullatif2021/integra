@@ -139,7 +139,7 @@ export class ResultsService implements OnDestroy {
         }
         return this.http.post<any>(AppConfig.endpoints.assignToSet(setId), data);
     }
-    orderTreeNode(setId, addressId, level, type) {
+    orderTreeNode(preDispatch, addressId, level, type) {
         const roots = {cityId: 1, capId: 2, streetId: 3, building: 4}
         const data = {
             data: [
@@ -150,7 +150,7 @@ export class ResultsService implements OnDestroy {
                 }
             ]
         }
-        return this.http.post<any>(AppConfig.endpoints.orderTreeNode(setId), data);
+        return this.http.post<any>(AppConfig.endpoints.orderTreeNode(preDispatch), data);
     }
 
     ngOnDestroy() {

@@ -170,7 +170,6 @@ export class ResultComponent implements OnInit, OnDestroy {
       }
 
       if (result.remote) {
-          console.log('remote');
           this.resultsService.assignToSet(target.setId, result.item.addressId,
               target.addressId ? target.addressId : target.id, index, result.item.type).subscribe(
               data => {
@@ -178,12 +177,11 @@ export class ResultComponent implements OnInit, OnDestroy {
               }
           );
       } else {
-          console.log('local');
-          this.resultsService.orderTreeNode(target.setId, result.item.addressId, index, result.item.type).subscribe(
+          this.resultsService.orderTreeNode(this.preDispatch, result.item.addressId, index, result.item.type).subscribe(
               data => {
                   console.log('data', data);
               }
-          )
+          );
       }
 
   }
