@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable, OnDestroy} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {TreeNodeInterface, TreeNodeResponseInterface} from '../../../core/models/tree-node.interface';
 import {AppConfig} from '../../../config/app.config';
 import {takeUntil} from 'rxjs/internal/operators';
@@ -111,7 +111,6 @@ export class ListTreeService implements OnDestroy {
             name += parent.text + ' ';
             parent = parent.parent;
         }
-        console.log(name);
         return name + ', Italy';
     }
 
@@ -242,9 +241,9 @@ export class ListTreeService implements OnDestroy {
     }
 
     getAddressesTreeMapMarkers(preDispatchId, lat, lng, zoom) {
-        const options = {params: new HttpParams()};
-        options.params = options.params.set('centerLat', lng);
-        options.params = options.params.set('centerLong', lat);
+        const options = {params: new HttpParams(), headers: new HttpHeaders({'ignoreLoadingBar': ''})};
+        options.params = options.params.set('centerLat', lat);
+        options.params = options.params.set('centerLong', lng);
         options.params = options.params.set('zoom', zoom);
         return this.http.get<any>(AppConfig.endpoints.getAddressesTreeMapMarkers(preDispatchId), options);
     }

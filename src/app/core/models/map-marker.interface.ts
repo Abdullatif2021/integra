@@ -6,5 +6,6 @@ export interface MapMarker {
     label: string;
     icon?: string;
     type?: string;
-    draggable?: boolean
+    draggable?: boolean;
+    title?: string;
 }

@@ -70,7 +70,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             }
         );
         this.mapService.markersChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
-            data => { console.log('changes', data); this.markers = data ; }
+            data => { this.markers = data ; }
         );
         this.scheduleService.rightSideView.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
@@ -157,7 +157,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
     notFoundAddressChanged(data, item) {
         if (!data.hasObject || !data.address.strict) {
-            console.log(data);
             return this.errors['invalid-building-' + item.id] = true;
         } else {
             this.errors['invalid-building-' + item.id] = false;
@@ -206,6 +205,10 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
     next() {
         this.planningService.next(this.router.url);
+    }
+
+    trackMarkers(marker) {
+        return marker.id + '-' + marker.type;
     }
 
     loadRightSideView(view, data) {

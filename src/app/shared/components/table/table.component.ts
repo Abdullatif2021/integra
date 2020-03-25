@@ -7,18 +7,17 @@ import {
     AfterViewChecked,
     EventEmitter,
     Output,
-    Host,
     SimpleChanges, OnChanges, OnDestroy
 } from '@angular/core';
 
 @Component({
     selector: 'app-table',
     templateUrl: './table.component.html',
-    styleUrls: ['./table.component.css']
+    styleUrls: ['./table.component.css'],
 })
 export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDestroy {
 
-    constructor(private cdr: ChangeDetectorRef) { }
+    constructor(private cdr: ChangeDetectorRef) {}
 
     cells_size = [] ;
     @ViewChild('tableRow') tableRowElement;

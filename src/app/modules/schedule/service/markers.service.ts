@@ -83,5 +83,24 @@ export class MarkersService {
         };
     }
 
+    getMarker(marker) {
+        switch (marker.type) {
+            case 'City': return { color: this.colors[marker.priority - 1], text: ''};
+            case 'Cap': return {
+                color: this.colors[marker.parentsPriority.cityPriority - 1],
+                text: String.fromCharCode(64 + marker.priority)
+            };
+            case 'Street': return {
+                color: this.colors[marker.parentsPriority.cityPriority - 1],
+                text: String.fromCharCode(64 + marker.parentsPriority.capPriority) + marker.priority
+            };
+            case 'Product': return {
+                color: this.colors[marker.parentsPriority.cityPriority - 1],
+                text: String.fromCharCode(64 + marker.parentsPriority.capPriority) + marker.parentsPriority.streetPriority
+                + ' - ' + marker.name
+            }
+            default: return null;
+        }
+    }
 }
 

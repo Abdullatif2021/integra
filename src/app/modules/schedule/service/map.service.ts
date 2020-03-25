@@ -1,10 +1,11 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {MapMarker} from '../../../core/models/map-marker.interface';
+import {MarkersService} from './markers.service';
 
 @Injectable()
 export class MapService {
 
-    constructor() {
+    constructor(private markersService: MarkersService) {
     }
 
     mapLocation = {
@@ -36,19 +37,20 @@ export class MapService {
         return marker ;
     }
 
-
     createMarkersList(list, onDrag = null) {
         if (!list) { return; }
         list.forEach((elm) => {
+            const m = this.markersService.getMarker(elm) ;
             const marker = <MapMarker>{
                 lat: elm.lat,
                 lng: elm.long,
-                label: elm.name,
+                label: m.text,
+                title: elm.name,
                 id: elm.id ? elm.id : Math.random().toString(36).substr(2, 6),
-                icon: null,
+                icon: this.getMarkerImage(elm.type, m.color),
                 type: elm.type,
-                draggable: true,
-                cluster: true
+                draggable: elm.type === 'Product',
+                cluster: elm.type !== 'Product'
             } ;
             marker.onDrag = (event) => {
                 if (typeof onDrag === 'function') {
@@ -89,6 +91,33 @@ export class MapService {
         }
     }
 
+    getMarkerImage(type, color) {
+        let size = '42' ;
+        if (type === 'Region' || type === 'City') {
+            size = '52';
+        }
+        let encoded ;
+        if (type === 'Product') {
+            encoded = window.btoa('' +
+                '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" ' +
+                'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="' + size + '" height="' + size + '"' +
+                ' viewBox="0 0 365 560" enable-background="new 0 0 365 560" xml:space="preserve"> <g>' +
+                '<path fill="' + color + '" d="M182.9,551.7c0,0.1,0.2,0.3,0.2,0.3S358.3,283,358.3,194.6c0-130.' +
+                '1-88.8-186.7-175.4-186.9 \tC96.3,7.9,7.5,64.5,7.5,194.6c0,88.4,175.3,357.4,175.3,357.4S182.9,' +
+                '551.7,182.9,551.7z M122.2,187.2c0-33.6,27.2-60.8,60.8-60.8' +
+                '\tc33.6,0,60.8,27.2,60.8,60.8S216.5,248,182.9,248C149.4,248,122.2,220.8,122.2,187.2z"/></g></svg>');
+        } else {
+            encoded = window.btoa('' +
+                '<svg width="' + size + '" height="' + size + '" xmlns="http://www.w3.org/2000/svg" ' +
+                'xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-100 -100 200 200">' +
+                '<defs><g id="a" transform="rotate(45)"><path d="M0 47A47 47 0 0 0 47 0L62 0A62 62 0 0 1 0 62Z" fill-opacity="0.7"/>' +
+                '<path d="M0 67A67 67 0 0 0 67 0L81 0A81 81 0 0 1 0 81Z" fill-opacity="0.5"/>' +
+                '<path d="M0 86A86 86 0 0 0 86 0L100 0A100 100 0 0 1 0 100Z" fill-opacity="0.3"/></g>' +
+                '</defs><g fill="' + color + '"><circle r="42"/><use xlink:href="#a"/><g transform="rotate(120)">' +
+                '<use xlink:href="#a"/></g><g transform="rotate(240)"><use xlink:href="#a"/></g></g></svg>');
+        }
 
+        return ('data:image/svg+xml;base64,' + encoded);
+    }
 }
 

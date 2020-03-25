@@ -39,8 +39,8 @@
           <app-address-input (changed)="navigateMap($event)" [_class]="'bg-white'"></app-address-input>
         </div>
         <agm-map class="map" (mapClick)="mapClick($event)" (centerChange)="centerChange($event)" (zoomChange)="zoomChange($event)" [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
-          <ng-container *ngFor="let marker of markers">
-            <agm-marker [latitude]="marker.lat" [longitude]="marker.lng" [label]="marker.label"></agm-marker>
+          <ng-container *ngFor="let marker of markers; trackBy: trackMarkers ">
+            <agm-marker [latitude]="marker.lat" (dragEnd)="marker.onDrag($event, marker)" [iconUrl]="marker.icon" [markerDraggable]="marker.draggable" [longitude]="marker.lng" [label]="marker.label"></agm-marker>
           </ng-container>
         </agm-map>
       </div>

@@ -86,7 +86,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
             mapLocation => {
                 this.loadMarkers(mapLocation);
             }
-        )
+        );
+        this.loadMarkers(this.mapService.mapLocation);
 
     }
 
@@ -252,7 +253,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
         event.item.node.children = [];
         event.item.node.loading = false;
         event.item.node.page = 0;
-        console.log(event.item.node);
         await this.load(event.item.node, event.item.next);
     }
 
@@ -567,7 +567,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 if (result.data) {
                     // show the modal
                     this.modalService.open(modalRef);
-                    console.log('show the modal', result.data);
                 } else {
                     this.planningService.moveToInPlanning(this.preDispatch, data, () => {
                         this.reloadNode({item: {node: this.tree[0]}});
@@ -689,8 +688,11 @@ export class AddressesComponent implements OnInit, OnDestroy {
             data => {
                 if (!data.data) { return ; }
                 this.mapService.reset();
-                this.mapService.createMarkersList(data.data, (event, marker)=>{
-                    console.log(event, marker);
+                this.mapService.createMarkersList(data.data, (event, marker) => {
+                    this.addressesActionsService.changeBuldinAddress({lat: event.coords.lat, lng: event.coords.lng}, marker.id, this.preDispatch)
+                        .subscribe(_data => {
+                            this.snotifyService.success('Location Updated.', {showProgressBar: false});
+                        });
                 });
             }
         );
