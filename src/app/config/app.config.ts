@@ -69,6 +69,7 @@ export const AppConfig = {
         makeDispatchesVisible: (id) => `${api_url}/api/preDispatch/${id}/makeSetsVisible`,
         assignToSet: (id) => `${api_url}/api/set/${id}/assignManual`,
         orderTreeNode: (id) => `${api_url}/api/preDispatch/${id}/shift`,
+        getAddressesTreeMapMarkers: (id) => `${api_url}/api/preDispatch/${id}/markers`,
 
     },
 

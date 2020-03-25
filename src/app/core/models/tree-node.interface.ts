@@ -17,6 +17,12 @@ export interface TreeNodeInterface {
     expanded?: boolean;
     loading?: boolean;
     addressId?: number;
+    marker?: TreeNodeMarker;
+}
+
+export interface TreeNodeMarker {
+    color: string;
+    text: string;
 }
 
 export interface TreeNodeResponseInterface {

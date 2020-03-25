@@ -18,9 +18,6 @@ export class PreDispatchService {
         private paginationService: PaginationService
     ) {}
 
-    httpOptions = {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Request-Headers': 'POST,GET,PUT,DELETE,OPTIONS' })
-    };
     selectedPreDispatches = [] ;
 
     getPreDispatchList(page = 1, pageSize = '50') {
@@ -67,7 +64,7 @@ export class PreDispatchService {
             product_ids: products,
             byFilter: 0,
         }
-        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.createPreDispatched, options, this.httpOptions);
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.createPreDispatched, options);
     }
 
     createByFilters(name) {

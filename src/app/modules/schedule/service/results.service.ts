@@ -5,12 +5,14 @@ import {Observable} from 'rxjs';
 import {TreeNodeInterface, TreeNodeResponseInterface} from '../../../core/models/tree-node.interface';
 import {takeUntil} from 'rxjs/internal/operators';
 import {SetClientTreeNodeInterface, SetTreeNodeInterface} from '../../../core/models/set-tree-node.interface';
+import {MarkersService} from './markers.service';
 
 @Injectable()
 export class ResultsService implements OnDestroy {
 
     constructor(
         private http: HttpClient,
+        private markersService: MarkersService
     ) {
     }
 
@@ -63,10 +65,12 @@ export class ResultsService implements OnDestroy {
                 id: elm.id, address: this.getAddress(elm, parent), loaded: false, parent: parent, type: 'building', addressId: elm.addressId
             };
         } else {
-            return {
+            const node = {
                 id: elm.id, type: type, children: [], parent: parent, text: elm.name, loaded: false, addressId: elm.addressId,
                 qta: elm.count, page: 1, expanded: false, setId: parent.setId, marker: this.getMarker(type, parent)
             };
+            node.marker = this.markersService.getNodeMarker(node, elm.priority);
+            return node ;
         }
     }
 

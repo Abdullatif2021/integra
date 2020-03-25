@@ -25,7 +25,7 @@
             <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
           </div>
           <div class="marker-container">
-            <div class="marker" *ngIf="item.marker">{{item.marker}}</div>
+            <div class="marker {{item.marker.color}}" [style.background]="item.marker.color" *ngIf="item.marker">{{item.marker.text}}</div>
           </div>
           <div class="text" #itemText>{{item.text}}</div>
           <div class="right-side">

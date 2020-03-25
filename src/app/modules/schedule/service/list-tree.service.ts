@@ -6,6 +6,7 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {Observable} from 'rxjs';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
 import {SnotifyService} from 'ng-snotify';
+import {MarkersService} from './markers.service';
 
 @Injectable()
 export class ListTreeService implements OnDestroy {
@@ -13,6 +14,7 @@ export class ListTreeService implements OnDestroy {
     constructor(
         private http: HttpClient,
         private snotifyService: SnotifyService,
+        private markersService: MarkersService
     ) {
     }
 
@@ -35,11 +37,13 @@ export class ListTreeService implements OnDestroy {
                 result = result.concat(this.handleBuildings(node, data));
             } else {
                 data.data.forEach((elm) => {
-                    result.push({
+                    const _node = {
                         id: elm.id, type: type, children: [], subtype: '', parent: node, text: elm.name, _end: false,
                         status: 0, qta: elm.productCount ? elm.productCount : elm.productsCount, warning: !elm.is_fixed,
-                        selected: node.selected, page: 0, addressId: elm.addressId
-                    });
+                        selected: node.selected, page: 0, addressId: elm.addressId, marker: null
+                    };
+                    _node.marker = this.markersService.getNodeMarker(_node, elm.priority);
+                    result.push(_node);
                 });
             }
             return resolve(result);
@@ -235,6 +239,14 @@ export class ListTreeService implements OnDestroy {
         options.params = options.params.set('cityId', cityId);
         options.params = options.params.set('capId', capId);
         return this.http.get<any>(AppConfig.endpoints.getStreetMergeAvailableStreets(preDispatchId), options);
+    }
+
+    getAddressesTreeMapMarkers(preDispatchId, lat, lng, zoom) {
+        const options = {params: new HttpParams()};
+        options.params = options.params.set('centerLat', lng);
+        options.params = options.params.set('centerLong', lat);
+        options.params = options.params.set('zoom', zoom);
+        return this.http.get<any>(AppConfig.endpoints.getAddressesTreeMapMarkers(preDispatchId), options);
     }
 
     mergeTwoStreets(preDispatchId, source, target): Observable<ApiResponseInterface> {

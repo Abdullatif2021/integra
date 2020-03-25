@@ -34,7 +34,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.preDispatchData = this.route.snapshot.data.data ;
     }
 
-// { id: 1, selected: true, marker: 'A', name: 'Bologna', warning: true, qta: 14, children: [], status: 1}
     preDispatch: number;
     unsubscribe = new EventEmitter();
     tree = <TreeNodeInterface[]>[
@@ -57,7 +56,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     @ViewChild('startPointTextInput') startPointTextInput: ElementRef;
     @ViewChild('endPointTextInput') endPointTextInput: ElementRef;
     merge_data = {targets: [], source: null};
-
+    markersSubscription;
 
     async ngOnInit() {
         this.locatingService.treeCreated.pipe(takeUntil(this.unsubscribe)).subscribe(
@@ -83,6 +82,12 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 this.moveToInPlanning(data.modalRef, data.force);
             }
         );
+        this.mapService.moved.pipe(takeUntil(this.unsubscribe)).subscribe(
+            mapLocation => {
+                this.loadMarkers(mapLocation);
+            }
+        )
+
     }
 
     // List Tree Methods
@@ -671,7 +676,25 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.listTreeService.select.select(node);
     }
 
-
+    loadMarkers(mapLocation) {
+        if (this.markersSubscription) {
+            this.markersSubscription.unsubscribe();
+        }
+        this.markersSubscription = this.listTreeService.getAddressesTreeMapMarkers(
+            this.preDispatch,
+            mapLocation.center.lat,
+            mapLocation.center.lng,
+            mapLocation.zoom
+        ).pipe(takeUntil(this.unsubscribe)).subscribe(
+            data => {
+                if (!data.data) { return ; }
+                this.mapService.reset();
+                this.mapService.createMarkersList(data.data, (event, marker)=>{
+                    console.log(event, marker);
+                });
+            }
+        );
+    }
 
     // Life Cycle OnDestroy
 

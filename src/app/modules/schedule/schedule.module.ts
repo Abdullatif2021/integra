@@ -39,6 +39,7 @@ import {faCross} from '@fortawesome/free-solid-svg-icons/faCross';
 import {ScheduleService} from './service/schedule.service';
 import { NotMatchesTreeComponent } from './parts-components/not-matches-tree/not-matches-tree.component';
 import {DndModule} from 'ngx-drag-drop';
+import {MarkersService} from './service/markers.service';
 
 
 @NgModule({
@@ -80,7 +81,8 @@ import {DndModule} from 'ngx-drag-drop';
       MapService,
       ResultsService,
       ResultesResolver,
-      ScheduleService
+      ScheduleService,
+      MarkersService
   ],
   entryComponents: [ NotMatchesTreeComponent ],
 

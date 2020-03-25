@@ -84,9 +84,9 @@
               <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
               <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
             </div>
-            <div class="marker-container" *ngIf="item.marker">
-              <div class="marker">{{item.marker}}</div>
-            </div>
+            <!--<div class="marker-container" *ngIf="item.marker">-->
+              <!--<div class="marker {{item.marker.color}}" [style.background]="item.marker.color" *ngIf="item.marker">{{item.marker.text}}</div>-->
+            <!--</div>-->
           </div>
           <div [ngClass]="{'col-2-half': item.marker, 'col-3 wide-col': !item.marker}"> <div class="item-name mt-1">{{item.text}}</div> </div>
           <div class="col-3"> <div class="count mt-1">{{item.qta}} Consegne</div> </div>

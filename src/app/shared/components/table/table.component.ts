@@ -48,13 +48,6 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
         return typeof variable ;
     }
 
-    getFieldClass(col, field) {
-        if (typeof col.classes !== 'undefined') {
-            return col.classes[field] ? col.classes[field] : '';
-        }
-        return '' ;
-    }
-
     ngAfterViewChecked() {
         this.updateTableHeaderSize();
     }
@@ -69,9 +62,6 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
         this.cdr.detectChanges();
     }
 
-    getCellWidth(idx) {
-        return this.cells_size[idx] + 'px';
-    }
     isSelectedRow(item) {
         return this.selectedProducts.find((elm) => elm.id === item.id ) ;
     }

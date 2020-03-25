@@ -70,7 +70,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             }
         );
         this.mapService.markersChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
-            data => { this.markers = data ; }
+            data => { console.log('changes', data); this.markers = data ; }
         );
         this.scheduleService.rightSideView.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
@@ -188,6 +188,12 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
     mapClick(event) {
         this.mapService.mapClicked(event);
+    }
+    centerChange(event) {
+        this.mapService.move('center', event) ;
+    }
+    zoomChange(event) {
+        this.mapService.move('zoom', event) ;
     }
 
     isRunning() {
