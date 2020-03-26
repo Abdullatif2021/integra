@@ -62,6 +62,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.locatingService.treeCreated.pipe(takeUntil(this.unsubscribe)).subscribe(
             async data => {
                 this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);
+                this.loadMarkers(this.mapService.mapLocation);
             }
         );
         this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);
@@ -83,12 +84,11 @@ export class AddressesComponent implements OnInit, OnDestroy {
             }
         );
         this.mapService.moved.pipe(takeUntil(this.unsubscribe)).subscribe(
-            mapLocation => {
-                this.loadMarkers(mapLocation);
+            location => {
+                this.loadMarkers(location);
             }
         );
         this.loadMarkers(this.mapService.mapLocation);
-
     }
 
     // List Tree Methods
@@ -686,11 +686,13 @@ export class AddressesComponent implements OnInit, OnDestroy {
             mapLocation.zoom
         ).pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
+                this.mapService.moveMapTo(mapLocation.center.lat, mapLocation.center.lng, mapLocation.zoom);
                 if (!data.data) { return ; }
                 this.mapService.reset();
                 this.mapService.createMarkersList(data.data, (event, marker) => {
-                    this.addressesActionsService.changeBuldinAddress({lat: event.coords.lat, lng: event.coords.lng}, marker.id, this.preDispatch)
-                        .subscribe(_data => {
+                    this.addressesActionsService.changeBuldinAddress(
+                        {lat: event.coords.lat, lng: event.coords.lng},
+                        marker.id, this.preDispatch).subscribe(_data => {
                             this.snotifyService.success('Location Updated.', {showProgressBar: false});
                         });
                 });

@@ -5,10 +5,12 @@ import {MarkersService} from './markers.service';
 @Injectable()
 export class MapService {
 
-    constructor(private markersService: MarkersService) {
+    constructor(
+        private markersService: MarkersService,
+    ) {
     }
 
-    mapLocation = {
+    mapLocation = <any>{
         center: {
             lat: 40.8440337,
             lng: 14.3435834
@@ -18,7 +20,8 @@ export class MapService {
     markers = <MapMarker[]>[];
     onClickCallBack: any;
     markersChanges = new EventEmitter<MapMarker[]>();
-    moved = new EventEmitter();
+    moved = new EventEmitter<any>();
+    mapMoved = new EventEmitter<any>();
 
     createMarker(id = null, lat, lng, label = '', onDrag = null, icon = null, type = null, draggable = false, cluster = null ): MapMarker {
         const marker = <MapMarker>{
@@ -50,13 +53,21 @@ export class MapService {
                 icon: this.getMarkerImage(elm.type, m.color),
                 type: elm.type,
                 draggable: elm.type === 'Product',
-                cluster: elm.type !== 'Product'
+                cluster: elm.type !== 'Product',
             } ;
             marker.onDrag = (event) => {
                 if (typeof onDrag === 'function') {
                     onDrag(event, marker);
                 }
-            },
+            };
+            marker.onClick = (event) => {
+                switch (marker.type) {
+                    case 'Region': this.moveMapTo(elm.lat, elm.long, 10); break ;
+                    case 'City': this.moveMapTo(elm.lat, elm.long, 13); break ;
+                    case 'Cap': this.moveMapTo(elm.lat, elm.long, 14); break ;
+                    case 'Street': this.moveMapTo(elm.lat, elm.long, 16); break ;
+                }
+            }
             this.markers.push(marker);
         });
         this.markersChanges.emit(this.markers);
@@ -80,15 +91,35 @@ export class MapService {
         this.onClickCallBack = callback;
     }
 
+    // the user had moved in the map
     move(type, val) {
         this.mapLocation[type] = val ;
         this.moved.emit(this.mapLocation);
+    }
+
+    // forces map to move to a location
+    moveMapTo(lat, lng, zoom) {
+        this.mapLocation.center.lat = lat;
+        this.mapLocation.center.lng = lng;
+        this.mapLocation.zoom = zoom;
+
+        this.mapMoved.emit(this.mapLocation);
     }
 
     mapClicked(event) {
         if (typeof this.onClickCallBack === 'function') {
             this.onClickCallBack(event);
         }
+    }
+
+    resetLocation() {
+        this.mapLocation = {
+            center: {
+                lat: 40.8440337,
+                lng: 14.3435834
+            },
+            zoom: 11
+        };
     }
 
     getMarkerImage(type, color) {

@@ -40,7 +40,7 @@
         </div>
         <agm-map class="map" (mapClick)="mapClick($event)" (centerChange)="centerChange($event)" (zoomChange)="zoomChange($event)" [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
           <ng-container *ngFor="let marker of markers; trackBy: trackMarkers ">
-            <agm-marker [latitude]="marker.lat" (dragEnd)="marker.onDrag($event, marker)" [iconUrl]="marker.icon" [markerDraggable]="marker.draggable" [longitude]="marker.lng" [label]="marker.label"></agm-marker>
+            <agm-marker [latitude]="marker.lat" (markerClick)="marker.onClick($event)" [markerClickable]="marker.cluster" (dragEnd)="marker.onDrag($event, marker)" [iconUrl]="marker.icon" [markerDraggable]="marker.draggable" [longitude]="marker.lng" [label]="marker.label"></agm-marker>
           </ng-container>
         </agm-map>
       </div>

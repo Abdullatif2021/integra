@@ -8,4 +8,6 @@ export interface MapMarker {
     type?: string;
     draggable?: boolean;
     title?: string;
+    onClick?: any;
+    cluster?: boolean;
 }

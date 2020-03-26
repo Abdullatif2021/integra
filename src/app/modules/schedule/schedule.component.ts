@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
@@ -49,7 +49,8 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private loadingService: LoadingService,
         private preDispatchService: PreDispatchService,
         private scheduleService: ScheduleService,
-        private componentFactoryResolver: ComponentFactoryResolver
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private ref: ChangeDetectorRef
     ) {
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data;
@@ -81,7 +82,14 @@ export class ScheduleComponent implements OnInit, OnDestroy {
                     this.show_map = true ;
                 }
             }
-        )
+        );
+        this.mapService.mapMoved.pipe(takeUntil(this.unsubscribe)).subscribe(
+            data => {
+                this.latitude = data.center.lat ;
+                this.longitude = data.center.lng ;
+                this.zoom = data.zoom ;
+            }
+        );
         this.startInterval();
     }
 
@@ -223,6 +231,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.unsubscribe.next();
         this.unsubscribe.complete();
+        this.mapService.resetLocation();
     }
 
 }
