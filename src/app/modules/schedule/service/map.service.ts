@@ -1,6 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {MapMarker} from '../../../core/models/map-marker.interface';
 import {MarkersService} from './markers.service';
+import {SymbolPath} from '@agm/core/services/google-maps-types';
 
 @Injectable()
 export class MapService {
@@ -54,7 +55,9 @@ export class MapService {
                 type: elm.type,
                 draggable: elm.type === 'Product',
                 cluster: elm.type !== 'Product',
-            } ;
+            };
+            this.addCountLabel(marker, elm);
+            this.addInfoWindow(marker, elm);
             marker.onDrag = (event) => {
                 if (typeof onDrag === 'function') {
                     onDrag(event, marker);
@@ -67,6 +70,9 @@ export class MapService {
                     case 'Cap': this.moveMapTo(elm.lat, elm.long, 14); break ;
                     case 'Street': this.moveMapTo(elm.lat, elm.long, 16); break ;
                 }
+                if (marker.infoWindow) {
+                    marker.infoWindow.isOpen = !marker.infoWindow.isOpen;
+                }
             }
             this.markers.push(marker);
         });
@@ -75,6 +81,43 @@ export class MapService {
 
     reset() {
         this.markers = [];
+    }
+
+    addInfoWindow(marker, elm) {
+        if (marker.type !== 'Product') {
+            return ;
+        }
+        let text = '';
+        if (!elm.markerProducts) {
+            text = 'No Products.';
+        }
+        console.log('shit', elm.markerProducts)
+        elm.markerProducts.forEach((product) => {
+            text += `<div class='info-window-product-act-row'>${product.act_code}</div>`;
+            console.log(text);
+        })
+        marker.infoWindow = {
+          text: text,
+          isOpen: false
+        };
+    }
+    addCountLabel(marker, elm) {
+        if (marker.type === 'Product') {
+            return ;
+        }
+        marker.count = {
+            text: elm.productCount + '',
+                fontSize: '8px'
+        },
+        marker.count_marker = {
+            path: SymbolPath.CIRCLE,
+                anchor: {x: -2, y: 4},
+            scale: 8,
+                fillColor: '#fcda4b',
+                color: '#FFF',
+                strokeWeight: 1,
+                fillOpacity: 1,
+        };
     }
 
     removeMarker(marker: MapMarker | string) {
@@ -92,18 +135,22 @@ export class MapService {
     }
 
     // the user had moved in the map
-    move(type, val) {
-        this.mapLocation[type] = val ;
+    move(lat, lng, zoom) {
+        this.mapLocation.center.lat = lat;
+        this.mapLocation.center.lng = lng;
+        this.mapLocation.zoom = zoom;
         this.moved.emit(this.mapLocation);
     }
 
     // forces map to move to a location
     moveMapTo(lat, lng, zoom) {
-        this.mapLocation.center.lat = lat;
-        this.mapLocation.center.lng = lng;
-        this.mapLocation.zoom = zoom;
-
-        this.mapMoved.emit(this.mapLocation);
+        this.mapMoved.emit({
+            center: {
+                lat: lat,
+                lng: lng
+            },
+            zoom: zoom
+        });
     }
 
     mapClicked(event) {
@@ -123,10 +170,7 @@ export class MapService {
     }
 
     getMarkerImage(type, color) {
-        let size = '42' ;
-        if (type === 'Region' || type === 'City') {
-            size = '52';
-        }
+        const size = '42' ;
         let encoded ;
         if (type === 'Product') {
             encoded = window.btoa('' +

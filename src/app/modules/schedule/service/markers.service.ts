@@ -79,27 +79,48 @@ export class MarkersService {
         idx = idx < 1 ? 0 : idx ;
         return {
             color: this.colors[idx],
-            text: '',
+            text: order + '',
         };
     }
 
     getMarker(marker) {
         switch (marker.type) {
-            case 'City': return { color: this.colors[marker.priority - 1], text: ''};
+            case 'City': return {
+                color: this.colors[marker.priority - 1],
+                text: {
+                    text: marker.priority + '',
+                    color: '#FFF',
+                    fontSize: '12px'
+                }
+            };
             case 'Cap': return {
                 color: this.colors[marker.parentsPriority.cityPriority - 1],
-                text: String.fromCharCode(64 + marker.priority)
+                text: {
+                    text: String.fromCharCode(64 + marker.priority),
+                    color: '#FFF',
+                    fontSize: '12px'
+                }
             };
             case 'Street': return {
                 color: this.colors[marker.parentsPriority.cityPriority - 1],
-                text: String.fromCharCode(64 + marker.parentsPriority.capPriority) + marker.priority
+                text: {
+                    text: String.fromCharCode(64 + marker.parentsPriority.capPriority) + marker.priority,
+                    color: '#FFF',
+                    fontSize: '11px'
+                }
             };
             case 'Product': return {
                 color: this.colors[marker.parentsPriority.cityPriority - 1],
-                text: String.fromCharCode(64 + marker.parentsPriority.capPriority) + marker.parentsPriority.streetPriority
-                + ' - ' + marker.name
+                text: {
+                    text: String.fromCharCode(64 + marker.parentsPriority.capPriority) + marker.parentsPriority.streetPriority
+                    + ' - ' + marker.name,
+                    fontSize: '11px'
+                }
             }
-            default: return null;
+            default: return {
+                color: this.colors[0],
+                text: ''
+            };
         }
     }
 }

@@ -38,9 +38,14 @@
         <div class="map-search">
           <app-address-input (changed)="navigateMap($event)" [_class]="'bg-white'"></app-address-input>
         </div>
-        <agm-map class="map" (mapClick)="mapClick($event)" (centerChange)="centerChange($event)" (zoomChange)="zoomChange($event)" [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+        <agm-map class="map" (mapClick)="mapClick($event)" (mapReady)="mapReady($event)" [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
           <ng-container *ngFor="let marker of markers; trackBy: trackMarkers ">
-            <agm-marker [latitude]="marker.lat" (markerClick)="marker.onClick($event)" [markerClickable]="marker.cluster" (dragEnd)="marker.onDrag($event, marker)" [iconUrl]="marker.icon" [markerDraggable]="marker.draggable" [longitude]="marker.lng" [label]="marker.label"></agm-marker>
+            <agm-marker [zIndex]="1" [latitude]="marker.lat" (markerClick)="marker.onClick($event)" [markerClickable]="marker.cluster" (dragEnd)="marker.onDrag($event, marker)" [iconUrl]="marker.icon" [markerDraggable]="marker.draggable" [longitude]="marker.lng" [label]="marker.label">
+              <agm-info-window *ngIf="marker.infoWindow" [isOpen]="marker.infoWindow.isOpen" [disableAutoPan]="true">
+                <div [innerHTML]="marker.infoWindow.text"></div>
+              </agm-info-window>
+            </agm-marker>
+            <agm-marker [zIndex]="2" *ngIf="marker.count"  [latitude]="marker.lat" [iconUrl]="marker.count_marker" [longitude]="marker.lng" [label]="marker.count"></agm-marker>
           </ng-container>
         </agm-map>
       </div>

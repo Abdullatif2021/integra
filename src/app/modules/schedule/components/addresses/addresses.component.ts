@@ -686,7 +686,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
             mapLocation.zoom
         ).pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
-                this.mapService.moveMapTo(mapLocation.center.lat, mapLocation.center.lng, mapLocation.zoom);
                 if (!data.data) { return ; }
                 this.mapService.reset();
                 this.mapService.createMarkersList(data.data, (event, marker) => {

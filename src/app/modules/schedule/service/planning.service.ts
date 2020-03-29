@@ -4,7 +4,6 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs/index';
 import { AppConfig } from '../../../config/app.config';
 import {SnotifyService} from 'ng-snotify';
-import {reject} from 'q';
 
 @Injectable({
     providedIn: 'root'

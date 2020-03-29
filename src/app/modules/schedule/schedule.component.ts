@@ -87,7 +87,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             data => {
                 this.latitude = data.center.lat ;
                 this.longitude = data.center.lng ;
-                this.zoom = data.zoom ;
+                setTimeout(() => {this.zoom = data.zoom;}, 100);
             }
         );
         this.startInterval();
@@ -196,12 +196,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     mapClick(event) {
         this.mapService.mapClicked(event);
     }
-    centerChange(event) {
-        this.mapService.move('center', event) ;
-    }
-    zoomChange(event) {
-        this.mapService.move('zoom', event) ;
-    }
 
     isRunning() {
         return this.preDispatchData.localize_status === 'play' || this.backProcessingService.isRunning('locating-' + this.preDispatch);
@@ -226,6 +220,23 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
         const componentRef = viewContainerRef.createComponent(componentFactory);
         (<any>componentRef.instance).data = data;
+    }
+
+    mapReady(map) {
+        const that = this;
+        map.addListener('dragend', function () {
+            that.mapService.move( map.center.lat(), map.center.lng(), map.zoom) ;
+            that.latitude = map.center.lat();
+            that.longitude = map.center.lng();
+            that.zoom = map.zoom;
+            console.log(that.latitude, that.longitude);
+        });
+        map.addListener('zoom_changed', function () {
+            that.mapService.move( map.center.lat(), map.center.lng(), map.zoom) ;
+            that.latitude = map.center.lat();
+            that.longitude = map.center.lng();
+            that.zoom = map.zoom;
+        });
     }
 
     ngOnDestroy() {
