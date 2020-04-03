@@ -31,7 +31,6 @@ import {AddressesActionsService} from './service/addresses.actions.service';
 import {PreDispatchDataResolver} from './resolvers/pre-dispatch-data.resolver';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {PlanningService} from './service/planning.service';
 import {MapService} from './service/map.service';
 import {ResultsService} from './service/results.service';
 import {ResultesResolver} from './resolvers/resultes.resolver';
@@ -77,12 +76,11 @@ import {MarkersService} from './service/markers.service';
       ContextMenuService,
       AddressesActionsService,
       PreDispatchDataResolver,
-      PlanningService,
       MapService,
       ResultsService,
       ResultesResolver,
       ScheduleService,
-      MarkersService
+      MarkersService,
   ],
   entryComponents: [ NotMatchesTreeComponent ],
 

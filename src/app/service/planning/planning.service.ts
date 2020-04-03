@@ -1,9 +1,12 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs/index';
-import { AppConfig } from '../../../config/app.config';
 import {SnotifyService} from 'ng-snotify';
+import {GoogleDirectionsService} from './google-directions.service';
+import {BackProcessingService} from '../back-processing.service';
+import {AppConfig} from '../../config/app.config';
+import {ApiResponseInterface} from '../../core/models/api-response.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -14,20 +17,13 @@ export class PlanningService {
     constructor(
         private http: HttpClient,
         private snotifyService: SnotifyService,
+        private googleDirectionsService: GoogleDirectionsService,
+        private backProcessingService: BackProcessingService
     ) { }
 
-    preDispatchDataChanges = new EventEmitter() ;
     moveItemsToInPlaningChanges = new EventEmitter<any>() ;
-    nextButtonClicked = new EventEmitter<any>();
 
-    changePreDispatchData(data) {
-        this.preDispatchDataChanges.emit(data);
-    }
-
-    next(source) {
-        this.nextButtonClicked.emit(source);
-    }
-
+    /*** Move to in planning { ***/
     moveItemsToInPlaning(modalRef, force) {
         this.moveItemsToInPlaningChanges.emit({modalRef: modalRef, force: force}) ;
     }
@@ -81,30 +77,37 @@ export class PlanningService {
         this.snotifyService.async(msg, promise, { showProgressBar: true, timeout: 10000 });
     }
 
+    /*** } Move to in planning ***/
+
+    /*** Parameters { ***/
+
     sendSaveParametersRequest(data) {
         return this.http.post<any>(AppConfig.endpoints.changePreDispatchParameters, data).pipe(
             catchError(this.handleError)
         );
     }
 
-
-    async divideToDistenta(preDispatch) {
-        await this.run(this.sendDivideToDistentaRequest(preDispatch), 'Dividing..', false, false);
+    async saveParameters(data, success) {
+        await this.run(this.sendSaveParametersRequest(data), 'Saving', success, () => {
+            console.log('error');
+        });
     }
 
-    sendDivideToDistentaRequest(preDispatch) {
+    /*** } Parameters ***/
+
+    /*** Auto Planning { ***/
+
+    divideToDistenta(preDispatch) {
         return this.http.post<any>(AppConfig.endpoints.divideToDistenta(preDispatch), {}).pipe(
             catchError(this.handleError)
         );
     }
-
 
     getMatchesRate(preDispatch, match) {
         const options = {params: new HttpParams()};
         options.params = options.params.set('match', match);
         return this.http.get<any>(AppConfig.endpoints.getMatchesRate(preDispatch), options);
     }
-
 
     async confirmPlanning(preDispatch, match, notMatchesOption, departureDate) {
         await this.run(this.sendConfirmPlanningRequest(preDispatch, match, notMatchesOption, departureDate), 'Matching', (data) => {
@@ -121,12 +124,35 @@ export class PlanningService {
             departureDate: departureDate
         });
     }
+    /*** } Auto Planning ***/
 
-    async saveParameters(data, success) {
-        await this.run(this.sendSaveParametersRequest(data), 'Saving', success, () => {
-            console.log('error');
-        });
+
+    /*** Path drawing { ***/
+    getDirections(setId) {
+        const options = {params: new HttpParams(), headers: new HttpHeaders({'ignoreLoadingBar': ''})};
+        return this.http.get<any>(AppConfig.endpoints.getSetProductsCoordinates(setId), options);
     }
+
+    savePath(setId, path) {
+        const options = { path: path ? JSON.stringify(path.polyline) : '{}' };
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.saveSetPath(setId), options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    async drawPaths(sets, preDispatch, handle) {
+        for (let i = 0; i < sets.length; ++i) {
+            const waypoints = await this.getDirections(sets[i].id).toPromise();
+            const path = await this.googleDirectionsService.getDirections(preDispatch.startPoint, waypoints.data, preDispatch.endPoint);
+            const save = await this.savePath(sets[i].id, path).toPromise() ;
+            handle.emit({progress: ( (i + 1) / sets.length) * 100 });
+            if (!this.backProcessingService.isRunning('planning-' + preDispatch.id)) {
+                return false ;
+            }
+        }
+        this.backProcessingService.ultimatePause(preDispatch.id);
+    }
+    /*** } Path drawing ***/
 
 
     handleError(error: HttpErrorResponse) {

@@ -4,7 +4,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {BuildingLocationInterface} from '../../core/models/building.interface';
-import {PlanningService} from './service/planning.service';
+import {PlanningService} from '../../service/planning/planning.service';
 import {MapService} from './service/map.service';
 import {MapMarker} from '../../core/models/map-marker.interface';
 import {SnotifyService} from 'ng-snotify';
@@ -14,6 +14,7 @@ import {LocatingService} from '../../service/locating/locating.service';
 import {PreDispatchService} from '../../service/pre-dispatch.service';
 import {ScheduleService} from './service/schedule.service';
 import {PageDirective} from '../../shared/directives/page.directive';
+import {PreDispatchGlobalActionsService} from '../../service/pre-dispatch-global-actions.service';
 
 @Component({
     selector: 'app-schedules',
@@ -36,6 +37,8 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     markers: MapMarker[];
     percent = 0 ;
     show_map = true ;
+    nextAction = 'locating' ;
+    actionInRun = false ;
 
     constructor(
         private router: Router,
@@ -45,11 +48,12 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private planningService: PlanningService,
         private mapService: MapService,
         private snotifyService: SnotifyService,
-        private backProcessingService: BackProcessingService,
+        public backProcessingService: BackProcessingService,
         private loadingService: LoadingService,
         private preDispatchService: PreDispatchService,
         private scheduleService: ScheduleService,
         private componentFactoryResolver: ComponentFactoryResolver,
+        private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
         private ref: ChangeDetectorRef
     ) {
         this.preDispatch = this.route.snapshot.params.id;
@@ -87,7 +91,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             data => {
                 this.latitude = data.center.lat ;
                 this.longitude = data.center.lng ;
-                setTimeout(() => {this.zoom = data.zoom;}, 100);
+                setTimeout(() => { this.zoom = data.zoom; }, 100);
             }
         );
         this.startInterval();
@@ -97,14 +101,10 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         this.preDispatchService.getPreDispatchData(this.preDispatch, true).pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
                 this.preDispatchData = data.data ;
-                if (
-                    this.preDispatchData.localize_status === 'pause' &&
-                    this.backProcessingService.isRunning('locating-' + this.preDispatch)
-                    && !this.backProcessingService.nameSpaceHasAny('updating-status')
-                ) {
-                    // pause pre-dispatch
-                    this.locatingService.pause(this.preDispatch);
-                }
+                this.scheduleService.prodcastPreDispatchData(this.preDispatchData);
+                this.backProcessingService.handlePreDispatchActionsChanges(this.preDispatchData);
+                this.nextAction = this.backProcessingService.getPreDispatchAction(this.preDispatchData.status) ;
+                this.actionInRun = this.preDispatchGlobalActionsService.isPreDispatchInRunStatus(this.preDispatchData);
                 setTimeout(() => {
                     this.startInterval();
                 }, 2000);
@@ -122,25 +122,8 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
 
-    async locate() {
-        // this.loadingService.show();
-        // this.loadingService.subscribeTo(this.locatingHandle);
-        if (this.backProcessingService.isRunning('locating-' + this.preDispatch)) {
-            this.loadingService.setLoadingState({
-                state: true, message: 'checking loading state for this pre-distinta ...', progress: 0, autProgress: false, hide_btn: true
-            });
-            return ;
-        }
-
-        this.backProcessingService.run('locating-' + this.preDispatch, async(handle) => {
-            const result: any = await this.locatingService.startLocating(this.preDispatch, handle, this.preDispatchData);
-            if (result && result.data && result.data.preDispatch) {
-                this.planningService.changePreDispatchData(result.data.preDispatch);
-            }
-            // update pre-dispatch data
-            const data = await this.preDispatchService.getPreDispatchData(this.preDispatch).toPromise();
-            this.planningService.changePreDispatchData(data.data);
-        }, 'locating', this.preDispatch);
+    async runNextAction() {
+        this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
     }
 
     moveToInPlan(modalRef, force = false) {
@@ -160,7 +143,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         this.fixedItems = <[BuildingLocationInterface]>[];
         // update pre-dispatch data
         const data = await this.preDispatchService.getPreDispatchData(this.preDispatch).toPromise();
-        this.planningService.changePreDispatchData(data.data);
+        this.scheduleService.prodcastPreDispatchData(data.data);
     }
 
     notFoundAddressChanged(data, item) {
@@ -197,16 +180,13 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         this.mapService.mapClicked(event);
     }
 
-    isRunning() {
-        return this.preDispatchData.localize_status === 'play' || this.backProcessingService.isRunning('locating-' + this.preDispatch);
-    }
-
-    stopLocating() {
-        this.locatingService.pause(this.preDispatch);
+    stopAction() {
+        this.preDispatchData.localize_status = 'pause';
+        this.backProcessingService.ultimatePause(this.preDispatch);
     }
 
     next() {
-        this.planningService.next(this.router.url);
+        this.scheduleService.next(this.router.url);
     }
 
     trackMarkers(marker) {

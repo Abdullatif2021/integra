@@ -55,7 +55,7 @@ export const AppConfig = {
         groupingProgress: (id) => `${api_url}/api/preDispatch/${id}/getGroupingPercent`,
         getStreetMergeAvailableStreets: (id) => `${api_url}/api/preDispatch/${id}/getAvailableStreets`,
         mergeTwoStreets: `${api_url}/api/preDispatch/mergerStreets`,
-        updateLocalizationStatus: (id) => `${api_url}/api/preDispatch/${id}/changeLocalizeStatus`,
+        updatePreDispatchRunningStatus: (id) => `${api_url}/api/preDispatch/${id}/changeLocalizeStatus`,
         divideToDistenta: (id) => `${api_url}/api/preDispatch/${id}/toSets`,
         getScheduleResults: (id) => `${api_url}/api/preDispatch/${id}/scheduleResults`,
         getSetTreeNode: (id) => `${api_url}/api/set/${id}/tree`,
@@ -70,6 +70,8 @@ export const AppConfig = {
         assignToSet: (id) => `${api_url}/api/set/${id}/assignManual`,
         orderTreeNode: (id) => `${api_url}/api/preDispatch/${id}/shift`,
         getAddressesTreeMapMarkers: (id) => `${api_url}/api/preDispatch/${id}/markers`,
+        getSetProductsCoordinates: (id) => `${api_url}/api/set/${id}/products/coordinate`,
+        saveSetPath: (id) => `${api_url}/api/set/${id}/savePath`,
 
     },
 

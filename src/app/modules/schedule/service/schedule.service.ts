@@ -1,16 +1,20 @@
 import {EventEmitter, Injectable, OnDestroy} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class ScheduleService implements OnDestroy {
 
     constructor(
-        private http: HttpClient,
     ) {
     }
 
     unsubscribe = new EventEmitter();
     rightSideView = new EventEmitter();
+    preDispatchDataChanged = new EventEmitter();
+    nextButtonClicked = new EventEmitter<any>();
+
+    next(source) {
+        this.nextButtonClicked.emit(source);
+    }
 
     changeRightSideView(view, data) {
         this.rightSideView.emit({view: view, data: data});
@@ -18,6 +22,10 @@ export class ScheduleService implements OnDestroy {
 
     showRightSideMap() {
         this.rightSideView.emit(null);
+    }
+
+    prodcastPreDispatchData(preDispatchData) {
+        this.preDispatchDataChanged.emit(preDispatchData);
     }
 
     ngOnDestroy() {

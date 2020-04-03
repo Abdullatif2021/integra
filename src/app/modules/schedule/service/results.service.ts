@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable, OnDestroy} from '@angular/core';
-import {HttpClient, HttpParams,} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {AppConfig} from '../../../config/app.config';
 import {Observable} from 'rxjs';
 import {TreeNodeInterface, TreeNodeResponseInterface} from '../../../core/models/tree-node.interface';
@@ -16,7 +16,7 @@ export class ResultsService implements OnDestroy {
     ) {
     }
 
-    unsubscribe = new EventEmitter()
+    unsubscribe = new EventEmitter();
     markers = {cities: 65, caps: {}} ;
     levels = ['set', 'cityId', 'capId', 'streetId', 'client', 'end'];
 
@@ -25,7 +25,7 @@ export class ResultsService implements OnDestroy {
             this.http.get<any>(AppConfig.endpoints.getScheduleResults(preDispatch), {})
                 .subscribe(
                 data => {
-                    if (!data.success) { return reject(false); }
+                    if (!data.success) { return reject(data); }
                     const res = [] ;
                     // convert api response to Nodes
                     data.data.forEach((elm) => {
@@ -39,7 +39,7 @@ export class ResultsService implements OnDestroy {
                         res.push({day: elm.day, sets: sets});
                     });
                     resolve(res) ;
-                }, error => { reject(error);}
+                }, error => { reject(error); }
             );
         });
     }
@@ -130,7 +130,7 @@ export class ResultsService implements OnDestroy {
     }
 
     assignToSet(setId, addressId, assignTo, level, type) {
-        const roots = {cityId: 1, capId: 2, streetId: 3, building: 4}
+        const roots = {cityId: 1, capId: 2, streetId: 3, building: 4};
         const data = {
             data: [
                 {
@@ -140,16 +140,16 @@ export class ResultsService implements OnDestroy {
                     level: level
                 }
             ]
-        }
+        };
         return this.http.post<any>(AppConfig.endpoints.assignToSet(setId), data);
     }
     orderTreeNode(preDispatch, addressId, level, type) {
-        const roots = {cityId: 1, capId: 2, streetId: 3, building: 4}
+        const roots = {cityId: 1, capId: 2, streetId: 3, building: 4};
         const data = {
             root: roots[type],
             element_id: addressId,
             level: level
-        }
+        };
         return this.http.post<any>(AppConfig.endpoints.orderTreeNode(preDispatch), data);
     }
 

@@ -90,12 +90,12 @@ export class LocatingService implements OnDestroy {
 
     async startLocating(preDispatch, handle: EventEmitter<any>, preDispatchData, groupingProgress = true) {
         this.preDispatch = preDispatch ;
-        await this.updateLocalizationStatus(preDispatch, '1');
+        await this.backProcessingService.updatePreDispatchActionStatus(preDispatch, '1');
         if (preDispatchData.status === 'notPlanned' || preDispatchData.status === 'in_grouping') {
             const grouping = await this.group(preDispatch, handle, groupingProgress);
             // if grouping was interrupted, pause the process stop working.
             if (!grouping) {
-                this.pause(preDispatch) ;
+                this.backProcessingService.ultimatePause(preDispatch) ;
                 return ;
             }
         }
@@ -130,7 +130,7 @@ export class LocatingService implements OnDestroy {
 
         // reset buildings to start the fix not found process .
         this.buildings = <[LocatedBuildingInterface]>[] ;
-        await this.updateLocalizationStatus(preDispatch, null);
+        await this.backProcessingService.updatePreDispatchActionStatus(preDispatch, null);
         const nfound = await this.getNotFoundProducts(preDispatch).toPromise() ;
         if (nfound.data.length) {
             // emit fix the not found items event.
@@ -144,11 +144,6 @@ export class LocatingService implements OnDestroy {
         }
 
         return true;
-    }
-
-    pause(preDispatch) {
-        this.backProcessingService.pause('locating-' + preDispatch);
-        this.updateLocalizationStatus(preDispatch, null);
     }
 
     async process(buildings, total, handle: EventEmitter<any>) {
@@ -298,28 +293,16 @@ export class LocatingService implements OnDestroy {
             setTimeout(() => { _resolve(true); }, time);
         });
     }
+
     stopAllLocatingProcess() {
         const process = this.backProcessingService.getAllByNameSpace('locating') ;
         if (!process) {
             return ;
         }
         process.forEach((elm) => {
-            this.updateLocalizationStatus(elm, null);
+            this.backProcessingService.updatePreDispatchActionStatus(elm, null);
         });
     }
-    async updateLocalizationStatus(id, status) {
-        return await this.backProcessingService.run('updating-status-' + id, () => new Promise((resolve, reject) => {
-            const options = { params: new HttpParams(), headers: new HttpHeaders({'ignoreLoadingBar': ''})};
-            if (status) {
-                options.params = options.params.append('status', status);
-            }
-            return this.http.get<ApiResponseInterface>(AppConfig.endpoints.updateLocalizationStatus(id), options).subscribe(
-                data => { resolve(data); },
-                error => { reject(error); },
-            );
-        }), 'updating-status', id);
-    }
-
 
     ngOnDestroy() {
     }

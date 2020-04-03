@@ -95,7 +95,6 @@
     display: inline-block;
     margin: 14px auto;
     float: left;
-
 }
 .progress-action-value{
     background-color: #2CA53A;
@@ -119,7 +118,15 @@
     padding-top: 4px;
     font-size: 9px;
 }
-
+.progress-action-container:hover .percent-value {
+    display: none;
+}
+.progress-action-container .action-value {
+    display: none;
+}
+.progress-action-container:hover .action-value {
+    display: block;
+}
 .play-pause-icon{
     width: 15px;
     margin: 14px;

@@ -5,7 +5,6 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {SnotifyService} from 'ng-snotify';
 import {ScheduleService} from '../../service/schedule.service';
 import {NotMatchesTreeComponent} from '../../parts-components/not-matches-tree/not-matches-tree.component';
-import {DropEffect} from 'ngx-drag-drop';
 import {DragAndDropService} from '../../../../service/drag-and-drop.service';
 import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {ListTreeService} from '../../service/list-tree.service';
@@ -173,13 +172,11 @@ export class ResultComponent implements OnInit, OnDestroy {
           this.resultsService.assignToSet(target.setId, result.item.addressId,
               target.addressId ? target.addressId : target.id, index, result.item.type).subscribe(
               data => {
-                  console.log('data', data);
               }
           );
       } else {
           this.resultsService.orderTreeNode(this.preDispatch, result.item.addressId, index, result.item.type).subscribe(
               data => {
-                  console.log('data', data);
               }
           );
       }

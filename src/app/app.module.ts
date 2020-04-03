@@ -14,6 +14,8 @@ import {LocatingService} from './service/locating/locating.service';
 import {GoogleGeocodeService} from './service/locating/google.geocode.service';
 import {TuttocittaGeocodeService} from './service/locating/tuttocitta.geocode.service';
 import {MapBoxGeocodeService} from './service/locating/map-box.geocode.service';
+import {PlanningService} from './service/planning/planning.service';
+import {GoogleDirectionsService} from './service/planning/google-directions.service';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import {MapBoxGeocodeService} from './service/locating/map-box.geocode.service';
       GoogleGeocodeService,
       TuttocittaGeocodeService,
       MapBoxGeocodeService,
-      LocatingService
+      LocatingService,
+      PlanningService,
+      GoogleDirectionsService,
   ],
   bootstrap: [AppComponent]
 })

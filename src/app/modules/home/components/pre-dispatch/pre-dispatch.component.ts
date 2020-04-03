@@ -17,6 +17,7 @@ import {PreDispatchDeleteComponent} from '../../modals/pre-dispatch-delete/pre-d
 import {Router} from '@angular/router';
 import {BackProcessingService} from '../../../../service/back-processing.service';
 import {LocatingService} from '../../../../service/locating/locating.service';
+import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-global-actions.service';
 
 @Component({
   selector: 'app-pre-dispatch',
@@ -49,14 +50,14 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       private modalService: NgbModal,
       public router: Router,
       public backProcessingService: BackProcessingService,
-      public locatingService: LocatingService
+      public preDispatchGlobalActionsService: PreDispatchGlobalActionsService
   ) { }
 
 
    ngOnInit() {
         this.actionsService.setActions(this.actions) ;
         this.filtersService.clear();
-        this.loadItems(true);
+        this.loadItems(true, true);
         this.actionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
             this.loadItems(false) ;
             this.preDispatchService.selectedPreDispatches = [] ;
@@ -67,7 +68,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
         });
   }
 
-  loadItems(reset: boolean, startInterval = true) {
+  loadItems(reset: boolean, startInterval = false) {
       if ( this.subscription ) { this.subscription.unsubscribe(); }
       this.preDispatchList = [];
       this._preDispatchTable.loading(true);
@@ -99,11 +100,12 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
                       this.preDispatchList = res.data ;
                       this.refresh++ ;
                   }
+                  setTimeout(() => {
+                      this.startLoadingInterval();
+                  }, 2000);
               });
       }
-      setTimeout(() => {
-          this.startLoadingInterval();
-      }, 2000);
+
   }
 
   ngOnDestroy() {

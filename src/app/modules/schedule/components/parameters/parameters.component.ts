@@ -1,11 +1,15 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {PlanningService} from '../../service/planning.service';
+import {PlanningService} from '../../../../service/planning/planning.service';
 import {ActivatedRoute} from '@angular/router';
 import {NgbCalendar, NgbDate, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {RecipientsService} from '../../../../service/recipients.service';
+import {ScheduleService} from '../../service/schedule.service';
+import {SnotifyService} from 'ng-snotify';
+import {BackProcessingService} from '../../../../service/back-processing.service';
+import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-global-actions.service';
 
 @Component({
     selector: 'app-parameter',
@@ -20,7 +24,11 @@ export class ParametersComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private preDispatchService: PreDispatchService,
         private modalService: NgbModal,
-        public recipientsService: RecipientsService
+        public recipientsService: RecipientsService,
+        private scheduleService: ScheduleService,
+        private snotifyService: SnotifyService,
+        private backProcessingService: BackProcessingService,
+        private preDispatchGlobalActionsService: PreDispatchGlobalActionsService
     ) {
         this.preDispatch = this.route.snapshot.parent.params.id;
         this.preDispatchData = this.route.snapshot.parent.data.data ;
@@ -118,7 +126,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
             hours_per_day_minute: hours_per_day[1] ? hours_per_day[1] : '',
             max_product: this.preDispatchData.max_product,
         };
-        this.planningService.nextButtonClicked.pipe(takeUntil(this.unsubscribe)).subscribe(
+        this.scheduleService.nextButtonClicked.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
                 if (this.visibleView.value === 2) {
                     this.changePreDispatch();
@@ -126,6 +134,9 @@ export class ParametersComponent implements OnInit, OnDestroy {
                     this.save();
                 }
             }
+        );
+        this.scheduleService.preDispatchDataChanged.pipe(takeUntil(this.unsubscribe)).subscribe(
+            preDispatchData => this.preDispatchData = preDispatchData,
         );
     }
 
@@ -265,10 +276,47 @@ export class ParametersComponent implements OnInit, OnDestroy {
     }
 
     async save() {
-        await this.planningService.saveParameters(this.getData(), () => {
-            this.planningService.divideToDistenta(this.preDispatch);
+        if (this.backProcessingService.isRunning('planning-' + this.preDispatch)) {
+            this.snotifyService.warning('already in planning !', {
+                position: 'centerTop',
+            });
+        }
+        await this.planningService.saveParameters(this.getData(), async() => {
+            if (this.preDispatchData.status === 'localized') {
+                this.snotifyService.error('No Items to plan !', {
+                    position: 'centerTop',
+                    timeout: 6000,
+                });
+                return ;
+            }
+            if (['notPlanned', 'in_grouping', 'in_localize'].find((elm) => elm === this.preDispatchData.status)) {
+                this.snotifyService.warning('In order to start planning, you need to localize this pre-dispatch',
+                    {
+                        position: 'centerTop',
+                        showProgressBar: false,
+                        type: 'confirm',
+                        timeout: 6000,
+                        buttons: [
+                            {text: 'Close', action: (toast) => { this.snotifyService.remove(toast.id); }},
+                            {text: 'Localize', action: (toast) => {
+                                    this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
+                                    this.snotifyService.remove(toast.id);
+                            }},
+                        ]
+                    }
+                );
+                return ;
+            }
             return 'Data Saved !' ;
         });
+        await this.startPlanning();
+    }
+
+    async startPlanning() {
+        if (this.backProcessingService.isRunning('planning-' + this.preDispatch)) {
+            return ;
+        }
+        this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
     }
 
     ngOnDestroy() {

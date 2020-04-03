@@ -9,8 +9,9 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AddressesActionsService} from '../../service/addresses.actions.service';
 import {SnotifyService} from 'ng-snotify';
 import {ACAddress} from '../../../../core/models/address.interface';
-import {PlanningService} from '../../service/planning.service';
+import {PlanningService} from '../../../../service/planning/planning.service';
 import {MapService} from '../../service/map.service';
+import {ScheduleService} from '../../service/schedule.service';
 
 @Component({
     selector: 'app-addresses',
@@ -28,7 +29,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
         private addressesActionsService: AddressesActionsService,
         private snotifyService: SnotifyService,
         private planningService: PlanningService,
-        private mapService: MapService
+        private mapService: MapService,
+        private scheduleService: ScheduleService
     ) {
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data ;
@@ -73,7 +75,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 }
             },
         );
-        this.planningService.preDispatchDataChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
+        this.scheduleService.preDispatchDataChanged.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
                 this.preDispatchData = data ;
             }
