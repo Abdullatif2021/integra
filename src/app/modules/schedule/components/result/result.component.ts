@@ -9,6 +9,8 @@ import {DragAndDropService} from '../../../../service/drag-and-drop.service';
 import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {ListTreeService} from '../../service/list-tree.service';
 import {MapService} from '../../service/map.service';
+import {forEach} from '@angular/router/src/utils/collection';
+import {MapMarker} from '../../../../core/models/map-marker.interface';
 
 @Component({
   selector: 'app-result',
@@ -157,7 +159,25 @@ export class ResultComponent implements OnInit, OnDestroy {
   async loadPath(postman) {
       const path = await <any>this.resultsService.getSetPath(postman.id).toPromise();
       this.mapService.reset();
-      this.mapService.drawPath(JSON.parse(path.data));
+      this.mapService.drawPath(JSON.parse(path.data.path));
+      const markers = <[MapMarker]>[];
+      let i = 1 ;
+      path.data.coordinates.forEach((elm) => {
+         markers.push({
+             lat: elm.lat,
+             lng: elm.long,
+             label: elm.priority + '',
+             title: elm.name,
+             id: elm.id,
+             infoWindow: {
+                 text: elm.act_code,
+                 isOpen: false
+             },
+             onClick: () => {}
+         });
+         ++i;
+      });
+      this.mapService.setMarkers(markers);
   }
 
   getStatusClass(item) {

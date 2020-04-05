@@ -43,6 +43,11 @@ export class MapService {
         return marker ;
     }
 
+    setMarkers(markers: [MapMarker]) {
+        this.markers = markers;
+        this.markersChanges.emit(this.markers);
+    }
+
     createMarkersList(list, onDrag = null) {
         if (!list) { return; }
         list.forEach((elm) => {
@@ -99,7 +104,6 @@ export class MapService {
         if (!elm.markerProducts) {
             text = 'No Products.';
         }
-        console.log('shit', elm.markerProducts)
         elm.markerProducts.forEach((product) => {
             text += `<div class='info-window-product-act-row'>${product.act_code}</div>`;
             console.log(text);

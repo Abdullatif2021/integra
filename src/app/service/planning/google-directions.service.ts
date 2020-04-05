@@ -27,7 +27,7 @@ export class GoogleDirectionsService {
                 origin: origin,
                 destination: destination,
                 waypoints: waypoints,
-                // optimizeWaypoints: true,
+                optimizeWaypoints: true,
                 travelMode: 'DRIVING'
             }, function(response, status) {
                 if (status === 'OK') {
@@ -55,6 +55,7 @@ export class GoogleDirectionsService {
                 }
                 return resolve(null) ;
             }
+            console.log(dRes);
             const path = this.formatPath(dRes) ;
             return resolve(path);
         });
@@ -67,7 +68,9 @@ export class GoogleDirectionsService {
     convertMultiplePoints(points) {
         const res = [] ;
         points.forEach((point) => {
-            res.push({location: this.convertPoint(point), stopover: false});
+            if (point.lat !== '0' && point.long !== '0') {
+                res.push({location: this.convertPoint(point), stopover: false});
+            }
         });
         return res ;
     }
@@ -82,7 +85,9 @@ export class GoogleDirectionsService {
         dRes.routes[0].legs.forEach((leg) => {
             path.totalTime += leg.duration.value ;
             leg.steps.forEach((step) => {
-                path.polyline.push({lat: step.start_location.lat(), lng: step.start_location.lng()});
+                step.path.forEach((latlng) => {
+                    path.polyline.push({lat: latlng.lat(), lng: latlng.lng()});
+                });
             });
         });
         return path;

@@ -7,6 +7,7 @@ import {GoogleDirectionsService} from './google-directions.service';
 import {BackProcessingService} from '../back-processing.service';
 import {AppConfig} from '../../config/app.config';
 import {ApiResponseInterface} from '../../core/models/api-response.interface';
+import {MapService} from '../../modules/schedule/service/map.service';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +19,7 @@ export class PlanningService {
         private http: HttpClient,
         private snotifyService: SnotifyService,
         private googleDirectionsService: GoogleDirectionsService,
-        private backProcessingService: BackProcessingService
+        private backProcessingService: BackProcessingService,
     ) { }
 
     moveItemsToInPlaningChanges = new EventEmitter<any>() ;
@@ -60,6 +61,7 @@ export class PlanningService {
                         if (typeof success === 'function') {
                             body = success(data);
                         }
+                        if (typeof body !== 'string') { body = 'Success'; }
                         resolve({body: body, config: { showProgressBar: false, timeout: 3000 }});
                     } else {
                         reject({body: data ? data.status : 'Something went wrong', config: { showProgressBar: false, timeout: 3000 }});
