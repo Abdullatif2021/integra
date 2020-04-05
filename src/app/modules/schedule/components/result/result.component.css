@@ -142,3 +142,9 @@
     height: 575px;
     overflow-y: scroll;
 }
+.selected-postman {
+    background-color: #4caf5040 !important;
+}
+.postman-tree-node {
+    cursor: pointer;
+}

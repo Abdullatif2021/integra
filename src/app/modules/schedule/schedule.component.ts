@@ -64,6 +64,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     longitude = 14.3435834;
     zoom = 11;
     locatingHandle: any ;
+    paths = [] ;
     @ViewChild(PageDirective) pageHost: PageDirective;
 
     ngOnInit() {
@@ -92,6 +93,11 @@ export class ScheduleComponent implements OnInit, OnDestroy {
                 this.latitude = data.center.lat ;
                 this.longitude = data.center.lng ;
                 setTimeout(() => { this.zoom = data.zoom; }, 100);
+            }
+        );
+        this.mapService.pathsChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
+            paths => {
+               this.paths = paths;
             }
         );
         this.startInterval();

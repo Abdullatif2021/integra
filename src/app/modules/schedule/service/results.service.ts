@@ -129,6 +129,10 @@ export class ResultsService implements OnDestroy {
         return this.http.post<any>(AppConfig.endpoints.makeDispatchesVisible(postmanId), {});
     }
 
+    getSetPath(setId): Observable<TreeNodeResponseInterface> {
+        return this.http.get<any>(AppConfig.endpoints.getSetPath(setId));
+    }
+
     assignToSet(setId, addressId, assignTo, level, type) {
         const roots = {cityId: 1, capId: 2, streetId: 3, building: 4};
         const data = {

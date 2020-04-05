@@ -72,6 +72,8 @@ export const AppConfig = {
         getAddressesTreeMapMarkers: (id) => `${api_url}/api/preDispatch/${id}/markers`,
         getSetProductsCoordinates: (id) => `${api_url}/api/set/${id}/products/coordinate`,
         saveSetPath: (id) => `${api_url}/api/set/${id}/savePath`,
+        getSetPath: (id) => `${api_url}/api/set/${id}/getPath`,
+        getSetsWithoutPaths: (id) => `${api_url}/api/preDispatch/${id}/sets/withoutPaths`,
 
     },
 

@@ -226,7 +226,7 @@ export class LocatingService implements OnDestroy {
             }).subscribe(
                 data => {
                     resolve(data) ;
-                    handle.emit({state: false});
+                    handle.emit({state: false, treeCreated: true});
                     this.treeCreated.emit(true);
                 },
                 error => {

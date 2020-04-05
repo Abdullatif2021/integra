@@ -15,28 +15,33 @@ export class PreDispatchGlobalActionsService {
     ) {}
 
 
-    startPreDispatchAction(preDispatchData) {
+    startPreDispatchAction(preDispatchData, data = {}) {
         const action = this.backProcessingService.getPreDispatchAction(preDispatchData.status);
         preDispatchData.localize_status = 'play';
         this.backProcessingService.run(`${action}-${preDispatchData.id}`, async(handle) => {
             if (action === 'locating') {
                 await this.runLocating(preDispatchData, handle) ;
             } else if (action === 'planning') {
-                await this.runPlanning(preDispatchData, handle) ;
+                await this.runPlanning(preDispatchData, handle, data) ;
             }
         }, action, preDispatchData.id);
     }
 
     isPreDispatchInRunStatus(preDispatchData): boolean {
-        return ['in_localize', 'inPlanning', 'drawing_paths'].find((elm) => elm === preDispatchData.status) ? true : false;
+        return ['in_localize', 'in_divide', 'drawing_paths'].find((elm) => elm === preDispatchData.status) ? true : false;
     }
 
-    async runPlanning(preDispatchData, handle) {
+    async runPlanning(preDispatchData, handle, data: any = {}) {
         const planningService =  Object.assign(
             Object.create( Object.getPrototypeOf(this.planningService)), this.planningService
         );
         await this.backProcessingService.updatePreDispatchActionStatus(preDispatchData.id, 1);
-        const sets: any = await planningService.divideToDistenta(preDispatchData.id).toPromise();
+        let sets: any ;
+        if (data.ignoreDivide || preDispatchData.status === 'drawing_paths') {
+            sets = await planningService.getSetsWithoutPaths(preDispatchData.id).toPromise();
+        } else {
+            sets = await planningService.divideToDistenta(preDispatchData.id).toPromise();
+        }
         if (sets && sets.data) {
             const drawing: any = await this.planningService.drawPaths(sets.data, preDispatchData, handle);
         }

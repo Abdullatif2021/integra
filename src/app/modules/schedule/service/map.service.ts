@@ -21,8 +21,10 @@ export class MapService {
     markers = <MapMarker[]>[];
     onClickCallBack: any;
     markersChanges = new EventEmitter<MapMarker[]>();
+    pathsChanges = new EventEmitter<MapMarker[]>();
     moved = new EventEmitter<any>();
     mapMoved = new EventEmitter<any>();
+    pathes = [] ;
 
     createMarker(id = null, lat, lng, label = '', onDrag = null, icon = null, type = null, draggable = false, cluster = null ): MapMarker {
         const marker = <MapMarker>{
@@ -81,6 +83,12 @@ export class MapService {
 
     reset() {
         this.markers = [];
+        this.markersChanges.emit(this.markers);
+    }
+
+    drawPath(path) {
+        this.pathes = [path];
+        this.pathsChanges.emit(this.pathes);
     }
 
     addInfoWindow(marker, elm) {

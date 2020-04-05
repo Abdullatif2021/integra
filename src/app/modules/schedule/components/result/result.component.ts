@@ -8,6 +8,7 @@ import {NotMatchesTreeComponent} from '../../parts-components/not-matches-tree/n
 import {DragAndDropService} from '../../../../service/drag-and-drop.service';
 import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {ListTreeService} from '../../service/list-tree.service';
+import {MapService} from '../../service/map.service';
 
 @Component({
   selector: 'app-result',
@@ -22,7 +23,8 @@ export class ResultComponent implements OnInit, OnDestroy {
       private snotifyService: SnotifyService,
       private scheduleService: ScheduleService,
       private dragAndDropService: DragAndDropService,
-      private listTreeService: ListTreeService
+      private listTreeService: ListTreeService,
+      private mapService: MapService
   ) {
       this.route.parent.params.subscribe(
           data => {
@@ -47,6 +49,7 @@ export class ResultComponent implements OnInit, OnDestroy {
   _postmen = {} ;
   selectedPostmen: any = {} ;
   dragging;
+  selected_set = -1;
 
   async ngOnInit() {
       this.loadPostmen();
@@ -143,6 +146,18 @@ export class ResultComponent implements OnInit, OnDestroy {
               this.snotifyService.error('Something went wrong',  { showProgressBar: false, timeout: 1500 });
           }
       );
+  }
+
+  selectPostman(postman) {
+      this.selected_set = postman.id ;
+      this.loadPath(postman);
+  }
+
+
+  async loadPath(postman) {
+      const path = await <any>this.resultsService.getSetPath(postman.id).toPromise();
+      this.mapService.reset();
+      this.mapService.drawPath(JSON.parse(path.data));
   }
 
   getStatusClass(item) {

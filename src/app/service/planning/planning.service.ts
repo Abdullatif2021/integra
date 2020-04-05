@@ -152,6 +152,11 @@ export class PlanningService {
         }
         this.backProcessingService.ultimatePause(preDispatch.id);
     }
+
+    getSetsWithoutPaths(preDispatchId) {
+        const options = {params: new HttpParams(), headers: new HttpHeaders({'ignoreLoadingBar': ''})};
+        return this.http.get<any>(AppConfig.endpoints.getSetsWithoutPaths(preDispatchId), options);
+    }
     /*** } Path drawing ***/
 
 

@@ -115,8 +115,7 @@ export class BackProcessingService {
         if (['notPlanned', 'in_grouping', 'in_localize'].find((item) => item === status)) {
             return 'locating';
         }
-        // TODO handle move to in planning.
-        if (status === 'inPlanning' || status === 'drawing_paths') {
+        if (status === 'inPlanning' || status === 'in_divide' || status === 'drawing_paths') {
             return 'planning';
         }
     }

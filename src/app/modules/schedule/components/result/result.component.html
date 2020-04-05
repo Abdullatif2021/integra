@@ -35,7 +35,7 @@
     <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
   </ng-container>
   <ng-container *ngIf="!item.skeleton">
-    <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" class="{{getLvlClass(next)}} {{getStatusClass(item)}}">
+    <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2), 'selected-postman': item.id == selected_set}" class="{{getLvlClass(next)}} {{getStatusClass(item)}} postman-tree-node" (click)="selectPostman(item)">
       <div class="item-row">
         <div class="row">
           <div class="col-1-half wide-col">

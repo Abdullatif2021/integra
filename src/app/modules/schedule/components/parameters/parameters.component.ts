@@ -240,7 +240,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
         this.loadAllPreDispatches(true, event);
     }
 
-    changePreDispatch(force = false, notMatchesOption = null, modal = null) {
+    async changePreDispatch(force = false, notMatchesOption = null, modal = null) {
 
         if (!this.selectedPreDispatch) {
             return ;
@@ -255,7 +255,8 @@ export class ParametersComponent implements OnInit, OnDestroy {
             const departureDate = (this.options2Data.departure_date ? (typeof this.options2Data.departure_date === 'object' ?
                 Object.values(this.options2Data.departure_date).join('-') :  this.options2Data.departure_date) : '') +
                 (this.options2Data.departure_time ? ' ' + this.options2Data.departure_time : '');
-            return this.planningService.confirmPlanning(this.preDispatch, this.selectedPreDispatch.id, notMatchesOption, departureDate);
+            await this.planningService.confirmPlanning(this.preDispatch, this.selectedPreDispatch.id, notMatchesOption, departureDate);
+            return this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData, {ignoreDivide: true});
         }
 
         this.planningService.getMatchesRate(this.preDispatch, this.selectedPreDispatch.id).subscribe(
@@ -287,7 +288,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
                     position: 'centerTop',
                     timeout: 6000,
                 });
-                return ;
+                return 'Data Saved !';
             }
             if (['notPlanned', 'in_grouping', 'in_localize'].find((elm) => elm === this.preDispatchData.status)) {
                 this.snotifyService.warning('In order to start planning, you need to localize this pre-dispatch',
@@ -305,11 +306,11 @@ export class ParametersComponent implements OnInit, OnDestroy {
                         ]
                     }
                 );
-                return ;
+                return 'Data Saved !';
             }
+            this.startPlanning();
             return 'Data Saved !' ;
         });
-        await this.startPlanning();
     }
 
     async startPlanning() {
