@@ -280,13 +280,15 @@ export class ParametersComponent implements OnInit, OnDestroy {
         if (this.backProcessingService.isRunning('planning-' + this.preDispatch)) {
             this.snotifyService.warning('already in planning !', {
                 position: 'centerTop',
+                showProgressBar: false,
             });
         }
-        await this.planningService.saveParameters(this.getData(), async() => {
+        await this.planningService.saveParameters(this.getData(), () => {
             if (this.preDispatchData.status === 'localized') {
                 this.snotifyService.error('No Items to plan !', {
                     position: 'centerTop',
                     timeout: 6000,
+                    showProgressBar: false,
                 });
                 return 'Data Saved !';
             }

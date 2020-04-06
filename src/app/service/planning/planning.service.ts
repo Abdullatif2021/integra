@@ -136,7 +136,7 @@ export class PlanningService {
     }
 
     savePath(setId, path) {
-        const options = { path: path ? JSON.stringify(path.polyline) : '{}' };
+        const options = { path: path ? JSON.stringify(path) : '[]' };
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.saveSetPath(setId), options).pipe(
             catchError(this.handleError)
         );

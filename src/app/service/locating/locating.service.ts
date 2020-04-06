@@ -125,9 +125,6 @@ export class LocatingService implements OnDestroy {
             return false ;
         }
 
-        // remove the loader.
-        handle.emit({state: false});
-
         // reset buildings to start the fix not found process .
         this.buildings = <[LocatedBuildingInterface]>[] ;
         await this.backProcessingService.updatePreDispatchActionStatus(preDispatch, null);
@@ -135,6 +132,7 @@ export class LocatingService implements OnDestroy {
         if (nfound.data.length) {
             // emit fix the not found items event.
             this.productsNotFound.emit(nfound.data);
+            handle.emit({nfound: nfound.data});
         }
 
         // if every thing is done or the user is not in the pre-dispatch page, create the tree.
@@ -154,9 +152,6 @@ export class LocatingService implements OnDestroy {
         const onePercent = Math.ceil(total / 100.0);
 
         for (let i = 0; i < buildings.length; ++i) {
-            handle.emit({id: this.preDispatch,
-                message: `Locating '${buildings[i].street}, ${buildings[i].houseNumber}, ${buildings[i].cap} ${buildings[i].city}'`
-            });
             if ( result = await this.tuttocittaGeocodeService.locate(buildings[i]) ) {
                 this.buildings.push(result);
             } else if ( result = await this.googleGeocodeService.locate(buildings[i]) ) {
@@ -166,7 +161,6 @@ export class LocatingService implements OnDestroy {
             } else {
                 this.buildings.push({ id: buildings[i].id, lat: 0, long: 0, is_fixed: false, name: buildings[i].street});
             }
-            handle.emit({progress: (++this.processed / total) * 100 });
             // if the process is paused save and stop working.
             if (!this.backProcessingService.isRunning('locating-' + this.preDispatch)) {
                 await this.save();
@@ -177,7 +171,6 @@ export class LocatingService implements OnDestroy {
                 await this.save();
             }
         }
-        handle.emit({message: `Saving data...`});
         await this.save();
         return true ;
     }

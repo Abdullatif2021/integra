@@ -28,11 +28,8 @@ export class ResultComponent implements OnInit, OnDestroy {
       private listTreeService: ListTreeService,
       private mapService: MapService
   ) {
-      this.route.parent.params.subscribe(
-          data => {
-              this.preDispatch = data.id;
-          }
-      );
+      this.preDispatchData = this.route.snapshot.parent.data.data ;
+      this.preDispatch = this.route.snapshot.parent.params.id;
       this.scheduleResults = this.route.snapshot.data.data.scheduleResults;
       this.selectedPostmen = this.route.snapshot.data.data.selectedPostmen;
 
@@ -45,6 +42,7 @@ export class ResultComponent implements OnInit, OnDestroy {
 
   scheduleResults: any;
   preDispatch: number;
+  preDispatchData: any;
   page = 1;
   unsubscribe = new EventEmitter();
   postmen = {} ;
@@ -161,7 +159,6 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.mapService.reset();
       this.mapService.drawPath(JSON.parse(path.data.path));
       const markers = <[MapMarker]>[];
-      let i = 1 ;
       path.data.coordinates.forEach((elm) => {
          markers.push({
              lat: elm.lat,
@@ -175,8 +172,43 @@ export class ResultComponent implements OnInit, OnDestroy {
              },
              onClick: () => {}
          });
-         ++i;
       });
+      // add start and end points.
+      if (this.preDispatchData.startPoint.lat === this.preDispatchData.endPoint.lat &&
+          this.preDispatchData.startPoint.long === this.preDispatchData.endPoint.long ) {
+          markers.push({
+              lat: this.preDispatchData.startPoint.lat,
+              lng: this.preDispatchData.startPoint.long,
+              label: 'Start/End',
+              title: this.preDispatchData.startPoint.text,
+              id: 'start+end+point',
+              icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
+              infoWindow: false,
+              onClick: () => {}
+          });
+      } else {
+          markers.push({
+              lat: this.preDispatchData.startPoint.lat,
+              lng: this.preDispatchData.startPoint.long,
+              label: 'Start',
+              title: this.preDispatchData.startPoint.text,
+              id: 'start+point',
+              icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
+              infoWindow: false,
+              onClick: () => {}
+          });
+          markers.push({
+              lat: this.preDispatchData.endPoint.lat,
+              lng: this.preDispatchData.endPoint.long,
+              label: 'End',
+              title: this.preDispatchData.startPoint.text,
+              id: 'end+point',
+              icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
+              infoWindow: false,
+              onClick: () => {}
+          });
+      }
+
       this.mapService.setMarkers(markers);
   }
 

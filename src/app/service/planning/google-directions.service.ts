@@ -27,7 +27,7 @@ export class GoogleDirectionsService {
                 origin: origin,
                 destination: destination,
                 waypoints: waypoints,
-                optimizeWaypoints: true,
+                // optimizeWaypoints: true,
                 travelMode: 'DRIVING'
             }, function(response, status) {
                 if (status === 'OK') {
@@ -41,28 +41,30 @@ export class GoogleDirectionsService {
 
     getDirections(origin, waypoints, destination): Promise<any> {
         return new Promise<any>(async (resolve) => {
-            // if (this.invalid_keys_alerted) { return resolve(null); }
-            // if (!this.keys) { await this.loadKeys(); }
-            origin = this.convertPoint(origin);
-            destination = this.convertPoint(destination);
-            waypoints = this.convertMultiplePoints(waypoints);
-            const dRes = await this.sendDirectionRequest(origin, waypoints, destination).catch((e) => {
-                console.log(e);
-            });
-            if (!dRes || dRes.status !== 'OK') {
-                if (dRes && dRes.status === 'REQUEST_DENIED') {
-                    this.handleExpiredToken();
+            let path = [] ;
+            while (waypoints.length) {
+                const _origin = this.convertPoint(path.length ? path[path.length - 1] : origin);
+                const _waypoints = this.convertMultiplePoints(waypoints.splice(0, 23));
+                const _destination = this.convertPoint(waypoints.length ? waypoints.splice(0, 1)[0] : destination);
+                const dRes = await this.sendDirectionRequest(_origin, _waypoints, _destination).catch((e) => {
+                    console.log(e);
+                });
+                if (!dRes || dRes.status !== 'OK') {
+                    if (dRes && dRes.status === 'REQUEST_DENIED') {
+                        this.handleExpiredToken();
+                    }
+                    return resolve(null) ;
                 }
-                return resolve(null) ;
+                path = path.concat(this.formatPath(dRes));
             }
-            console.log(dRes);
-            const path = this.formatPath(dRes) ;
+
             return resolve(path);
         });
     }
 
     convertPoint(point) {
-        return  `${point.lat}, ${point.long}`;
+        const lng = point.lng ? point.lng : point.long ;
+        return  `${point.lat}, ${lng}`;
     }
 
     convertMultiplePoints(points) {
@@ -78,15 +80,11 @@ export class GoogleDirectionsService {
 
     formatPath(dRes) {
         if (!dRes.routes || !dRes.routes.length) { return ; }
-        const path = {
-            polyline: [],
-            totalTime: 0,
-        };
+        const path = []
         dRes.routes[0].legs.forEach((leg) => {
-            path.totalTime += leg.duration.value ;
             leg.steps.forEach((step) => {
                 step.path.forEach((latlng) => {
-                    path.polyline.push({lat: latlng.lat(), lng: latlng.lng()});
+                    path.push({lat: latlng.lat(), lng: latlng.lng()});
                 });
             });
         });

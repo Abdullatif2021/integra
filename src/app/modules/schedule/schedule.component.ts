@@ -69,10 +69,12 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.locatingHandle = this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch);
-        this.locatingService.productsNotFound.pipe(takeUntil(this.unsubscribe)).subscribe(
-            nfound => {
-                this.nFoundItems = nfound;
-                this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown'});
+        this.locatingHandle.pipe(takeUntil(this.unsubscribe)).subscribe(
+            data => {
+                if (data.nfound) {
+                    this.nFoundItems = data.nfound;
+                    this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown'});
+                }
             }
         );
         this.mapService.markersChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
