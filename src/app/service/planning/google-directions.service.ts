@@ -61,7 +61,7 @@ export class GoogleDirectionsService {
             const d_waypoints = [...waypoints] ;
             while (waypoints.length) {
                 const _origin = this.convertPoint(path.length ? path[path.length - 1] : origin);
-                const _waypoints = this.convertMultiplePoints(waypoints.splice(0, 23));
+                const _waypoints = this.convertMultiplePoints(waypoints.splice(0, 25));
                 if (waypoints.length) {
                     console.log('should ad', waypoints[0].id);
                 }
