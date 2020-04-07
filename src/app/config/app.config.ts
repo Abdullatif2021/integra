@@ -74,6 +74,7 @@ export const AppConfig = {
         saveSetPath: (id) => `${api_url}/api/set/${id}/savePath`,
         getSetPath: (id) => `${api_url}/api/set/${id}/getPath`,
         getSetsWithoutPaths: (id) => `${api_url}/api/preDispatch/${id}/sets/withoutPaths`,
+        setMapPriority: `${api_url}/api/sets/setMapPriority`,
 
     },
 

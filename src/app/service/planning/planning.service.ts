@@ -23,6 +23,7 @@ export class PlanningService {
     ) { }
 
     moveItemsToInPlaningChanges = new EventEmitter<any>() ;
+    // test = new EventEmitter<any>() ;
 
     /*** Move to in planning { ***/
     moveItemsToInPlaning(modalRef, force) {
@@ -33,7 +34,7 @@ export class PlanningService {
         data = {
             pre_dispatch_id: parseInt(preDispatchId, 10),
             data: data
-        }
+        };
         if (confirm) {
             data.confirm = 1 ;
         }
@@ -136,8 +137,14 @@ export class PlanningService {
     }
 
     savePath(setId, path) {
-        const options = { path: path ? JSON.stringify(path) : '[]' };
+        const options = { path: path ? JSON.stringify(path.path) : '[]' };
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.saveSetPath(setId), options).pipe(
+            catchError(this.handleError)
+        );
+    }
+    setMapPriority(path) {
+        const options = { data: path.order };
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.setMapPriority, options).pipe(
             catchError(this.handleError)
         );
     }
@@ -146,8 +153,10 @@ export class PlanningService {
         for (let i = 0; i < sets.length; ++i) {
             const waypoints = await this.getDirections(sets[i].id).toPromise();
             const path = await this.googleDirectionsService.getDirections(preDispatch.startPoint, waypoints.data, preDispatch.endPoint);
+            // this.test.emit(path.path);
+            const priority = await this.setMapPriority(path).toPromise();
             const save = await this.savePath(sets[i].id, path).toPromise() ;
-            handle.emit({progress: ( (i + 1) / sets.length) * 100 });
+            // handle.emit({progress: ( (i + 1) / sets.length) * 100 });
             if (!this.backProcessingService.isRunning('planning-' + preDispatch.id)) {
                 return false ;
             }

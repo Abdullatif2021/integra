@@ -27,7 +27,7 @@ export class GoogleDirectionsService {
                 origin: origin,
                 destination: destination,
                 waypoints: waypoints,
-                // optimizeWaypoints: true,
+                optimizeWaypoints: true,
                 travelMode: 'DRIVING'
             }, function(response, status) {
                 if (status === 'OK') {
@@ -39,12 +39,32 @@ export class GoogleDirectionsService {
         });
     }
 
+    clearWaypoints(waypoints) {
+        const remove = [] ;
+        for (let idx = 0 ; idx < waypoints.length; ++idx) {
+            if (waypoints[idx].lat === '0' || waypoints[idx].long === '0' || !waypoints[idx].lat || !waypoints[idx].long) {
+                remove.push(idx);
+            }
+        }
+        remove.forEach(idx => {
+            waypoints.splice(idx, 1);
+        });
+        return waypoints;
+    }
+
     getDirections(origin, waypoints, destination): Promise<any> {
         return new Promise<any>(async (resolve) => {
             let path = [] ;
+            const order = [] ;
+            let order_count = 0;
+            waypoints = this.clearWaypoints(waypoints);
+            const d_waypoints = [...waypoints] ;
             while (waypoints.length) {
                 const _origin = this.convertPoint(path.length ? path[path.length - 1] : origin);
                 const _waypoints = this.convertMultiplePoints(waypoints.splice(0, 23));
+                if (waypoints.length) {
+                    console.log('should ad', waypoints[0].id);
+                }
                 const _destination = this.convertPoint(waypoints.length ? waypoints.splice(0, 1)[0] : destination);
                 const dRes = await this.sendDirectionRequest(_origin, _waypoints, _destination).catch((e) => {
                     console.log(e);
@@ -53,12 +73,20 @@ export class GoogleDirectionsService {
                     if (dRes && dRes.status === 'REQUEST_DENIED') {
                         this.handleExpiredToken();
                     }
-                    return resolve(null) ;
+                    return resolve(path) ;
+                }
+                dRes.routes[0].waypoint_order.forEach((idx) => {
+                   order.push({ id: d_waypoints[idx].id, priority: order_count++ });
+                });
+                d_waypoints.splice(0, dRes.routes[0].waypoint_order.length)
+                if (d_waypoints.length) {
+                    console.log('added', d_waypoints[0].id);
+                    order.push({ id: d_waypoints[0].id, priority: order_count++ });
+                    d_waypoints.splice(0, 1);
                 }
                 path = path.concat(this.formatPath(dRes));
             }
-
-            return resolve(path);
+            return resolve({path: path, order: order});
         });
     }
 
@@ -71,7 +99,7 @@ export class GoogleDirectionsService {
         const res = [] ;
         points.forEach((point) => {
             if (point.lat !== '0' && point.long !== '0') {
-                res.push({location: this.convertPoint(point), stopover: false});
+                res.push({location: this.convertPoint(point), stopover: true});
             }
         });
         return res ;

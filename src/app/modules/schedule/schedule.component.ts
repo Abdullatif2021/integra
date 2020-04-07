@@ -102,6 +102,11 @@ export class ScheduleComponent implements OnInit, OnDestroy {
                this.paths = paths;
             }
         );
+        // this.planningService.test.subscribe(
+        //     data => {
+        //         this.mapService.drawPath(data);
+        //     }
+        // )
         this.startInterval();
     }
 

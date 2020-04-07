@@ -53,8 +53,9 @@
           </ng-container>
           <ng-container *ngFor="let path of paths">
             <agm-polyline [strokeColor]="'#4CAF50'">
+              <agm-icon-sequence [path]="'FORWARD_OPEN_ARROW'" [scale]="1" [repeat]="'120px'"></agm-icon-sequence>
               <ng-container *ngFor="let point of path">
-                <agm-polyline-point [latitude]="point.lat" [longitude]="point.lng"></agm-polyline-point>
+                <agm-polyline-point *ngIf="!point.arrow" [latitude]="point.lat" [longitude]="point.lng"></agm-polyline-point>
               </ng-container>
             </agm-polyline>
           </ng-container>

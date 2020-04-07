@@ -163,7 +163,7 @@ export class ResultComponent implements OnInit, OnDestroy {
          markers.push({
              lat: elm.lat,
              lng: elm.long,
-             label: elm.priority + '',
+             label: elm.map_priority + '',
              title: elm.name,
              id: elm.id,
              infoWindow: {
