@@ -27,7 +27,8 @@ export class GoogleGeocodeService {
         const options = { params: new HttpParams(),  headers: new HttpHeaders({'ignoreLoadingBar': ''})};
         const houseNumber = building.houseNumber ? building.houseNumber : 1 ;
         options.params = options.params.set('address',
-            `${building.street}, ${houseNumber}, ${building.cap} ${building.city}`) ;
+            `${building.street} ${houseNumber}, ${building.cap} ${building.city}`) ;
+        console.log('address', `${building.street}, ${houseNumber}, ${building.cap} ${building.city}`) ;
         options.params = options.params.set('components', 'postal_code:' + building.cap) ;
         options.params = options.params.set('key', this.keys[0].name) ;
         return this.http.get<GoogleGeocodeResponseInterface>('https://maps.googleapis.com/maps/api/geocode/json', options);
@@ -46,7 +47,14 @@ export class GoogleGeocodeService {
                 }
                 return resolve(null) ;
             }
-
+            const address_component = gRes.results[0].address_components;
+            for (let i = 0; i < address_component.lengtht; ++i) {
+                if (address_component[i].types.indexOf('street_number').indexOf('street_number') !== -1) {
+                    if (building.houseNumber !== address_component[i].long_name) {
+                        return resolve(null);
+                    }
+                }
+            }
             const address = this.getAddressObject(gRes) ;
             return resolve({
                 id: building.id,

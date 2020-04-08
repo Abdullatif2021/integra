@@ -12,7 +12,7 @@ export class TuttocittaGeocodeService {
             const script = document.createElement('script');
             const houseNumber = building.houseNumber ? building.houseNumber : 1 ;
             const callback = '__tuttocitta_result = ' ;
-            const address = `${building.street}, ${houseNumber}, ${building.cap} ${building.city}`;
+            const address = `${building.city}, ${building.street}, ${houseNumber}, ${building.cap}`;
             // the following line only used to remove the annoying undefined variable IDE error
             const windoo: any = window ;
             script.src = `https://services.tuttocitta.it/lbs?callback=${callback}&&sito=ac_api&&dv=${address}&format=javascript`;
@@ -37,7 +37,9 @@ export class TuttocittaGeocodeService {
             }
             let res: any = {};
             tRes.r.forEach((elm) => {
-               if (elm.cap === building.cap && elm.topo !== '') {
+               const topo = elm.topo.split(',');
+               if (elm.cap === building.cap && elm.topo !== '' &&
+                   topo.length > 1 && topo[topo.length - 1].trim() === building.houseNumber) {
                    res = elm ;
                }
             });

@@ -62,9 +62,6 @@ export class GoogleDirectionsService {
             while (waypoints.length) {
                 const _origin = this.convertPoint(path.length ? path[path.length - 1] : origin);
                 const _waypoints = this.convertMultiplePoints(waypoints.splice(0, 25));
-                if (waypoints.length) {
-                    console.log('should ad', waypoints[0].id);
-                }
                 const _destination = this.convertPoint(waypoints.length ? waypoints.splice(0, 1)[0] : destination);
                 const dRes = await this.sendDirectionRequest(_origin, _waypoints, _destination).catch((e) => {
                     console.log(e);
@@ -80,7 +77,6 @@ export class GoogleDirectionsService {
                 });
                 d_waypoints.splice(0, dRes.routes[0].waypoint_order.length)
                 if (d_waypoints.length) {
-                    console.log('added', d_waypoints[0].id);
                     order.push({ id: d_waypoints[0].id, priority: order_count++ });
                     d_waypoints.splice(0, 1);
                 }

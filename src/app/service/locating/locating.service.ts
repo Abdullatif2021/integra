@@ -154,7 +154,7 @@ export class LocatingService implements OnDestroy {
         for (let i = 0; i < buildings.length; ++i) {
             if ( result = await this.tuttocittaGeocodeService.locate(buildings[i]) ) {
                 this.buildings.push(result);
-            } else if ( result = await this.googleGeocodeService.locate(buildings[i]) ) {
+            } else if (result = await this.googleGeocodeService.locate(buildings[i])) {
                 this.buildings.push(result);
             } else if ( result = await this.mapBoxGeocodeService.locate(buildings[i])) {
                 this.buildings.push(result);
