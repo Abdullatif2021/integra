@@ -49,7 +49,6 @@ export class GoogleDirectionsService {
             const order = [] ;
             let order_count = 0;
             waypoints = this.clearWaypoints(waypoints);
-            console.log(waypoints);
             const d_waypoints = [...waypoints] ;
             while (waypoints.length) {
                 const _origin = this.convertPoint(path.length ? path[path.length - 1] : origin);

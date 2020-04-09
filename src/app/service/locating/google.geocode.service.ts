@@ -28,7 +28,6 @@ export class GoogleGeocodeService {
         const houseNumber = building.houseNumber ? building.houseNumber : 1 ;
         options.params = options.params.set('address',
             `${building.street}, ${houseNumber}, ${building.cap} ${building.city}`) ;
-        console.log('address', `${building.street}, ${houseNumber}, ${building.cap} ${building.city}`) ;
         options.params = options.params.set('components', 'postal_code:' + building.cap) ;
         options.params = options.params.set('key', this.keys[0].name) ;
         return this.http.get<GoogleGeocodeResponseInterface>('https://maps.googleapis.com/maps/api/geocode/json', options);

@@ -189,6 +189,7 @@ export class LocatingService implements OnDestroy {
             } else if ( result = await this.mapBoxGeocodeService.locate(address)) {
                 resolve(result) ;
             } else {
+                console.log('was not able to locate',  `${address.street}, ${address}, ${address.cap} ${address.city}`);
                 reject(null) ;
             }
             this.loadingService.state(false);
