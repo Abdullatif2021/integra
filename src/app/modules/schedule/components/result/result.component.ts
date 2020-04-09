@@ -163,9 +163,10 @@ export class ResultComponent implements OnInit, OnDestroy {
          markers.push({
              lat: elm.lat,
              lng: elm.long,
-             label: elm.map_priority + '',
+             label:  '',
              title: elm.name,
              id: elm.id,
+             icon: `https://mt.google.com/vt/icon/text=${elm.map_priority + ''}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`,
              infoWindow: {
                  text: elm.act_code,
                  isOpen: false

@@ -40,16 +40,7 @@ export class GoogleDirectionsService {
     }
 
     clearWaypoints(waypoints) {
-        const remove = [] ;
-        for (let idx = 0 ; idx < waypoints.length; ++idx) {
-            if (waypoints[idx].lat === '0' || waypoints[idx].long === '0' || !waypoints[idx].lat || !waypoints[idx].long) {
-                remove.push(idx);
-            }
-        }
-        remove.forEach(idx => {
-            waypoints.splice(idx, 1);
-        });
-        return waypoints;
+        return waypoints.filter((elm) => elm.lat !== '0' && elm.long !== '0');
     }
 
     getDirections(origin, waypoints, destination): Promise<any> {
@@ -58,6 +49,7 @@ export class GoogleDirectionsService {
             const order = [] ;
             let order_count = 0;
             waypoints = this.clearWaypoints(waypoints);
+            console.log(waypoints);
             const d_waypoints = [...waypoints] ;
             while (waypoints.length) {
                 const _origin = this.convertPoint(path.length ? path[path.length - 1] : origin);
