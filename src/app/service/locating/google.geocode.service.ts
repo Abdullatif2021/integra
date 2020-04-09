@@ -48,7 +48,7 @@ export class GoogleGeocodeService {
             }
             const address_component = gRes.results[0].address_components;
             let _b = false ;
-            for (let i = 0; i < address_component.lengtht; ++i) {
+            for (let i = 0; i < address_component.length; ++i) {
                 if (address_component[i].types.indexOf('street_number') !== -1) {
                     _b = true ;
                     if (building.houseNumber !== address_component[i].long_name) {
