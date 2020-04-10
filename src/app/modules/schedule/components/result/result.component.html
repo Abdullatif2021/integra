@@ -1,6 +1,6 @@
 
 <div class="results-container" #ResultsContainer>
-  <div class="items mt-2">
+  <div class="items mt-2" #itemContainer>
     <ng-container *ngFor="let item of scheduleResults; let idx = index">
       <ng-container [ngTemplateOutlet]="dateItem" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx}"></ng-container>
     </ng-container>
@@ -59,7 +59,7 @@
       </div>
     </div>
     <ng-container *ngIf="item.expanded"  >
-      <div infiniteScroll class="ngx-dnd-container" (scrolled)="loadMore(item)" dndDropzone [dndDisableDropIf]="dragging && dragging.type !== 'cityId'" [dndHorizontal]="false" (dndDrop)="onDrop($event, item)"  [ngClass]="{'drop-location': dragging && dragging.type === 'cityId'}" [scrollWindow]="true" infiniteScrollDistance="30">
+      <div infiniteScroll [infiniteScrollContainer]="itemContainer" class="ngx-dnd-container" (scrolled)="loadMore(item)" dndDropzone [dndDisableDropIf]="dragging && dragging.type !== 'cityId'" [dndHorizontal]="false" (dndDrop)="onDrop($event, item)"  [ngClass]="{'drop-location': dragging && dragging.type === 'cityId'}" [scrollWindow]="true" infiniteScrollDistance="30">
         <div dndPlaceholderRef class="dndPlaceholder"></div>
         <div *ngFor="let child of item.children; let i = index" [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"
              (dndStart)="onDragStart($event, child)" class="ngx-dnd-item">
@@ -97,7 +97,7 @@
     </div>
     <ng-container *ngIf="item.expanded">
         <ng-container  *ngIf="getLvl(next) <  5" >
-          <div dndDropzone (dndDrop)="onDrop($event, item)" infiniteScroll (scrolled)="loadMore(item)" [dndDisableDropIf]="dragging && dragging.parent.type !== item.type" [scrollWindow]="true" infiniteScrollDistance="30" [ngClass]="{'drop-location': dragging && dragging.parent.type === item.type}">
+          <div dndDropzone (dndDrop)="onDrop($event, item)" infiniteScroll [infiniteScrollContainer]="itemContainer" (scrolled)="loadMore(item)" [dndDisableDropIf]="dragging && dragging.parent.type !== item.type" [scrollWindow]="true" infiniteScrollDistance="30" [ngClass]="{'drop-location': dragging && dragging.parent.type === item.type}">
             <div dndPlaceholderRef class="dndPlaceholder"></div>
             <div *ngFor="let child of item.children; let i = index"  [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"
                  (dndStart)="onDragStart($event, child)">
@@ -122,7 +122,7 @@
       <div class="col-3"><div class="street-items-header-cell">Distanza</div></div>
     </div>
   </div>
-  <div class="street-items" dndDropzone [dndDisableDropIf]="dragging && dragging.type !== 'building'" [dndHorizontal]="false" (dndDrop)="onDrop($event, item)"  [ngClass]="{'drop-location': dragging && dragging.type === 'building'}" infiniteScroll (scrolled)="loadMore(item)" [scrollWindow]="true" [infiniteScrollContainer]="ResultsContainer" infiniteScrollDistance="30">
+  <div class="street-items" dndDropzone [dndDisableDropIf]="dragging && dragging.type !== 'building'" [dndHorizontal]="false" (dndDrop)="onDrop($event, item)"  [ngClass]="{'drop-location': dragging && dragging.type === 'building'}" infiniteScroll (scrolled)="loadMore(item)" [scrollWindow]="true" [infiniteScrollContainer]="itemContainer" infiniteScrollDistance="30">
     <div dndPlaceholderRef class="dndPlaceholder"></div>
     <div *ngFor="let child of item.children; let i = index" [ngClass]="{'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"
          (dndStart)="onDragStart($event, child)" class="{{getStatusClass(child)}}">
