@@ -69,6 +69,7 @@ export class SearchPanelComponent implements OnInit {
           this._search = null ;
           this.filters = {};
           this._has_active_filters = false ;
+          this.isCollapsed = true ;
       });
       this.filtersService.fields.subscribe((data) => {
           this.fieldsData = data ;

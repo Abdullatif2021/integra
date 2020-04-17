@@ -161,20 +161,20 @@
 <!-- TODO complete this thing -->
 <!--  Actions templates { -->
 <ng-template #view let-action="action" let-item="item">
-    <img (click)="action.click && action.click(item, parent)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="Vedi">
+    <img (click)="action.click && action.click(item, parent)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="Visualizza">
 </ng-template>
 <ng-template #book><img src="assets/images/notepad.svg" class="action-icon"></ng-template>
 <ng-template #print><img src="assets/images/printer.svg" class="action-icon" placement="bottom" ngbTooltip="Stampa"></ng-template>
 <ng-template #excel_export let-action="action" let-item="item"><img (click)="action.click && action.click(item, parent)" src="assets/images/excel.svg" class="action-icon" placement="bottom" ngbTooltip="Esporta"></ng-template>
 <ng-template #edit let-action="action" let-item="item"><img src="assets/images/edit.svg" (click)="action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="Modifica"></ng-template>
 <ng-template #pPlay let-action="action" let-item="item">
-    <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/play.svg" class="action-icon play-pause-icon">
+    <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/play.svg" placement="bottom" ngbTooltip="Riprendi" class="action-icon play-pause-icon">
 </ng-template>
 <ng-template #pPause let-action="action" let-item="item">
-    <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/pause.svg" class="action-icon play-pause-icon">
+    <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/pause.svg" placement="bottom" ngbTooltip="Pausa" class="action-icon play-pause-icon">
 </ng-template>
 <ng-template #pDelete let-action="action" let-item="item">
-    <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/delete.x.png" class="action-icon play-pause-icon">
+    <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/delete.x.png" placement="bottom" ngbTooltip="Elimina" class="action-icon play-pause-icon">
 </ng-template>
 <ng-template #progress let-action="action" let-item="item">
     <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': itemsProgressWarning[item.id]}" [ngStyle]="{width:item[action.field]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz {{action.status ? action.status(item) : ''}}">{{item[action.field]}} %</div></div>

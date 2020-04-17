@@ -9,7 +9,7 @@
           <div class="col-12 text-danger mb-2" *ngIf="error===1">Name is Required</div>
           <div class="col-12 text-danger mb-2" *ngIf="error===2">Name Should be at least 3 chars</div>
           <div class="col-8 align-self-center">
-            <label>Nserisci Nome Pre-Distinta</label>
+            <label>Inserisci Nome Pre-Distinta</label>
             <input (change)="changeName($event)" value="{{name}}" type="text" class="form-control name-input" placeholder="Nome">
           </div>
         </div>
@@ -24,7 +24,7 @@
       <ng-template #ConfrimDialog>
         <h6 class="text-warning ">Esci</h6>
         <div class="row mt-4">
-          <h6 class="col-12 mb-2" >Sei sicuro di voler cambiare le modifiche?</h6>
+          <h6 class="col-12 mb-2" >Sei sicuro di voler uscire?</h6>
         </div>
         <div class="btns-container mt-3">
           <button type="button" class="integraa-btn bg-warning ml-2 float-right" (click)="confirmClose(modal)">Si</button>
