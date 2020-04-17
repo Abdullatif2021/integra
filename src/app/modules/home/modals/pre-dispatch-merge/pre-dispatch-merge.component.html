@@ -2,18 +2,22 @@
   <div class="modal-container">
     <div class="modal-body">
       <h6>Pre-Distinte Uniti</h6>
+      <div class="selected-count-confirm">
+        ATTENZIONE! Stai per processare <b>{{preDispatchService.selectedPreDispatches.length}}</b> righe. Assicurati che la quantità sia corretta,
+        altrimenti riprova o contatta l'assistenz. Premi su Conferma se non hai dubbi sull'operazione.
+      </div>
       <div class="row mt-4">
         <div class="col-12 text-danger mb-2" *ngIf="error===1">Name is Required</div>
         <div class="col-12 text-danger mb-2" *ngIf="error===2">Name Should be at least 3 chars</div>
         <div class="col-8 align-self-center">
-          <label>Enter Pre-dispatch Name</label>
-          <input (change)="changeName($event)" type="text" class="form-control name-input" placeholder="Name">
+          <label>Nserisci Nome Pre-Distinta</label>
+          <input (change)="changeName($event)" type="text" class="form-control name-input" placeholder="Nome">
         </div>
       </div>
 
       <div class="btns-container mt-3">
         <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">Esegui</button>
-        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Cancel</button>
+        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
         <div class="clear-both"></div>
       </div>
     </div>

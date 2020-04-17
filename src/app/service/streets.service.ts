@@ -3,7 +3,7 @@ import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {ApiResponseInterface} from '../core/models/api-response.interface';
 import {catchError} from 'rxjs/operators';
 import {AppConfig} from '../config/app.config';
-import {throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {FiltersService} from './filters.service';
 
 @Injectable({
@@ -16,12 +16,16 @@ export class StreetsService {
         private filtersService: FiltersService,
         ) { }
 
-    getStreets(page, rpp, name, cities, order, citiesType) {
+    getStreets(page, rpp, name, cities, order) {
+        if (!cities.all && (!cities.items || !cities.items.length)) {
+            return false;
+        }
         const options = { params: new HttpParams().set('page', page).set('pageSize', rpp)};
         if (order) {
             options.params = options.params.set('orderMethod', order);
         }
         if (name !== null) { options.params = options.params.set('streetName', name); }
+        const citiesType = this.filtersService.getGrouping();
         if (cities.all) {
             if (cities.items.length) {
                 if (citiesType === 'by_client') {

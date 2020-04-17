@@ -50,6 +50,26 @@ export class PaginationComponent implements OnInit {
       this.pages = Math.ceil(this.results_count / this.rpp);
   }
 
+  prevPage() {
+    this.current_page = this.current_page - 1;
+    this.paginationService.updateCurrentPage(this.current_page);
+  }
+
+  nextPage() {
+    this.current_page = this.current_page + 1;
+    this.paginationService.updateCurrentPage(this.current_page);
+  }
+
+  lastPage() {
+    this.current_page = this.pages;
+    this.paginationService.updateCurrentPage(this.current_page);
+  }
+
+  firstPage() {
+    this.current_page = 1;
+    this.paginationService.updateCurrentPage(this.current_page);
+  }
+
   changePage(page) {
     this.current_page = page ;
     this.paginationService.updateCurrentPage(page);

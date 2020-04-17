@@ -17,10 +17,11 @@ export class CitiesService {
         private filtersService: FiltersService,
     ) { }
 
-    getCities(page, rpp, name, order, citiesType) {
+    getCities(page, rpp, name, order) {
         const options = {
             params: new HttpParams().set('page', page).set('pageSize', rpp)
         };
+        const citiesType = this.filtersService.getGrouping();
         if (citiesType === 'by_client') {
             options.params = options.params.set('type', citiesType);
         }

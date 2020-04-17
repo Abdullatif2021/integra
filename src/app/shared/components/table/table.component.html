@@ -82,7 +82,7 @@
                 <!-- row item {  -->
                 <tr #tableRow class="table-item" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx, 'selected-row':isSelectedRow(item)}">
                     <!-- select row item <static item > {  -->
-                    <td class="table-item-cell" [ngStyle]="{width: '1%'}">
+                    <td class="table-item-cell select-cell" [ngStyle]="{width: '1%'}">
                         <div class="select-row rounded-circle" (click)="selectItem(item)">
                             <div class="selected" *ngIf="isSelectedRow(item)"><fa-icon [icon]="['fa','check']"></fa-icon></div>
                         </div>
@@ -161,12 +161,12 @@
 <!-- TODO complete this thing -->
 <!--  Actions templates { -->
 <ng-template #view let-action="action" let-item="item">
-    <img (click)="action.click && action.click(item, parent)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon">
+    <img (click)="action.click && action.click(item, parent)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="Vedi">
 </ng-template>
 <ng-template #book><img src="assets/images/notepad.svg" class="action-icon"></ng-template>
-<ng-template #print><img src="assets/images/printer.svg" class="action-icon"></ng-template>
-<ng-template #excel_export let-action="action" let-item="item"><img (click)="action.click && action.click(item, parent)" src="assets/images/excel.svg" class="action-icon"></ng-template>
-<ng-template #edit let-action="action" let-item="item"><img src="assets/images/edit.svg" (click)="action.click && action.click(item, parent)" class="action-icon"></ng-template>
+<ng-template #print><img src="assets/images/printer.svg" class="action-icon" placement="bottom" ngbTooltip="Stampa"></ng-template>
+<ng-template #excel_export let-action="action" let-item="item"><img (click)="action.click && action.click(item, parent)" src="assets/images/excel.svg" class="action-icon" placement="bottom" ngbTooltip="Esporta"></ng-template>
+<ng-template #edit let-action="action" let-item="item"><img src="assets/images/edit.svg" (click)="action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="Modifica"></ng-template>
 <ng-template #pPlay let-action="action" let-item="item">
     <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/play.svg" class="action-icon play-pause-icon">
 </ng-template>
@@ -181,8 +181,8 @@
 </ng-template>
 <ng-template #more let-item="item" let-action="action">
     <span class="collapse-arrow action-icon">
-        <fa-icon *ngIf="!isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-right']"></fa-icon>
-        <fa-icon *ngIf="isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-up']"></fa-icon>
+        <fa-icon *ngIf="!isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-right']" placement="bottom" ngbTooltip="Di Più"></fa-icon>
+        <fa-icon *ngIf="isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-up']"  placement="bottom" ngbTooltip="Di meno"></fa-icon>
     </span>
 </ng-template>
 <!-- } Actions templates -->

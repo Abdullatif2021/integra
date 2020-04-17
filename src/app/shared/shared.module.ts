@@ -3,7 +3,15 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import {faCheck, faChevronRight, faChevronUp, faMinus, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {
+    faCaretLeft,
+    faCaretRight,
+    faCheck,
+    faChevronRight,
+    faChevronUp, faForward,
+    faMinus,
+    faSearch
+} from '@fortawesome/free-solid-svg-icons';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -17,6 +25,8 @@ import { AddressInputComponent } from './components/address-input/address-input.
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import {PlacesAutocompleteService} from './service/places.autocomplete.service';
 import {PageDirective} from './directives/page.directive';
+import {faBackward} from '@fortawesome/free-solid-svg-icons/faBackward';
+import { IframeComponent } from './components/iframe/iframe.component';
 
 @NgModule({
   imports: [
@@ -37,7 +47,8 @@ import {PageDirective} from './directives/page.directive';
       ModalDirective,
       PageDirective,
       LoadingComponent,
-      AddressInputComponent
+      AddressInputComponent,
+      IframeComponent
   ],
   exports: [
       SearchBoxComponent,
@@ -47,7 +58,8 @@ import {PageDirective} from './directives/page.directive';
       ModalDirective,
       PageDirective,
       LoadingComponent,
-      AddressInputComponent
+      AddressInputComponent,
+      IframeComponent
   ],
   providers: [
       PlacesAutocompleteService
@@ -61,6 +73,11 @@ export class SharedModule {
         library.add(faChevronUp);
         library.add(faCheck);
         library.add(faMinus);
+        library.add(faCaretLeft);
+        library.add(faCaretRight);
+        library.add(faBackward);
+        library.add(faForward);
+        library.add(faCaretRight);
     }
 
 }

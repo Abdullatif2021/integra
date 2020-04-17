@@ -41,21 +41,21 @@ export const FilterConfig = {
             {type: 'ng-select', label: 'CAP Destinatario:', key: 'recipientCap', items: sp.filters_data.caps_group,
                 labelVal: 'name'},
             {type: 'simpleText', label: 'Indirizzo Destinatario:', key: 'destination'},
-            {type: 'ng-select', label: 'Raggruppamento quantita:', labelVal: 'name',
-                items: [{name: 'Quantità per CAP', id: 'cap'}, {name: 'Quantità per Cliente', id: 'client'}],
-                change: (val) => {sp.groupByChanged(val) ; }, unclearbale: true,
-                selectedAttribute: {name: 'Quantità per CAP', id: 'cap'}},
-            {type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
-                    {name: 'Tutto', id: 'all'}, {name: 'Con Filtri Applicati', id: 'filters'} ], labelVal: 'name',
-                selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'},
-                change: (val) => {sp.grouping.filters = val.id ; }, unclearbale: true
-            },
+            {type: 'ng-select', label: 'Raggruppamento quantita:', labelVal: 'name', key: 'grouping',
+                items: [{name: 'Quantità per CAP', id: 'by_cap'}, {name: 'Quantità per Cliente', id: 'by_client'}], unclearbale: true,
+                selectedAttribute: {name: 'Quantità per CAP', id: 'by_cap'}},
+            // {type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
+            //         {name: 'Tutto', id: 'all'}, {name: 'Con Filtri Applicati', id: 'filters'} ], labelVal: 'name',
+            //     selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'},
+            //     change: (val) => {sp.grouping.filters = val.id ; }, unclearbale: true
+            // },
             {type: ['date', 'date'], label: 'Data/Ora:', group: true, key: ['fromDate', 'toDate']},
             {type: 'simpleText', label: 'Articolo Legge', key: 'articleLawName'},
             {type: ['date', 'date'], label: 'Data Articolo Legge:', group: true, key: ['fromArticleLawDate', 'toArticleLawDate']},
             {type: ['date', 'date'], label: 'Data Accettazione:', group: true, key: ['fromAcceptanceDate', 'toAcceptanceDate']},
         ],
         grouping: false,
+        default_filters: {'grouping': 'by_cap'}
     },
     pre_dispatch: {
         search: (container, sp) => [

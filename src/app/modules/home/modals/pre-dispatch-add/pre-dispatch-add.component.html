@@ -2,6 +2,10 @@
 <div class="modal-container">
   <div class="modal-body">
     <h6>Aggiungi a Pre-distinta esistente</h6>
+    <div *ngIf="data.method === 'selected'" class="selected-count-confirm">
+      ATTENZIONE! Stai per processare <b>{{productsService.selectedProducts.length}}</b> righe. Assicurati che la quantità sia corretta,
+      altrimenti riprova o contatta l'assistenz. Premi su Conferma se non hai dubbi sull'operazione.
+    </div>
     <div class="row mt-4">
       <div class="col-12 text-danger mb-2" *ngIf="error===1">Pre Dispatch is not selected</div>
       <div class="col-6">
@@ -17,7 +21,7 @@
 
     <div class="btns-container mt-3">
       <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">Esegui</button>
-      <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Cancel</button>
+      <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
       <div class="clear-both"></div>
     </div>
   </div>

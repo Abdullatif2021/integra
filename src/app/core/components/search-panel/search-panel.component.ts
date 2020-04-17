@@ -24,13 +24,16 @@ export class SearchPanelComponent implements OnInit {
 
   isCollapsed = true ;
   _search: any ;
-  _filters = [] ;
-  _active_filters = [] ;
+  // used for view changes {
+  _active_filters = {} ;
+  _changed_filters = {};
+  _has_active_filters = false ;
+  // }
   filters_data: any ;
   filtersFields: any ;
   fieldsData: any ;
   searchFields: any ;
-  search_value: string;
+  search_value: any;
   active_cap = null ;
   subscriptions: any = {} ;
   grouping = {active: 'cap', filters: 'filters'} ;
@@ -38,6 +41,8 @@ export class SearchPanelComponent implements OnInit {
   _m_active_action = null ;
   actions: any = [];
   loaded = false ;
+
+  filters = {};
   @ViewChild(ModalDirective) modalHost: ModalDirective;
   @ViewChild('confirmUnAppliedFiltersModalRef') confirmUnAppliedFiltersModalRef: ElementRef;
   unsubscribeTo(name) {
@@ -62,10 +67,13 @@ export class SearchPanelComponent implements OnInit {
           this._m_active_action = null ;
           this.active_action = null ;
           this._search = null ;
-          this._filters = [] ;
+          this.filters = {};
+          this._has_active_filters = false ;
       });
       this.filtersService.fields.subscribe((data) => {
           this.fieldsData = data ;
+          this.filters = Object.assign({}, data.fields.default_filters);
+          this._active_filters = Object.assign({}, data.fields.default_filters);
           if ( this.loaded ) {
               this.initFields() ;
           }
@@ -78,129 +86,87 @@ export class SearchPanelComponent implements OnInit {
       this.search_value = null ;
   }
 
-  getInputValue(event, type) {
-      let value = null ;
-      switch (type) {
-          case 'text': value = event ; break ;
-          case 'date': value = event.target.value ; break ;
-          case 'simpleText': value = event.target.value ; break ;
-          case 'number': value = event.target.value ; break ;
-          case 'ng-select': value = event && event.id ? event.id : ( event && event.name ? event.name : null); break;
-          case 'tag': value = event;
-      }
-      return value ;
-  }
-  changeSearchValue(event, type) {
-      this.search_value = this.getInputValue(event, type) ;
-  }
-
   search() {
       if (this._search && !this.search_value) { return ; }
       if (this._search && this._search.key && this.search_value) {
-        this.filtersService.updateFilters([{key: this._search.key, value: this.search_value}]);
+        const search = {} ;
+        search[this._search.key] = typeof this.search_value === 'object' ?
+            (this.search_value.id ? this.search_value.id : this.search_value.name) : this.search_value;
+        this.filtersService.updateFilters(search);
       } else {
         this.filtersService.updateFilters([]) ;
       }
-      this._active_filters = [] ;
+      this._active_filters = {} ;
   }
 
   changeFiltersValue(event, key, type, idx) {
+
+    // if filters has action that needs to run on change, run it.
     if (typeof this.filtersFields[idx].change === 'function') {
         return this.filtersFields[idx].change(event) ;
     }
-    this._filters = this._filters.filter(elm => elm.key !== key);
-    this._active_filters = this._active_filters.filter(elm => elm.key !== key);
 
-    const val = this.getInputValue(event, type) ;
-    if (val && val !== '') {
-        if ( typeof val === 'object' && !val.length ) { return ; }
-        this._filters.push({key: key, value: val});
+    // remove the active filter
+    delete this._active_filters[key];
+    this._changed_filters[key] = 1;
+
+    if (this.filters[key] && typeof this.filters[key] === 'object' ? !this.filters[key].length : !this.filters[key]) {
+        delete this.filters[key];
     }
+
+    // changes the filterField value, required in some filters, (the once with remote data loading.).
     if (typeof this.filtersFields[idx].key === 'string') {
-        this.filtersFields[idx].value = val ;
+        this.filtersFields[idx].value = this.filters[key] ;
     } else {
         if (!this.filtersFields[idx].value) {
             this.filtersFields[idx].value = {} ;
         }
-        this.filtersFields[idx].value[key] = val ;
+        this.filtersFields[idx].value[key] = this.filters[key] ;
     }
+
   }
 
-  // // TODO remake in a better way
-  // filterCap(cap) {
-  //     this.active_cap = cap ;
-  //     this._active_filters = this._active_filters.filter((elm) => {
-  //         return elm.key !== 'recipientCap' ;
-  //     });
-  //     let filters = [] ;
-  //     if (this.grouping.filters === 'filters' ) {
-  //         filters = this._active_filters.concat({key: 'recipientCap', value: cap.id}) ;
-  //     } else {
-  //         this._active_filters = [] ;
-  //         filters = [{key: 'recipientCap', value: cap.id}] ;
-  //     }
-  //     this.filtersService.updateFilters(filters) ;
-  // }
-  //
-  // filterCustomer(customer) {
-  //     this.active_cap = customer ;
-  //     this._active_filters = this._active_filters.filter((elm) => {
-  //         return elm.key !== 'customerId' ;
-  //     });
-  //     let filters = [] ;
-  //     if (this.grouping.filters === 'filters' ) {
-  //         filters = this._active_filters.concat({key: 'customerId', value: customer.id}) ;
-  //     } else {
-  //         this._active_filters = [] ;
-  //         filters = [{key: 'customerId', value: customer.id}] ;
-  //     }
-  //     this.filtersService.updateFilters(filters) ;
-  // }
-
   filter() {
-      this.filtersService.updateFilters(this._filters) ;
-      this._active_filters = this._filters ;
+      this.filtersService.updateFilters(this.filters) ;
+      this._active_filters = Object.assign({}, this.filters) ;
+      this._changed_filters = {} ;
+      this._has_active_filters = Object.keys(this._active_filters).length ? true : false ;
       this.active_cap = null ;
       this._search = null ;
   }
 
-  isActive(key) {
-      if (typeof key === 'object') {
-          return this._active_filters.find( e => key.indexOf(e.key) !== -1) ;
-      }
-      return this._active_filters.find(e => e.key === key) ;
-
-  }
-  isFilled(key) {
-      return this._filters.find(e => e.key === key) ;
+  clearFilters() {
+      this.filters = {} ;
+      this._active_filters = {};
+      this._changed_filters = {};
+      this._has_active_filters = false ;
+      this.filtersService.updateFilters(this.filters) ;
   }
 
-  clearFilters() {}
-
-  groupByChanged(val) {
-      this.grouping.active = val.id ;
-      let selected = {} ;
-      switch (val.id) {
-          case 'cap': selected = {
-              type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
-                  {name: 'Tutto', id: 'all'},
-                  {name: 'Con Filtri Applicati', id: 'filters'}
-              ], labelVal: 'name', change: (value) => {this.grouping.filters = value.id ; },
-              selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'}, unclearbale: true} ; break ;
-          case 'client': selected = {
-              type: 'ng-select', key: '__quantity_', label: 'Quantita per Client:', items : [
-                  {name: 'Tutto', id: 'all'},
-                  {name: 'Con Filtri Applicati', id: 'filters'}
-              ], labelVal: 'name', change: (value) => {this.grouping.filters = value.id ; },
-              selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'}, unclearbale: true} ; break ;
-      }
-      for (let i = 0; i < this.filtersFields.length ; ++i) {
-          if ( this.filtersFields[i].key && this.filtersFields[i].key === '__quantity_') {
-              this.filtersFields[i] = selected ;
-          }
-      }
-      this.filtersService.updateGrouping(val);
-  }
+  // groupByChanged(val) {
+  //     this.grouping.active = val.id ;
+  //     let selected = {} ;
+  //     switch (val.id) {
+  //         case 'cap': selected = {
+  //             type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
+  //                 {name: 'Tutto', id: 'all'},
+  //                 {name: 'Conpause_time_start Filtri Applicati', id: 'filters'}
+  //             ], labelVal: 'name', change: (value) => {this.grouping.filters = value.id ; },
+  //             selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'}, unclearbale: true} ; break ;
+  //         case 'client': selected = {
+  //             type: 'ng-select', key: '__quantity_', label: 'Quantita per Client:', items : [
+  //                 {name: 'Tutto', id: 'all'},
+  //                 {name: 'Con Filtri Applicati', id: 'filters'}
+  //             ], labelVal: 'name', change: (value) => {this.grouping.filters = value.id ; },
+  //             selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'}, unclearbale: true} ; break ;
+  //     }
+  //     for (let i = 0; i < this.filtersFields.length ; ++i) {
+  //         if ( this.filtersFields[i].key && this.filtersFields[i].key === '__quantity_') {
+  //             this.filtersFields[i] = selected ;
+  //         }
+  //     }
+  //     this.filtersService.updateGrouping(val);
+  // }
 
   getFieldRemoteData(event, field) {
       if (!event.term || event.term === '') {
@@ -247,9 +213,9 @@ export class SearchPanelComponent implements OnInit {
     if ( this.active_action && this.active_action.modal ) {
         if (!force && this.active_action.method && this.active_action.method === 'filters') {
             // check if there is any non committed filters
-            if (this._filters.length !== this._active_filters.length) {
+            if (Object.keys(this.filters).length !== Object.keys(this._active_filters).length) {
 
-                this.modalService.open(this.confirmUnAppliedFiltersModalRef)
+                this.modalService.open(this.confirmUnAppliedFiltersModalRef, {backdrop: 'static' });
                 return false;
             }
         }
@@ -259,7 +225,7 @@ export class SearchPanelComponent implements OnInit {
         const componentRef = viewContainerRef.createComponent(componentFactory);
         const instance = <any>componentRef.instance ;
         instance.data = this.active_action  ;
-        const modalOptions = Object.assign({ windowClass: 'animated slideInDown' },
+        const modalOptions = Object.assign({ windowClass: 'animated slideInDown', backdrop: 'static' },
             this.active_action.modalOptions ? this.active_action.modalOptions : {} );
         this.modalService.open(instance.modalRef, modalOptions) ;
     } else if ( this.active_action && typeof this.active_action.run === 'function' ) {

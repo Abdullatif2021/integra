@@ -41,7 +41,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     actionInRun = false ;
 
     constructor(
-        private router: Router,
+        public router: Router,
         private route: ActivatedRoute,
         private locatingService: LocatingService,
         private modalService: NgbModal,
@@ -73,7 +73,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             data => {
                 if (data.nfound) {
                     this.nFoundItems = data.nfound;
-                    this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown'});
+                    this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown', backdrop: 'static'});
                 }
             }
         );
@@ -130,17 +130,16 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         );
     }
 
-    activeTab(route) {
-        return route === this.router.url;
-    }
-
-
     async runNextAction() {
         this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
     }
 
     moveToInPlan(modalRef, force = false) {
         this.planningService.moveItemsToInPlaning(modalRef, force);
+    }
+    moveBackToAddresses(modalRef, force = false) {
+        console.log('call 1');
+        this.planningService.moveItemsBackToAddresses(modalRef, force);
     }
 
     latLngInputActivate(event, nFoundItem, latInput, lngInput) {

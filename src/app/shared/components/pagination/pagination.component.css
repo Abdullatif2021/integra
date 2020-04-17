@@ -5,25 +5,39 @@
     color: #111;
 }
 .rpg-select{
-    min-width: 70px;
+    min-width: 60px;
     margin-left: 10px;
 }
 .pages-container{
     padding-top: 7px;
     margin-left: 15px;
+    display: flex;
 }
 .page{
     color: #fff;
     background-color: #000;
     border: 1px solid #000;
     margin: 0px 3px;
-    display: inline-block;
     font-size: 11px;
+    display: flex;
     text-align: center;
     padding: 2px;
     min-width: 22px;
     cursor: pointer;
+    height: 22px;
 }
+.page span {
+    margin: auto;
+}
+.next-page span, .prev-page span{
+    font-size: 18px;
+    margin-top: -5px;
+    margin-left: 3px;
+}
+.next-page span {
+    margin-left: 6px;
+}
+
 .page:hover{
     background-color: #fcda4b;
     border: 1px solid #fcda4b;
@@ -57,4 +71,10 @@
     width: 380px;
     height: 30px;
     margin-top: 0px;
+}
+.results-count {
+    font-size: 13px;
+    height: 18px;
+    margin: auto 0px;
+    color: #666;
 }

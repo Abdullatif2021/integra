@@ -18,13 +18,14 @@ export class ProductsService {
       private paginationService: PaginationService
   ) { }
 
-  public selectedProducts ;
+  public selectedProducts = [];
   selectAllOnLoadEvent = new EventEmitter() ;
-  getToDeliverProducts(cities, streets, order_field = null, order_method = '1', citiesType = 'by_cap') {
+  getToDeliverProducts(cities, streets, order_field = null, order_method = '1') {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)
               .set('pageSize', this.paginationService.rpp)};
 
+      const citiesType = this.filtersService.getGrouping();
       if (citiesType === 'by_client') {
           options.params = options.params.set('by_clients_Filter', '1');
       }

@@ -15,12 +15,22 @@ export class PreDispatchEditComponent extends ModalComponent implements OnInit {
 
   name = '' ;
   error = null ;
-
+  changed = false ;
+  showConfirm = false ;
   ngOnInit() {
+      this.name = this.data.name;
   }
 
   changeName(event) {
       this.name = event.target.value ;
+      this.changed = true ;
+  }
+
+  confirmClose(modal) {
+      if (!this.changed || this.showConfirm) {
+          return modal.close();
+      }
+      this.showConfirm = true ;
   }
 
   run(modal) {

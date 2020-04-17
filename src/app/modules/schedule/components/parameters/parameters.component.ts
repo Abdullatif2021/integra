@@ -109,6 +109,8 @@ export class ParametersComponent implements OnInit, OnDestroy {
             <NgbDate>{year: parseInt(departure_date[0], 10), month: parseInt(departure_date[1], 10),
             day: parseInt(departure_date[2], 10) } : false;
         const hours_per_day = this.preDispatchData.hours_per_day ? '' + this.preDispatchData.hours_per_day.split('.') : [] ;
+        // const pause_time_start = this.preDispatchData.pause_time_start.split(':');
+        // const pause_time_end = this.preDispatchData.pause_time_end.split(':');
         this.data = {
             service_time_single: this.findOption('service_time_single', this.options.serviceTimeOptions),
             service_time_multiple: this.findOption('service_time_multiple', this.options.serviceTimeOptions),
@@ -182,6 +184,8 @@ export class ParametersComponent implements OnInit, OnDestroy {
         data['hours_per_day'] = (data.hours_per_day_hour ? parseInt(data.hours_per_day_hour, 10)  : 0 ) +
             (data.hours_per_day_minute ? parseInt(data.hours_per_day_minute, 10) / Math.pow(10, data.hours_per_day_minute.length) : 0);
         data['pre_dispatch_id'] = this.preDispatch ;
+        // data['pause_time_start'] = data['pause_time_start'] ? data['pause_time_start']['hours'] + ':' + data['pause_time_start']['minutes'] : null;
+        // data['pause_time_end'] = data['pause_time_end'] ? data['pause_time_end']['hours'] + ':' + data['pause_time_end']['minutes'] : null;
         for (const [key, value] of Object.entries(data)) {
             if (typeof value === 'object') {
                 data[key] = value ? value['value'] : null ;
@@ -263,11 +267,11 @@ export class ParametersComponent implements OnInit, OnDestroy {
             data => {
                 this.matchRateData = data ;
                 if (data.data.percent === 100) {
-                    this.modalService.open(this.fullmatchesModal);
+                    this.modalService.open(this.fullmatchesModal, {backdrop: 'static' });
                 } else if (data.data.percent > 79) {
-                    this.modalService.open(this.lowmatchesModal);
+                    this.modalService.open(this.lowmatchesModal, {backdrop: 'static' });
                 } else {
-                    this.modalService.open(this.verylowmatchesModal);
+                    this.modalService.open(this.verylowmatchesModal, {backdrop: 'static' });
                 }
 
             }, error => {

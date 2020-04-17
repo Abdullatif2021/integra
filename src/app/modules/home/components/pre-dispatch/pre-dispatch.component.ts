@@ -129,6 +129,6 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       const componentRef = viewContainerRef.createComponent(componentFactory);
       const instance = <any>componentRef.instance ;
       instance.data = data  ;
-      this.modalService.open(instance.modalRef, { windowClass: 'animated slideInDown' }) ;
+      this.modalService.open(instance.modalRef, { windowClass: 'animated slideInDown', backdrop: 'static' }) ;
   }
 }

@@ -3,6 +3,7 @@ import {ModalComponent} from '../modal.component';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {ApiResponseInterface} from '../../../../core/models/api-response.interface';
 import {ActionsService} from '../../../../service/actions.service';
+import {ProductsService} from '../../../../service/products.service';
 
 @Component({
   selector: 'app-pre-dispatch-add',
@@ -25,6 +26,8 @@ export class PreDispatchAddComponent extends ModalComponent implements OnInit {
   constructor(
       private preDispatchService: PreDispatchService,
       private actionsService: ActionsService,
+      public productsService: ProductsService
+
   ) {
     super();
   }

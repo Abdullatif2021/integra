@@ -6,8 +6,16 @@
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
     position: relative;
+    scrollbar-width: thin;
 }
-.table-container::-webkit-scrollbar { width: 0 !important }
+.table-container::-webkit-scrollbar-thumb {
+    background-color: #C1BEBC;
+    outline: 1px solid slategrey;
+    border-radius: 4px;
+}
+.table-container::-webkit-scrollbar {
+    width: 5px;
+}
 .table-head,.pagination-footer{
     background-color: #222222;
     color: #feda44;
@@ -40,6 +48,10 @@
     padding: 3px;
     vertical-align: middle;
     line-height: 13px;
+    min-width: 42px;
+}
+.select-cell {
+    min-width: 0px;
 }
 .table-item:hover{
     background-color: #e5e5ff !important;

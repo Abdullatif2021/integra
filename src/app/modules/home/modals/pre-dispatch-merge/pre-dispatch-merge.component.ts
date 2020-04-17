@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ModalComponent} from '../modal.component';
 import {ActionsService} from '../../../../service/actions.service';
+import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 
 @Component({
   selector: 'app-pre-dispatch-merge',
@@ -9,7 +10,10 @@ import {ActionsService} from '../../../../service/actions.service';
 })
 export class PreDispatchMergeComponent extends ModalComponent implements OnInit {
 
-  constructor(private actionsService: ActionsService) {
+  constructor(
+      private actionsService: ActionsService,
+      public preDispatchService: PreDispatchService
+  ) {
     super();
   }
 

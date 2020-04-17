@@ -7,3 +7,10 @@
     height: 33px;
     font-size: 13px;
 }
+.selected-count-confirm {
+    font-size: 12px;
+    border: 1px solid #ced4da;
+    padding: 5px;
+    background-color: #f3f3f3;
+    border-radius: 4px;
+}

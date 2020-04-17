@@ -15,13 +15,12 @@ export class FiltersService {
   // the filters was changed and the changes was committed
   filtersChanges = new EventEmitter<number>() ;
   // the filters was changed but the changes was not committed
-  groupingChanges = new EventEmitter<any>();
-  groupingType = 'by_cap' ;
   cleared = new EventEmitter<number>() ;
   fields = new EventEmitter() ;
-  filters = [];
+  filters = <any>{};
   specials: any = {};
   barcodes = [];
+  grouping = 'by_cap';
 
   getFiltersData() {
       return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getFiltersData).pipe(
@@ -30,13 +29,15 @@ export class FiltersService {
   }
 
   updateFilters(filters) {
-    this.filters = filters ;
+    const grouping = filters.grouping;
+    this.grouping =  grouping ? grouping : 'by_cap' ;
+    this.filters = Object.assign({}, filters) ;
+    delete this.filters.grouping ;
     this.filtersChanges.emit(filters);
   }
 
-  updateGrouping(value) {
-      this.groupingType = value ;
-      this.groupingChanges.emit(value);
+  getGrouping() {
+      return this.grouping;
   }
 
   getHttpParams(options: HttpParams) {
@@ -44,9 +45,9 @@ export class FiltersService {
     // if there is no filters return the original options
     if ( typeof this.filters !== 'object') {return options ; }
     // loop through all filters and add them if there value was not empty string or null
-    this.filters.forEach((filter: FilterInterface) => {
-      if (!filter.value || filter.value === '') { return ; }
-      options = options.set(filter.key, filter.value) ;
+    Object.keys(this.filters).forEach((filterKey) => {
+      if (!this.filters[filterKey] || this.filters[filterKey] === '') { return ; }
+      options = options.set(filterKey, this.filters[filterKey]) ;
       // if a filter is valid, set applied to true
       applied = true ;
     });
@@ -57,23 +58,18 @@ export class FiltersService {
 
   getFiltersObject() {
       if ( typeof this.filters !== 'object') { return [] ; }
-      // loop through all filters and add them if there value was not empty string or null
-      const _filters = {} ;
-      this.filters.forEach((filter: FilterInterface) => {
-          if (!filter.value || filter.value === '') { return ; }
-          _filters[filter.key] = filter.value ;
-      });
-
+      const _filters = Object.assign({}, this.filters);
+      const grouping = _filters['grouping'] ? _filters['grouping'] : 'by_cap';
       if (this.specials.cities && this.specials.cities.all) {
           if (this.specials.cities.items.length) {
-              _filters[this.groupingType === 'by_cap' ? 'exclude_cities_ids' : 'exclude_clients_ids'] = this.specials.cities.items;
+              _filters[grouping === 'by_cap' ? 'exclude_cities_ids' : 'exclude_clients_ids'] = this.specials.cities.items;
           }
           if (this.specials.cities.search) {
-              _filters[this.groupingType === 'by_cap' ? 'byCitiesSearch' : 'by_clients_search'] = this.specials.cities.search;
+              _filters[grouping === 'by_cap' ? 'byCitiesSearch' : 'by_clients_search'] = this.specials.cities.search;
           }
       } else if (this.specials.cities) {
           if (this.specials.cities.items.length) {
-              _filters[this.groupingType === 'by_cap' ? 'cities_ids' : 'clients'] = this.specials.cities.items;
+              _filters[grouping === 'by_cap' ? 'cities_ids' : 'clients'] = this.specials.cities.items;
           }
       }
       if (this.specials.streets && this.specials.streets.all) {
@@ -88,7 +84,7 @@ export class FiltersService {
               _filters['streets_ids'] = this.specials.streets.items;
           }
       }
-      if (this.groupingType !== 'by_cap') {
+      if (grouping !== 'by_cap') {
           _filters['by_clients_Filter'] = '1';
       }
       return _filters ;

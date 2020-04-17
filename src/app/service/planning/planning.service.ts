@@ -23,14 +23,19 @@ export class PlanningService {
     ) { }
 
     moveItemsToInPlaningChanges = new EventEmitter<any>() ;
+    moveItemsBackToAddressesChanges = new EventEmitter<any>() ;
     // test = new EventEmitter<any>() ;
 
     /*** Move to in planning { ***/
     moveItemsToInPlaning(modalRef, force) {
         this.moveItemsToInPlaningChanges.emit({modalRef: modalRef, force: force}) ;
     }
+    moveItemsBackToAddresses(modalRef, force) {
+        console.log('call 2');
+        this.moveItemsBackToAddressesChanges.emit({modalRef: modalRef, force: force}) ;
+    }
 
-    sendMoveToInPlanningRequest(preDispatchId, data, confirm = false) {
+    sendMoveToInPlanningRequest(preDispatchId, data, filter = null, status = null, confirm = false) {
         data = {
             pre_dispatch_id: parseInt(preDispatchId, 10),
             data: data
@@ -38,19 +43,25 @@ export class PlanningService {
         if (confirm) {
             data.confirm = 1 ;
         }
+        if (filter) {
+            data['filter'] = filter + '';
+        }
+        if (status) {
+            data['status'] = status ;
+        }
         return this.http.post<any>(AppConfig.endpoints.moveToInPlanning, data).pipe(
             catchError(this.handleError)
         );
     }
 
-    moveToInPlanning(preDispatchId, data, success) {
-        this.run(this.sendMoveToInPlanningRequest(preDispatchId, data, true), 'Moving Items', success, () => {
+    moveToInPlanning(preDispatchId, data, filter = null, status = null, success) {
+        this.run(this.sendMoveToInPlanningRequest(preDispatchId, data, filter, status, true), 'Moving Items', success, () => {
             console.log('error');
         });
     }
 
-    moveToInPlanningCheck(preDispatchId, data) {
-        return this.sendMoveToInPlanningRequest(preDispatchId, data, false);
+    moveToInPlanningCheck(preDispatchId, data, filter = null, status = null) {
+        return this.sendMoveToInPlanningRequest(preDispatchId, data, filter, status, false);
     }
 
     run(method, msg, success, failed) {

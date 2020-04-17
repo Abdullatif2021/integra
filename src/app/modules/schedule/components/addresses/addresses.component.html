@@ -97,9 +97,9 @@
             <div class="warning" *ngIf="item.warning">!</div>
             <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
             <div class="small-more" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
-            <div class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
-              <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rename</a>
-              <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">Merge</a>
+            <div *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'" class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
+              <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rinominare</a>
+              <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">Sposta in un altra strada</a>
               <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingAddressContainer, [EditBuildingLatLngContainer])">Change Address</a>
               <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="changeLocationOnMap(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">Edit Location</a>
             </div>
@@ -168,7 +168,7 @@
       </div>
       <div class="btns-container mt-3">
         <button type="button" (click)="modal.close();submitMoveItem(moveToSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
-        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
         <div class="clear-both"></div>
       </div>
     </div>
@@ -188,7 +188,7 @@
       </div>
       <div class="btns-container mt-3">
         <button type="button" (click)="modal.close();submitMergeStreets(mergeWithSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
-        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
         <div class="clear-both"></div>
       </div>
     </div>
@@ -211,7 +211,7 @@
           </div>
           <div class="btns-container mt-3">
             <button type="button" (click)="modal.close();submitChangeStartPoint(StartPointSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
-            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
             <div class="clear-both"></div>
           </div>
         </div>
@@ -225,7 +225,7 @@
           <div *ngIf="errors['editStartPoint']" class="error-msg">{{errors['editStartPoint']}}</div>
           <div class="btns-container mt-3">
             <button type="button" (click)="submitEditStartPoint(EditStartPointInput)" class="integraa-btn ml-2 float-right" >Esegui</button>
-            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
             <div class="clear-both"></div>
           </div>
         </div>
@@ -250,7 +250,7 @@
           </div>
           <div class="btns-container mt-3">
             <button type="button" (click)="modal.close();submitChangeEndPoint(EndPointSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
-            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
             <div class="clear-both"></div>
           </div>
         </div>
@@ -264,7 +264,7 @@
           <div *ngIf="errors['editEndPoint']" class="error-msg">{{errors['editEndPoint']}}</div>
           <div class="btns-container mt-3">
             <button type="button" (click)="submitEditEndPoint(EditEndPointInput)" class="integraa-btn ml-2 float-right" >Esegui</button>
-            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Cancel</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
             <div class="clear-both"></div>
           </div>
         </div>

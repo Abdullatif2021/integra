@@ -38,7 +38,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   unsubscribe: Subject<void> = new Subject();
   order_field = null ;
   order_method = '1' ;
-  citiesType = 'by_cap' ;
+  // citiesType = 'by_cap' ;
 
   actions = [
     {
@@ -81,9 +81,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
     },
   ];
 
-  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getCities(page, rpp, name, order, this.citiesType);
-  streetsGetMethod = (page, rpp, name, order) =>
-      this.streetsService.getStreets(page, rpp, name, this.current_cities, order,  this.citiesType);
+  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getCities(page, rpp, name, order);
+  streetsGetMethod = (page, rpp, name, order) => this.streetsService.getStreets(page, rpp, name, this.current_cities, order);
 
   constructor(
       private citiesService: CitiesService,
@@ -98,19 +97,6 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       this.paginationService.updateLoadingState(true) ;
   }
 
-  cityChanged(event) {
-    this.current_cities = event;
-    this._streetsTable.loadData(false) ;
-    this.loadProducts(true);
-    this.filtersService.setSpecialFilter('cities', event);
-  }
-
-  streetChanged(event) {
-      this.current_streets = event ;
-      this.loadProducts(true);
-      this.filtersService.setSpecialFilter('streets', event);
-  }
-
   ngOnInit() {
       this.filtersService.clear();
       this.loadProducts(false);
@@ -120,23 +106,12 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       this.paginationService.currentPageChanges.pipe(takeUntil(this.unsubscribe)).subscribe( (page: number) => {
           this.loadProducts(false) ;
       });
-      this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filters) => {
+      this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filters: any) => {
           this.loadProducts(true) ;
+          this.citiesTable.title = filters.grouping === 'by_client' ? 'Cliente' : 'Paese' ;
           this._streetsTable.reload();
           this._citiesTable.reload();
       });
-      this.filtersService.groupingChanges.pipe(takeUntil(this.unsubscribe)).subscribe((data) => {
-          if (data.id === 'client') {
-              this.citiesType = 'by_client' ;
-          } else {
-              this.citiesType = 'by_cap' ;
-          }
-          this.current_cities = {all: true, items: [], search: null} ;
-          this.current_streets = {all: true, items: [], search: null};
-          this._citiesTable.loadData(false);
-          this._streetsTable.loadData(false);
-          this.loadProducts(true);
-      })
       this.actionsService.setActions(this.actions);
       this.actionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
           this.loadProducts(false) ;
@@ -150,8 +125,28 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       this.filtersService.setFields(FilterConfig.products, this);
   }
 
+  cityChanged(event) {
+     this.current_cities = event;
+     this._streetsTable.loadData(false) ;
+     this.loadProducts(true);
+     this.filtersService.setSpecialFilter('cities', event);
+  }
+
+  streetChanged(event) {
+      this.current_streets = event ;
+      this.loadProducts(true);
+      this.filtersService.setSpecialFilter('streets', event);
+  }
+
   loadProducts(reset: boolean) {
       if ( this.subscription ) { this.subscription.unsubscribe(); }
+      if (
+          !this.current_cities.all && (!this.current_cities.items || !this.current_cities.items.length) ||
+          !this.current_streets.all && (!this.current_streets.items || !this.current_streets.items.length)
+      ) {
+          this.products = [] ;
+          return false;
+      }
       this.products = [];
       this._productsTable.loading(true);
       if (reset) {
@@ -164,7 +159,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
           this.current_streets,
           this.order_field,
           this.order_method,
-          this.citiesType
+          // this.citiesType
       ).pipe(takeUntil(this.unsubscribe)).subscribe((res: ApiResponseInterface) => {
           this.paginationService.updateLoadingState(false);
           this.paginationService.updateResultsCount(res.pagination.total);

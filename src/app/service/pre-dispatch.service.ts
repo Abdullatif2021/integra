@@ -18,7 +18,7 @@ export class PreDispatchService {
         private paginationService: PaginationService
     ) {}
 
-    selectedPreDispatches = [] ;
+    public selectedPreDispatches = [] ;
 
     getPreDispatchList(page = 1, pageSize = '50') {
         const options = { params: new HttpParams() };

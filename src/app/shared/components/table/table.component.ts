@@ -122,6 +122,8 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
 
     changeOrder(field, order) {
         this.currentOrder = {field: field, order: order} ;
+        this.selectedProducts = [];
+        this.selected.emit(this.selectedProducts);
         this.orderChange.emit(this.currentOrder);
     }
 

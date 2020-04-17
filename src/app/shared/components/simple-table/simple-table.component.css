@@ -33,11 +33,19 @@
     font-size: 11px;
     font-weight: 500;
     color: #333;
-    overflow: -moz-scrollbars-none;
-    -ms-overflow-style: none;
+    scrollbar-width: thin;
+    /*overflow: -moz-scrollbars-none;*/
+    /*-ms-overflow-style: none;*/
     height: 100%
 }
-.table-body::-webkit-scrollbar { width: 0 !important }
+.table-body::-webkit-scrollbar-thumb {
+    background-color: #C1BEBC;
+    outline: 1px solid slategrey;
+    border-radius: 4px;
+}
+.table-body::-webkit-scrollbar {
+    width: 5px;
+}
 
 .select-row-input{
     width: 20px;

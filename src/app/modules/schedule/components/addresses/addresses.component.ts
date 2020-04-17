@@ -86,7 +86,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
         );
         this.planningService.moveItemsToInPlaningChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
-                this.moveToInPlanning(data.modalRef, data.force);
+                this.moveToInPlanning(data.modalRef, data.force, this.filter, 'to_planning');
             }
         );
         this.mapService.moved.pipe(takeUntil(this.unsubscribe)).subscribe(
@@ -560,21 +560,21 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
 
-    async moveToInPlanning(modalRef, force = false) {
+    async moveToInPlanning(modalRef, force = false, filter = null, status = null) {
         const data = this.listTreeService.select.fetchSelectedItems(this.tree[0]);
         if (force) {
-            return this.planningService.moveToInPlanning(this.preDispatch, data, () => {
+            return this.planningService.moveToInPlanning(this.preDispatch, data, filter, status, () => {
                 this.reloadNode({item: {node: this.tree[0]}});
                 return 'Items moved successfully';
             });
         }
-        return this.planningService.moveToInPlanningCheck(this.preDispatch, data).subscribe(
+        return this.planningService.moveToInPlanningCheck(this.preDispatch, data, filter, status).subscribe(
             result => {
                 if (result.data) {
                     // show the modal
-                    this.modalService.open(modalRef);
+                    this.modalService.open(modalRef, {backdrop: 'static' });
                 } else {
-                    this.planningService.moveToInPlanning(this.preDispatch, data, () => {
+                    this.planningService.moveToInPlanning(this.preDispatch, data, filter, status, () => {
                         this.reloadNode({item: {node: this.tree[0]}});
                         return 'Items moved successfully';
                     });
@@ -586,7 +586,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     // Modals Methods
 
     openMoveItemModal(event, modal) {
-        this.modalService.open(modal);
+        this.modalService.open(modal, {backdrop: 'static' });
         this.move_to_items = [];
         if (event.item.node.type === 'streetId') {
             this.listTreeService.getMoveToCaps(this.preDispatch, event.item.node.parent.parent.id, event.item.node.parent.id).subscribe(
@@ -605,7 +605,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
     openChangeStartPointModal(event, modal) {
-        this.modalService.open(modal);
+        this.modalService.open(modal, {backdrop: 'static' });
         this.all_start_points = [];
         this.addressesActionsService.getAllStartPoints().subscribe(
             data => {
@@ -614,7 +614,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
     openChangeEndPointModal(event, modal) {
-        this.modalService.open(modal);
+        this.modalService.open(modal, {backdrop: 'static' });
         this.all_start_points = [];
         this.addressesActionsService.getAllEndPoints().subscribe(
             data => {
@@ -624,7 +624,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
 
 
     openMergeStreetsModal(item, modal) {
-        this.modalService.open(modal);
+        this.modalService.open(modal, {backdrop: 'static' });
         this.merge_data.source = item ;
         this.listTreeService.getStreetMergeAvailableStreets(this.preDispatch, item.parent.parent.id, item.parent.id)
             .pipe(takeUntil(this.unsubscribe)).subscribe(
@@ -635,7 +635,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
     openModal(modal) {
-        this.modalService.open(modal);
+        this.modalService.open(modal, {backdrop: 'static' });
     }
 
     changeLocationOnMap(element, hideElements = []) {

@@ -1,6 +1,5 @@
 import {Component, ComponentFactoryResolver, Input, OnInit, ViewChild} from '@angular/core';
 import {IntegraaModalService} from '../../../service/integraa-modal.service';
-import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-integraa-modal',
@@ -13,7 +12,6 @@ export class IntegraaModalComponent implements OnInit {
   constructor(
       private componentFactoryResolver: ComponentFactoryResolver,
       private integraaModalService: IntegraaModalService,
-      private sanitizer: DomSanitizer
   ) { }
 
   @ViewChild('modal') modal ;
@@ -29,9 +27,10 @@ export class IntegraaModalComponent implements OnInit {
   }
 
   open(opt) {
-      const modal = new IntegraaModal(this.sanitizer) ;
+      const modal = new IntegraaModal() ;
       modal.setOptions(opt) ;
-      setTimeout(() => {modal.height = document.getElementsByTagName('body')[0].clientHeight ;},0);
+      console.log(opt);
+      setTimeout(() => {modal.height = document.getElementsByTagName('body')[0].clientHeight ; }, 0);
       this.modals.push(modal) ;
   }
 
@@ -55,7 +54,7 @@ export class IntegraaModalComponent implements OnInit {
           modal.options.height = 100;
           modal.options.position = {x: 0, y: 0};
       } else {
-          modal.options.sizeUnit = 'px'
+          modal.options.sizeUnit = 'px';
           modal.options.width = modal._options.width;
           modal.options.height = modal._options.height;
           modal.options.position = modal._options.position;
@@ -93,19 +92,19 @@ export class IntegraaModalComponent implements OnInit {
   }
 
   openLink(modal) {
-      (window.open(modal.options.raw_url));
+      (window.open(modal.options.url));
       this.close(modal);
   }
 
-  display(modal) {
-      modal.displayed = !modal.displayed ;
+  display(event, modal) {
+      modal.displayed = true ;
   }
 
 }
 
 class IntegraaModal {
 
-    inBounds = { top: true, left: true, right: true, bottom: true }
+    inBounds = { top: true, left: true, right: true, bottom: true };
     _options = {
         minimized : false,
         expanded : false,
@@ -114,7 +113,7 @@ class IntegraaModal {
         width : 600,
         height: 300,
         position: {x: 20, y: 20},
-    }
+    };
     displayed = false ;
     _status = {
         change: null
@@ -123,19 +122,14 @@ class IntegraaModal {
     id ;
     height = 0 ;
 
-    constructor(private sanitizer: DomSanitizer) {
+    constructor() {
       this.id = Date.now() ;
     }
 
     setOptions(options) {
         const modal = this ;
         Object.keys(options).forEach(function(key) {
-            if (key === 'url') {
-                modal._options[key] = modal.sanitizer.bypassSecurityTrustResourceUrl(options[key]);
-                modal._options['raw_url'] = options[key];
-            } else {
-                modal._options[key] =  options[key] ;
-            }
+            modal._options[key] =  options[key] ;
         });
         this._options.position = {
             x: ((window).innerWidth - this._options.width) / 2 ,

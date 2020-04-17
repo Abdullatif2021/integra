@@ -49,12 +49,13 @@
 .nFoundItemModal, .nFoundItemModal input{
     font-size: 14px;
 }
-.mote-to-in-plan-btn {
+.move-to-in-plan-btn, .move-back-to-addresses-btn, .locating-btn {
     width: 130px;
     float: left;
     margin: 10px;
     cursor: pointer;
 }
+.move-back-to-addresses-btn {width: 140px}
 
 .error-msg{
     font-size: 13px;

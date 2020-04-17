@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-simple-table',
@@ -57,11 +58,17 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     if (!append) { this.items = [] ; this._all_selected = true ; this._selected = []; }
     if ( this.subscription ) { this.subscription.unsubscribe(); }
 
-    this.subscription = this.getMethod(this.page, this.rpp, this.searchValue, this.currentOrder)
-        .subscribe((res: ApiResponseInterface) => {
-          this.handleResponse(res);
+    const observable = this.getMethod(this.page, this.rpp, this.searchValue, this.currentOrder) ;
+    if (!observable) {
+      this.items = [] ;
+      this.page = 1 ;
+      this.loaded = true ;
+      this.loading = false ;
+    } else {
+        this.subscription = observable.subscribe((res: ApiResponseInterface) => {
+            this.handleResponse(res);
         });
-
+    }
     return this ;
   }
 
@@ -129,6 +136,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this.currentOrder = order ;
     this.page = 1 ;
     this.loadData(false) ;
+    this.changed.emit({all: true, items: [], search: this.searchValue, order: this.currentOrder});
   }
 
   reload() {

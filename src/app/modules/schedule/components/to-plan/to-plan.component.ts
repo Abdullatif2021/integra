@@ -4,6 +4,7 @@ import {ListTreeService} from '../../service/list-tree.service';
 import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {takeUntil} from 'rxjs/internal/operators';
 import {SettingsService} from '../../../../service/settings.service';
+import {PlanningService} from '../../../../service/planning/planning.service';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class ToPlanComponent implements OnInit, OnDestroy {
       private route: ActivatedRoute,
       private listTreeService: ListTreeService,
       private settingsService: SettingsService,
+      private planningService: PlanningService,
   ) {
 
       this.route.parent.params.subscribe(
@@ -47,6 +49,15 @@ export class ToPlanComponent implements OnInit, OnDestroy {
           },
           error => {
               console.log(error);
+          }
+      );
+      this.planningService.moveItemsBackToAddressesChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
+          data => {
+              const items = this.listTreeService.select.fetchSelectedItems(this.tree[0]);
+              return this.planningService.moveToInPlanning(this.preDispatch, items, null, 'created', () => {
+                  this.reloadNode({item: {node: this.tree[0]}});
+                  return 'Items moved successfully';
+              });
           }
       );
   }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ModalComponent} from '../modal.component';
 import {ActionsService} from '../../../../service/actions.service';
+import {ProductsService} from '../../../../service/products.service';
 
 @Component({
   selector: 'app-pre-dispatch-new',
@@ -10,7 +11,8 @@ import {ActionsService} from '../../../../service/actions.service';
 export class PreDispatchNewComponent extends ModalComponent  implements OnInit {
 
   constructor(
-      private actionsService: ActionsService
+      private actionsService: ActionsService,
+      public productsService: ProductsService
   ) {
       super();
   }

@@ -4,17 +4,17 @@
   <div class="row mt-2">
     <div class="col-4 v-wide-col">
       <div class="schedule-nav">
-        <button class="btn schedule-nav-btn schedule-nav-left-btn" [ngClass]="{'active': activeTab('/schedule/'+preDispatch)}" routerLink="/schedule/{{preDispatch}}">Indirizzi</button>
-        <button class="btn schedule-nav-btn" [ngClass]="{'active': activeTab('/schedule/'+preDispatch+'/toPlan')}" routerLink="/schedule/{{preDispatch}}/toPlan">Da pianificare</button>
-        <button class="btn schedule-nav-btn" [ngClass]="{'active': activeTab('/schedule/'+preDispatch+'/parameters')}" routerLink="/schedule/{{preDispatch}}/parameters">Parametri</button>
-        <button class="btn schedule-nav-btn schedule-nav-right-btn" [ngClass]="{'active': activeTab('/schedule/'+preDispatch+'/result')}" routerLink="/schedule/{{preDispatch}}/result">Risultato</button>
+        <button class="btn schedule-nav-btn schedule-nav-left-btn" [ngClass]="{'active': '/schedule/'+preDispatch === router.url}" routerLink="/schedule/{{preDispatch}}">Indirizzi</button>
+        <button class="btn schedule-nav-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/toPlan' === router.url}" routerLink="/schedule/{{preDispatch}}/toPlan">Da pianificare</button>
+        <button class="btn schedule-nav-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/parameters' === router.url}" routerLink="/schedule/{{preDispatch}}/parameters">Parametri</button>
+        <button class="btn schedule-nav-btn schedule-nav-right-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/result' === router.url}" routerLink="/schedule/{{preDispatch}}/result">Risultato</button>
       </div>
     </div>
     <div class="col-8 v-wide-col">
       <div class="map-header">
-        <div class="mote-to-in-plan-btn integraa-btn" *ngIf="nextAction === 'locating'" (click)="runNextAction()">Localize</div>
-        <div class="mote-to-in-plan-btn integraa-btn" *ngIf="activeTab('/schedule/'+preDispatch) && nextAction !== 'locating'" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Move to in plan</div>
-        <!--<div class="mote-to-in-plan-btn integraa-btn" *ngIf="activeTab('/schedule/'+preDispatch+'/toPlan')" (click)="divideToDistenta()">Divide</div>-->
+        <div class="locating-btn integraa-btn" *ngIf="nextAction === 'locating'" (click)="runNextAction()">Localize</div>
+        <div class="move-to-in-plan-btn integraa-btn" *ngIf="'/schedule/'+preDispatch === router.url && nextAction !== 'locating'" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Move to in plan</div>
+        <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url && nextAction === 'planning'" (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">Back to Addresses</div>
         <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': false}" [ngStyle]="{width: preDispatchData.percent + '%'}">&nbsp;</div><div class="progress-action-text-value horiz">
           <span class="percent-value">{{preDispatchData.percent}} %</span>
           <span class="action-value">{{nextAction}}</span>
@@ -22,10 +22,10 @@
         <img *ngIf="actionInRun && (preDispatchData.localize_status === 'play' || backProcessingService.isRunningAny(preDispatch))" (click)="stopAction()" src="assets/images/pause.svg" class="action-icon play-pause-icon">
         <img *ngIf="actionInRun && preDispatchData.localize_status !== 'play' && backProcessingService.isRunningAny(preDispatch) !== true" (click)="runNextAction()" src="assets/images/play.svg" class="action-icon play-pause-icon">
         <div class="continue-btn integraa-btn" (click)="next()">
-          <ng-container *ngIf="activeTab('/schedule/'+preDispatch+'/parameters')">
+          <ng-container *ngIf="'/schedule/'+preDispatch+'/parameters' === router.url">
             Pianifica
           </ng-container>
-          <ng-container *ngIf="!activeTab('/schedule/'+preDispatch+'/parameters')">
+          <ng-container *ngIf="'/schedule/'+preDispatch+'/parameters' !== router.url ">
             Prosegui
           </ng-container>
         </div>
