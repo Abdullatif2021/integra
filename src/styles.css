@@ -232,3 +232,15 @@ a:hover {
     height: 25px !important;
     min-height: 25px !important;
 }
+
+
+/* Time Picker */
+.ngx-timepicker-control {
+    width: 34px !important;
+}
+.ngx-timepicker-control input {
+    font-size: 13px !important;
+}
+.ngx-timepicker__time-colon{
+    margin: 0px !important;
+}

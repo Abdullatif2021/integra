@@ -40,6 +40,7 @@ export class GoogleDirectionsService {
     }
 
     clearWaypoints(waypoints) {
+        console.log(waypoints);
         return waypoints.filter((elm) => elm.lat !== '0' && elm.long !== '0');
     }
 

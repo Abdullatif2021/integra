@@ -11,30 +11,33 @@
       <div class="parameters-section-title">Impostazioni Generali</div>
       <div class="row parameter-item">
         <div class="col-5"> <label>Giorno di Partenza</label> </div>
-        <div class="col-7"> <input  [(ngModel)]="data.departure_date" type="text" ngbDatepicker #timeOfServiceDP="ngbDatepicker" (focus)="timeOfServiceDP.toggle()" placeholder="YYYY-MM-DD" class="parameter-text-input"> </div>
+        <div class="col-7"> <input  [(ngModel)]="data.departure_date" type="text" ngbDatepicker #timeOfServiceDP="ngbDatepicker" (focus)="timeOfServiceDP.toggle()" placeholder="DD/MM/YYYY" class="parameter-text-input"> </div>
       </div>
       <div class="row parameter-item">
         <div class="col-5"> <label>Ora di Partenza</label> </div>
         <div class="col-7">
-          <input type="text" [(ngModel)]="data.departure_time" class="parameter-text-input parameter-medium-input" placeholder="H:i" type="time" min="0" max="24">
+          <ngx-timepicker-field [(ngModel)]="data.departure_time" [format]="24" [controlOnly]="true"></ngx-timepicker-field>
+          <!--<input type="text" [(ngModel)]="data.departure_time" class="parameter-text-input parameter-medium-input" placeholder="H:i" type="time" min="0" max="24">-->
         </div>
       </div>
       <div class="row parameter-item">
-        <div class="col-5"> <label>Tempo di Servizio (single)</label> </div>
+        <div class="col-5"> <label>Tempo di Servizio (singolo)</label> </div>
         <div class="col-7"> <ng-select class="integraa-select parameter-select-input" [bindLabel]="'label'" [clearable]="false" [(ngModel)]="data.service_time_single" [items]="options.serviceTimeOptions"></ng-select> </div>
       </div>
       <div class="row parameter-item">
-        <div class="col-5"> <label>Tempo di Servizio (multi)</label> </div>
+        <div class="col-5"> <label>Tempo di Servizio (multiplo)</label> </div>
         <div class="col-7"> <ng-select class="integraa-select parameter-select-input" [bindLabel]="'label'" [clearable]="false" [(ngModel)]="data.service_time_multiple" [items]="options.serviceTimeOptions"></ng-select> </div>
       </div>
       <div class="row parameter-item">
-        <div class="col-5"> <label>Tempo di pauza</label> </div>
+        <div class="col-5"> <label>Tempo di pause</label> </div>
         <div class="col-7">
-          <!--<ngb-timepicker [(ngModel)]="data.pause_time_start"></ngb-timepicker>-->
-          <!--<ngb-timepicker [(ngModel)]="data.pause_time_end"></ngb-timepicker>-->
+          <div class="d-flex">
+            <span class="mt-auto mb-auto">Della : </span><ngx-timepicker-field [(ngModel)]="data.pause_time_start" [format]="24" [controlOnly]="true"></ngx-timepicker-field>
+            <span class="mt-auto mb-auto ml-1">Alle : </span><ngx-timepicker-field [(ngModel)]="data.pause_time_end" [format]="24" [controlOnly]="true"></ngx-timepicker-field>
+          </div>
 
-          Da : <input type="text" [(ngModel)]="data.pause_time_start" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_start')" >
-          A : <input type="text" [(ngModel)]="data.pause_time_end" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_end')" >
+          <!--<input type="text" [(ngModel)]="data.pause_time_start" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_start')" >-->
+          <!--<input type="text" [(ngModel)]="data.pause_time_end" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_end')" >-->
         </div>
       </div>
       <div class="row parameter-item mt-0">
@@ -50,7 +53,7 @@
       <div class="parameters-section-title">Postini multipli</div>
       <div class="row parameter-item mt-0">
         <div class="col-5 pt-2"> <label>Numero di Postini</label> </div>
-        <div class="col-7"> <input [(ngModel)]="data.post_man_number" min="0" type="number" (change)="validateNumber($event.target.value, 'post_man_number', 0)"class="parameter-number-input"> postino. </div>
+        <div class="col-7"> <input [(ngModel)]="data.post_man_number" min="1" type="number" (change)="validateNumber($event.target.value, 'post_man_number', 0)"class="parameter-number-input"> postino. </div>
       </div>
       <div class="row parameter-item">
         <div class="col-5"> <label>Ore di lavoro al gg.</label> </div>
@@ -82,7 +85,7 @@
         <div class="col-7"><ng-select [(ngModel)]="data.mixed_cities" [clearable]="false" [bindLabel]="'label'" [items]="options.mixedCities" class="integraa-select parameter-select-input"></ng-select></div>
       </div>
       <div class="row parameter-item mt-0">
-        <div class="col-5 pt-2"> <label>Percorso inizia</label> </div>
+        <div class="col-5 pt-2"> <label>Partenza</label> </div>
         <div class="col-7"><ng-select [(ngModel)]="data.path_start" [clearable]="false" [bindLabel]="'label'" [items]="options.pathStart" class="integraa-select parameter-select-input"></ng-select></div>
       </div>
     </div>

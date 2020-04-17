@@ -14,7 +14,7 @@
       <div class="map-header">
         <div class="locating-btn integraa-btn" *ngIf="nextAction === 'locating'" (click)="runNextAction()">Localize</div>
         <div class="move-to-in-plan-btn integraa-btn" *ngIf="'/schedule/'+preDispatch === router.url && nextAction !== 'locating'" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Move to in plan</div>
-        <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url && nextAction === 'planning'" (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">Back to Addresses</div>
+        <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url " (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">Back to Addresses</div>
         <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': false}" [ngStyle]="{width: preDispatchData.percent + '%'}">&nbsp;</div><div class="progress-action-text-value horiz">
           <span class="percent-value">{{preDispatchData.percent}} %</span>
           <span class="action-value">{{nextAction}}</span>

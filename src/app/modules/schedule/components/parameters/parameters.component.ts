@@ -37,15 +37,15 @@ export class ParametersComponent implements OnInit, OnDestroy {
     options = {
         serviceTimeOptions: [
             {label: 'Default', value: ''},
-            {label: '5 Minutes', value: '5'},
-            {label: '10 Minutes', value: '10'},
-            {label: '15 Minutes', value: '15'},
-            {label: '20 Minutes', value: '20'},
-            {label: '30 Minutes', value: '30'},
+            {label: '5 Minuti', value: '5'},
+            {label: '10 Minuti', value: '10'},
+            {label: '15 Minuti', value: '15'},
+            {label: '20 Minuti', value: '20'},
+            {label: '30 Minuti', value: '30'},
         ],
         travelModes: [
             {label: 'Bicycle', value: 'bicycle'},
-            {label: 'Motor', value: 'motor'}
+            {label: 'Da tradurre', value: 'motor'}
         ],
         devision: [20, 50, 70, 100],
         target:  [{label: 'Short Path', value: 'short_path'}, {label: 'Less Time', value: 'less_time'}],
@@ -103,7 +103,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.visibleView = this.views[0];
         let departure_date = this.preDispatchData.departure_date ? this.preDispatchData.departure_date.split(' ') : [] ;
-        const departure_time = departure_date[1];
+        const departure_time = departure_date.length > 1 ? departure_date[1].substr(0, 5) : null;
         departure_date = departure_date[0] ? departure_date[0].split('-') : false  ;
         departure_date = departure_date ?
             <NgbDate>{year: parseInt(departure_date[0], 10), month: parseInt(departure_date[1], 10),
@@ -121,8 +121,8 @@ export class ParametersComponent implements OnInit, OnDestroy {
             path_start: this.findOption('path_start', this.options.pathStart),
             departure_date: departure_date,
             departure_time: departure_time,
-            pause_time_start: this.preDispatchData.pause_time_start,
-            pause_time_end: this.preDispatchData.pause_time_end,
+            pause_time_start: this.preDispatchData.pause_time_start ? this.preDispatchData.pause_time_start.substr(0, 5) : null,
+            pause_time_end: this.preDispatchData.pause_time_end ? this.preDispatchData.pause_time_end.substr(0, 5) : null,
             post_man_number: this.preDispatchData.post_man_number,
             hours_per_day_hour: hours_per_day[0] ? hours_per_day[0] : '',
             hours_per_day_minute: hours_per_day[1] ? hours_per_day[1] : '',
@@ -179,13 +179,11 @@ export class ParametersComponent implements OnInit, OnDestroy {
     getData() {
         const data: any = {...this.data} ;
         data['departure_date'] = (data.departure_date ? (typeof data.departure_date === 'object' ?
-            Object.values(data.departure_date).join('-') :  data.departure_date) : '') +
+            Object.values(data.departure_date).join('/') :  data.departure_date) : '') +
             (data.departure_time ? ' ' + data.departure_time : '');
         data['hours_per_day'] = (data.hours_per_day_hour ? parseInt(data.hours_per_day_hour, 10)  : 0 ) +
             (data.hours_per_day_minute ? parseInt(data.hours_per_day_minute, 10) / Math.pow(10, data.hours_per_day_minute.length) : 0);
         data['pre_dispatch_id'] = this.preDispatch ;
-        // data['pause_time_start'] = data['pause_time_start'] ? data['pause_time_start']['hours'] + ':' + data['pause_time_start']['minutes'] : null;
-        // data['pause_time_end'] = data['pause_time_end'] ? data['pause_time_end']['hours'] + ':' + data['pause_time_end']['minutes'] : null;
         for (const [key, value] of Object.entries(data)) {
             if (typeof value === 'object') {
                 data[key] = value ? value['value'] : null ;
@@ -296,6 +294,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
                 });
                 return 'Data Saved !';
             }
+            console.log('this.preDispatchData.status', this.preDispatchData.status);
             if (['notPlanned', 'in_grouping', 'in_localize'].find((elm) => elm === this.preDispatchData.status)) {
                 this.snotifyService.warning('In order to start planning, you need to localize this pre-dispatch',
                     {

@@ -39,6 +39,7 @@ import {ScheduleService} from './service/schedule.service';
 import { NotMatchesTreeComponent } from './parts-components/not-matches-tree/not-matches-tree.component';
 import {DndModule} from 'ngx-drag-drop';
 import {MarkersService} from './service/markers.service';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
 
 @NgModule({
@@ -59,6 +60,7 @@ import {MarkersService} from './service/markers.service';
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxMaterialTimepickerModule,
   ],
   declarations: [
       ScheduleComponent,

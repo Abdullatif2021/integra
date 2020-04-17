@@ -142,19 +142,20 @@ export class PlanningService {
 
 
     /*** Path drawing { ***/
-    getDirections(setId) {
+    getDirections(setId, page = 1) {
         const options = {params: new HttpParams(), headers: new HttpHeaders({'ignoreLoadingBar': ''})};
+        options.params = options.params.set('page', page + '');
         return this.http.get<any>(AppConfig.endpoints.getSetProductsCoordinates(setId), options);
     }
 
     savePath(setId, path) {
-        const options = { path: path ? JSON.stringify(path.path) : '[]' };
+        const options = { path: path ? JSON.stringify(path) : '[]' };
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.saveSetPath(setId), options).pipe(
             catchError(this.handleError)
         );
     }
-    setMapPriority(path) {
-        const options = { data: path.order };
+    setMapPriority(order) {
+        const options = { data: order };
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.setMapPriority, options).pipe(
             catchError(this.handleError)
         );
@@ -162,10 +163,27 @@ export class PlanningService {
 
     async drawPaths(sets, preDispatch, handle) {
         for (let i = 0; i < sets.length; ++i) {
-            const waypoints = await this.getDirections(sets[i].id).toPromise();
-            const path = await this.googleDirectionsService.getDirections(preDispatch.startPoint, waypoints.data, preDispatch.endPoint);
+            let path = [];
+            let order = [];
+            let page = 1 ;
+            let waypoints ;
+            do {
+                waypoints = await this.getDirections(sets[i].id, page).toPromise();
+                let startPoint = preDispatch.startPoint ;
+                if (path.length) {
+                    startPoint = path[path.length - 1];
+                }
+                let endPoint = preDispatch.endPoint;
+                if (!waypoints.data.last_page) {
+                    endPoint = waypoints.data[waypoints.data.length];
+                }
+                const temp = await this.googleDirectionsService.getDirections(startPoint, waypoints.data.data, preDispatch.endPoint) ;
+                path = path.concat(temp.path);
+                order = order.concat(temp.order);
+                page ++ ;
+            } while ( !waypoints.data.last_page );
             // this.test.emit(path.path);
-            const priority = await this.setMapPriority(path).toPromise();
+            const priority = await this.setMapPriority(order).toPromise();
             const save = await this.savePath(sets[i].id, path).toPromise() ;
             // handle.emit({progress: ( (i + 1) / sets.length) * 100 });
             if (!this.backProcessingService.isRunning('planning-' + preDispatch.id)) {
