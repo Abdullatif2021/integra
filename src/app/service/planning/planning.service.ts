@@ -162,7 +162,7 @@ export class PlanningService {
     async drawPaths(sets, preDispatch, handle) {
         for (let i = 0; i < sets.length; ++i) {
             let path = [];
-            let order = [];
+            const order = [];
             let page = 1 ;
             let waypoints ;
             do {
@@ -177,7 +177,11 @@ export class PlanningService {
                 }
                 const temp = await this.googleDirectionsService.getDirections(startPoint, waypoints.data.data, preDispatch.endPoint) ;
                 path = path.concat(temp.path);
-                order = order.concat(temp.order);
+                const lp = order.length ;
+                temp.order.forEach(item => {
+                    item.priority += lp;
+                    order.push(item);
+                })
                 page ++ ;
             } while ( !waypoints.data.last_page );
             // this.test.emit(path.path);

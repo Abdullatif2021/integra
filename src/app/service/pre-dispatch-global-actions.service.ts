@@ -16,6 +16,8 @@ export class PreDispatchGlobalActionsService {
         private snotifyService: SnotifyService,
     ) {}
     planningErrors = new EventEmitter();
+    handles = {} ;
+    handleCreated = new EventEmitter();
 
     startPreDispatchAction(preDispatchData, data = {}) {
         const action = this.backProcessingService.getPreDispatchAction(preDispatchData.status);
@@ -29,11 +31,13 @@ export class PreDispatchGlobalActionsService {
             } else if (action === 'planning') {
                 await this.runPlanning(preDispatchData, handle, data) ;
             }
+            this.handles[preDispatchData.id] = handle ;
+            this.handleCreated.emit(handle);
         }, action, preDispatchData.id);
     }
 
     isPreDispatchInRunStatus(preDispatchData): boolean {
-        return ['in_localize', 'in_divide', 'drawing_paths'].find((elm) => elm === preDispatchData.status) ? true : false;
+        return ['in_grouping', 'in_localize', 'in_divide', 'drawing_paths'].find((elm) => elm === preDispatchData.status) ? true : false;
     }
 
     async runPlanning(preDispatchData, handle, data: any = {}) {

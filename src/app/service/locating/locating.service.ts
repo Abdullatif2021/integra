@@ -64,7 +64,7 @@ export class LocatingService implements OnDestroy {
                 stateObj: {state: true, message: 'initializing...', progress: 0, autProgress: false, hide_btn: true}
             });
             this.processed = 0 ;
-            await this.process(this.fixed, this.fixed.length, handle);
+            await this.process(this.fixed, this.fixed.length, handle, preDispatch);
             this.loadingService.state(false);
             this.fixed = <[BuildingLocationInterface]>[] ;
         }
@@ -78,7 +78,6 @@ export class LocatingService implements OnDestroy {
         const nfound = await this.getNotFoundProducts(preDispatch).toPromise();
         if (nfound.data.length) {
             this.productsNotFound.emit(nfound.data);
-            // TODO uncoooment this
             handle.emit({nfound: nfound.data});
             return false;
         }
@@ -117,7 +116,7 @@ export class LocatingService implements OnDestroy {
                 this.processed = response.data.localized_groups;
             }
             // there is no more items to process
-            if (! await this.process(response.data.products, response.data.total_groups, handle) ) {
+            if (! await this.process(response.data.products, response.data.total_groups, handle, preDispatch) ) {
                 break ;
             }
         }
@@ -130,7 +129,6 @@ export class LocatingService implements OnDestroy {
         // reset buildings to start the fix not found process .
         this.buildings = <[LocatedBuildingInterface]>[] ;
         await this.backProcessingService.updatePreDispatchActionStatus(preDispatch, null);
-        console.log('preDispatch', preDispatch);
         const nfound = await this.getNotFoundProducts(preDispatch).toPromise() ;
         if (nfound.data.length) {
             // emit fix the not found items event.
@@ -147,7 +145,7 @@ export class LocatingService implements OnDestroy {
         return true;
     }
 
-    async process(buildings, total, handle: EventEmitter<any>) {
+    async process(buildings, total, handle: EventEmitter<any>, preDispatch) {
 
         if (!buildings.length) { return false; }
         let result ;
@@ -165,7 +163,7 @@ export class LocatingService implements OnDestroy {
                 this.buildings.push({ id: buildings[i].id, lat: 0, long: 0, is_fixed: false, name: buildings[i].street});
             }
             // if the process is paused save and stop working.
-            if (!this.backProcessingService.isRunning('locating-' + this.preDispatch)) {
+            if (!this.backProcessingService.isRunning('locating-' + preDispatch)) {
                 await this.save();
                 return false ;
             }

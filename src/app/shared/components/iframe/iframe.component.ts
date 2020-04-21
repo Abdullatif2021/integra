@@ -19,7 +19,7 @@ export class IframeComponent implements OnInit, AfterViewInit {
       this.src = this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
       if (this.messenger) {
         this.messenger.subscribe(message => {
-          console.log('message posted');
+            console.log('message posted');
             this.iframe.contentWindow.postMessage(message);
         });
       }

@@ -68,15 +68,15 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     @ViewChild(PageDirective) pageHost: PageDirective;
 
     ngOnInit() {
-        this.locatingHandle = this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch);
-        this.locatingHandle.pipe(takeUntil(this.unsubscribe)).subscribe(
-            data => {
-                if (data.nfound) {
-                    this.nFoundItems = data.nfound;
-                    this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown', backdrop: 'static'});
-                }
-            }
-        );
+        // this.locatingHandle = this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch);
+        // this.locatingHandle.pipe(takeUntil(this.unsubscribe)).subscribe(
+        //     data => {
+        //         if (data.nfound) {
+        //             this.nFoundItems = data.nfound;
+        //             this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown', backdrop: 'static'});
+        //         }
+        //     }
+        // );
         this.mapService.markersChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => { this.markers = data ; }
         );
