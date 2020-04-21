@@ -147,7 +147,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     async fixLocation(skip = false) {
-        await this.locatingService.fix(<[BuildingLocationInterface]>this.fixedItems, skip, this.locatingHandle);
+        await this.locatingService.fix(<[BuildingLocationInterface]>this.fixedItems, skip, this.locatingHandle, this.preDispatch);
         this.fixedItems = <[BuildingLocationInterface]>[];
         // update pre-dispatch data
         const data = await this.preDispatchService.getPreDispatchData(this.preDispatch).toPromise();

@@ -40,7 +40,7 @@ export class LocatingService implements OnDestroy {
     processed = 0 ;
     breakGroupingLoading = false ;
 
-    async fix(buildings: [BuildingLocationInterface], skip = false, handle: EventEmitter<any>) {
+    async fix(buildings: [BuildingLocationInterface], skip = false, handle: EventEmitter<any>, preDispatch) {
 
         if (skip) {
             await this.createTree(handle);
@@ -75,9 +75,11 @@ export class LocatingService implements OnDestroy {
         }
 
         // check if there is any more not localized buildings
-        const nfound = await this.getNotFoundProducts(this.preDispatch).toPromise();
+        const nfound = await this.getNotFoundProducts(preDispatch).toPromise();
         if (nfound.data.length) {
             this.productsNotFound.emit(nfound.data);
+            // TODO uncoooment this
+            handle.emit({nfound: nfound.data});
             return false;
         }
 
@@ -128,6 +130,7 @@ export class LocatingService implements OnDestroy {
         // reset buildings to start the fix not found process .
         this.buildings = <[LocatedBuildingInterface]>[] ;
         await this.backProcessingService.updatePreDispatchActionStatus(preDispatch, null);
+        console.log('preDispatch', preDispatch);
         const nfound = await this.getNotFoundProducts(preDispatch).toPromise() ;
         if (nfound.data.length) {
             // emit fix the not found items event.
@@ -237,6 +240,7 @@ export class LocatingService implements OnDestroy {
     }
 
     getNotFoundProducts(preDispatch): Observable<any> {
+        console.log('preDispatch2', preDispatch);
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getNotFoundProducts(preDispatch));
     }
 

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {BackProcessingService} from './back-processing.service';
 import {LocatingService} from './locating/locating.service';
 import {PlanningService} from './planning/planning.service';
@@ -15,10 +15,9 @@ export class PreDispatchGlobalActionsService {
         private planningService: PlanningService,
         private snotifyService: SnotifyService,
     ) {}
-
+    planningErrors = new EventEmitter();
 
     startPreDispatchAction(preDispatchData, data = {}) {
-        console.log('something', preDispatchData, data);
         const action = this.backProcessingService.getPreDispatchAction(preDispatchData.status);
         if (this.backProcessingService.isRunning(`${action}-${preDispatchData.id}`)) {
             return ;
@@ -48,7 +47,8 @@ export class PreDispatchGlobalActionsService {
         } else {
             sets = await planningService.divideToDistenta(preDispatchData.id).toPromise().catch(e => {
                 this.backProcessingService.ultimatePause(preDispatchData.id);
-                this.snotifyService.error('Something went wrong, check the settings..', {showProgressBar: false,});
+                this.snotifyService.error('Something went wrong, check the settings..', {showProgressBar: false, });
+                this.planningErrors.emit('error');
             });
         }
         if (sets && sets.data) {

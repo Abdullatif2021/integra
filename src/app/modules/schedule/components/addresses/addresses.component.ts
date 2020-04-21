@@ -65,7 +65,9 @@ export class AddressesComponent implements OnInit, OnDestroy {
     async ngOnInit() {
         this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch).pipe(takeUntil(this.unsubscribe)).subscribe(
             async data => {
+                console.log('progress', data);
                 if (data.treeCreated) {
+                    console.log('tree created');
                     this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);
                     this.loadMarkers(this.mapService.mapLocation);
                 }

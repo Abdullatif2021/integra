@@ -102,9 +102,7 @@ export class PlanningService {
     }
 
     async saveParameters(data, success) {
-        await this.run(this.sendSaveParametersRequest(data), 'Saving', success, () => {
-            console.log('error');
-        });
+        await this.run(this.sendSaveParametersRequest(data), 'Saving', success, () => {});
     }
 
     /*** } Parameters ***/

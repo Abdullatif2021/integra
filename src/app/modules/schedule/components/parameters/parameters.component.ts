@@ -99,7 +99,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
 
     views = [{value: 1, label: 'Secondo i parametri impostati'}, {value: 2, label: 'Secondo predistinta pianificata'}];
     unsubscribe: Subject<void> = new Subject();
-
+    errors = {} ;
     ngOnInit() {
         this.visibleView = this.views[0];
         let departure_date = this.preDispatchData.departure_date ? this.preDispatchData.departure_date.split(' ') : [] ;
@@ -140,6 +140,9 @@ export class ParametersComponent implements OnInit, OnDestroy {
         this.scheduleService.preDispatchDataChanged.pipe(takeUntil(this.unsubscribe)).subscribe(
             preDispatchData => this.preDispatchData = preDispatchData,
         );
+        this.preDispatchGlobalActionsService.planningErrors.subscribe((e) => {
+            this.checkErrors();
+        });
     }
 
     findOption(option, options) {
@@ -294,7 +297,6 @@ export class ParametersComponent implements OnInit, OnDestroy {
                 });
                 return 'Data Saved !';
             }
-            console.log('this.preDispatchData.status', this.preDispatchData.status);
             if (['notPlanned', 'in_grouping', 'in_localize'].find((elm) => elm === this.preDispatchData.status)) {
                 this.snotifyService.warning('In order to start planning, you need to localize this pre-dispatch',
                     {
@@ -322,7 +324,18 @@ export class ParametersComponent implements OnInit, OnDestroy {
         if (this.backProcessingService.isRunning('planning-' + this.preDispatch)) {
             return ;
         }
-        this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
+        const result = await this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
+    }
+
+    checkErrors() {
+        const data = this.getData() ;
+        if (!data.post_man_number) {
+            this.errors['post_man_number'] = 1 ;
+        }
+        if (!data.max_product) {
+            this.errors['max_product'] = 1 ;
+        }
+        console.log(data, this.errors, 'echeck');
     }
 
     ngOnDestroy() {

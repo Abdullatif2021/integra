@@ -52,8 +52,11 @@
     <div class="parameters-section">
       <div class="parameters-section-title">Postini multipli</div>
       <div class="row parameter-item mt-0">
-        <div class="col-5 pt-2"> <label>Numero di Postini</label> </div>
-        <div class="col-7"> <input [(ngModel)]="data.post_man_number" min="1" type="number" (change)="validateNumber($event.target.value, 'post_man_number', 0)"class="parameter-number-input"> postino. </div>
+        <div class="col-5 pt-2"> <label>Numero di Postini</label></div>
+        <div class="col-7"> <input [(ngModel)]="data.post_man_number" min="1" type="number" (change)="validateNumber($event.target.value, 'post_man_number', 0)" class="parameter-number-input" [ngClass]="{'error-input': errors['post_man_number']}">
+          <span> postino.</span>
+        </div>
+        <span class="error-msg col-5" *ngIf="errors['post_man_number']">Wrong Value</span>
       </div>
       <div class="row parameter-item">
         <div class="col-5"> <label>Ore di lavoro al gg.</label> </div>
@@ -64,7 +67,11 @@
       </div>
       <div class="row parameter-item">
         <div class="col-5"> <label>Massimo di prodotti al gg.</label> </div>
-        <div class="col-7"> <input [(ngModel)]="data.max_product" min="1" type="number" min="0" (change)="validateNumber($event.target.value, 'max_product', 0)" class="parameter-text-input parameter-number-input"> prodotti. </div>
+        <div class="col-7">
+          <input [(ngModel)]="data.max_product" min="1" type="number" min="0" (change)="validateNumber($event.target.value, 'max_product', 0)" class="parameter-text-input parameter-number-input" [ngClass]="{'error-input': errors['max_product']}">
+          <span> prodotti.</span>
+        </div>
+        <div class="error-msg col-5" *ngIf="errors['max_product']">Wrong Value</div>
       </div>
       <div class="row parameter-item mt-0">
         <div class="col-5 pt-2"> <label>Consenti deviazione</label> </div>

@@ -99,3 +99,11 @@
 .departureDate-input-container{
     font-size: 14px;
 }
+.error-msg {
+    color: red;
+    font-size: 12px;
+    margin-top: -8px;
+}
+.error-input {
+    border: 1px solid red;
+}

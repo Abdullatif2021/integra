@@ -19,13 +19,16 @@ export class PreDispatchMergeComponent extends ModalComponent implements OnInit 
 
   name = '' ;
   error = null ;
+  confirmed = false ;
   ngOnInit() {
   }
 
   changeName(event) {
       this.name = event.target.value ;
   }
-
+  confirm() {
+      this.confirmed = true ;
+  }
   run(modal) {
     if ( !this.name || this.name === '') { return this.error = 1 ; }
     if ( this.name.length < 3 ) { return this.error = 2 ; }
