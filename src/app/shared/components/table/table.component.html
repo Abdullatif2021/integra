@@ -174,7 +174,7 @@
     <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/pause.svg" placement="bottom" ngbTooltip="Pausa" class="action-icon play-pause-icon">
 </ng-template>
 <ng-template #pDelete let-action="action" let-item="item">
-    <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/delete.x.png" placement="bottom" ngbTooltip="Elimina" class="action-icon play-pause-icon">
+    <img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/delete.x.png" placement="bottom" ngbTooltip="Elimina" class="action-icon">
 </ng-template>
 <ng-template #progress let-action="action" let-item="item">
     <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': itemsProgressWarning[item.id]}" [ngStyle]="{width:item[action.field]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz {{action.status ? action.status(item) : ''}}">{{item[action.field]}} %</div></div>
@@ -185,4 +185,5 @@
         <fa-icon *ngIf="isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-up']"  placement="bottom" ngbTooltip="Di meno"></fa-icon>
     </span>
 </ng-template>
+
 <!-- } Actions templates -->

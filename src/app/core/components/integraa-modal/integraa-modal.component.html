@@ -34,7 +34,7 @@
         <div class="loading-container" [ngClass]="{'hidden': modal.displayed == true}">
           <div class="loader"></div>
         </div>
-        <app-iframe class="m-frame" [ngClass]="{'hidden':modal.displayed == false}" (load)="display($event, modal)" [src]="modal.options.url"></app-iframe>
+        <app-iframe class="m-frame" [messenger]="modal.iframemMssenger" [ngClass]="{'hidden':modal.displayed == false}" (load)="display($event, modal)" [src]="modal.options.url"></app-iframe>
       </div>
     </div>
   </div>

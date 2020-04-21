@@ -17,7 +17,7 @@
       <ng-container [ngTemplateOutlet]="item_body" [ngTemplateOutletContext]="{item:{name:'ALL',count:pagination.totalProduct},table:table}"></ng-container>
     </div>
     <ng-container *ngFor="let item of items; let idx = index">
-      <div class="item flipInX animated" (click)="selectItem(item)" [ngClass]="{'odd-bg':(idx%2),'even-bg':!(idx%2),'active-item':isSelected(item), 'custom': table.custom}">
+      <div class="item flipInX animated" (click)="selectItem(item)" [ngClass]="{'odd-bg':(idx%2),'even-bg':!(idx%2),'active-item':selected[item.id], 'custom': table.custom}">
         <ng-container [ngTemplateOutlet]="item_body" [ngTemplateOutletContext]="{item:item,table:table}"></ng-container>
       </div>
     </ng-container>

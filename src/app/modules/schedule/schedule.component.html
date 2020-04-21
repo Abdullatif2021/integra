@@ -14,20 +14,20 @@
       <div class="map-header">
         <div class="locating-btn integraa-btn" *ngIf="nextAction === 'locating'" (click)="runNextAction()">Localize</div>
         <div class="move-to-in-plan-btn integraa-btn" *ngIf="'/schedule/'+preDispatch === router.url && nextAction !== 'locating'" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Move to in plan</div>
-        <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url " (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">Back to Addresses</div>
+        <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url && nextAction !== 'locating'" (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">Back to Addresses</div>
         <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': false}" [ngStyle]="{width: preDispatchData.percent + '%'}">&nbsp;</div><div class="progress-action-text-value horiz">
           <span class="percent-value">{{preDispatchData.percent}} %</span>
           <span class="action-value">{{nextAction}}</span>
         </div></div>
         <img *ngIf="actionInRun && (preDispatchData.localize_status === 'play' || backProcessingService.isRunningAny(preDispatch))" (click)="stopAction()" src="assets/images/pause.svg" class="action-icon play-pause-icon">
         <img *ngIf="actionInRun && preDispatchData.localize_status !== 'play' && backProcessingService.isRunningAny(preDispatch) !== true" (click)="runNextAction()" src="assets/images/play.svg" class="action-icon play-pause-icon">
-        <div class="continue-btn integraa-btn" (click)="next()">
-          <ng-container *ngIf="'/schedule/'+preDispatch+'/parameters' === router.url">
+        <div class="continue-btn integraa-btn" (click)="next()" *ngIf="'/schedule/'+preDispatch+'/parameters' === router.url">
+          <ng-container>
             Pianifica
           </ng-container>
-          <ng-container *ngIf="'/schedule/'+preDispatch+'/parameters' !== router.url ">
-            Prosegui
-          </ng-container>
+          <!--<ng-container *ngIf="'/schedule/'+preDispatch+'/parameters' !== router.url ">-->
+            <!--Prosegui-->
+          <!--</ng-container>-->
         </div>
         <div class="clear-both"></div>
       </div>

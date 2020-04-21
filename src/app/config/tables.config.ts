@@ -106,6 +106,13 @@ export const TablesConfig = {
                         {action: 'view', click: (elm, container) => {
                             container.integraaModalService.open('/pages/pre-dispatch/' + elm.id + '/products', {width: 1250, height: 650});
                         }},
+                        {action: 'pDelete', print_if: (item, container) => {
+                                return !container.backProcessingService.isRunningAny(item.id) &&
+                                    item.localize_status === 'pause'},
+                            click: (item, container) => {
+                                container.openModal(PreDispatchDeleteComponent, {deleteItem: true, item: item}) ;
+                            }
+                        }
                     ]},
                 {title: 'NOME DISTINTA', field: 'name', actions: [], order: '1'},
                 {title: 'DISTINTA', field: 'code', actions: [], order: '4'},
@@ -141,23 +148,14 @@ export const TablesConfig = {
                                 item.localize_status = 'pause';
                                 container.backProcessingService.ultimatePause(item.id);
                             }
-                        }, {
-                        action: 'pDelete', print_if: (item, container) => {
-                                return !container.backProcessingService.isRunningAny(item.id) &&
-                                    item.localize_status === 'pause' &&
-                                    container.preDispatchGlobalActionsService.isPreDispatchInRunStatus(item);
-                            },
-                            click: (item, container) => {
-                                container.openModal(PreDispatchDeleteComponent, {deleteItem: true, item: item}) ;
-                            }
-                        }
+                        },
                     ]},
             ],
             collapsedActions: [
                 {label: 'Pianifica', _class: 'green-btn', click: (elm, container) => {
-                    // container.integraaModalService.open('/schedule/' + elm.id, {width: 1400, height: 680});
-                    container.router.navigate(['/schedule', elm.id]);
-                }},
+                    container.openIntegraaModal(elm);
+                    // container.router.navigate(['/schedule', elm.id]);
+                    }},
                 {label: 'Metti in Consegna', _class: 'yellow-btn', click: (elm, container) => {console.log('clicked') ; }},
                 {label: 'Aggiungi Prodotti', _class: 'orange-btn', click: (elm, container) => {console.log('clicked') ; }},
                 {label: 'Elimina', _class: 'red-btn', click: (elm, container) => {

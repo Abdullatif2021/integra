@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {IntegraaModalService} from '../../../service/integraa-modal.service';
 
 @Component({
@@ -29,14 +29,15 @@ export class IntegraaModalComponent implements OnInit {
   open(opt) {
       const modal = new IntegraaModal() ;
       modal.setOptions(opt) ;
-      console.log(opt);
       setTimeout(() => {modal.height = document.getElementsByTagName('body')[0].clientHeight ; }, 0);
       this.modals.push(modal) ;
+      this.integraaModalService.updateModals(this.modals);
   }
 
   close(modal) {
       if (typeof this.modals === 'object') {
           this.modals = this.modals.filter((elm) => elm.id !== modal.id );
+          this.integraaModalService.updateModals(this.modals);
       }
   }
 
@@ -121,13 +122,21 @@ class IntegraaModal {
     options = Object.assign({}, this._options) ;
     id ;
     height = 0 ;
+    data = {} ;
+    iframemMssenger = new EventEmitter();
 
     constructor() {
       this.id = Date.now() ;
     }
 
+    tellIframe(message) {
+        this.iframemMssenger.emit(message);
+    }
+
     setOptions(options) {
         const modal = this ;
+        this.data = options.data ? options.data : {} ;
+        delete options.data ;
         Object.keys(options).forEach(function(key) {
             modal._options[key] =  options[key] ;
         });

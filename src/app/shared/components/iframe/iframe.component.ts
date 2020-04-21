@@ -8,14 +8,21 @@ import {DomSanitizer} from '@angular/platform-browser';
 })
 export class IframeComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('iframe') iframe:any;
+  @ViewChild('iframe') iframe: any;
   @Input() src ;
   @Output() load = new EventEmitter();
+  @Input() messenger ;
 
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
       this.src = this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
+      if (this.messenger) {
+        this.messenger.subscribe(message => {
+          console.log('message posted');
+            this.iframe.contentWindow.postMessage(message);
+        });
+      }
   }
 
   ngAfterViewInit() {

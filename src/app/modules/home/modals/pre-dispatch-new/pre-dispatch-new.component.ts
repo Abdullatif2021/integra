@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ModalComponent} from '../modal.component';
 import {ActionsService} from '../../../../service/actions.service';
 import {ProductsService} from '../../../../service/products.service';
+import {FiltersService} from '../../../../service/filters.service';
 
 @Component({
   selector: 'app-pre-dispatch-new',
@@ -12,19 +13,31 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit {
 
   constructor(
       private actionsService: ActionsService,
-      public productsService: ProductsService
+      public productsService: ProductsService,
+      public filtersService: FiltersService
   ) {
       super();
   }
 
   name = '' ;
   error: any = false ;
+  filtersCount = 0 ;
+  selectedCount = 0;
+  confirmed = false ;
 
   ngOnInit() {
+    this.filtersCount = Object.keys(this.filtersService.filters).length;
+    this.selectedCount = this.productsService.selectedProducts.length ;
+    if (this.filtersService.specials.cities && !this.filtersService.specials.cities.all) { this.filtersCount++;}
+    if (this.filtersService.specials.streets && !this.filtersService.specials.streets.all) { this.filtersCount++;}
   }
 
   changeName(event) {
     this.name = event.target.value ;
+  }
+
+  confirm() {
+    this.confirmed = true ;
   }
 
   run(modal) {

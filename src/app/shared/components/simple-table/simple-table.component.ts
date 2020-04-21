@@ -33,6 +33,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   loading = true ;
   subscription: any = false ;
   currentOrder = null ;
+  @Input() selected = {} ;
 
   ngOnInit() {
     // this.loadData(false);
@@ -55,7 +56,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     }
     this.loading = true ;
 
-    if (!append) { this.items = [] ; this._all_selected = true ; this._selected = []; }
+    if (!append) { this.items = [] ; this._all_selected = true ; this.selected = {}; }
     if ( this.subscription ) { this.subscription.unsubscribe(); }
 
     const observable = this.getMethod(this.page, this.rpp, this.searchValue, this.currentOrder) ;
@@ -92,8 +93,8 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this.searchValue = event ;
     this.page = 1 ;
     this._all_selected = true ;
-    this._selected = [] ;
-    this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue});
+    this.selected = {} ;
+    this.changed.emit({all: this._all_selected, items: Object.keys(this.selected), search: this.searchValue});
     if (this.table.searchMethod && typeof this.table.searchMethod === 'function') {
       return this.items = this.table.searchMethod(this._items, event) ;
     }
@@ -101,41 +102,56 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   }
 
   selectItem(item) {
-    if (!this.multi) {
-      this._selected = item ;
+    if (!this.multi) { // if the table was single element select.
+      this.selected = item ;
       return this.changed.emit(item) ;
     }
-    if (!item) {
-      this._selected = [] ;
-      this._all_selected = !this._all_selected;
-      return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
+    // handle multiple items select.
+    if (!item) { // if user clicked on all.
+      this.selected = {} ;
+      this._all_selected = true ;
+      return this.changed.emit({all: true, items: [], search: this.searchValue, order: this.currentOrder});
     }
-    for (let i = 0; i < this._selected.length; ++i) {
-      if (!this._selected[i]) {
-          this._selected.splice(i, 1);
-      } else if (this._selected[i] === item.id) {
-        this._selected.splice(i, 1);
-        return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
+    if (this.selected[item.id]) { // if the item was already selected, remove it.
+      delete this.selected[item.id];
+      if (!Object.keys(this.selected).length) {
+        this._all_selected = true ;
       }
+      return this.changed.emit({all: this._all_selected,
+          items: Object.keys(this.selected), search: this.searchValue, order: this.currentOrder});
     }
-    this._selected.push(item.id);
-    return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
+    this.selected[item.id] = item ; // select the item
+    this._all_selected = false ;
+    return this.changed.emit({all: this._all_selected,
+        items: Object.keys(this.selected), search: this.searchValue, order: this.currentOrder});
+      // if (!this.multi) {
+    //   this._selected = item ;
+    //   return this.changed.emit(item) ;
+    // }
+    // if (!item) {
+    //   this._selected = [] ;
+    //   this._all_selected = !this._all_selected;
+    //   return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
+    // }
+    // for (let i = 0; i < this._selected.length; ++i) {
+    //   if (!this._selected[i]) {
+    //       this._selected.splice(i, 1);
+    //   } else if (this._selected[i] === item.id) {
+    //     this._selected.splice(i, 1);
+    //     return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
+    //   }
+    // }
+    // this._selected.push(item.id);
+    // return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
   }
 
-  isSelected(item) {
-    if (!this.multi) {
-      return this._selected && (this._selected.id === item.id);
-    }
-    if (this._all_selected) {
-      return !this._selected.filter((_item) => item.id === _item).length;
-    }
-    return this._selected.filter((_item) => item.id === _item).length;
-  }
 
   changeOrder(order) {
     this.currentOrder = order ;
     this.page = 1 ;
     this.loadData(false) ;
+    this.selected = {} ;
+    this._all_selected = true ;
     this.changed.emit({all: true, items: [], search: this.searchValue, order: this.currentOrder});
   }
 
@@ -143,6 +159,8 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this.page = 1 ;
     this.loaded = false ;
     this.loading = true ;
+    this.selected = {} ;
+    this._all_selected = true ;
     this.loadData(false) ;
   }
 
@@ -150,6 +168,8 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this.page = 1;
     this.loaded = false ;
     this.loading = false ;
+    this.selected = {} ;
+    this._all_selected = true ;
     this.items = [] ;
   }
 

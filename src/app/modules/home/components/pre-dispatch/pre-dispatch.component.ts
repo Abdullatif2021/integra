@@ -40,6 +40,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   order_field = null ;
   order_method = '1' ;
   refresh = 0 ;
+
   constructor(
       private paginationService: PaginationService,
       private filtersService: FiltersService,
@@ -98,6 +99,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
                   // if there was not status update request pending, update the status
                   if (!this.backProcessingService.ignoreOne('updating-status')) {
                       this.preDispatchList = res.data ;
+                      this.prodcastDataToModals(res.data) ;
                       this.refresh++ ;
                   }
                   setTimeout(() => {
@@ -105,7 +107,6 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
                   }, 2000);
               });
       }
-
   }
 
   ngOnDestroy() {
@@ -120,6 +121,13 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       this.order_field = event.field;
       this.order_method = event.order === 'DESC' ? '1' : '2';
       this.loadItems(true, false);
+  }
+
+  openIntegraaModal(elm) {
+      this.integraaModalService.open('/schedule/' + elm.id, {width: 1400, height: 680}, {location: 'schedule', id: elm.id});
+  }
+
+  prodcastDataToModals(data) {
   }
 
   openModal(modal, data) {

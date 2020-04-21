@@ -18,7 +18,11 @@ export class PreDispatchGlobalActionsService {
 
 
     startPreDispatchAction(preDispatchData, data = {}) {
+        console.log('something', preDispatchData, data);
         const action = this.backProcessingService.getPreDispatchAction(preDispatchData.status);
+        if (this.backProcessingService.isRunning(`${action}-${preDispatchData.id}`)) {
+            return ;
+        }
         preDispatchData.localize_status = 'play';
         this.backProcessingService.run(`${action}-${preDispatchData.id}`, async(handle) => {
             if (action === 'locating') {

@@ -128,6 +128,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   cityChanged(event) {
      this.current_cities = event;
      this._streetsTable.loadData(false) ;
+     this.current_streets.all = true ;
+     this.current_streets.items = [];
      this.loadProducts(true);
      this.filtersService.setSpecialFilter('cities', event);
   }

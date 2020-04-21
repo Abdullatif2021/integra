@@ -3,6 +3,7 @@ import {BackProcessingService} from './service/back-processing.service';
 import {LocatingService} from './service/locating/locating.service';
 import {NgbDateParserFormatter} from '@ng-bootstrap/ng-bootstrap';
 import {NgbDateITParserFormatter} from './shared/provider/ngb-date-it-parser-formatter';
+import {PreDispatchGlobalActionsService} from './service/pre-dispatch-global-actions.service';
 
 @Component({
     selector: 'app-root',
@@ -12,7 +13,11 @@ import {NgbDateITParserFormatter} from './shared/provider/ngb-date-it-parser-for
 })
 export class AppComponent {
 
-    constructor(private backProcessingService: BackProcessingService, private locatingService: LocatingService) {
+    constructor(
+        private backProcessingService: BackProcessingService,
+        private locatingService: LocatingService,
+        private preDispatchGlobalActionsService: PreDispatchGlobalActionsService
+    ) {
     }
 
     @HostListener('window:beforeunload', ['$event'])
@@ -25,6 +30,15 @@ export class AppComponent {
             return msg;
         }
         return null ;
+    }
+
+    @HostListener('window:message', ['$event'])
+    onMessage(e) {
+        if (e.data.runPreDispatch) {
+            console.log('e.data.runPreDispatch', e.data.runPreDispatch);
+            this.preDispatchGlobalActionsService.startPreDispatchAction(e.data.runPreDispatch);
+        }
+        console.log(e.data);
     }
 
 }

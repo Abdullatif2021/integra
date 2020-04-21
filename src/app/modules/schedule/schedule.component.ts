@@ -102,11 +102,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
                this.paths = paths;
             }
         );
-        // this.planningService.test.subscribe(
-        //     data => {
-        //         this.mapService.drawPath(data);
-        //     }
-        // )
+
         this.startInterval();
     }
 
@@ -115,7 +111,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             data => {
                 this.preDispatchData = data.data ;
                 this.scheduleService.prodcastPreDispatchData(this.preDispatchData);
-                this.backProcessingService.handlePreDispatchActionsChanges(this.preDispatchData);
+                // this.backProcessingService.handlePreDispatchActionsChanges(this.preDispatchData);
                 this.nextAction = this.backProcessingService.getPreDispatchAction(this.preDispatchData.status) ;
                 this.actionInRun = this.preDispatchGlobalActionsService.isPreDispatchInRunStatus(this.preDispatchData);
                 setTimeout(() => {
@@ -131,14 +127,14 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     async runNextAction() {
-        this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
+        window.parent.postMessage({runPreDispatch: this.preDispatchData}, '*');
     }
 
     moveToInPlan(modalRef, force = false) {
         this.planningService.moveItemsToInPlaning(modalRef, force);
     }
+
     moveBackToAddresses(modalRef, force = false) {
-        console.log('call 1');
         this.planningService.moveItemsBackToAddresses(modalRef, force);
     }
 
