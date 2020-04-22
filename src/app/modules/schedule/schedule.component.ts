@@ -68,15 +68,15 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     @ViewChild(PageDirective) pageHost: PageDirective;
 
     ngOnInit() {
-        // this.locatingHandle = this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch);
-        // this.locatingHandle.pipe(takeUntil(this.unsubscribe)).subscribe(
-        //     data => {
-        //         if (data.nfound) {
-        //             this.nFoundItems = data.nfound;
-        //             this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown', backdrop: 'static'});
-        //         }
-        //     }
-        // );
+        this.locatingHandle = this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch);
+        this.locatingHandle.pipe(takeUntil(this.unsubscribe)).subscribe(
+            data => {
+                if (data.nfound) {
+                    this.nFoundItems = data.nfound;
+                    this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown', backdrop: 'static'});
+                }
+            }
+        );
         this.mapService.markersChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => { this.markers = data ; }
         );
@@ -111,7 +111,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             data => {
                 this.preDispatchData = data.data ;
                 this.scheduleService.prodcastPreDispatchData(this.preDispatchData);
-                // this.backProcessingService.handlePreDispatchActionsChanges(this.preDispatchData);
+                this.backProcessingService.handlePreDispatchActionsChanges(this.preDispatchData);
                 this.nextAction = this.backProcessingService.getPreDispatchAction(this.preDispatchData.status) ;
                 this.actionInRun = this.preDispatchGlobalActionsService.isPreDispatchInRunStatus(this.preDispatchData);
                 setTimeout(() => {
@@ -127,7 +127,8 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     async runNextAction() {
-        window.parent.postMessage({runPreDispatch: this.preDispatchData}, '*');
+        // window.parent.postMessage({runPreDispatch: this.preDispatchData}, '*');
+        this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
     }
 
     moveToInPlan(modalRef, force = false) {

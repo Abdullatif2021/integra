@@ -44,15 +44,15 @@ export class ParametersComponent implements OnInit, OnDestroy {
             {label: '30 Minuti', value: '30'},
         ],
         travelModes: [
-            {label: 'Bicycle', value: 'bicycle'},
-            {label: 'Da tradurre', value: 'motor'}
+            {label: 'Moto', value: 'bicycle'},
+            {label: 'Auto', value: 'car'}
         ],
         devision: [20, 50, 70, 100],
-        target:  [{label: 'Short Path', value: 'short_path'}, {label: 'Less Time', value: 'less_time'}],
-        mixedCities:  [{label: 'Allowed', value: true}, {label: 'Not Allowed', value: false}],
+        target:  [{label: 'Percorso più corto', value: 'short_path'}, {label: 'Tempo minore', value: 'less_time'}],
+        mixedCities:  [{label: 'Consentito', value: true}, {label: 'Non consentito', value: false}],
         pathStart:  [
-            {label: 'From Start to End', value: 'from_start_to_end'},
-            {label: 'From End to Start', value: 'from_end_to_start'}
+            {label: 'Dal più vicino al più lontano', value: 'from_start_to_end'},
+            {label: 'Dal più lontano al più vicino', value: 'from_end_to_start'}
         ],
     };
 
@@ -167,6 +167,17 @@ export class ParametersComponent implements OnInit, OnDestroy {
         return this.data[key];
     }
 
+    timeChangeFormat(event) {
+        if (event.code === 'Backspace') { return; }
+        let time = event.target.value ;
+        if (time[time.length - 1] === ':' && time.length === 3) { return ; }
+        if (time[time.length - 1] === ':' && time.length < 3) { return event.target.value = (time.length === 2 ? '0' : '00') + time ; }
+        if (!/^\d+$/.test(time[time.length - 1])) { time = time.substr(0, event.target.value.length - 1); }
+        if (parseInt(time, 10) > 24 ) { time = 24; }
+        if (parseInt(time, 10) < 0) { time = 0; }
+        if (time.length === 2) { time += ':'; }
+        event.target.value = time ;
+    }
     validateNumber(value, key, min: any = false, max: any = false, minLength = null) {
         if (!parseInt(value, 10)) {
             value = '0';
@@ -298,7 +309,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
                 return 'Data Saved !';
             }
             if (['notPlanned', 'in_grouping', 'in_localize'].find((elm) => elm === this.preDispatchData.status)) {
-                this.snotifyService.warning('In order to start planning, you need to localize this pre-dispatch',
+                this.snotifyService.warning('Per iniziare la pianificazione, è necessario localizzare questa pre-distinta',
                     {
                         position: 'centerTop',
                         showProgressBar: false,
@@ -317,6 +328,18 @@ export class ParametersComponent implements OnInit, OnDestroy {
             }
             this.startPlanning();
             return 'Data Saved !' ;
+        }, (e) => {
+            if (this.data.departure_time && !this.data.departure_date) {
+                this.errors['departure_date'] = 1;
+            }
+        });
+    }
+
+    removeErrors() {
+        console.log('chnaged', this.errors);
+        Object.keys(this.errors).forEach((key) => {
+            console.log('key', key);
+           if (this.data[key]) { delete this.errors[key]; }
         });
     }
 
@@ -327,6 +350,12 @@ export class ParametersComponent implements OnInit, OnDestroy {
         const result = await this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
     }
 
+    // someTimeChanged(event) {
+    //     console.log(event.target.closest('input'), event.target.value);
+    //     if (event.target.value[0] > 2 || event.target.value.length > 1) {
+    //         event.target.closest('input').focus();
+    //     }
+    // }
     checkErrors() {
         const data = this.getData() ;
         if (!data.post_man_number) {

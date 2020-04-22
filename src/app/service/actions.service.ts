@@ -59,7 +59,7 @@ export class ActionsService {
       let method ;
       if (!data.method || data.method === 'selected' ) {
           if (!products || ( typeof products === 'object' && !products.length ) ) {
-              return this.snotifyService.error('No Products Selected', { showProgressBar: false, timeout: 3000 });
+              return this.snotifyService.error('Nessun prodotto selezionato', { showProgressBar: false, timeout: 3000 });
           }
           const productsIds = [] ;
           products.forEach((elm) => {
@@ -80,7 +80,7 @@ export class ActionsService {
       let method ;
       if (!data.method || data.method === 'selected' ) {
           if (!products || ( typeof products === 'object' && !products.length ) ) {
-              return this.snotifyService.error('No Products Selected', { showProgressBar: false, timeout: 3000 });
+              return this.snotifyService.error('Nessun prodotto selezionato', { showProgressBar: false, timeout: 3000 });
           }
           const productsIds = [] ;
           products.forEach((elm) => {
@@ -104,7 +104,7 @@ export class ActionsService {
 
       const preDispatches = this.preDispatchService.selectedPreDispatches ;
       if (!preDispatches || ( typeof preDispatches === 'object' && !preDispatches.length)) {
-          return this.snotifyService.error('No Pre-Distinta Selected', { showProgressBar: false, timeout: 3000 });
+          return this.snotifyService.error('Nessuna predestinata selezionata', { showProgressBar: false, timeout: 3000 });
       }
       const items = [] ;
       preDispatches.forEach((elm) => {

@@ -64,10 +64,10 @@ export class ResultComponent implements OnInit, OnDestroy {
   async assignPostman(event, set, day) {
       this.resultsService.assignPostman(event.id, set.id).subscribe(
           data => {
-              this.snotifyService.success('Postman Assigned', { showProgressBar: false, timeout: 1500 });
+              this.snotifyService.success('Postino assegnato', { showProgressBar: false, timeout: 1500 });
           },
           error => {
-              this.snotifyService.error('Something went wrong', { showProgressBar: false, timeout: 1500 });
+              this.snotifyService.error('Qualcosa è andato storto!!', { showProgressBar: false, timeout: 1500 });
           }
       );
       this.filterPostmen(day) ;
@@ -138,12 +138,12 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.resultsService.makeDispatchesVisible(this.preDispatch).subscribe(
           data => {
               if (data.success) {
-                  this.snotifyService.success('Dispatches was created !',  { showProgressBar: false, timeout: 1500 });
+                  this.snotifyService.success('Pre-distinta è stata creata con successo!',  { showProgressBar: false, timeout: 1500 });
               } else {
                   this.snotifyService.error(data.message,  { showProgressBar: false, timeout: 1500 });
               }
           }, error => {
-              this.snotifyService.error('Something went wrong',  { showProgressBar: false, timeout: 1500 });
+              this.snotifyService.error('Qualcosa è andato storto!!',  { showProgressBar: false, timeout: 1500 });
           }
       );
   }

@@ -11,13 +11,14 @@
       <div class="parameters-section-title">Impostazioni Generali</div>
       <div class="row parameter-item">
         <div class="col-5"> <label>Giorno di Partenza</label> </div>
-        <div class="col-7"> <input  [(ngModel)]="data.departure_date" type="text" ngbDatepicker #timeOfServiceDP="ngbDatepicker" (focus)="timeOfServiceDP.toggle()" placeholder="DD/MM/YYYY" class="parameter-text-input"> </div>
+        <div class="col-7"> <input  [ngClass]="{'error-input': errors['departure_date']}" [(ngModel)]="data.departure_date" type="text" ngbDatepicker #timeOfServiceDP="ngbDatepicker" (focus)="timeOfServiceDP.toggle()" (change)="removeErrors()" (dateSelect)="removeErrors()" placeholder="DD/MM/YYYY" class="parameter-text-input"> </div>
+        <span class="error-msg col-5" *ngIf="errors['departure_date']">Wrong Value</span>
       </div>
       <div class="row parameter-item">
         <div class="col-5"> <label>Ora di Partenza</label> </div>
         <div class="col-7">
-          <ngx-timepicker-field [(ngModel)]="data.departure_time" [format]="24" class="w-75" [controlOnly]="true"></ngx-timepicker-field>
-          <!--<input type="text" [(ngModel)]="data.departure_time" class="parameter-text-input parameter-medium-input" placeholder="H:i" type="time" min="0" max="24">-->
+          <!--<ngx-timepicker-field [(ngModel)]="data.departure_time" (keyup)="someTimeChanged($event)" [format]="24" class="w-75" [controlOnly]="true"></ngx-timepicker-field>-->
+          <input type="text" [(ngModel)]="data.departure_time" (keyup)="timeChangeFormat($event)" (change)="formatTime($event.target.value, 'departure_time')" class="parameter-text-input parameter-medium-input" placeholder="H:i" min="0" max="24">
         </div>
       </div>
       <div class="row parameter-item">
@@ -31,13 +32,14 @@
       <div class="row parameter-item">
         <div class="col-5"> <label>Tempo di pause</label> </div>
         <div class="col-7">
-          <div class="d-flex">
-            <span class="mt-auto mb-auto mr-1">Della : </span><ngx-timepicker-field [(ngModel)]="data.pause_time_start" [format]="24" [controlOnly]="true"></ngx-timepicker-field>
-            <span class="mt-auto mb-auto ml-2 mr-1">Alle : </span><ngx-timepicker-field [(ngModel)]="data.pause_time_end" [format]="24" [controlOnly]="true"></ngx-timepicker-field>
-          </div>
+          <!--<div class="d-flex">-->
+            <!--<span class="mt-auto mb-auto mr-1">Della : </span>-->
+            <!--<ngx-timepicker-field [(ngModel)]="data.pause_time_start" [format]="24" [controlOnly]="true"></ngx-timepicker-field>-->
+            <!--<span class="mt-auto mb-auto ml-2 mr-1">Alle : </span><ngx-timepicker-field [(ngModel)]="data.pause_time_end" [format]="24" [controlOnly]="true"></ngx-timepicker-field>-->
+          <!--</div>-->
 
-          <!--<input type="text" [(ngModel)]="data.pause_time_start" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_start')" >-->
-          <!--<input type="text" [(ngModel)]="data.pause_time_end" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_end')" >-->
+          <span>Della : </span><input type="text" [(ngModel)]="data.pause_time_start" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_start')" >
+          <span> Alle : </span><input type="text" [(ngModel)]="data.pause_time_end" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_end')" >
         </div>
       </div>
       <div class="row parameter-item mt-0">
@@ -53,7 +55,7 @@
       <div class="parameters-section-title">Postini multipli</div>
       <div class="row parameter-item mt-0">
         <div class="col-5 pt-2"> <label>Numero di Postini</label></div>
-        <div class="col-7"> <input [(ngModel)]="data.post_man_number" min="1" type="number" (change)="validateNumber($event.target.value, 'post_man_number', 0)" class="parameter-number-input" [ngClass]="{'error-input': errors['post_man_number']}">
+        <div class="col-7"> <input [(ngModel)]="data.post_man_number" min="1" type="number" (change)="validateNumber($event.target.value, 'post_man_number', 0)" class="parameter-number-input" (change)="removeErrors()" [ngClass]="{'error-input': errors['post_man_number']}">
           <span> postino.</span>
         </div>
         <span class="error-msg col-5" *ngIf="errors['post_man_number']">Wrong Value</span>
@@ -68,7 +70,7 @@
       <div class="row parameter-item">
         <div class="col-5"> <label>Massimo di prodotti al gg.</label> </div>
         <div class="col-7">
-          <input [(ngModel)]="data.max_product" min="1" type="number" min="0" (change)="validateNumber($event.target.value, 'max_product', 0)" class="parameter-text-input parameter-number-input" [ngClass]="{'error-input': errors['max_product']}">
+          <input [(ngModel)]="data.max_product" min="1" type="number" min="0" (change)="validateNumber($event.target.value, 'max_product', 0)" class="parameter-text-input parameter-number-input" (change)="removeErrors()" [ngClass]="{'error-input': errors['max_product']}">
           <span> prodotti.</span>
         </div>
         <div class="error-msg col-5" *ngIf="errors['max_product']">Wrong Value</div>
@@ -196,7 +198,7 @@
 <ng-template #fullmatchesModal let-modal>
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
-      <h6 class="text-center">Enter new Departure Date and Time</h6><hr>
+      <h6 class="text-center">Inserisci la data e l'ora di partenza</h6><hr>
       <div class="departureDate-input-container">
         <div class="row parameter-item">
           <div class="col-5"> <label>Giorno di Partenza</label> </div>

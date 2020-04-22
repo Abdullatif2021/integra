@@ -85,7 +85,7 @@ export class LocatingService implements OnDestroy {
         // if the process is done, create the tree.
         if (!this.buildings.length && !this.fixed.length) {
             await this.createTree(handle);
-            this.snotifyService.success('All buildings are localized !', { showProgressBar: false});
+            this.snotifyService.success('Tutti gli indirizzo sono localizzati!', { showProgressBar: false});
         }
     }
 
@@ -139,7 +139,7 @@ export class LocatingService implements OnDestroy {
         // if every thing is done or the user is not in the pre-dispatch page, create the tree.
         if (!this.buildings.length && !this.fixed.length) {
             await this.createTree(handle);
-            this.snotifyService.success('All buildings are localized !', { showProgressBar: false});
+            this.snotifyService.success('Tutti gli indirizzo sono localizzati!', { showProgressBar: false});
         }
 
         return true;

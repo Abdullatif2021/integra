@@ -179,14 +179,14 @@ export class ListTreeService implements OnDestroy {
             this.sendMoveStreetRequest(item.parent.parent.id, item.parent.id, parent.id, item.id, preDispatch)
                 .subscribe(
                     data => {
-                        this.snotifyService.success('Street moved successfully', {showProgressBar: false});
+                        this.snotifyService.success('Strada spostata con successo', {showProgressBar: false});
                     }
                 );
         } else if (item.type === 'capId') {
             this.sendMoveCapRequest(item.parent.id, parent.id, item.id, preDispatch)
                 .subscribe(
                     data => {
-                        this.snotifyService.success('Cap moved successfully', {showProgressBar: false});
+                        this.snotifyService.success('Cap spostato con successo', {showProgressBar: false});
                     }
                 );
         }

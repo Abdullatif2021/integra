@@ -101,8 +101,8 @@ export class PlanningService {
         );
     }
 
-    async saveParameters(data, success) {
-        await this.run(this.sendSaveParametersRequest(data), 'Saving', success, () => {});
+    async saveParameters(data, success, error) {
+        await this.run(this.sendSaveParametersRequest(data), 'Saving', success, error);
     }
 
     /*** } Parameters ***/
@@ -162,10 +162,11 @@ export class PlanningService {
     async drawPaths(sets, preDispatch, handle) {
         for (let i = 0; i < sets.length; ++i) {
             let path = [];
-            const order = [];
             let page = 1 ;
             let waypoints ;
+            let lp = 0 ;
             do {
+                const order = [];
                 waypoints = await this.getDirections(sets[i].id, page).toPromise();
                 let startPoint = preDispatch.startPoint ;
                 if (path.length) {
@@ -177,15 +178,15 @@ export class PlanningService {
                 }
                 const temp = await this.googleDirectionsService.getDirections(startPoint, waypoints.data.data, preDispatch.endPoint) ;
                 path = path.concat(temp.path);
-                const lp = order.length ;
                 temp.order.forEach(item => {
                     item.priority += lp;
                     order.push(item);
-                })
+                });
+                lp += order.length;
+                const priority = await this.setMapPriority(order).toPromise();
                 page ++ ;
             } while ( !waypoints.data.last_page );
             // this.test.emit(path.path);
-            const priority = await this.setMapPriority(order).toPromise();
             const save = await this.savePath(sets[i].id, path).toPromise() ;
             // handle.emit({progress: ( (i + 1) / sets.length) * 100 });
             if (!this.backProcessingService.isRunning('planning-' + preDispatch.id)) {

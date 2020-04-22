@@ -163,6 +163,11 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.dragging = null;
     }
 
+    onDragEnd() {
+        console.log('your drag is ended')
+        this.dragging = null ;
+    }
+
     moveNode(node, to, next, validated = false) {
         const oldParent = node.parent;
         if (this.listTreeService.moveItem(node, to, this.preDispatch, validated)) {
@@ -244,13 +249,13 @@ export class AddressesComponent implements OnInit, OnDestroy {
         };
         this.listTreeService.mergeTwoStreets(this.preDispatch, source, target).pipe(takeUntil(this.unsubscribe)).subscribe(
             async data => {
-                this.snotifyService.success('Streets Merged Successfully', {showProgressBar: false});
+                this.snotifyService.success('Strade unite con successo', {showProgressBar: false});
                 await this.reloadNode({item: {node: this.merge_data.source.parent, next: ''}});
                 this.merge_data = {source: null, targets: []};
 
             },
             error => {
-                this.snotifyService.error('Something went wrong !', {showProgressBar: false});
+                this.snotifyService.error('Qualcosa è andato storto!!', {showProgressBar: false});
                 this.merge_data = {source: null, targets: []};
             }
         );
@@ -282,22 +287,22 @@ export class AddressesComponent implements OnInit, OnDestroy {
         if (item.type === 'cityId') {
             this.addressesActionsService.renameCity(item.id, this.preDispatch, event.target.value).subscribe(
                 data => {
-                    this.snotifyService.success('City renamed successfully', {showProgressBar: false});
+                    this.snotifyService.success('La città è stata rinominata con successo', {showProgressBar: false});
                 },
                 error => {
                     item.text = old;
-                    this.snotifyService.error('City was not renamed', {showProgressBar: false, timeout: 3000});
+                    this.snotifyService.error('La città non è stata rinominata', {showProgressBar: false, timeout: 3000});
                 }
             );
         } else if (item.type === 'streetId') {
             this.addressesActionsService.renameStreet(item.parent.parent.id, this.preDispatch, item.parent.id, item.id, event.target.value)
                 .subscribe(
                     data => {
-                        this.snotifyService.success('Street renamed successfully', {showProgressBar: false});
+                        this.snotifyService.success('La strada è stata rinominata con successo', {showProgressBar: false});
                     },
                     error => {
                         item.text = old;
-                        this.snotifyService.error('Street was not renamed', {showProgressBar: false, timeout: 3000});
+                        this.snotifyService.error('La strada non è stata rinominata', {showProgressBar: false, timeout: 3000});
                     }
                 );
         }
@@ -312,14 +317,14 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.addressesActionsService.updatePreDispatchStartPoint(this.preDispatch, input.itemsList.selectedItems[0].value.id).subscribe(
             data => {
                 if (data.success) {
-                    this.snotifyService.success('Start Point updated successfully', {showProgressBar: false});
+                    this.snotifyService.success('Punto d\'inizio aggiornato correttamente', {showProgressBar: false});
                     this.startPointTextInput.nativeElement.value = input.itemsList.selectedItems[0].value.text;
                 } else {
-                    this.snotifyService.error('Start point was not updated', {showProgressBar: false});
+                    this.snotifyService.error('Il punto d\'inizio non è stato aggiornato', {showProgressBar: false});
                 }
             },
             error => {
-                this.snotifyService.error('Start point was not updated', {showProgressBar: false});
+                this.snotifyService.error('Il punto d\'inizio non è stato aggiornato', {showProgressBar: false});
             }
         );
     }
@@ -360,10 +365,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 if (!res.success) {
                     return this.snotifyService.error('End point was not updated', {showProgressBar: false});
                 }
-                this.snotifyService.success('End Point updated successfully', {showProgressBar: false});
+                this.snotifyService.success('Il punto di fine è stato aggiornato correttamente', {showProgressBar: false});
                 this.endPointTextInput.nativeElement.value = input.address.text;
             } catch (e) {
-                this.snotifyService.error('End point was not updated', {showProgressBar: false});
+                this.snotifyService.error('Il punto di fine non è stato aggiornato', {showProgressBar: false});
             }
         }).catch((e) => {
 
@@ -377,14 +382,14 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.addressesActionsService.updatePoreDispatchEndPoint(this.preDispatch, select.itemsList.selectedItems[0].value.id).subscribe(
             data => {
                 if (data.success) {
-                    this.snotifyService.success('End Point updated successfully', {showProgressBar: false});
+                    this.snotifyService.success('Il punto di fine è stato aggiornato correttamente', {showProgressBar: false});
                     this.endPointTextInput.nativeElement.value = select.itemsList.selectedItems[0].value.text;
                 } else {
-                    this.snotifyService.error('End point was not updated', {showProgressBar: false});
+                    this.snotifyService.error('Il punto di fine non è stato aggiornato', {showProgressBar: false});
                 }
             },
             error => {
-                this.snotifyService.error('End point was not updated', {showProgressBar: false});
+                this.snotifyService.error('Il punto di fine non è stato aggiornato', {showProgressBar: false});
             }
         );
     }
@@ -392,7 +397,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     async locateStartEndPoint(address: ACAddress, error_domain: string): Promise<ACAddress> {
         return new Promise<ACAddress>( async(resolve, reject) => {
             if (!address.hasObject) {
-                this.errors[error_domain] = 'Wrong Address Format' ;
+                this.errors[error_domain] = 'Il formato di indirizzo è errato' ;
                 return reject(false);
             }
             if (!address.located) {
@@ -401,7 +406,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
                     address.address.lat = locatedAddress.lat ;
                     address.address.lng = locatedAddress.long ;
                 } catch (e) {
-                    this.errors[error_domain] = 'Was not able to locate this address';
+                    this.errors[error_domain] = 'Non è stato possibile localizzare questo indirizzo';
                     return reject(e) ;
                 }
             }
@@ -415,10 +420,11 @@ export class AddressesComponent implements OnInit, OnDestroy {
             this.modalService.dismissAll();
             this.addressesActionsService.createStartPoint(address).subscribe(
                data => {
-                   this.snotifyService.success('Start Point created successfully', {showProgressBar: false});
+                   this.snotifyService.success('Punto d\'inizio è stato creato con successo', {showProgressBar: false});
                },
                error => {
-                    this.snotifyService.error('Failed to create Start Point', {showProgressBar: false});
+                    this.snotifyService.error('Non è stato possibile creare il punto d\'inizio, Riprova più tardi!',
+                        {showProgressBar: false});
                }
            ) ;
         }).catch((e) => {
@@ -431,10 +437,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
             this.modalService.dismissAll();
             this.addressesActionsService.createEndPoint(address).subscribe(
                data => {
-                   this.snotifyService.success('End Point created successfully', {showProgressBar: false});
+                   this.snotifyService.success('Punto di fine è stato creato con successo', {showProgressBar: false});
                },
                error => {
-                    this.snotifyService.error('Failed to create End Point', {showProgressBar: false});
+                    this.snotifyService.error('n è stato possibile creare il punto di fine, Riprova più tardi!', {showProgressBar: false});
                }
            ) ;
         }).catch((e) => {
@@ -496,10 +502,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
     async editBuildingAddress(input, item, container) {
         const address: ACAddress = input.address ;
         if (!address.hasObject) {
-            return this.errors['editBuildingAddress-' + item.id] = 'Please Enter a valid address' ;
+            return this.errors['editBuildingAddress-' + item.id] = 'Si prega di inserire un\'indirizzo valido' ;
         }
         if (!address.address.strict) {
-            return this.errors['editBuildingAddress-' + item.id] = 'The address must be strict building address' ;
+            return this.errors['editBuildingAddress-' + item.id] = 'L\'indirizzo inserito deve essere un indirizzo di palazzo' ;
         }
         if (!address.located) {
             try {
@@ -522,18 +528,18 @@ export class AddressesComponent implements OnInit, OnDestroy {
                     }
                 }
             } catch (e) {
-                return this.errors['editBuildingAddress-' + item.id] = 'We was not able to locate this address' ;
+                return this.errors['editBuildingAddress-' + item.id] = 'Non è stato riuscito a localizzare questi indirizzi' ;
             }
         }
         this.errors['editBuildingAddress-' + item.id] = null ;
         container.style.display = 'none';
         this.addressesActionsService.changeBuldinAddress(address.address, item.id, this.preDispatch).subscribe(
             data => {
-                this.snotifyService.success('Address Was Changed successfully', {showProgressBar: false});
+                this.snotifyService.success('L\'indirizzo è stato modificato con successo', {showProgressBar: false});
                 this.reloadNode({item: {node: item.parent.parent}});
             },
             error => {
-                this.snotifyService.error('Error Updating address', {showProgressBar: false});
+                this.snotifyService.error('Errore durante l\'aggiornamento dell\'indirizzo', {showProgressBar: false});
             }
         );
     }
@@ -553,7 +559,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 this.snotifyService.success('Coordinates Were Changed successfully', {showProgressBar: false});
             },
             error => {
-                this.snotifyService.error('Error Updating address', {showProgressBar: false});
+                this.snotifyService.error('Errore durante l\'aggiornamento dell\'indirizzo', {showProgressBar: false});
                 item.parent.expanded = false ;
                 item.parent.loading = false ;
                 this.reloadNode({item: {node: item.parent}});
@@ -567,7 +573,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
         if (force) {
             return this.planningService.moveToInPlanning(this.preDispatch, data, filter, status, () => {
                 this.reloadNode({item: {node: this.tree[0]}});
-                return 'Items moved successfully';
+                return 'I prodotti sono stati spostati con successo';
             });
         }
         return this.planningService.moveToInPlanningCheck(this.preDispatch, data, filter, status).subscribe(
@@ -578,7 +584,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 } else {
                     this.planningService.moveToInPlanning(this.preDispatch, data, filter, status, () => {
                         this.reloadNode({item: {node: this.tree[0]}});
-                        return 'Items moved successfully';
+                        return 'I prodotti sono stati spostati con successo';
                     });
                 }
             }
@@ -700,7 +706,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
                     this.addressesActionsService.changeBuldinAddress(
                         {lat: event.coords.lat, lng: event.coords.lng},
                         marker.id, this.preDispatch).subscribe(_data => {
-                            this.snotifyService.success('Location Updated.', {showProgressBar: false});
+                            this.snotifyService.success('Posizione aggiornata', {showProgressBar: false});
                         });
                 });
             }

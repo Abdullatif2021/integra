@@ -12,7 +12,7 @@
     </div>
     <div class="col-8 v-wide-col">
       <div class="map-header">
-        <div class="locating-btn integraa-btn" *ngIf="nextAction === 'locating'" (click)="runNextAction()">Localize</div>
+        <div class="locating-btn integraa-btn" *ngIf="nextAction === 'locating'" (click)="runNextAction()">Localizza</div>
         <div class="move-to-in-plan-btn integraa-btn" *ngIf="'/schedule/'+preDispatch === router.url && nextAction !== 'locating'" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Move to in plan</div>
         <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url && nextAction !== 'locating'" (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">Back to Addresses</div>
         <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': false}" [ngStyle]="{width: preDispatchData.percent + '%'}">&nbsp;</div><div class="progress-action-text-value horiz">
@@ -79,7 +79,7 @@
         <h6 class="mb-0"><span class="text-warning font-size-13">{{nFoundItem.street}}, {{nFoundItem.houseNumber}}, {{nFoundItem.cap}} {{nFoundItem.city}}</span></h6>
         <div>
           <div class="form-group">
-            <label>Change address</label>
+            <label>Modifica indirizzo</label>
             <app-address-input (changed)="notFoundAddressChanged($event, nFoundItem)" [disabled]="latLngInputState[nFoundItem.id]" [_class]="'full-size-ac'" ></app-address-input>
             <div *ngIf="errors['invalid-building-'+nFoundItem.id] && !latLngInputState[nFoundItem.id]" class="error-msg">Invalid Building Address</div>
           </div>

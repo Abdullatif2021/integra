@@ -127,7 +127,7 @@
       <ng-container *ngIf="item.expanded">
         <div infiniteScroll (scrolled)="loadMore(item, next)" [scrollWindow]="true" [infiniteScrollContainer]="PlannerContainer" infiniteScrollDistance="30">
           <ng-container *ngFor="let child of item.children; let i = index">
-            <div (dndStart)="onDragStart($event, child)" [ngClass]="{'cursor-grab': isMovable(child)}" [dndEffectAllowed]="'move'" [dndDraggable]="{next: next+':'+i, id: child.id}" [dndDisableIf]="!isMovable(child)">
+            <div (dndStart)="onDragStart($event, child)" [ngClass]="{'cursor-grab': isMovable(child)}" [dndEffectAllowed]="'move'" [dndDraggable]="{next: next+':'+i, id: child.id}" [dndDisableIf]="!isMovable(child)" (dndEnd)="onDragEnd($event)">
               <ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
             </div>
           </ng-container>
@@ -142,13 +142,13 @@
   <ng-template contextMenuItem [visible]="isMovable" (execute)="openMoveItemModal($event, MoveItemModalRef)">
     <div class="context-menu-item">
       <fa-icon class="text-warning modal-icon" [icon]="['fa','allergies']"></fa-icon>
-      <span> Move Item </span>
+      <span> Sposta prodotti </span>
     </div>
   </ng-template>
   <ng-template contextMenuItem  (execute)="reloadNode($event)">
     <div class="context-menu-item">
       <fa-icon class="text-warning" [icon]="['fa','sync']"></fa-icon>
-      <span> Reload </span>
+      <span> Ricarica </span>
     </div>
   </ng-template>
 </context-menu>
@@ -158,7 +158,7 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','allergies']"></fa-icon>
-        Move item to
+        Sposta prodotti a
       </h6>
       <div class="mt-3">
         <div class="form-group">
@@ -179,7 +179,7 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','allergies']"></fa-icon>
-        Merge Street With
+        Unisci strade con
       </h6>
       <div class="mt-3">
         <div class="form-group">
@@ -200,11 +200,11 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marker-alt']"></fa-icon>
-        Change pre dispatch start point
+        Cambia punto d'inizio della pre-distinta
       </h6>
       <div class="mt-3">
         <div class="form-group" *ngIf="!editingPoint['startPoint']">
-          <label class="modal-label">Change start point</label>
+          <label class="modal-label">Cambia punto d'inizio</label>
           <div class="flex-container">
             <ng-select #StartPointSelect class="change-start-end-point-input" [clearable]="false" [bindLabel]="'text'" [items]="all_start_points" placeholder="Select Start Point"></ng-select>
             <div class="edit-start-end-point-btn"><img src="/assets/images/edit.svg" (click)="editPoint('startPoint', StartPointSelect)"></div>
@@ -216,8 +216,8 @@
           </div>
         </div>
         <div class="form-group" *ngIf="editingPoint['startPoint']">
-          <label class="modal-label">Edit start point</label>
-          <p class="small-note">editing this start point will cause editing it on all pre-dispatches</p>
+          <label class="modal-label">Modifica punto d'inizio</label>
+          <p class="small-note">la modifica di questo punto iniziale comporterà la modifica su tutte le pre-distinte</p>
           <div class="flex-container">
             <div class="edit-start-end-point-input"><app-address-input [point]="editingPoint['startPoint']" #EditStartPointInput ></app-address-input></div>
             <div class="cancel-edit-start-end-point-btn" (click)="cancelEditPoint('startPoint')">X</div>
@@ -239,11 +239,11 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marker-alt']"></fa-icon>
-        Change pre dispatch end point
+        Cambia punto di fine della pre-distinta
       </h6>
       <div class="mt-3">
         <div class="form-group" *ngIf="!editingPoint['endPoint']">
-          <label class="modal-label">Change end point</label>
+          <label class="modal-label">Cambia punto di fine</label>
           <div class="flex-container">
             <ng-select #EndPointSelect class="change-start-end-point-input" [clearable]="false" [bindLabel]="'text'" [items]="all_end_points" placeholder="Select End Point"></ng-select>
             <div class="edit-start-end-point-btn"><img src="/assets/images/edit.svg" (click)="editPoint('endPoint', EndPointSelect)"></div>
@@ -255,8 +255,8 @@
           </div>
         </div>
         <div class="form-group" *ngIf="editingPoint['endPoint']">
-          <label class="modal-label">Edit end point</label>
-          <p class="small-note">editing this end point will cause editing it on all pre-dispatches</p>
+          <label class="modal-label">Modifica punto di fine</label>
+          <p class="small-note">la modifica di questo punto di fine comporterà la modifica su tutte le pre-distinte</p>
           <div class="flex-container">
             <div class="edit-start-end-point-input"><app-address-input [point]="editingPoint['endPoint']" #EditEndPointInput ></app-address-input></div>
             <div class="cancel-edit-start-end-point-btn" (click)="cancelEditPoint('endPoint')">X</div>
@@ -278,11 +278,11 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marked-alt']"></fa-icon>
-        Create Start Point
+        Crea punto d'inizio
       </h6>
       <div class="mt-3">
         <div class="form-group">
-          <label class="modal-label">Start Point Address</label>
+          <label class="modal-label">Indirizzo punto d'inizio</label>
           <app-address-input #StartPontAddressInput></app-address-input>
           <div *ngIf="errors['createStartPoint']" class="error-msg">{{errors['createStartPoint']}}</div>
         </div>
@@ -300,11 +300,11 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marked-alt']"></fa-icon>
-        Create End Point
+        Crea punto di fine
       </h6>
       <div class="mt-3">
         <div class="form-group">
-          <label class="modal-label">End Point Address</label>
+          <label class="modal-label">Indirizzo punto di fine</label>
           <app-address-input #EndPontAddressInput></app-address-input>
           <div *ngIf="errors['createEndPoint']" class="error-msg">{{errors['createEndPoint']}}</div>
         </div>

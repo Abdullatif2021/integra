@@ -6,8 +6,8 @@
       <ng-container *ngIf="!showConfirm; else ConfrimDialog">
         <h6>Pre-Distinte Edit</h6>
         <div class="row mt-4">
-          <div class="col-12 text-danger mb-2" *ngIf="error===1">Name is Required</div>
-          <div class="col-12 text-danger mb-2" *ngIf="error===2">Name Should be at least 3 chars</div>
+          <div class="col-12 text-danger mb-2" *ngIf="error===1">Il nome è obbligatorio</div>
+          <div class="col-12 text-danger mb-2" *ngIf="error===2">Il nome deve essere più di 3 caratteri</div>
           <div class="col-8 align-self-center">
             <label>Inserisci Nome Pre-Distinta</label>
             <input (change)="changeName($event)" value="{{name}}" type="text" class="form-control name-input" placeholder="Nome">

@@ -51,7 +51,7 @@ export class PreDispatchGlobalActionsService {
         } else {
             sets = await planningService.divideToDistenta(preDispatchData.id).toPromise().catch(e => {
                 this.backProcessingService.ultimatePause(preDispatchData.id);
-                this.snotifyService.error('Something went wrong, check the settings..', {showProgressBar: false, });
+                this.snotifyService.error('Qualcosa è andato storto, controlla le impostazioni...', {showProgressBar: false, });
                 this.planningErrors.emit('error');
             });
         }
