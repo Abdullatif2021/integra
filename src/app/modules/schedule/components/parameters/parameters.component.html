@@ -12,7 +12,7 @@
       <div class="row parameter-item">
         <div class="col-5"> <label>Giorno di Partenza</label> </div>
         <div class="col-7"> <input  [ngClass]="{'error-input': errors['departure_date']}" [(ngModel)]="data.departure_date" type="text" ngbDatepicker #timeOfServiceDP="ngbDatepicker" (focus)="timeOfServiceDP.toggle()" (change)="removeErrors()" (dateSelect)="removeErrors()" placeholder="DD/MM/YYYY" class="parameter-text-input"> </div>
-        <span class="error-msg col-5" *ngIf="errors['departure_date']">Wrong Value</span>
+        <span class="error-msg col-5" *ngIf="errors['departure_date']">Valore errato</span>
       </div>
       <div class="row parameter-item">
         <div class="col-5"> <label>Ora di Partenza</label> </div>
@@ -58,7 +58,7 @@
         <div class="col-7"> <input [(ngModel)]="data.post_man_number" min="1" type="number" (change)="validateNumber($event.target.value, 'post_man_number', 0)" class="parameter-number-input" (change)="removeErrors()" [ngClass]="{'error-input': errors['post_man_number']}">
           <span> postino.</span>
         </div>
-        <span class="error-msg col-5" *ngIf="errors['post_man_number']">Wrong Value</span>
+        <span class="error-msg col-5" *ngIf="errors['post_man_number']">Valore errato</span>
       </div>
       <div class="row parameter-item">
         <div class="col-5"> <label>Ore di lavoro al gg.</label> </div>
@@ -73,7 +73,7 @@
           <input [(ngModel)]="data.max_product" min="1" type="number" min="0" (change)="validateNumber($event.target.value, 'max_product', 0)" class="parameter-text-input parameter-number-input" (change)="removeErrors()" [ngClass]="{'error-input': errors['max_product']}">
           <span> prodotti.</span>
         </div>
-        <div class="error-msg col-5" *ngIf="errors['max_product']">Wrong Value</div>
+        <div class="error-msg col-5" *ngIf="errors['max_product']">Valore errato</div>
       </div>
       <div class="row parameter-item mt-0">
         <div class="col-5 pt-2"> <label>Consenti deviazione</label> </div>
@@ -112,7 +112,7 @@
     <!-- Submit section -->
 
     <div class="submit-section mt-3">
-      <button class="integraa-btn float-right" (click)="save()">Pianifica</button>
+      <button class="integraa-btn float-right" [ngClass]="{'disabled': preDispatchData.status === 'planned'}" [disabled]="preDispatchData.status === 'planned'"  (click)="save()">Pianifica</button>
       <div class="clear-both"></div>
     </div>
   </ng-container>

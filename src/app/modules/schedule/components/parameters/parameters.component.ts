@@ -90,7 +90,6 @@ export class ParametersComponent implements OnInit, OnDestroy {
         departure_date: null,
         departure_time: null
     };
-
     // modals
 
     @ViewChild('verylowmatchesModal') verylowmatchesModal: NgbModalRef ;
@@ -138,7 +137,9 @@ export class ParametersComponent implements OnInit, OnDestroy {
             }
         );
         this.scheduleService.preDispatchDataChanged.pipe(takeUntil(this.unsubscribe)).subscribe(
-            preDispatchData => this.preDispatchData = preDispatchData,
+            preDispatchData => {
+                this.preDispatchData = preDispatchData;
+            }
         );
         this.preDispatchGlobalActionsService.planningErrors.subscribe((e) => {
             this.checkErrors();

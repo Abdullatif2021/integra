@@ -44,7 +44,7 @@ export class LocatingService implements OnDestroy {
 
         if (skip) {
             await this.createTree(handle);
-            return this.snotifyService.success('Tree was created successfully', { showProgressBar: false});
+            return this.snotifyService.success('Albero creato con successo', { showProgressBar: false});
         }
 
         Object.keys(buildings).forEach((key) => {

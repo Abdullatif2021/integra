@@ -268,3 +268,8 @@ a:hover {
 .w-75 .ngx-timepicker {
     width: 75% !important;
 }
+
+.disabled {
+    background: #d6d6d6;
+    cursor: auto;
+}

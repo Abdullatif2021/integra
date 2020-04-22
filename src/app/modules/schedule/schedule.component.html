@@ -13,22 +13,17 @@
     <div class="col-8 v-wide-col">
       <div class="map-header">
         <div class="locating-btn integraa-btn" *ngIf="nextAction === 'locating'" (click)="runNextAction()">Localizza</div>
-        <div class="move-to-in-plan-btn integraa-btn" *ngIf="'/schedule/'+preDispatch === router.url && nextAction !== 'locating'" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Move to in plan</div>
-        <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url && nextAction !== 'locating'" (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">Back to Addresses</div>
+        <div class="move-to-in-plan-btn integraa-btn" *ngIf="'/schedule/'+preDispatch === router.url && nextAction !== 'locating'" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Sposta in da pianificare</div>
+        <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url && nextAction !== 'locating'" (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">Sposta in indirizzi</div>
         <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': false}" [ngStyle]="{width: preDispatchData.percent + '%'}">&nbsp;</div><div class="progress-action-text-value horiz">
           <span class="percent-value">{{preDispatchData.percent}} %</span>
           <span class="action-value">{{nextAction}}</span>
         </div></div>
         <img *ngIf="actionInRun && (preDispatchData.localize_status === 'play' || backProcessingService.isRunningAny(preDispatch))" (click)="stopAction()" src="assets/images/pause.svg" class="action-icon play-pause-icon">
         <img *ngIf="actionInRun && preDispatchData.localize_status !== 'play' && backProcessingService.isRunningAny(preDispatch) !== true" (click)="runNextAction()" src="assets/images/play.svg" class="action-icon play-pause-icon">
-        <div class="continue-btn integraa-btn" (click)="next()" *ngIf="'/schedule/'+preDispatch+'/parameters' === router.url">
-          <ng-container>
-            Pianifica
-          </ng-container>
-          <!--<ng-container *ngIf="'/schedule/'+preDispatch+'/parameters' !== router.url ">-->
-            <!--Prosegui-->
-          <!--</ng-container>-->
-        </div>
+        <button class="continue-btn integraa-btn" [ngClass]="{'disabled': preDispatchData.status === 'planned'}" [disabled]="preDispatchData.status === 'planned'"  (click)="next()" *ngIf="'/schedule/'+preDispatch+'/parameters' === router.url">
+          Pianifica
+        </button>
         <div class="clear-both"></div>
       </div>
     </div>
@@ -73,7 +68,7 @@
     <div class="modal-body">
       <h6 class="mb-3">
         <fa-icon class="text-warning" [icon]="['fa','exclamation-triangle']"></fa-icon>
-        The system was not able to locate this Addresses
+        Il sistema non è riuscito a localizzare gli indirizzo sotto indicati
       </h6>
       <div *ngFor="let nFoundItem of nFoundItems" class="mt-2 pr-5 pl-5">
         <h6 class="mb-0"><span class="text-warning font-size-13">{{nFoundItem.street}}, {{nFoundItem.houseNumber}}, {{nFoundItem.cap}} {{nFoundItem.city}}</span></h6>
@@ -112,7 +107,7 @@
       <h6 class="mb-3">
         <fa-icon class="text-warning notFoundItemsWarnongModalWarningIcon" [icon]="['fa','exclamation-triangle']"></fa-icon>
       </h6>
-      <h6 class="text-center">Some not located items was found, are you sure you want to continue ?</h6>
+      <h6 class="text-center">Ci sono alcuni indirizzo non trovati, Sicuro do voler procedere?</h6>
       <div class="btns-container mt-3">
         <button type="button" (click)="modal.close();moveToInPlan(notFoundItemsWarnongModalRef, true)" class="integraa-btn integraa-btn-danger ml-2 float-right" >Esegui</button>
         <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Close</button>
