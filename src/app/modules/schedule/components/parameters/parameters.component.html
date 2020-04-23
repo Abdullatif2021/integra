@@ -18,7 +18,7 @@
         <div class="col-5"> <label>Ora di Partenza</label> </div>
         <div class="col-7">
           <!--<ngx-timepicker-field [(ngModel)]="data.departure_time" (keyup)="someTimeChanged($event)" [format]="24" class="w-75" [controlOnly]="true"></ngx-timepicker-field>-->
-          <input type="text" [(ngModel)]="data.departure_time" (keyup)="timeChangeFormat($event)" (change)="formatTime($event.target.value, 'departure_time')" class="parameter-text-input parameter-medium-input" placeholder="H:i" min="0" max="24">
+          <input type="text" [(ngModel)]="data.departure_time" (keyup)="timeChangeFormat($event)" (change)="formatTime($event.target.value, 'departure_time')" class="parameter-text-input parameter-medium-input" placeholder="HH:MM" min="0" max="24">
         </div>
       </div>
       <div class="row parameter-item">
@@ -38,8 +38,8 @@
             <!--<span class="mt-auto mb-auto ml-2 mr-1">Alle : </span><ngx-timepicker-field [(ngModel)]="data.pause_time_end" [format]="24" [controlOnly]="true"></ngx-timepicker-field>-->
           <!--</div>-->
 
-          <span>Della : </span><input type="text" [(ngModel)]="data.pause_time_start" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_start')" >
-          <span> Alle : </span><input type="text" [(ngModel)]="data.pause_time_end" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="H:i" (change)="formatTime($event.target.value, 'pause_time_end')" >
+          <span>Della : </span><input type="text" [(ngModel)]="data.pause_time_start" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'pause_time_start')" >
+          <span> Alle : </span><input type="text" [(ngModel)]="data.pause_time_end" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'pause_time_end')" >
         </div>
       </div>
       <div class="row parameter-item mt-0">
@@ -180,7 +180,7 @@
         <div class="row parameter-item">
           <div class="col-5"> <label>Ora di Partenza</label> </div>
           <div class="col-7">
-            <input type="text" [(ngModel)]="options2Data.departure_time" class="parameter-text-input parameter-medium-input" placeholder="H:i" type="time" min="0" max="24">
+            <input type="text" [(ngModel)]="options2Data.departure_time" class="parameter-text-input parameter-medium-input" placeholder="HH:MM" type="time" min="0" max="24">
           </div>
         </div>
       </div>
@@ -207,7 +207,7 @@
         <div class="row parameter-item">
           <div class="col-5"> <label>Ora di Partenza</label> </div>
           <div class="col-7">
-            <input type="text" [(ngModel)]="options2Data.departure_time" class="parameter-text-input parameter-medium-input" placeholder="H:i" type="time" min="0" max="24">
+            <input type="text" [(ngModel)]="options2Data.departure_time" class="parameter-text-input parameter-medium-input" placeholder="HH:MM" type="time" min="0" max="24">
           </div>
         </div>
       </div>
