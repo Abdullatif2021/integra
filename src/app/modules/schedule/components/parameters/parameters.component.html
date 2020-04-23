@@ -143,7 +143,7 @@
         </ng-container>
       </div>
 
-      <button class="integraa-btn float-right mt-3" (click)="changePreDispatch()">Pianifica</button>
+      <button class="integraa-btn float-right mt-3" [ngClass]="{'disabled': preDispatchData.status === 'planned'}" [disabled]="preDispatchData.status === 'planned'" (click)="changePreDispatch()">Pianifica</button>
 
     </div>
   </ng-container>
