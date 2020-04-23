@@ -147,14 +147,47 @@ export class ResultsService implements OnDestroy {
         };
         return this.http.post<any>(AppConfig.endpoints.assignToSet(setId), data);
     }
-    orderTreeNode(preDispatch, addressId, level, type) {
-        const roots = {cityId: 1, capId: 2, streetId: 3, building: 4};
+    orderTreeNode(groupId, level) {
         const data = {
-            root: roots[type],
-            element_id: addressId,
-            level: level
+            newPriority: level
         };
-        return this.http.post<any>(AppConfig.endpoints.orderTreeNode(preDispatch), data);
+        return this.http.post<any>(AppConfig.endpoints.shiftGroupPriority(groupId), data);
+    }
+
+    getSetGroups(set) {
+        return new Promise((resolve, reject) => {
+            this.sendGetSetGroupsRequest(set.id, set.page).subscribe(
+                data => {
+                    if (!data.success) { return reject(data); }
+                    resolve(this.reshapeGroupsData(set, data.data));
+                },
+                error => reject(error)
+            );
+        });
+    }
+
+    reshapeGroupsData(parent, groups) {
+        const result = [] ;
+        groups.forEach(elm => {
+           result.push({
+               id: elm.id,
+               address: `${elm.street}, ${elm.house_number}, ${elm.cap}, ${elm.city}` ,
+               loaded: false,
+               parent: parent,
+               type: 'building',
+               addressId: elm.id,
+               products: elm.products.length
+           });
+        });
+        return result ;
+    }
+
+    sendGetSetGroupsRequest(setId, page = 1) {
+        const options = {params: new HttpParams()};
+        options.params = options.params.set('page', page + '');
+        options.params = options.params.set('pageSize', '15');
+
+        return <any>this.http.get(AppConfig.endpoints.getSetGroups(setId), options);
     }
 
     ngOnDestroy() {

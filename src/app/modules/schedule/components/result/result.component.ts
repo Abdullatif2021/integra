@@ -9,7 +9,6 @@ import {DragAndDropService} from '../../../../service/drag-and-drop.service';
 import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {ListTreeService} from '../../service/list-tree.service';
 import {MapService} from '../../service/map.service';
-import {forEach} from '@angular/router/src/utils/collection';
 import {MapMarker} from '../../../../core/models/map-marker.interface';
 
 @Component({
@@ -26,7 +25,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       private scheduleService: ScheduleService,
       private dragAndDropService: DragAndDropService,
       private listTreeService: ListTreeService,
-      private mapService: MapService
+      private mapService: MapService,
   ) {
       this.preDispatchData = this.route.snapshot.parent.data.data ;
       this.preDispatch = this.route.snapshot.parent.params.id;
@@ -99,7 +98,11 @@ export class ResultComponent implements OnInit, OnDestroy {
       if (item.expanded && !item.children.length) {
           item.children = [{skeleton: true}];
           item.loaded = true ;
-          item.children = await this.resultsService.listNode(item) ;
+          const result = await <any>this.resultsService.getSetGroups(item).catch(
+              error => this.snotifyService.error('Qualcosa è andato storto!!', { showProgressBar: false, timeout: 1500 })
+          );
+          item.children =  result;
+          console.log(item);
           item.loaded = false ;
       }
   }
@@ -112,26 +115,20 @@ export class ResultComponent implements OnInit, OnDestroy {
           item.children = [] ;
       }
       item.children.push({skeleton: true});
-      if (!item.page) {
-          item.page = 2 ;
-      } else {
-          item.page ++ ;
-      }
+      item.page = item.page ? ++item.page : 2 ;
       item.loaded = true ;
-      const data = await this.resultsService.listNode(item);
-      item.children.pop();
-      if (!data || !data.length) {
+      const result = await <any>this.resultsService.getSetGroups(item).catch(
+          error => this.snotifyService.error('Qualcosa è andato storto!!', { showProgressBar: false, timeout: 1500 })
+      );      item.children.pop();
+      if (!result || !result.data.length) {
           return ;
       }
       item.loaded = false ;
-      item.children = item.children.concat(data);
+      item.children = item.children.concat(result.data);
   }
 
   getLvlClass(next) {
       return ('lvl-' + (next + '').split(':').length);
-  }
-  getLvl(next) {
-      return (next + '').split(':').length;
   }
 
   makeDispatchesVisible() {
@@ -227,6 +224,7 @@ export class ResultComponent implements OnInit, OnDestroy {
 
 
   onDrop(event, target) {
+      console.log('drop', event, target);
       let index = event.index;
       if ( typeof index === 'undefined' ) {
           index = target.children.length;
@@ -243,7 +241,7 @@ export class ResultComponent implements OnInit, OnDestroy {
               }
           );
       } else {
-          this.resultsService.orderTreeNode(this.preDispatch, result.item.addressId, index, result.item.type).subscribe(
+          this.resultsService.orderTreeNode(result.item.addressId, index).subscribe(
               data => {
               }
           );

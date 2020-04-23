@@ -40,6 +40,10 @@ export class LocatingService implements OnDestroy {
     processed = 0 ;
     breakGroupingLoading = false ;
 
+    // TODO remove this
+    countNotFound = 0 ;
+    countFound = 0 ;
+    notfounds = [];
     async fix(buildings: [BuildingLocationInterface], skip = false, handle: EventEmitter<any>, preDispatch) {
 
         if (skip) {
@@ -126,6 +130,8 @@ export class LocatingService implements OnDestroy {
             return false ;
         }
 
+        console.log('located', this.countFound);
+        console.log('not located', this.countNotFound);
         // reset buildings to start the fix not found process .
         this.buildings = <[LocatedBuildingInterface]>[] ;
         await this.backProcessingService.updatePreDispatchActionStatus(preDispatch, null);
@@ -134,6 +140,12 @@ export class LocatingService implements OnDestroy {
             // emit fix the not found items event.
             this.productsNotFound.emit(nfound.data);
             handle.emit({nfound: nfound.data});
+            // TODO remove this.
+            nfound.forEach(elm => {
+                if (!this.notfounds.filter(e => e.id === elm.id).length) {
+                    console.log('diff shit', elm.id);
+                }
+            });
         }
 
         // if every thing is done or the user is not in the pre-dispatch page, create the tree.
@@ -151,27 +163,39 @@ export class LocatingService implements OnDestroy {
         let result ;
 
         const onePercent = Math.ceil(total / 100.0);
-
+        console.log('locating page contains ', buildings.length, ' items!');
         for (let i = 0; i < buildings.length; ++i) {
             if ( result = await this.tuttocittaGeocodeService.locate(buildings[i]) ) {
                 this.buildings.push(result);
+                console.log(buildings[i], ' located by tuttocitta');
+                this.countFound++;
             } else if (result = await this.googleGeocodeService.locate(buildings[i])) {
                 this.buildings.push(result);
+                console.log(buildings[i], ' located by google');
+                this.countFound++;
             } else if ( result = await this.mapBoxGeocodeService.locate(buildings[i])) {
                 this.buildings.push(result);
+                this.countFound++;
             } else {
+                console.error(buildings[i], ' was not located');
+                this.countNotFound++;
+                this.notfounds.push(buildings[i]);
                 this.buildings.push({ id: buildings[i].id, lat: 0, long: 0, is_fixed: false, name: buildings[i].street});
             }
             // if the process is paused save and stop working.
             if (!this.backProcessingService.isRunning('locating-' + preDispatch)) {
+                console.log('saving because of pause ', this.buildings);
                 await this.save();
                 return false ;
             }
             // save every 1%
             if (this.processed % onePercent === 0) {
+                console.log('saving every 1% ', this.buildings);
                 await this.save();
             }
         }
+
+        console.log('saving because of stage end ', this.buildings);
         await this.save();
         return true ;
     }

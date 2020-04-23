@@ -25,7 +25,7 @@ export class DragAndDropService {
             (this.drag_elm.type === 'capId' && target.type !== 'cityId') ||
             (this.drag_elm.type === 'streetId' && target.type !== 'capId') ||
             (this.drag_elm.type === 'oet') ||
-            (this.drag_elm.type === 'building' && target.type !== 'streetId')
+            (this.drag_elm.type === 'building' && (target.type !== 'streetId' && target.type !== 'set' ))
         ) {
             return ;
         }
@@ -70,7 +70,8 @@ export class DragAndDropService {
             loaded: false,
             parent: target,
             type: 'building',
-            addressId: elm.addressId
+            addressId: elm.addressId,
+            products: elm.products
         };
     }
 
@@ -89,7 +90,6 @@ export class DragAndDropService {
     }
 
     handleRepeated(target) {
-        console.log(this.remote);
         if (!this.remote) {
             return ;
         }
