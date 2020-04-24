@@ -107,7 +107,6 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   async loadMore(item) {
-      console.log('in load more', item, item.loaded);
       if (item.loaded) {
           return ;
       }
