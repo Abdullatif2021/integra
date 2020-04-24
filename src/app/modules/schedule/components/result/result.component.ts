@@ -102,12 +102,12 @@ export class ResultComponent implements OnInit, OnDestroy {
               error => this.snotifyService.error('Qualcosa è andato storto!!', { showProgressBar: false, timeout: 1500 })
           );
           item.children =  result;
-          console.log(item);
           item.loaded = false ;
       }
   }
 
   async loadMore(item) {
+      console.log('in load more', item, item.loaded);
       if (item.loaded) {
           return ;
       }
@@ -120,11 +120,11 @@ export class ResultComponent implements OnInit, OnDestroy {
       const result = await <any>this.resultsService.getSetGroups(item).catch(
           error => this.snotifyService.error('Qualcosa è andato storto!!', { showProgressBar: false, timeout: 1500 })
       );      item.children.pop();
-      if (!result || !result.data || !result.data.length) {
+      if (!result.length) {
           return ;
       }
       item.loaded = false ;
-      item.children = item.children.concat(result.data);
+      item.children = item.children.concat(result);
   }
 
   getLvlClass(next) {
@@ -224,7 +224,6 @@ export class ResultComponent implements OnInit, OnDestroy {
 
 
   onDrop(event, target) {
-      console.log('drop', event, target);
       let index = event.index;
       if ( typeof index === 'undefined' ) {
           index = target.children.length;
@@ -243,7 +242,6 @@ export class ResultComponent implements OnInit, OnDestroy {
       } else {
           this.resultsService.orderTreeNode(result.item.addressId, index).subscribe(
               data => {
-                  console.log('here we go');
                   this.loadPath(this.selected_set);
               }
           );
