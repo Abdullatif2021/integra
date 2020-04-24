@@ -148,3 +148,19 @@
 .postman-tree-node {
     cursor: pointer;
 }
+.priority-container {
+    background: #212121;
+    margin: auto;
+    border-radius: 13px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    color: #FFF;
+    text-align: center;
+}
+.priority-container span {
+    margin: auto;
+    width: 100%;
+    text-align: center;
+
+}

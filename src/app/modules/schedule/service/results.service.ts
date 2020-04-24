@@ -171,12 +171,13 @@ export class ResultsService implements OnDestroy {
         groups.forEach(elm => {
            result.push({
                id: elm.id,
-               address: `${elm.street}, ${elm.house_number}, ${elm.cap}, ${elm.city}` ,
+               address: `${elm.street}, ${elm.houseNumber}, ${elm.cap}, ${elm.city}` ,
                loaded: false,
                parent: parent,
                type: 'building',
                addressId: elm.id,
-               products: elm.products.length
+               products: elm.products.length,
+               priority: elm.mapPriority
            });
         });
         return result ;

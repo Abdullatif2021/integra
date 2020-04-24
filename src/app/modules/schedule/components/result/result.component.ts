@@ -48,7 +48,7 @@ export class ResultComponent implements OnInit, OnDestroy {
   _postmen = {} ;
   selectedPostmen: any = {} ;
   dragging;
-  selected_set = -1;
+  selected_set = {id: -1};
 
   async ngOnInit() {
       this.loadPostmen();
@@ -120,7 +120,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       const result = await <any>this.resultsService.getSetGroups(item).catch(
           error => this.snotifyService.error('Qualcosa è andato storto!!', { showProgressBar: false, timeout: 1500 })
       );      item.children.pop();
-      if (!result || !result.data.length) {
+      if (!result || !result.data || !result.data.length) {
           return ;
       }
       item.loaded = false ;
@@ -146,7 +146,7 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   selectPostman(postman) {
-      this.selected_set = postman.id ;
+      this.selected_set = postman ;
       this.loadPath(postman);
   }
 
@@ -243,6 +243,8 @@ export class ResultComponent implements OnInit, OnDestroy {
       } else {
           this.resultsService.orderTreeNode(result.item.addressId, index).subscribe(
               data => {
+                  console.log('here we go');
+                  this.loadPath(this.selected_set);
               }
           );
       }
