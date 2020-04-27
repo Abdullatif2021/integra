@@ -119,6 +119,7 @@ export class FiltersService {
 
   clear() {
       this.filters = [] ;
+      this.specials = {} ;
       this.cleared.emit(1);
   }
 
