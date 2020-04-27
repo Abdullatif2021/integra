@@ -145,17 +145,27 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   selectPostman(postman) {
+      if (this.selected_set.id === postman.id) {
+          return ;
+      }
       this.selected_set = postman ;
       this.loadPath(postman);
   }
 
 
-  async loadPath(postman) {
-      const path = await <any>this.resultsService.getSetPath(postman.id).toPromise();
+  async loadPath(postman, onlyMarkers = false) {
+      let markersData = [];
+      if (onlyMarkers) {
+          const temp = await <any>this.resultsService.getSetMarkers(postman.id).toPromise();
+          markersData = temp.data ;
+      } else {
+          const path = await <any>this.resultsService.getSetPath(postman.id).toPromise();
+          markersData = path.data.coordinates ;
+          this.mapService.drawPath(JSON.parse(path.data.path));
+      }
       this.mapService.reset();
-      this.mapService.drawPath(JSON.parse(path.data.path));
       const markers = <[MapMarker]>[];
-      path.data.coordinates.forEach((elm) => {
+      markersData.forEach((elm) => {
          markers.push({
              lat: elm.lat,
              lng: elm.long,
@@ -241,7 +251,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       } else {
           this.resultsService.orderTreeNode(result.item.addressId, index).subscribe(
               data => {
-                  this.loadPath(this.selected_set);
+                  this.loadPath(this.selected_set, true);
               }
           );
       }

@@ -32,6 +32,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
     ) {
         this.preDispatch = this.route.snapshot.parent.params.id;
         this.preDispatchData = this.route.snapshot.parent.data.data ;
+
     }
 
     options = {
@@ -99,34 +100,20 @@ export class ParametersComponent implements OnInit, OnDestroy {
     views = [{value: 1, label: 'Secondo i parametri impostati'}, {value: 2, label: 'Secondo predistinta pianificata'}];
     unsubscribe: Subject<void> = new Subject();
     errors = {} ;
+
+
     ngOnInit() {
         this.visibleView = this.views[0];
-        let departure_date = this.preDispatchData.departure_date ? this.preDispatchData.departure_date.split(' ') : [] ;
-        const departure_time = departure_date.length > 1 ? departure_date[1].substr(0, 5) : null;
-        departure_date = departure_date[0] ? departure_date[0].split('-') : false  ;
-        departure_date = departure_date ?
-            <NgbDate>{year: parseInt(departure_date[0], 10), month: parseInt(departure_date[1], 10),
-            day: parseInt(departure_date[2], 10) } : false;
-        const hours_per_day = this.preDispatchData.hours_per_day ? '' + this.preDispatchData.hours_per_day.split('.') : [] ;
-        // const pause_time_start = this.preDispatchData.pause_time_start.split(':');
-        // const pause_time_end = this.preDispatchData.pause_time_end.split(':');
-        this.data = {
-            service_time_single: this.findOption('service_time_single', this.options.serviceTimeOptions),
-            service_time_multiple: this.findOption('service_time_multiple', this.options.serviceTimeOptions),
-            travel_mode: this.findOption('travel_mode', this.options.travelModes),
-            deviation: this.preDispatchData.deviation,
-            target: this.findOption('target', this.options.target),
-            mixed_cities: this.findOption('mixed_cities', this.options.mixedCities),
-            path_start: this.findOption('path_start', this.options.pathStart),
-            departure_date: departure_date,
-            departure_time: departure_time,
-            pause_time_start: this.preDispatchData.pause_time_start ? this.preDispatchData.pause_time_start.substr(0, 5) : null,
-            pause_time_end: this.preDispatchData.pause_time_end ? this.preDispatchData.pause_time_end.substr(0, 5) : null,
-            post_man_number: this.preDispatchData.post_man_number,
-            hours_per_day_hour: hours_per_day[0] ? hours_per_day[0] : '',
-            hours_per_day_minute: hours_per_day[1] ? hours_per_day[1] : '',
-            max_product: this.preDispatchData.max_product,
-        };
+        // update the pre-dispatch data in case it was outdated, then initiate the form data object.
+        this.preDispatchService.getPreDispatchData(this.preDispatchData.id).subscribe(
+            res => {
+                this.preDispatchData = res.data;
+                this.updateDataObject();
+            },
+            error => {
+                this.snotifyService.error('Qualcosa è andato storto!!');
+            }
+        );
         this.scheduleService.nextButtonClicked.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
                 if (this.visibleView.value === 2) {
@@ -141,9 +128,35 @@ export class ParametersComponent implements OnInit, OnDestroy {
                 this.preDispatchData = preDispatchData;
             }
         );
-        this.preDispatchGlobalActionsService.planningErrors.subscribe((e) => {
+        this.preDispatchGlobalActionsService.planningErrors.pipe(takeUntil(this.unsubscribe)).subscribe((e) => {
             this.checkErrors();
         });
+    }
+
+    updateDataObject() {
+        let departure_date = this.preDispatchData.departure_date ? this.preDispatchData.departure_date.split(' ') : [] ;
+        const departure_time = departure_date.length > 1 ? departure_date[1].substr(0, 5) : null;
+        departure_date = departure_date[0] ? departure_date[0].split('-') : false  ;
+        departure_date = departure_date ?
+            <NgbDate>{year: parseInt(departure_date[0], 10), month: parseInt(departure_date[1], 10),
+                day: parseInt(departure_date[2], 10) } : false;
+        this.data = {
+            service_time_single: this.findOption('service_time_single', this.options.serviceTimeOptions),
+            service_time_multiple: this.findOption('service_time_multiple', this.options.serviceTimeOptions),
+            travel_mode: this.findOption('travel_mode', this.options.travelModes),
+            deviation: this.preDispatchData.deviation,
+            target: this.findOption('target', this.options.target),
+            mixed_cities: this.findOption('mixed_cities', this.options.mixedCities),
+            path_start: this.findOption('path_start', this.options.pathStart),
+            departure_date: departure_date,
+            departure_time: departure_time,
+            pause_time_start: this.preDispatchData.pause_time_start ? this.preDispatchData.pause_time_start.substr(0, 5) : null,
+            pause_time_end: this.preDispatchData.pause_time_end ? this.preDispatchData.pause_time_end.substr(0, 5) : null,
+            post_man_number: this.preDispatchData.post_man_number,
+            hours_per_day_hour: this.preDispatchData.hours_per_day_hour,
+            hours_per_day_minute: this.preDispatchData.hours_per_day_minute,
+            max_product: this.preDispatchData.max_product,
+        };
     }
 
     findOption(option, options) {
@@ -337,7 +350,6 @@ export class ParametersComponent implements OnInit, OnDestroy {
     }
 
     removeErrors() {
-        console.log('chnaged', this.errors);
         Object.keys(this.errors).forEach((key) => {
             console.log('key', key);
            if (this.data[key]) { delete this.errors[key]; }
@@ -351,12 +363,6 @@ export class ParametersComponent implements OnInit, OnDestroy {
         const result = await this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
     }
 
-    // someTimeChanged(event) {
-    //     console.log(event.target.closest('input'), event.target.value);
-    //     if (event.target.value[0] > 2 || event.target.value.length > 1) {
-    //         event.target.closest('input').focus();
-    //     }
-    // }
     checkErrors() {
         const data = this.getData() ;
         if (!data.post_man_number) {

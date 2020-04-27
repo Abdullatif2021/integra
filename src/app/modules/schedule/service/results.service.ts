@@ -132,6 +132,9 @@ export class ResultsService implements OnDestroy {
     getSetPath(setId): Observable<TreeNodeResponseInterface> {
         return this.http.get<any>(AppConfig.endpoints.getSetPath(setId));
     }
+    getSetMarkers(setId): Observable<TreeNodeResponseInterface> {
+        return this.http.get<any>(AppConfig.endpoints.getSetMarkers(setId));
+    }
 
     assignToSet(setId, addressId, assignTo, level, type) {
         const roots = {cityId: 1, capId: 2, streetId: 3, building: 4};

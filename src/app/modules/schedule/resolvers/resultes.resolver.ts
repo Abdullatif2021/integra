@@ -6,7 +6,6 @@ import {PreDispatchService} from '../../../service/pre-dispatch.service';
 import {ResultsService} from '../service/results.service';
 import {SnotifyService} from 'ng-snotify';
 import {PreDispatchGlobalActionsService} from '../../../service/pre-dispatch-global-actions.service';
-import {takeUntil} from 'rxjs/internal/operators';
 
 @Injectable()
 export class ResultesResolver implements Resolve<any> {
