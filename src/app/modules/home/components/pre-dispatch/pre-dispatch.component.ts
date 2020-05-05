@@ -93,23 +93,20 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   }
 
   startLoadingInterval() {
-      if (!this.backProcessingService.nameSpaceHasAny('updating-status')) {
-          this.subscription = this.preDispatchService.getPreDispatchItems(true, this.order_field, this.order_method)
-              .pipe(takeUntil(this.unsubscribe)).subscribe((res: ApiResponseInterface) => {
-                  // if there was not status update request pending, update the status
-                  if (this.backProcessingService.canUpdateState('updating-status')) {
-                      this.preDispatchList = res.data ;
-                      this.preDispatchList.forEach(preDispatch => {
-                          this.backProcessingService.handlePreDispatchActionsChanges(preDispatch);
-                      });
-                      this.prodcastDataToModals(res.data) ;
-                      this.refresh++ ;
-                  }
-                  setTimeout(() => {
-                      this.startLoadingInterval();
-                  }, 2000);
-              });
-      }
+      this.subscription = this.preDispatchService.getPreDispatchItems(true, this.order_field, this.order_method)
+          .pipe(takeUntil(this.unsubscribe)).subscribe((res: ApiResponseInterface) => {
+              // if there was not status update request pending, update the status
+              if (this.backProcessingService.canUpdateState('updating-status')) {
+                  this.preDispatchList = res.data ;
+                  this.preDispatchList.forEach(preDispatch => {
+                      this.backProcessingService.handlePreDispatchActionsChanges(preDispatch);
+                  });
+                  this.refresh++ ;
+              }
+              setTimeout(() => {
+                  this.startLoadingInterval();
+              }, 2000);
+          });
   }
 
   ngOnDestroy() {
@@ -128,9 +125,6 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
 
   openIntegraaModal(elm) {
       this.integraaModalService.open('/schedule/' + elm.id, {width: 1400, height: 680}, {location: 'schedule', id: elm.id});
-  }
-
-  prodcastDataToModals(data) {
   }
 
   openModal(modal, data) {

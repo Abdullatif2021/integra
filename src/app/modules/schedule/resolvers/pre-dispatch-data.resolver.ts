@@ -10,13 +10,13 @@ export class PreDispatchDataResolver implements Resolve<any> {
 
     constructor(
         private preDispatchService: PreDispatchService,
-        private placesAutocompleteService: PlacesAutocompleteService
+        // private placesAutocompleteService: PlacesAutocompleteService
     ) {
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
         return new Promise(async (resolve, reject) => {
-            await this.placesAutocompleteService.loadAutoComplete();
+            // await this.placesAutocompleteService.loadAutoComplete();
             this.preDispatchService.getPreDispatchData(route.paramMap.get('id')).subscribe(
                 res => {
                     if (!res.success) {

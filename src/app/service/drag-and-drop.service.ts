@@ -72,7 +72,8 @@ export class DragAndDropService {
             type: 'building',
             addressId: elm.addressId,
             products: elm.products,
-            priority: elm.mapPriority
+            priority: elm.mapPriority,
+            productsCount: elm.productsCount
         };
     }
 

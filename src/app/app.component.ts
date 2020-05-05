@@ -5,6 +5,7 @@ import {NgbDateParserFormatter} from '@ng-bootstrap/ng-bootstrap';
 import {NgbDateITParserFormatter} from './shared/provider/ngb-date-it-parser-formatter';
 import {PreDispatchGlobalActionsService} from './service/pre-dispatch-global-actions.service';
 import {BuildingLocationInterface} from './core/models/building.interface';
+import {GoogleApiService} from './shared/service/google.api.service';
 
 @Component({
     selector: 'app-root',
@@ -17,10 +18,11 @@ export class AppComponent {
     constructor(
         private backProcessingService: BackProcessingService,
         private locatingService: LocatingService,
-        private preDispatchGlobalActionsService: PreDispatchGlobalActionsService
+        private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
+        private googleApiService: GoogleApiService
     ) {
+        this.googleApiService.loadApiScripts();
     }
-    test = {nothing: 1} ;
     @HostListener('window:beforeunload', ['$event'])
     beforeunload(event: Event) {
         event.preventDefault();
@@ -36,12 +38,11 @@ export class AppComponent {
     @HostListener('window:message', ['$event'])
     onMessage(e) {
         if (e.data.runPreDispatch) {
-            this.preDispatchGlobalActionsService.startPreDispatchAction(e.data.runPreDispatch);
+            this.preDispatchGlobalActionsService.startPreDispatchAction(e.data.runPreDispatch, e.data.data);
         } else if (e.data.handleSaysHi) {
             this.preDispatchGlobalActionsService.modalMessageRecived(e.data.handleSaysHi.message);
         } else if (e.data.locatingFixItems) {
             this.preDispatchGlobalActionsService.fixLocatingItems(e.data);
-            console.log('fix item was called');
         }
         console.log(e.data);
     }

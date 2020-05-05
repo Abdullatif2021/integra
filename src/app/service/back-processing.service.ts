@@ -107,6 +107,7 @@ export class BackProcessingService {
         if (this._ignore_one[key]) {
             this._ignore_one[key] = false ;
         }
+        console.log(`can update stat for ${key} returned :`, !state);
         return !state ;
     }
 

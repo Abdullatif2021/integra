@@ -24,6 +24,7 @@ import { LoadingComponent } from './components/loading/loading.component';
 import { AddressInputComponent } from './components/address-input/address-input.component';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import {PlacesAutocompleteService} from './service/places.autocomplete.service';
+import {GoogleApiService} from './service/google.api.service';
 import {PageDirective} from './directives/page.directive';
 import {faBackward} from '@fortawesome/free-solid-svg-icons/faBackward';
 import { IframeComponent } from './components/iframe/iframe.component';
@@ -59,10 +60,11 @@ import { IframeComponent } from './components/iframe/iframe.component';
       PageDirective,
       LoadingComponent,
       AddressInputComponent,
-      IframeComponent
+      IframeComponent,
   ],
   providers: [
-      PlacesAutocompleteService
+      PlacesAutocompleteService,
+      GoogleApiService
   ],
 })
 export class SharedModule {

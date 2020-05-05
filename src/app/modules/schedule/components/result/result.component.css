@@ -164,3 +164,11 @@
     text-align: center;
 
 }
+.product-items-header {
+    background: #222222;
+    color: #fcda4b;
+}
+.street-item .more {
+    margin: auto;
+    cursor: pointer;
+}

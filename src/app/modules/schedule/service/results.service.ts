@@ -179,8 +179,9 @@ export class ResultsService implements OnDestroy {
                parent: parent,
                type: 'building',
                addressId: elm.id,
-               products: elm.products.length,
-               priority: elm.mapPriority
+               products: elm.products,
+               priority: elm.mapPriority,
+               productsCount: elm.productsCount
            });
         });
         return result ;

@@ -116,12 +116,13 @@
 <ng-template let-idx="idx" let-next="next" let-item="item" #streetItems>
   <div class="street-items-header" *ngIf="item.children">
     <div class="row">
-      <div class="col-1 pl-3"><div class="street-items-header-cell">Indirizzo</div></div>
-      <div class="col-4 wide-col pl-3"><div class="street-items-header-cell">Indirizzo</div></div>
-      <div class="col-2 text-center"><div class="street-items-header-cell">Consegne</div></div>
-      <div class="col-2 wide-col pl-1"><div class="street-items-header-cell">Ora d’arrivo</div></div>
-      <div class="col-1"><div class="street-items-header-cell">Srv</div></div>
-      <div class="col-2"><div class="street-items-header-cell">Distanza</div></div>
+      <div class="col-1"></div>
+      <div class="col-1"></div>
+      <div class="col-4 wide-col"><div class="street-items-header-cell">Indirizzo</div></div>
+      <div class="col-3 text-center"><div class="street-items-header-cell">Consegne</div></div>
+      <div class="col-3 wide-col pl-1"><div class="street-items-header-cell">Ora d’arrivo</div></div>
+      <!--<div class="col-1"><div class="street-items-header-cell">Srv</div></div>-->
+      <!--<div class="col-1"><div class="street-items-header-cell">Distanza</div></div>-->
     </div>
   </div>
   <div class="street-items" dndDropzone [dndHorizontal]="false" (dndDrop)="onDrop($event, item)" [ngClass]="{'drop-location': dragging && dragging.type === 'building'}" infiniteScroll (scrolled)="loadMore(item)" [scrollWindow]="true" [infiniteScrollContainer]="itemContainer" infiniteScrollDistance="30">
@@ -134,14 +135,39 @@
       <ng-container  *ngIf="!child.skeleton;">
         <div class="street-item">
           <div class="row">
-            <div class="col-1 wide-col d-flex"> <div class="priority-container"><span>{{i + 1}}</span></div> </div>
-            <div class="col-4"> <div class="text">{{child.address}}</div> </div>
-            <div class="col-2 text-center"> <div class="count">{{child.products}}</div> </div>
-            <div class="col-2 wide-col pl-1"> <div class="count">{{child.time}}</div> </div>
-            <div class="col-1"> <div class="srv">{{child.srv}}</div> </div>
-            <div class="col-2"> <div class="distance">{{child.distance}}</div> </div>
+            <div class="col-1 d-flex">
+              <div class="more" *ngIf="child.products" (click)="child.expanded = !child.expanded">
+                <fa-icon *ngIf="!child.expanded" [icon]="['fa','chevron-down']"></fa-icon>
+                <fa-icon *ngIf="child.expanded" [icon]="['fa','chevron-up']"></fa-icon>
+              </div>
+            </div>
+            <div class="col-1 wide-col d-flex"> <div class="ml-1 priority-container"><span>{{i + 1}}</span></div> </div>
+            <div class="col-4 wide-col pl-3"> <div class="text">{{child.address}}</div> </div>
+            <div class="col-3 text-center"> <div class="count">{{child.productsCount}}</div> </div>
+            <div class="col-3 wide-col pl-1"> <div class="count">{{child.time}}</div> </div>
+            <!--<div class="col-1"> <div class="srv">{{child.srv}}</div> </div>-->
+            <!--<div class="col-1"> <div class="distance">{{child.distance}}</div> </div>-->
           </div>
         </div>
+
+        <!-- Products -->
+        <ng-container *ngIf="child.expanded">
+          <div class="product-items-header" *ngIf="item.children">
+            <div class="row">
+              <div class="col-3 d-flex"><div class="m-auto">Barcode</div></div>
+              <div class="col-3 d-flex"><div class="m-auto">Actcode</div></div>
+              <div class="col-6 d-flex"><div class="m-auto">Note</div></div>
+            </div>
+          </div>
+          <div class="product-items-body row">
+            <ng-container *ngFor="let product of child.products">
+              <div class="col-3 d-flex"><div class="m-auto">{{product.barcode}}</div></div>
+              <div class="col-3 d-flex"><div class="m-auto">{{product.act_code}}</div></div>
+              <div class="col-6 d-flex"><div class="m-auto">{{product.note}}</div></div>
+            </ng-container>
+          </div>
+
+        </ng-container>
       </ng-container>
     </div>
   </div>

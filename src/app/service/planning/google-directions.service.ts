@@ -67,7 +67,7 @@ export class GoogleDirectionsService {
                 dRes.routes[0].waypoint_order.forEach((idx) => {
                    order.push({ id: d_waypoints[idx].id, priority: order_count++ });
                 });
-                d_waypoints.splice(0, dRes.routes[0].waypoint_order.length)
+                d_waypoints.splice(0, dRes.routes[0].waypoint_order.length);
                 if (d_waypoints.length) {
                     order.push({ id: d_waypoints[0].id, priority: order_count++ });
                     d_waypoints.splice(0, 1);
@@ -96,7 +96,7 @@ export class GoogleDirectionsService {
 
     formatPath(dRes) {
         if (!dRes.routes || !dRes.routes.length) { return ; }
-        const path = []
+        const path = [];
         dRes.routes[0].legs.forEach((leg) => {
             leg.steps.forEach((step) => {
                 step.path.forEach((latlng) => {

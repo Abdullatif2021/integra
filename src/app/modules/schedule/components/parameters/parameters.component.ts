@@ -286,7 +286,8 @@ export class ParametersComponent implements OnInit, OnDestroy {
                 Object.values(this.options2Data.departure_date).join('-') :  this.options2Data.departure_date) : '') +
                 (this.options2Data.departure_time ? ' ' + this.options2Data.departure_time : '');
             await this.planningService.confirmPlanning(this.preDispatch, this.selectedPreDispatch.id, notMatchesOption, departureDate);
-            return this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData, {ignoreDivide: true});
+            window.parent.postMessage({runPreDispatch: this.preDispatchData, data: {ignoreDivide: true}}, '*');
+            // return this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData, {ignoreDivide: true}); // gobackhere
         }
 
         this.planningService.getMatchesRate(this.preDispatch, this.selectedPreDispatch.id).subscribe(
@@ -332,7 +333,8 @@ export class ParametersComponent implements OnInit, OnDestroy {
                         buttons: [
                             {text: 'Close', action: (toast) => { this.snotifyService.remove(toast.id); }},
                             {text: 'Localize', action: (toast) => {
-                                    this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
+                                    // this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
+                                    window.parent.postMessage({runPreDispatch: this.preDispatchData}, '*');
                                     this.snotifyService.remove(toast.id);
                             }},
                         ]
@@ -351,16 +353,16 @@ export class ParametersComponent implements OnInit, OnDestroy {
 
     removeErrors() {
         Object.keys(this.errors).forEach((key) => {
-            console.log('key', key);
            if (this.data[key]) { delete this.errors[key]; }
         });
     }
 
     async startPlanning() {
-        if (this.backProcessingService.isRunning('planning-' + this.preDispatch)) {
-            return ;
-        }
-        const result = await this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
+        window.parent.postMessage({runPreDispatch: this.preDispatchData, data: {ignoreDivide: false}}, '*');
+        // if (this.backProcessingService.isRunning('planning-' + this.preDispatch)) {
+        //     return ;
+        // }
+        // const result = await this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
     }
 
     checkErrors() {
