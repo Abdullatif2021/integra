@@ -13,6 +13,7 @@ import {PlanningService} from '../../../../service/planning/planning.service';
 import {MapService} from '../../service/map.service';
 import {ScheduleService} from '../../service/schedule.service';
 import {BackProcessingService} from '../../../../service/back-processing.service';
+import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-global-actions.service';
 
 @Component({
     selector: 'app-addresses',
@@ -32,7 +33,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
         private planningService: PlanningService,
         private mapService: MapService,
         private scheduleService: ScheduleService,
-        private backProcessingService: BackProcessingService
+        private backProcessingService: BackProcessingService,
+        private preDispatchGlobalActionsService: PreDispatchGlobalActionsService
     ) {
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data ;
@@ -63,16 +65,20 @@ export class AddressesComponent implements OnInit, OnDestroy {
     markersSubscription;
 
     async ngOnInit() {
-        this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch).pipe(takeUntil(this.unsubscribe)).subscribe(
-            async data => {
-                console.log('progress', data);
-                if (data.treeCreated) {
-                    console.log('tree created');
-                    this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);
-                    this.loadMarkers(this.mapService.mapLocation);
-                }
+        // this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch).pipe(takeUntil(this.unsubscribe)).subscribe(
+        //     async data => {
+        //         if (data.treeCreated) {
+        //             this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);
+        //             this.loadMarkers(this.mapService.mapLocation);
+        //         }
+        //     }
+        // )
+        this.preDispatchGlobalActionsService.modalHandleMessages.pipe(takeUntil(this.unsubscribe)).subscribe(async data => {
+            if (data.treeCreated) {
+                this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);
+                this.loadMarkers(this.mapService.mapLocation);
             }
-        )
+        });
         this.tree[0].children = await this.listTreeService.listNode(this.preDispatch, this.tree[0], 1, this.filter);
         this.settingsService.getPaginationOptions().pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {

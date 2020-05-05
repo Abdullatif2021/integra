@@ -3,6 +3,7 @@ import {BackProcessingService} from './back-processing.service';
 import {LocatingService} from './locating/locating.service';
 import {PlanningService} from './planning/planning.service';
 import {SnotifyService} from 'ng-snotify';
+import {PreDispatchService} from './pre-dispatch.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,10 +15,25 @@ export class PreDispatchGlobalActionsService {
         private locatingService: LocatingService,
         private planningService: PlanningService,
         private snotifyService: SnotifyService,
+        private preDispatchService: PreDispatchService,
     ) {}
     planningErrors = new EventEmitter();
     handles = {} ;
     handleCreated = new EventEmitter();
+    modalHandleMessages = new EventEmitter<any>(); // List to this if you are in a modal
+    locatingServiceClones = {} ;
+
+    getOrCreateLocatingServiceClone(id) {
+        if (this.locatingServiceClones[id]) { return this.locatingServiceClones[id] ;}
+        this.locatingServiceClones[id] = Object.assign(
+            Object.create( Object.getPrototypeOf(this.locatingService)), this.locatingService
+        );
+        return this.locatingServiceClones[id];
+    }
+
+    modalMessageRecived(message) {
+        this.modalHandleMessages.emit(message);
+    }
 
     startPreDispatchAction(preDispatchData, data = {}) {
         const action = this.backProcessingService.getPreDispatchAction(preDispatchData.status);
@@ -61,9 +77,17 @@ export class PreDispatchGlobalActionsService {
     }
 
     async runLocating(preDispatchData, handle) {
-        const locatingService =  Object.assign(
-            Object.create( Object.getPrototypeOf(this.locatingService)), this.locatingService
-        );
+        this.backProcessingService.ignoreOne(`locating-${preDispatchData.id}`);
+        preDispatchData.localize_status = 'play';
+        const locatingService =  this.getOrCreateLocatingServiceClone(preDispatchData.id)
         await locatingService.startLocating(preDispatchData.id, handle, preDispatchData, false);
+    }
+
+    fixLocatingItems(data) {
+        console.log('data.preDispatch', data.preDispatch);
+        const locatingService = this.getOrCreateLocatingServiceClone(data.preDispatch);
+        this.backProcessingService.run(`locating-${data.preDispatch}`, async (handle) => {
+            await locatingService.fix(data.fixedItems, data.skip, handle, data.preDispatch);
+        }, 'fixing', parseInt(data.preDispatch, 10));
     }
 }

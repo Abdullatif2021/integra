@@ -26,8 +26,9 @@ export class GoogleGeocodeService {
     sendGeocodeRequest(building: BuildingLocationInterface): Observable<GoogleGeocodeResponseInterface> {
         const options = { params: new HttpParams(),  headers: new HttpHeaders({'ignoreLoadingBar': ''})};
         const houseNumber = building.houseNumber ? building.houseNumber : 1 ;
-        options.params = options.params.set('address',
-            `${building.street}, ${houseNumber}, ${building.cap} ${building.city}`) ;
+        // options.params = options.params.set('address',
+        //     `${building.street}, ${houseNumber}, ${building.cap} ${building.city}`) ;
+        options.params = options.params.set('address', `${building.validAddress.indirizzo}, ${building.validAddress.civico}` ) ;
         options.params = options.params.set('components', 'postal_code:' + building.cap) ;
         options.params = options.params.set('key', this.keys[0].name) ;
         return this.http.get<GoogleGeocodeResponseInterface>('https://maps.googleapis.com/maps/api/geocode/json', options);

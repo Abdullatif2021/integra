@@ -1,5 +1,6 @@
 import {Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {IntegraaModalService} from '../../../service/integraa-modal.service';
+import {BackProcessingService} from '../../../service/back-processing.service';
 
 @Component({
   selector: 'app-integraa-modal',
@@ -12,6 +13,7 @@ export class IntegraaModalComponent implements OnInit {
   constructor(
       private componentFactoryResolver: ComponentFactoryResolver,
       private integraaModalService: IntegraaModalService,
+      private backProcessingService: BackProcessingService
   ) { }
 
   @ViewChild('modal') modal ;
@@ -23,6 +25,13 @@ export class IntegraaModalComponent implements OnInit {
   ngOnInit() {
       this.integraaModalService.status.subscribe((opt) => {
           this.open(opt) ;
+      });
+      this.backProcessingService.globalMessenger.subscribe(message => {
+         this.modals.forEach((modal) => {
+             if (modal.data['location'] === 'schedule' && modal.data['id'] === message.id) {
+                 modal.tellIframe({handleSaysHi: message});
+             }
+         });
       });
   }
 
@@ -99,6 +108,7 @@ export class IntegraaModalComponent implements OnInit {
 
   display(event, modal) {
       modal.displayed = true ;
+      modal.tellIframe({'testis': modal.data['test']});
   }
 
 }

@@ -172,7 +172,7 @@ export class ResultComponent implements OnInit, OnDestroy {
              label: '',
              title: elm.name,
              id: elm.id,
-             icon: `https://mt.google.com/vt/icon/text=${elm.map_priority + ''}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`,
+             icon: `https://mt.google.com/vt/icon/text=${elm.map_priority+1 + ''}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`,
              infoWindow: {
                  text: elm.act_code,
                  isOpen: false

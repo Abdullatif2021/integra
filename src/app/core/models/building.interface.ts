@@ -6,6 +6,13 @@ export interface BuildingLocationInterface {
     city: string;
     lat: number;
     long: number;
+    validAddress: ValidAddressInterface;
+}
+
+export interface ValidAddressInterface {
+    indirizzo: string;
+    civico: string;
+    spec: string;
 }
 
 export interface LocatedBuildingInterface {

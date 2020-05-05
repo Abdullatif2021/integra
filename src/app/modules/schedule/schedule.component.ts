@@ -63,20 +63,18 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     latitude = 40.8440337;
     longitude = 14.3435834;
     zoom = 11;
-    locatingHandle: any ;
     paths = [] ;
     @ViewChild(PageDirective) pageHost: PageDirective;
 
     ngOnInit() {
-        this.locatingHandle = this.backProcessingService.getOrCreateHandle('locating-' + this.preDispatch);
-        this.locatingHandle.pipe(takeUntil(this.unsubscribe)).subscribe(
+        this.preDispatchGlobalActionsService.modalHandleMessages.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
                 if (data.nfound) {
                     this.nFoundItems = data.nfound;
                     this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown', backdrop: 'static'});
                 }
             }
-        );
+        )
         this.mapService.markersChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => { this.markers = data ; }
         );
@@ -111,7 +109,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             data => {
                 this.preDispatchData = data.data ;
                 this.scheduleService.prodcastPreDispatchData(this.preDispatchData);
-                this.backProcessingService.handlePreDispatchActionsChanges(this.preDispatchData);
+                // this.backProcessingService.handlePreDispatchActionsChanges(this.preDispatchData);
                 this.nextAction = this.backProcessingService.getPreDispatchAction(this.preDispatchData.status) ;
                 this.actionInRun = this.preDispatchGlobalActionsService.isPreDispatchInRunStatus(this.preDispatchData);
                 setTimeout(() => {
@@ -127,8 +125,8 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     async runNextAction() {
-        // window.parent.postMessage({runPreDispatch: this.preDispatchData}, '*');
-        this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
+        window.parent.postMessage({runPreDispatch: this.preDispatchData}, '*');
+        // this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
     }
 
     moveToInPlan(modalRef, force = false) {
@@ -148,11 +146,11 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     async fixLocation(skip = false) {
-        await this.locatingService.fix(<[BuildingLocationInterface]>this.fixedItems, skip, this.locatingHandle, this.preDispatch);
+        window.parent.postMessage(
+            {locatingFixItems: 1, fixedItems: <[BuildingLocationInterface]>this.fixedItems, skip: skip, preDispatch: this.preDispatch},
+            '*');
+        // await this.locatingService.fix(<[BuildingLocationInterface]>this.fixedItems, skip, this.locatingHandle, this.preDispatch);
         this.fixedItems = <[BuildingLocationInterface]>[];
-        // update pre-dispatch data
-        const data = await this.preDispatchService.getPreDispatchData(this.preDispatch).toPromise();
-        this.scheduleService.prodcastPreDispatchData(data.data);
     }
 
     notFoundAddressChanged(data, item) {

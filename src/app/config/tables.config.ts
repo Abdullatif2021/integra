@@ -131,7 +131,6 @@ export const TablesConfig = {
                             }
                         },
                         {action: 'pPlay', field: 'p_status', print_if: (item, container) => {
-                                container.backProcessingService.handlePreDispatchActionsChanges(item);
                                 return !container.backProcessingService.isRunningAny(item.id) &&
                                     item.localize_status === 'pause' &&
                                     container.preDispatchGlobalActionsService.isPreDispatchInRunStatus(item);
@@ -153,8 +152,8 @@ export const TablesConfig = {
             ],
             collapsedActions: [
                 {label: 'Pianifica', _class: 'green-btn', click: (elm, container) => {
-                    // container.openIntegraaModal(elm);
-                    container.router.navigate(['/schedule', elm.id]);
+                    container.openIntegraaModal(elm);
+                    // container.router.navigate(['/schedule', elm.id]);
                     }},
                 {label: 'Metti in Consegna', _class: 'yellow-btn', click: (elm, container) => {console.log('clicked') ; }},
                 {label: 'Aggiungi Prodotti', _class: 'orange-btn', click: (elm, container) => {console.log('clicked') ; }},

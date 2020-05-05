@@ -64,7 +64,7 @@ export class LocatingService implements OnDestroy {
                 stateObj: {state: true, message: 'initializing...', progress: 0, autProgress: false, hide_btn: true}
             });
             this.processed = 0 ;
-            await this.process(this.fixed, this.fixed.length, handle, preDispatch);
+            await this.process(this.fixed, this.fixed.length, handle, preDispatch, true);
             this.loadingService.state(false);
             this.fixed = <[BuildingLocationInterface]>[] ;
         }
@@ -145,7 +145,7 @@ export class LocatingService implements OnDestroy {
         return true;
     }
 
-    async process(buildings, total, handle: EventEmitter<any>, preDispatch) {
+    async process(buildings, total, handle: EventEmitter<any>, preDispatch, unpausable = false) {
 
         if (!buildings.length) { return false; }
         let result ;
@@ -166,7 +166,7 @@ export class LocatingService implements OnDestroy {
                 this.buildings.push({ id: buildings[i].id, lat: 0, long: 0, is_fixed: false, name: buildings[i].street});
             }
             // if the process is paused save and stop working.
-            if (!this.backProcessingService.isRunning('locating-' + preDispatch)) {
+            if (!this.backProcessingService.isRunning('locating-' + preDispatch) && !unpausable) {
                 console.log('saving because of pause ', this.buildings);
                 await this.save();
                 return false ;

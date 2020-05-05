@@ -5,6 +5,7 @@ import {AppConfig} from '../config/app.config';
 import {catchError} from 'rxjs/operators';
 import {ApiResponseInterface} from '../core/models/api-response.interface';
 import {LocatingService} from './locating/locating.service';
+import {takeUntil} from 'rxjs/internal/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +19,8 @@ export class BackProcessingService {
     _actions = {} ;
     _handles = {} ;
     _ignore_one = {} ;
+    _end_informers = {};
+    globalMessenger = new EventEmitter();
     // _queue = {} ;
 
     async run(key, action, namespace = 'general', id = -1) {
@@ -27,12 +30,28 @@ export class BackProcessingService {
             this._actions[namespace] = [id] ;
         }
         this._states[key] = 1 ;
-        this._ignore_one[namespace] = true ;
-        const result = await action(this.getOrCreateHandle(key));
+        const handle = this.getOrCreateHandle(key) ;
+        this.stayOnTouch(handle, key, id); // Inform iframes about changes
+        const result = await action(handle);
+        this.forgetAbout(key); // job is done, unsubscribe to the handle
         this._states[key] = false ;
         this._handles[key] = 0 ;
         this._actions[namespace] = this._actions[namespace].filter((elm) => elm !== id) ;
         return result ;
+    }
+
+    stayOnTouch(handle, key, id) {
+        this._end_informers[key] = new EventEmitter();
+        handle.pipe(takeUntil(this._end_informers[key])).subscribe(data => {
+            this.globalMessenger.emit({key: key, id: id, message: data});
+        });
+    }
+
+    forgetAbout(key) {
+        setTimeout(() => {
+            this._end_informers[key].next();
+            this._end_informers[key].complete();
+        });
     }
 
     isRunning(key): boolean {
@@ -79,16 +98,21 @@ export class BackProcessingService {
         return this._actions[namespace] && this._actions[namespace].length ;
     }
 
-    ignoreOne(namespace): boolean {
-        const state = this._ignore_one[namespace] ? true : false ;
-        if (this._ignore_one[namespace]) {
-            this._ignore_one[namespace] = false ;
+    ignoreOne(key) {
+        this._ignore_one[key] = true ;
+    }
+
+    canUpdateState(key): boolean {
+        const state = this._ignore_one[key] ? true : false ;
+        if (this._ignore_one[key]) {
+            this._ignore_one[key] = false ;
         }
-        return state;
+        return !state ;
     }
 
     // updateLocalizationStatus
     async updatePreDispatchActionStatus(id, status) {
+        this.ignoreOne('updating-status');
         return await this.run('updating-status-' + id, () => new Promise((resolve, reject) => {
             const options = { params: new HttpParams(), headers: new HttpHeaders({'ignoreLoadingBar': ''})};
             if (status) {
@@ -127,32 +151,14 @@ export class BackProcessingService {
             preDispatchData.localize_status === 'pause' &&
             this.isRunning(`${action}-${preDispatchData.id}`)
             && !this.nameSpaceHasAny('updating-status')
+            && this.canUpdateState(`${action}-${preDispatchData.id}`)
         ) {
             // pause pre-dispatch
+            console.log('yes Im firing it');
             this.pause(`${action}-` + preDispatchData.id);
             // this.backProcessingService.updatePreDispatchActionStatus(preDispatchData.id, null);
         }
     }
 
     /*** } Pre-Dispatch ***/
-
-
-    // //TODO Remove this later.
-    // queue(key, item) {
-    //     this._queue[key] = item ;
-    // }
-    //
-    // release(key) {
-    //     this._queue[key] = null ;
-    // }
-    //
-    // getWaiting(key) {
-    //     if (typeof this._queue[key] !== 'undefined') {
-    //         return this._queue[key] ;
-    //     }
-    //     return null ;
-    // }
-    // getHandle(key): EventEmitter<any> {
-    //     return this._handles[key];
-    // }
 }

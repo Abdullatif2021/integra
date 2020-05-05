@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {TablesConfig} from '../../../../config/tables.config';
 import {ApiResponseInterface} from '../../../../core/models/api-response.interface';
 import {TableComponent} from '../../../../shared/components/table/table.component';
@@ -97,8 +97,11 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
           this.subscription = this.preDispatchService.getPreDispatchItems(true, this.order_field, this.order_method)
               .pipe(takeUntil(this.unsubscribe)).subscribe((res: ApiResponseInterface) => {
                   // if there was not status update request pending, update the status
-                  if (!this.backProcessingService.ignoreOne('updating-status')) {
+                  if (this.backProcessingService.canUpdateState('updating-status')) {
                       this.preDispatchList = res.data ;
+                      this.preDispatchList.forEach(preDispatch => {
+                          this.backProcessingService.handlePreDispatchActionsChanges(preDispatch);
+                      });
                       this.prodcastDataToModals(res.data) ;
                       this.refresh++ ;
                   }
