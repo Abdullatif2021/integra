@@ -121,10 +121,11 @@ export class PlanningService {
         return this.http.get<any>(AppConfig.endpoints.getMatchesRate(preDispatch), options);
     }
 
-    async confirmPlanning(preDispatch, match, notMatchesOption, departureDate) {
+    async confirmPlanning(preDispatch, match, notMatchesOption, departureDate, errorHandler) {
         await this.run(this.sendConfirmPlanningRequest(preDispatch, match, notMatchesOption, departureDate), 'Matching', (data) => {
             return 'Pre-Dispatches was matched';
         }, (error) => {
+            errorHandler(error);
             return 'Something went wring';
         });
     }
