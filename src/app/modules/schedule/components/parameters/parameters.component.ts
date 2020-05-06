@@ -289,8 +289,8 @@ export class ParametersComponent implements OnInit, OnDestroy {
                 departureDate, (error) => {
                 console.log(error);
             });
-            window.parent.postMessage({runPreDispatch: this.preDispatchData, data: {ignoreDivide: true}}, '*');
-            // return this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData, {ignoreDivide: true}); // gobackhere
+            return window.parent.postMessage({runPreDispatch: this.preDispatchData, data: {ignoreDivide: true}}, '*');
+            // return this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData, {ignoreDivide: true});
         }
 
         this.planningService.getMatchesRate(this.preDispatch, this.selectedPreDispatch.id).subscribe(
