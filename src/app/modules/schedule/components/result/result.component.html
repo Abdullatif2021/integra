@@ -153,16 +153,16 @@
         <ng-container *ngIf="child.expanded">
           <div class="product-items-header" *ngIf="item.children">
             <div class="row">
-              <div class="col-3 d-flex"><div class="m-auto">Barcode</div></div>
-              <div class="col-3 d-flex"><div class="m-auto">Actcode</div></div>
-              <div class="col-6 d-flex"><div class="m-auto">Note</div></div>
+              <div class="col-6 d-flex"><div class="m-auto">Recipient</div></div>
+              <div class="col-3 d-flex"><div class="m-auto">Codice a Barre</div></div>
+              <div class="col-3 d-flex"><div class="m-auto">Codice Atto</div></div>
             </div>
           </div>
           <div class="product-items-body row">
             <ng-container *ngFor="let product of child.products">
+              <div class="col-6 d-flex"><div class="m-auto">{{product.recipient.name}}</div></div>
               <div class="col-3 d-flex"><div class="m-auto">{{product.barcode}}</div></div>
               <div class="col-3 d-flex"><div class="m-auto">{{product.act_code}}</div></div>
-              <div class="col-6 d-flex"><div class="m-auto">{{product.note}}</div></div>
             </ng-container>
           </div>
 
