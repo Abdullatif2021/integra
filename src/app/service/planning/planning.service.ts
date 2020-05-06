@@ -76,6 +76,9 @@ export class PlanningService {
                         if (typeof body !== 'string') { body = 'Success'; }
                         resolve({body: body, config: { showProgressBar: false, timeout: 3000 }});
                     } else {
+                        if (typeof failed === 'function') {
+                            failed(data) ;
+                        }
                         reject({body: data ? data.status : 'Something went wrong', config: { showProgressBar: false, timeout: 3000 }});
                     }
                 },
@@ -121,8 +124,9 @@ export class PlanningService {
         return this.http.get<any>(AppConfig.endpoints.getMatchesRate(preDispatch), options);
     }
 
-    async confirmPlanning(preDispatch, match, notMatchesOption, departureDate, errorHandler) {
+    async confirmPlanning(preDispatch, match, notMatchesOption, departureDate, successHandler, errorHandler) {
         await this.run(this.sendConfirmPlanningRequest(preDispatch, match, notMatchesOption, departureDate), 'Matching', (data) => {
+            successHandler(data);
             return 'Pre-Dispatches was matched';
         }, (error) => {
             errorHandler(error);

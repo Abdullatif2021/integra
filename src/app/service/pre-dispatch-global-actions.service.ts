@@ -37,6 +37,7 @@ export class PreDispatchGlobalActionsService {
 
     startPreDispatchAction(preDispatchData, data = {}) {
         const action = this.backProcessingService.getPreDispatchAction(preDispatchData.status);
+        console.log('action', action, 'status', preDispatchData.status);
         if (this.backProcessingService.isRunning(`${action}-${preDispatchData.id}`)) {
             return ;
         }

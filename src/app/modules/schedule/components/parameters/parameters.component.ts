@@ -285,11 +285,15 @@ export class ParametersComponent implements OnInit, OnDestroy {
             const departureDate = (this.options2Data.departure_date ? (typeof this.options2Data.departure_date === 'object' ?
                 Object.values(this.options2Data.departure_date).join('-') :  this.options2Data.departure_date) : '') +
                 (this.options2Data.departure_time ? ' ' + this.options2Data.departure_time : '');
-            await this.planningService.confirmPlanning(this.preDispatch, this.selectedPreDispatch.id, notMatchesOption,
-                departureDate, (error) => {
-                console.log(error);
-            });
-            return window.parent.postMessage({runPreDispatch: this.preDispatchData, data: {ignoreDivide: true}}, '*');
+            await this.planningService.confirmPlanning(this.preDispatch, this.selectedPreDispatch.id, notMatchesOption, departureDate,
+                (success) => {},
+                (error) => {
+                    if (error.statusCode === 201) {
+                        this.preDispatchData.status = 'drawing_paths'; // force preDispatch status.
+                        return window.parent.postMessage({runPreDispatch: this.preDispatchData, data: {ignoreDivide: true}}, '*');
+                    }
+                });
+            return ;
             // return this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData, {ignoreDivide: true});
         }
 
