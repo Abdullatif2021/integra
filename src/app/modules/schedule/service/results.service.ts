@@ -33,7 +33,7 @@ export class ResultsService implements OnDestroy {
                         elm.sets.forEach((set) => {
                            sets.push({
                                id: set.id, type: 'set', children: [], parent: null, text: '', postman: set.postman,
-                               qta: set.products_count, page: 1, expanded: false, setId: set.id, loaded: false, addressId: set.addressId
+                               quantity: set.quantity, page: 1, expanded: false, setId: set.id, loaded: false, addressId: set.addressId
                            });
                         });
                         res.push({day: elm.day, sets: sets});

@@ -50,9 +50,8 @@
           </div>
           <div class="col-4 wide-col"> <div class="postman-name">
             <ng-select class="integraa-select postman-select" [items]="postmen[parent.day]" [placeholder]="'Not Assigned'" (change)="assignPostman($event, item, parent)" [clearable]="false" [bindLabel]="'full_name'" [(ngModel)]="selectedPostmen[parent.day][item.id]"></ng-select>
-
           </div> </div>
-          <div class="col-3 v-wide-col"> <div class="count mt-1">{{item.qta}} Consegne</div> </div>
+          <div class="col-3 v-wide-col"> <div class="count mt-1">{{item.quantity}} Consegne</div> </div>
           <div class="col-2"> <div class="time mt-1">{{item.time}}</div> </div>
           <div class="col-1"> <div class="distance mt-1">{{item.distance}}</div> </div>
         </div>
