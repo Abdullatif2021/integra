@@ -15,6 +15,7 @@ import {PreDispatchService} from '../../service/pre-dispatch.service';
 import {ScheduleService} from './service/schedule.service';
 import {PageDirective} from '../../shared/directives/page.directive';
 import {PreDispatchGlobalActionsService} from '../../service/pre-dispatch-global-actions.service';
+import {AppConfig} from '../../config/app.config';
 
 @Component({
     selector: 'app-schedules',
@@ -39,6 +40,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     show_map = true ;
     nextAction = 'locating' ;
     actionInRun = false ;
+    exportResultsLink = '';
 
     constructor(
         public router: Router,
@@ -58,6 +60,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     ) {
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data;
+        this.exportResultsLink = AppConfig.endpoints.exportPreDispatchResults(this.preDispatchData.id);
     }
 
     latitude = 40.8440337;
