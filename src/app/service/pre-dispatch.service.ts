@@ -20,6 +20,16 @@ export class PreDispatchService {
 
     public selectedPreDispatches = [] ;
 
+    // used when an Integraa modal is opened to perform an action on a specific pre-Dispatch {
+    private activePredispatch = null ;
+    getActivePreDispatch() {
+        return this.activePredispatch ;
+    }
+    setActivePreDispatch(preDispatch) {
+        this.activePredispatch = preDispatch;
+    }
+    // }
+
     getPreDispatchList(page = 1, pageSize = '50') {
         const options = { params: new HttpParams() };
         options.params = options.params.set('page', page + '') ;
@@ -37,6 +47,12 @@ export class PreDispatchService {
             options.params = options.params.set('filter', search) ;
         }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPlannedPreDispatches, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    getLog(preDispatch) {
+        return this.http.get<any>(AppConfig.endpoints.getPredispatchLog(preDispatch)).pipe(
             catchError(this.handleError)
         );
     }

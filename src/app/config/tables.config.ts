@@ -117,7 +117,7 @@ export const TablesConfig = {
                 {title: 'NOME DISTINTA', field: 'name', actions: [], order: '1'},
                 {title: 'DISTINTA', field: 'code', actions: [], order: '4'},
                 {title: 'STATO / ESITO', field: 'status', actions: [
-                        {action: 'view', click: (elm) => { console.log('call back working 2 . '); },
+                        {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ], order: '3'},
                 {title: 'Q.TA’', field: 'quantity', actions: [], order: '2'},
@@ -156,7 +156,7 @@ export const TablesConfig = {
                     // container.router.navigate(['/schedule', elm.id]);
                     }},
                 {label: 'Metti in Consegna', _class: 'yellow-btn', click: (elm, container) => {console.log('clicked') ; }},
-                {label: 'Aggiungi Prodotti', _class: 'orange-btn', click: (elm, container) => {console.log('clicked') ; }},
+                {label: 'Aggiungi Prodotti', _class: 'orange-btn', click: (elm, container) => {container.openAddProductsModal(elm)}},
                 {label: 'Elimina', _class: 'red-btn', click: (elm, container) => {
                     container.openModal(PreDispatchDeleteComponent, {deleteItem: true, item: elm}) ;
                 }}

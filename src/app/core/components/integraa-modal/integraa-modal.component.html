@@ -27,6 +27,7 @@
         </div>
         <div class="left-actions">
           <div class="action-btn" (click)="openLink(modal)"><fa-icon [icon]="['fa','external-link-alt']"></fa-icon></div>
+          <div class="modal-title">{{modal.title}}</div>
         </div>
         <div class="clear-both"></div>
       </div>
@@ -42,8 +43,9 @@
 
 <ng-template #minimizedModal let-modal="modal">
   <div class="integraa-minimized-modal">
-    <div class="integraa-modal-header">
+    <div class="integraa-modal-header minimized-modals-header">
       <div class="action-btn" (click)="minimize(modal)"><fa-icon [icon]="['fa','window-maximize']"></fa-icon></div>
+      <div class="minimized-modal-title text-truncate pl-1">{{modal.title}}</div>
     </div>
   </div>
 </ng-template>

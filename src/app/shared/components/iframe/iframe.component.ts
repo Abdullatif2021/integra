@@ -21,7 +21,7 @@ export class IframeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.src = this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
       if (this.messenger) {
         this.messenger.pipe(takeUntil(this.unsubscribe)).subscribe(message => {
-            console.log('message posted', this.iframe);
+            console.log('message posted', this.iframe, message);
             this.iframe.nativeElement.contentWindow.postMessage(message);
         });
       }

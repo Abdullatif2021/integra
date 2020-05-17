@@ -23,7 +23,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       private resultsService: ResultsService,
       private snotifyService: SnotifyService,
       private scheduleService: ScheduleService,
-      private dragAndDropService: DragAndDropService,
+      public dragAndDropService: DragAndDropService,
       private listTreeService: ListTreeService,
       private mapService: MapService,
   ) {
@@ -49,6 +49,8 @@ export class ResultComponent implements OnInit, OnDestroy {
   selectedPostmen: any = {} ;
   dragging;
   selected_set = {id: -1};
+  selectedProducts = [];
+  in_selected_drag_mode = false;
 
   async ngOnInit() {
       this.loadPostmen();
@@ -165,16 +167,24 @@ export class ResultComponent implements OnInit, OnDestroy {
       }
       this.mapService.reset();
       const markers = <[MapMarker]>[];
+      // groups
       markersData.forEach((elm) => {
+         const icon = `https://mt.google.com/vt/icon/text=${elm.groups[0].map_priority + 1 + ''}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1` ;
+         let infoWindowText = '';
+         elm.groups.forEach(group => {
+             group.act_codes.forEach(act_code => {
+                 infoWindowText += `[${group.map_priority + 1}] ${act_code} \n`;
+             });
+         });
          markers.push({
              lat: elm.lat,
              lng: elm.long,
              label: '',
              title: elm.name,
              id: elm.id,
-             icon: `https://mt.google.com/vt/icon/text=${elm.map_priority+1 + ''}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`,
+             icon: icon,
              infoWindow: {
-                 text: elm.act_code,
+                 text: infoWindowText,
                  isOpen: false
              },
              onClick: () => {}
@@ -227,16 +237,74 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
 
-  onDragStart(event, item) {
-      this.dragAndDropService.drag(item);
+  onDragStart(event, item, type = DragAndDropService.DRAGGED_TYPE_ADDRESS) {
+      // if type was product, check if dragged item is selected .
+      if (type === DragAndDropService.DRAGGED_TYPE_PRODUCT && this.selectedProducts.filter((elm) => elm.id === item.id).length) {
+          item = this.selectedProducts ;
+          this.in_selected_drag_mode = true ;
+      }
+      this.dragAndDropService.drag(item, false, type);
   }
 
-
+  onDragEnd() {
+      this.in_selected_drag_mode = false;
+  }
   onDrop(event, target) {
       let index = event.index;
       if ( typeof index === 'undefined' ) {
           index = target.children.length;
       }
+      if (event.data.item === DragAndDropService.DRAGGED_TYPE_PRODUCT) {
+          this.dropProduct(event, target, index);
+      } else {
+          this.dropAddress(event, target, index) ;
+      }
+
+  }
+
+  dropProduct(event, target, index) {
+      const list = this.dragAndDropService.drop(index, this.preDispatch);
+      if (!list) { return ; }
+
+      // clear selected .
+      const trash = [];
+      target.children.forEach(address => {
+          address.products = address.products.filter((product) => !list.find(i => i === product.id));
+          if (address.products.length === 0) {
+              trash.push(address.id);
+          }
+      });
+      target.children = target.children.filter(c => !trash.filter(i => i === c.id).length);
+      target.children.splice(index, 0, {address: 'loading...', productsCount: list.length, products: []});
+      this.resultsService.createNewGroup(this.preDispatch, list, index).pipe(takeUntil(this.unsubscribe)).subscribe(
+          data => {
+              console.log(data, {
+                  id: data.data.id,
+                  address: data.data.address[0] ,
+                  loaded: false,
+                  parent: parent,
+                  type: 'building',
+                  addressId: data.data.id,
+                  products: data.data.products,
+                  priority: data.data.mapPriority,
+                  productsCount: data.data.products.length
+              });
+              target.children[index] = {
+                  id: data.data.id,
+                  address: data.data.address[0] ,
+                  loaded: false,
+                  parent: parent,
+                  type: 'building',
+                  addressId: data.data.id,
+                  products: data.data.products,
+                  priority: data.data.mapPriority,
+                  productsCount: data.data.productsCount
+              };
+          }
+      );
+  }
+
+  dropAddress(event, target, index) {
       const result = this.dragAndDropService.drop(index, target);
       if (result) {
           result.item.marker = this.resultsService.getMarker(result.item.type, result.item.parent);
@@ -255,7 +323,15 @@ export class ResultComponent implements OnInit, OnDestroy {
               }
           );
       }
+  }
 
+  select(product) {
+      product.selected = !product.selected ;
+      if (product.selected) {
+          this.selectedProducts.push(product);
+      } else {
+          this.selectedProducts = this.selectedProducts.filter((elm) => elm.id !== product.id);
+      }
   }
 
   ngOnDestroy() {

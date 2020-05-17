@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {PreDispatchAddDirectComponent} from './modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
 
 @Component({
   selector: 'app-home',
@@ -8,9 +9,13 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(
+      private router: Router,
+      private activatedRoute: ActivatedRoute,
+  ) { }
 
-  active_tab = 'to-deliver'
+  active_tab = 'to-deliver';
+  actions_only = false ;
   ngOnInit() {
     // set active tab to match the current route
     if (this.router.url.substr(1)) {
@@ -23,6 +28,11 @@ export class HomeComponent implements OnInit {
           this.active_tab = this.router.url.substr(1);
       } else { this.active_tab = 'to-deliver' ; }
     });
+      this.activatedRoute.queryParams.subscribe(params => {
+          if (typeof params['actionsonly'] !== 'undefined') {
+              this.actions_only = true ;
+          }
+      });
   }
 
 }

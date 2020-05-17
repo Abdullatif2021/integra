@@ -1,8 +1,9 @@
-<app-user-nav></app-user-nav>
+<app-user-nav *ngIf="!actions_only"></app-user-nav>
+<div *ngIf="actions_only" class="the-yellow-bar mt-4 mb-4"></div>
 <div class="container-fluid page-container">
   <div class="row">
     <div class="col-12 v-wide-col">
-      <app-main-nav [active_tab]="active_tab"></app-main-nav>
+      <app-main-nav [active_tab]="active_tab" *ngIf="!actions_only"></app-main-nav>
     </div>
     <div class="col-12 v-wide-col">
       <app-search-panel></app-search-panel>

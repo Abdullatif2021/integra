@@ -17,6 +17,7 @@ import { PreDispatchMergeComponent } from './modals/pre-dispatch-merge/pre-dispa
 import { ImportFromBarcodesComponent } from './modals/import-from-barcodes/import-from-barcodes.component';
 import { PreDispatchEditComponent } from './modals/pre-dispatch-edit/pre-dispatch-edit.component';
 import { PreDispatchDeleteComponent } from './modals/pre-dispatch-delete/pre-dispatch-delete.component';
+import { PreDispatchAddDirectComponent } from './modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { PreDispatchDeleteComponent } from './modals/pre-dispatch-delete/pre-dis
       ImportFromBarcodesComponent,
       PreDispatchEditComponent,
       PreDispatchDeleteComponent,
+      PreDispatchAddDirectComponent,
   ],
   exports: [
       HomeComponent,
@@ -48,6 +50,7 @@ import { PreDispatchDeleteComponent } from './modals/pre-dispatch-delete/pre-dis
   bootstrap: [HomeComponent],
   entryComponents: [
       PreDispatchAddComponent,
+      PreDispatchAddDirectComponent,
       PreDispatchNewComponent,
       PreDispatchMergeComponent,
       ImportFromBarcodesComponent,

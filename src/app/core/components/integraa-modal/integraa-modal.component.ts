@@ -21,11 +21,22 @@ export class IntegraaModalComponent implements OnInit {
   @Input() bounds ;
 
   modals: IntegraaModal[] = [] ;
-
+  messagesBag = [];
   ngOnInit() {
       this.integraaModalService.status.subscribe((opt) => {
           this.open(opt) ;
       });
+      this.integraaModalService.messenger.subscribe( message => {
+          this.modals.forEach((modal) => {
+              if (modal.data['id'] === message.id && modal.data['location'] === message.location) {
+                  if (modal.displayed) {// if the iframe is loaded send the message.
+                      modal.tellIframe(message.message);
+                  } else { // stack the message to send it whenever iframe is loaded.
+                      this.messagesBag.push(message);
+                  }
+              }
+          });
+      } )
       this.backProcessingService.globalMessenger.subscribe(message => {
          this.modals.forEach((modal) => {
              if (modal.data['location'] === 'schedule' && modal.data['id'] === message.id) {
@@ -108,8 +119,17 @@ export class IntegraaModalComponent implements OnInit {
 
   display(event, modal) {
       modal.displayed = true ;
-      modal.tellIframe({'testis': modal.data['test']});
+      this.sendWaitingMessages(modal) ;
   }
+
+  sendWaitingMessages(modal) {
+      this.messagesBag.forEach(message => {
+          if (modal.data['id'] === message.id && modal.data['location'] === message.location) {
+              modal.tellIframe(message.message);
+          }
+      });
+  }
+
 
 }
 
@@ -133,6 +153,7 @@ class IntegraaModal {
     id ;
     height = 0 ;
     data = {} ;
+    title = '' ;
     iframemMssenger = new EventEmitter();
 
     constructor() {
@@ -146,6 +167,7 @@ class IntegraaModal {
     setOptions(options) {
         const modal = this ;
         this.data = options.data ? options.data : {} ;
+        this.title = options.title;
         delete options.data ;
         Object.keys(options).forEach(function(key) {
             modal._options[key] =  options[key] ;

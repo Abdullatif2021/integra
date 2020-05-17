@@ -5,20 +5,45 @@ import {EventEmitter, Injectable} from '@angular/core';
 })
 export class DragAndDropService {
 
+    static DRAGGED_TYPE_ADDRESS = 0 ;
+    static DRAGGED_TYPE_PRODUCT = -1 ;
+
     constructor() { }
 
     dragged = new EventEmitter();
     dropped = new EventEmitter();
+    draggedElementType = 0 ;
     drag_elm: any ;
     remote = false ;
 
-    drag(elm, remote = false) {
+    drag(elm, remote = false, type = DragAndDropService.DRAGGED_TYPE_ADDRESS) {
         this.drag_elm = elm ;
         this.remote = remote ;
         this.dragged.emit(elm);
+        this.draggedElementType = type;
     }
 
     drop(index, target) {
+        // if the dragged element is a product, call product drop.
+        if (this.draggedElementType === DragAndDropService.DRAGGED_TYPE_PRODUCT) {
+            return this.productDrop(index, target);
+        } else { // if the dragged element is an address, call address drop.
+            return this.addressDrop(index, target);
+        }
+    }
+
+    // handles creating new group
+    productDrop(index, target) {
+        if (!this.drag_elm) {return ;}
+        const list = [];
+        if (Array.isArray(this.drag_elm)) {
+            this.drag_elm.forEach((elm) => list.push(elm.id));
+        } else { list.push(this.drag_elm.id); }
+        return list ;
+    }
+
+    // handles address reorder and adding address from not matched tree.
+    addressDrop(index, target) {
         if (
             (!this.drag_elm || !target) ||
             (this.drag_elm.type === 'cityId' && target.type !== 'set') ||
@@ -57,11 +82,12 @@ export class DragAndDropService {
         this.clearParent(this.drag_elm) ;
 
         this.drag_elm.parent = target ;
-        const result = <any>{index: index, item: this.drag_elm, remote: this.remote};
+        const result = <any>{index: index, item: this.drag_elm, remote: this.remote, type: DragAndDropService.DRAGGED_TYPE_ADDRESS};
         this.dropped.emit(result) ;
         this._reset() ;
         return result ;
     }
+
 
     convertToBuildingDataShape(elm, target) {
         return {

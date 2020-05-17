@@ -60,7 +60,12 @@ export class SearchPanelComponent implements OnInit {
          }
       });
       this.actionsService.actionsChanges.subscribe((actions) => {
-          this.actions = actions ;
+          if (Array.isArray(actions)) {
+              this.actions = actions ;
+          } else {
+              this.actions = null ;
+              this.active_action = actions;
+          }
       });
       this.filtersService.cleared.subscribe(() => {
           this._active_filters = [];

@@ -6,6 +6,7 @@ import {NgbDateITParserFormatter} from './shared/provider/ngb-date-it-parser-for
 import {PreDispatchGlobalActionsService} from './service/pre-dispatch-global-actions.service';
 import {BuildingLocationInterface} from './core/models/building.interface';
 import {GoogleApiService} from './shared/service/google.api.service';
+import {PreDispatchService} from './service/pre-dispatch.service';
 
 @Component({
     selector: 'app-root',
@@ -19,7 +20,8 @@ export class AppComponent {
         private backProcessingService: BackProcessingService,
         private locatingService: LocatingService,
         private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
-        private googleApiService: GoogleApiService
+        private googleApiService: GoogleApiService,
+        private preDispatchService: PreDispatchService
     ) {
         this.googleApiService.loadApiScripts();
     }
@@ -44,7 +46,6 @@ export class AppComponent {
         } else if (e.data.locatingFixItems) {
             this.preDispatchGlobalActionsService.fixLocatingItems(e.data);
         }
-        console.log(e.data);
     }
 
 }

@@ -67,7 +67,7 @@ export class ActionsService {
           });
           method = this.preDispatchService.addProductsBySelected(preDispatchId, productsIds);
       } else {
-          method = this.preDispatchService.addProductsByFilters(name) ;
+          method = this.preDispatchService.addProductsByFilters(preDispatchId) ;
       }
       this.run(method, 'Aggiunta in corso', () => {
           setTimeout(() => {this.reloadData.emit(true) ; }, 500 );

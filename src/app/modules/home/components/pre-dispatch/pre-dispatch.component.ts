@@ -117,6 +117,10 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       this.preDispatchService.selectedPreDispatches = items ;
   }
 
+  showLogModal(elm) {
+      this.integraaModalService.open(`/pages/pre-dispatch/${elm.id}/log`, {width: 1000, height: 600, title: `Log: ${elm.name}`}, {});
+  }
+
   changeOrder(event) {
       this.order_field = event.field;
       this.order_method = event.order === 'DESC' ? '1' : '2';
@@ -124,7 +128,19 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   }
 
   openIntegraaModal(elm) {
-      this.integraaModalService.open('/schedule/' + elm.id, {width: 1400, height: 680}, {location: 'schedule', id: elm.id});
+      this.integraaModalService.open(
+          '/schedule/' + elm.id,
+          {width: 1400, height: 680, title: elm.name},
+          {location: 'schedule', id: elm.id}
+          );
+  }
+
+  openAddProductsModal(elm) {
+      this.integraaModalService.open(
+          `/?actionsonly=addproductstopd&activepredispatch=${elm.id}`,
+          {width: 1400, height: 680, title: elm.name},
+          {location: 'home', id: elm.id}
+      );
   }
 
   openModal(modal, data) {

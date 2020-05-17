@@ -8,6 +8,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 export class IntegraaModalService {
 
   status = new EventEmitter() ;
+  messenger = new EventEmitter() ;
   modals = [] ;
   constructor(
 
@@ -19,6 +20,10 @@ export class IntegraaModalService {
     options.data = data ;
     this.status.emit(options) ;
     return this ;
+  }
+
+  tellModal(location, id, message) {
+    this.messenger.emit({location: location, id: id, message: message});
   }
 
   updateModals(modals) {

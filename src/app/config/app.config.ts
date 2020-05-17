@@ -78,7 +78,9 @@ export const AppConfig = {
         setMapPriority: `${api_url}/api/sets/setMapPriority`,
         shiftGroupPriority: (id) => `${api_url}/api/group/${id}/shiftPriority`,
         getSetMarkers: (id) => `${api_url}/api/set/${id}/coordinate`,
-        exportPreDispatchResults: (id) => `${api_url}/api/preDispatch/${id}/exportResults`
+        exportPreDispatchResults: (id) => `${api_url}/api/preDispatch/${id}/exportResults`,
+        getPredispatchLog: (id) => `${api_url}/api/preDispatch/${id}/logs`,
+        createNewGroup: (id) => `${api_url}/api/preDispatch/${id}/createNewGroup`
 
     },
 

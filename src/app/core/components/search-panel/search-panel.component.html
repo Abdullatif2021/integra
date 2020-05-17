@@ -84,11 +84,12 @@
 
     <!-- Actions area {  -->
     <!-- Action select {  -->
-    <div class="col-lg-2 col-md-10">
+    <div class="col-lg-2 col-md-10" *ngIf="actions">
       <ng-select [items]="actions" [(ngModel)]="_m_active_action" (change)="changeActiveAction($event)" [bindLabel]="'name'" class="integraa-select" placeholder="Scegli un'operazione"></ng-select>
     </div>
     <!-- } Action select -->
     <ng-container *ngIf="active_action">
+      <ng-container *ngIf="!actions"><span class="oneactiontitle">{{active_action.name}}</span></ng-container>
       <ng-container *ngFor="let field of active_action.fields" >
         <ng-container *ngIf="field.type == 'select'">
           <div class="col-lg-2 col-md-10" >

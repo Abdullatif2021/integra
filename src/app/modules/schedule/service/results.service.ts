@@ -174,7 +174,7 @@ export class ResultsService implements OnDestroy {
         groups.forEach(elm => {
            result.push({
                id: elm.id,
-               address: `${elm.street}, ${elm.houseNumber}, ${elm.cap}, ${elm.city}` ,
+               address: elm.address[0] ,
                loaded: false,
                parent: parent,
                type: 'building',
@@ -193,6 +193,11 @@ export class ResultsService implements OnDestroy {
         options.params = options.params.set('pageSize', '15');
 
         return <any>this.http.get(AppConfig.endpoints.getSetGroups(setId), options);
+    }
+
+    createNewGroup(preDispatch, list, index) {
+        const data = {products: list, priority: index};
+        return <any>this.http.post(AppConfig.endpoints.createNewGroup(preDispatch), data);
     }
 
     ngOnDestroy() {

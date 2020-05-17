@@ -16,6 +16,9 @@ import {FilterConfig} from '../../../../config/filters.config';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {RecipientsService} from '../../../../service/recipients.service';
+import {ActivatedRoute} from '@angular/router';
+import {PreDispatchAddDirectComponent} from '../../modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
+import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 
 @Component({
   selector: 'app-to-deliver',
@@ -38,7 +41,6 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   unsubscribe: Subject<void> = new Subject();
   order_field = null ;
   order_method = '1' ;
-  // citiesType = 'by_cap' ;
 
   actions = [
     {
@@ -91,10 +93,29 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private paginationService: PaginationService,
       private filtersService: FiltersService,
       private actionsService: ActionsService,
-      protected recipientsService: RecipientsService
+      protected recipientsService: RecipientsService,
+      private activatedRoute: ActivatedRoute,
+      private preDispatchService: PreDispatchService
   ) {
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
+      this.activatedRoute.queryParams.subscribe(params => {
+          if (params['actionsonly'] === 'addproductstopd') {
+              this.actions = <any>{
+                  name: 'Aggiungi a Pre-Distinta esistente', fields: [
+                      { type: 'select', field: 'method', options: [
+                              {name: 'Selezionati', value: 'selected'},
+                              {name: 'Secondo i filtri applicati', value: 'filters'}
+                          ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                      }
+                  ],
+                  modal: PreDispatchAddDirectComponent,
+              };
+          }
+          if (params['activepredispatch']) {
+              this.preDispatchService.setActivePreDispatch(params['activepredispatch']);
+          }
+      });
   }
 
   ngOnInit() {

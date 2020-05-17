@@ -40,6 +40,10 @@
     background-color: #353535;
     cursor: grab;
 }
+.minimized-modals-header {
+    display: flex;
+    padding: 6px 10px;
+}
 .ng-dragging {
     cursor: grabbing !important;
 }
@@ -118,4 +122,14 @@
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
+}
+.modal-title {
+    display: inline-block;
+    color: #FFF;
+    padding-left: 15px;
+    font-size: 14px;
+}
+.minimized-modal-title {
+    color: #FFF;
+    font-size: 13px;
 }
