@@ -279,3 +279,8 @@ a:hover {
     background: #d6d6d6;
     cursor: auto;
 }
+@media screen and (max-width: 768px) {
+    .mt-md-20px {
+        margin-top: 10px;
+    }
+}

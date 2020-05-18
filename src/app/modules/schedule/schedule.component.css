@@ -3,6 +3,7 @@
 }
 .schedule-nav-btn{
     flex: 0 0 25%;
+    width: 25%;
     font-size: 13px;
     color: #212121;
     background-color: #E8E8E8;
@@ -136,3 +137,7 @@
 .hidden {
     display: none;
 }
+.map-container {
+    position: relative;
+}
+
