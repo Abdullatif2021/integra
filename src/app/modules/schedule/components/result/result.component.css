@@ -8,13 +8,16 @@
     height: 634px;
     overflow-y: scroll;
 }
-
+.text {
+    user-select: text;
+}
 /* items */
 .right-side{
     float: right;
 }
 .item-row .more, .item-row .select-container, .item-row .marker-container, .item-row .marker, .item-row .text {
     display: inline-block;
+    user-select: text;
 }
 .item-row .more{
     cursor: pointer;
@@ -43,6 +46,7 @@
     font-size: 11px;
     padding-left: 5px;
     font-weight: 500;
+    user-select: text;
 }
 .postman-marker{
     margin-left: 40%;
@@ -171,13 +175,13 @@
 .street-item .more {
     margin: auto;
     cursor: pointer;
+    padding-top: 5px;
 }
 
 .select-container .selected, .select-container .not-selected{
-    width: 21px;
-    height: 21px;
+    width: 18px;
+    height: 18px;
     border-radius: 20px;
-    margin: 0px 5px;
     font-size: 13px;
     text-align: center;
     padding: 0px 0px;
@@ -197,4 +201,25 @@
 }
 .dragged {
     opacity: 0.5;
+}
+
+.product-items-header-col, .product-items-col{
+    flex-direction: column;
+    user-select: text;
+}
+.with-white-dashed-bottom-border{
+    border-bottom: 1px dashed white;
+    padding-bottom: 2px;
+    margin-bottom: 2px;
+}
+.with-black-dashed-bottom-border{
+    border-bottom: 1px dashed black;
+    padding-bottom: 2px;
+    margin-bottom: 2px;
+}
+.drag-handle{
+    cursor: grab;
+    font-size: 17px;
+    margin: auto 5px auto 4px;
+    color: #212121;
 }

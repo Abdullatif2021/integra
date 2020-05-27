@@ -22,6 +22,7 @@ export class IntegraaModalComponent implements OnInit {
 
   modals: IntegraaModal[] = [] ;
   messagesBag = [];
+  currentScroll = 0;
   ngOnInit() {
       this.integraaModalService.status.subscribe((opt) => {
           this.open(opt) ;
@@ -47,17 +48,29 @@ export class IntegraaModalComponent implements OnInit {
   }
 
   open(opt) {
+
+      // make body not scrollable.
+      document.body.classList.add('contains-open-modal');
+
       const modal = new IntegraaModal() ;
+      this.setCurrentScroll();
       modal.setOptions(opt) ;
       setTimeout(() => {modal.height = document.getElementsByTagName('body')[0].clientHeight ; }, 0);
       this.modals.push(modal) ;
       this.integraaModalService.updateModals(this.modals);
   }
 
+  setCurrentScroll() {
+      this.currentScroll = window.scrollY;
+  }
+
   close(modal) {
       if (typeof this.modals === 'object') {
           this.modals = this.modals.filter((elm) => elm.id !== modal.id );
           this.integraaModalService.updateModals(this.modals);
+
+          // make body scrollable
+          document.body.classList.remove('contains-open-modal');
       }
   }
 

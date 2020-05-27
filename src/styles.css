@@ -15,6 +15,7 @@ body{
     background-color: #f2f2f2 !important;
     font-family: 'Roboto', sans-serif;
     min-height: 100vh;
+    /*padding-bottom: 30px;*/
 }
 
 /*TODO move this to a special file*/
@@ -283,4 +284,7 @@ a:hover {
     .mt-md-20px {
         margin-top: 10px;
     }
+}
+.contains-open-modal {
+    overflow: hidden;
 }

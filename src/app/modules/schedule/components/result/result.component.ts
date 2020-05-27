@@ -169,13 +169,18 @@ export class ResultComponent implements OnInit, OnDestroy {
       const markers = <[MapMarker]>[];
       // groups
       markersData.forEach((elm) => {
-         const icon = `https://mt.google.com/vt/icon/text=${elm.groups[0].map_priority + 1 + ''}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1` ;
-         let infoWindowText = '';
+          console.log(elm);
+         const priority = (elm.groups ? elm.groups[0].map_priority : elm.priority) + 1 + '' ;
+         const icon = `https://mt.google.com/vt/icon/text=${priority}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1` ;
+         let infoWindowText = `<table class="table"><thead><tr><th class="text-center">Order</th>
+                                    <th scope="col" class="text-center">Act code</th></tr></thead><tbody>`;
          elm.groups.forEach(group => {
              group.act_codes.forEach(act_code => {
-                 infoWindowText += `[${group.map_priority + 1}] ${act_code} \n`;
+                 infoWindowText += `<tr><th class="text-center">${group.map_priority + 1}</th>
+                                        <td class="text-center">${act_code}</td></tr>`;
              });
          });
+         infoWindowText += `</tbody></table>`;
          markers.push({
              lat: elm.lat,
              lng: elm.long,

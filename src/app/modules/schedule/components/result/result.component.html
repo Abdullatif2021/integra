@@ -134,7 +134,8 @@
         <div class="street-item" [ngClass]="{'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"
              (dndStart)="onDragStart($event, child)" class="{{getStatusClass(child)}}">
           <div class="row">
-            <div class="col-1 d-flex">
+            <div class="col-1 wide-col d-flex">
+              <div dndHandle class="drag-handle">☰</div>
               <div class="more" *ngIf="child.products" (click)="child.expanded = !child.expanded">
                 <fa-icon *ngIf="!child.expanded" [icon]="['fa','chevron-down']"></fa-icon>
                 <fa-icon *ngIf="child.expanded" [icon]="['fa','chevron-up']"></fa-icon>
@@ -154,23 +155,24 @@
           <div class="product-items-header" *ngIf="item.children">
             <div class="d-flex">
               <div class="col-1 d-flex"><div class="m-auto"></div></div>
-              <div class="col-3 d-flex"><div class="m-auto">Recipient</div></div>
-              <div class="col-4 d-flex"><div class="m-auto">Product Name</div></div>
-              <div class="col-2 d-flex text-center"><div class="m-auto">Codice a Barre</div></div>
-              <div class="col-2 d-flex text-center"><div class="m-auto">Codice Atto</div></div>
+              <div class="col-6 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Recipient</div></div><div class="m-auto">Product Name</div></div>
+              <!--<div class="col-4 d-flex"><div class="m-auto"></div></div>-->
+              <div class="col-5 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Codice a Barre</div></div><div class="m-auto">Codice Atto</div></div>
+              <!--<div class="col-2 d-flex text-center"><div class="m-auto"></div></div>-->
             </div>
           </div>
           <div class="product-items-body">
             <ng-container *ngFor="let product of child.products">
               <div [ngClass]="{'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2), 'dragged': (in_selected_drag_mode && product.selected)}" class="d-flex" [dndDraggable]="{item: -1}" [dndEffectAllowed]="'move'" (dndEnd)="onDragEnd()" (dndStart)="onDragStart($event, product, -1)">
-                <div class="col-1 d-flex"><div class="m-auto select-container" (click)="select(product)">
-                    <div class="selected" *ngIf="product.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
-                    <div class="not-selected" *ngIf="!product.selected "><fa-icon [icon]="['fa','check']"></fa-icon></div>
-                </div></div>
-                <div class="col-3 d-flex"><div class="m-auto" title="{{product.recipient.name}}">{{product.recipient.name}}</div></div>
-                <div class="col-4 d-flex"><div class="m-auto" title="{{product.integra_name.name}}">{{product.integra_name.name}}</div></div>
-                <div class="col-2 d-flex"><div class="m-auto text-truncate" title="{{product.barcode}}">{{product.barcode}}</div></div>
-                <div class="col-2 d-flex"><div class="m-auto text-truncate" title="{{product.act_code}}">{{product.act_code}}</div></div>
+                <div class="col-1 v-wide-col d-flex">
+                  <div dndHandle class="drag-handle">☰</div>
+                  <div class="m-auto select-container" (click)="select(product)">
+                      <div class="selected" *ngIf="product.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                      <div class="not-selected" *ngIf="!product.selected "><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                    </div>
+                </div>
+                <div class="col-6 d-flex text-center product-items-col"><div class="with-black-dashed-bottom-border"><div class="m-auto">{{product.recipient.name}}</div></div><div class="m-auto">{{product.integra_name.name}}</div></div>
+                <div class="col-5 d-flex text-center product-items-col"><div class="with-black-dashed-bottom-border"><div class="m-auto">{{product.barcode}}</div></div><div class="m-auto"> {{product.act_code}}</div></div>
               </div>
             </ng-container>
           </div>

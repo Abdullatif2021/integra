@@ -9,7 +9,7 @@
 
 
 <ng-template #modalRef let-modal="modal">
-  <div class="integraa-modal-container" id="{{modal.id}}" [ngStyle]="{'height': modal.height + 'px'}" [ngClass]="{'hidden':modal.options.minimized}">
+  <div class="integraa-modal-container" id="{{modal.id}}" [ngClass]="{'hidden':modal.options.minimized}">
     <div class="integraa-modal z-depth-1" [handle]="handle" [bounds]="bounds"
          [inBounds]="modal.inBounds" ngDraggable ngResizable [ngStyle]="{
          'width': modal.options.width + modal.options.sizeUnit,

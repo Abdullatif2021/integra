@@ -66,6 +66,7 @@
 }
 .item-row .more, .item-row .select-container, .item-row .marker-container, .item-row .marker, .item-row .text, .item-row .warning, .item-row .qty, .item-row .small-more {
     display: inline-block;
+    user-select: text;
 }
 .item-row .more{
     cursor: pointer;
@@ -300,4 +301,12 @@
 }
 .search-container{
     margin-top: 10px;
+}
+.drag-handle {
+    display: inline-block;
+    cursor: -webkit-grab;
+    cursor: grab;
+    font-size: 17px;
+    margin: auto 5px auto -17px;
+    color: #212121;
 }

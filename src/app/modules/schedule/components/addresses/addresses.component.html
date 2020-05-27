@@ -46,7 +46,7 @@
   <div class="items mt-2">
     <div infiniteScroll (scrolled)="loadMore(tree[0], -1)" [scrollWindow]="true" >
       <ng-container *ngFor="let item of tree[0].children; let idx = index">
-        <ng-container  [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx+''}"></ng-container>
+        <ng-container  [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx+'', draggable: false}"></ng-container>
       </ng-container>
     </div>
   </div>
@@ -70,70 +70,138 @@
 
 <!-- Items  -->
 
-<ng-template  let-item="item" let-idx="idx" let-next="next" #simpleItem>
+<ng-template  let-item="item" let-idx="idx" let-next="next" let-draggable="draggable" #simpleItem>
   <ng-container *ngIf="item.skeleton; else actualItem">
     <div class="rect-loading-skeleton full-width schedule-skeleton"></div>
   </ng-container>
   <ng-template #actualItem >
       <!-- [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" -->
-    <div dndDropzone class="drop-area" (dndDrop)="onDrop($event, item)" [ngClass]="{'drop-location': isDropLocation(item), 'cant-drop-location': isNonDropLocation(item)}">
-      <div [contextMenu]="contextMenu" [ngClass]="{'odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
-        <div class="item-row">
-          <div class="more" *ngIf="!item._end" (click)="listNode(item, next)">
-            <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
-            <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
-          </div>
-          <div class="select-container" (click)="select(item)">
-            <div class="selected" *ngIf="item.selected && !item.partiallySelected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
-            <div class="selected" *ngIf="item.partiallySelected"><fa-icon [icon]="['fa','minus']"></fa-icon></div>
-            <div class="not-selected" *ngIf="!item.selected && !item.partiallySelected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
-          </div>
-          <div class="marker-container">
-            <div class="marker {{item.marker.color}}" [style.background]="item.marker.color" *ngIf="item.marker">{{item.marker.text}}</div>
-          </div>
-          <div class="text" #itemText>{{item.text}}</div>
-          <div class="rename-input" #itemNameInput><input type="text" value="{{item.text}}" (change)="nameChanged($event, item, itemText, itemNameInput)"></div>
-          <div class="right-side">
-            <div class="warning" *ngIf="item.warning">!</div>
-            <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
-            <div class="small-more" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
-            <div *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'" class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
-              <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rinominare</a>
-              <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">Sposta in un altra strada</a>
-              <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingAddressContainer, [EditBuildingLatLngContainer])">Change Address</a>
-              <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="changeLocationOnMap(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">Edit Location</a>
-            </div>
-          </div>
-          <div class="clear-both"></div>
-          <div #EditBuildingAddressContainer class="hidden">
-            <div class="edit-building-address-container">
-              <div class="edit-building-address-input"><app-address-input [_class]="'edit-building-input'" #EditBuildingAddressInput ></app-address-input></div>
-              <div class="edit-building-address-submit"><fa-icon class="small-circle-btn" (click)="editBuildingAddress(EditBuildingAddressInput, item, EditBuildingAddressContainer)" [icon]="['fa','check-circle']"></fa-icon></div>
-            </div>
-            <div *ngIf="errors['editBuildingAddress-'+item.id]" class="error-msg building-error-msg">{{errors['editBuildingAddress-'+item.id]}}</div>
-          </div>
-          <div #EditBuildingLatLngContainer class="hidden">
-            <div class="edit-building-address-container">
-              <div class="edit-building-address-input d-flex">
-                <input type="text" #EditBuildingLatInput placeholder="Lat" class="edit-location-lat-input">
-                <input type="text" #EditBuildingLngInput placeholder="Lng" class="edit-location-lng-input">
+
+
+    <!-- Draggable item -->
+
+    <ng-container *ngIf="draggable" >
+      <div (dndStart)="onDragStart($event, item)" [ngClass]="{'cursor-grab': isMovable(item)}" [dndEffectAllowed]="'move'" [dndDraggable]="{next: next, id: item.id}" [dndDisableIf]="!isMovable(item)" (dndEnd)="onDragEnd($event)">
+        <div dndDropzone class="drop-area" (dndDrop)="onDrop($event, item)" [ngClass]="{'drop-location': isDropLocation(item), 'cant-drop-location': isNonDropLocation(item)}">
+          <div [contextMenu]="contextMenu" [ngClass]="{'odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
+            <div class="item-row">
+              <div dndHandle class="drag-handle">☰</div>
+              <div class="more" *ngIf="!item._end" (click)="listNode(item, next)">
+                <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
+                <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
               </div>
-              <div class="edit-building-address-submit"><fa-icon class="small-circle-btn" (click)="editBuildingLocation(EditBuildingLatInput, EditBuildingLngInput, item, EditBuildingLatLngContainer)" [icon]="['fa','check-circle']"></fa-icon></div>
+              <div class="select-container" (click)="select(item)">
+                <div class="selected" *ngIf="item.selected && !item.partiallySelected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                <div class="selected" *ngIf="item.partiallySelected"><fa-icon [icon]="['fa','minus']"></fa-icon></div>
+                <div class="not-selected" *ngIf="!item.selected && !item.partiallySelected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+              </div>
+              <div class="marker-container">
+                <div class="marker {{item.marker.color}}" [style.background]="item.marker.color" *ngIf="item.marker">{{item.marker.text}}</div>
+              </div>
+              <div class="text" #itemText>{{item.text}}</div>
+              <div class="rename-input" #itemNameInput><input type="text" value="{{item.text}}" (change)="nameChanged($event, item, itemText, itemNameInput)"></div>
+              <div class="right-side">
+                <div class="warning" *ngIf="item.warning">!</div>
+                <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
+                <div class="small-more" id="actions-dropdown-f" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
+                <div *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'" class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
+                  <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rinominare</a>
+                  <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">Sposta in un altra strada</a>
+                  <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingAddressContainer, [EditBuildingLatLngContainer])">Change Address</a>
+                  <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="changeLocationOnMap(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">Edit Location</a>
+                </div>
+              </div>
+              <div class="clear-both"></div>
+              <div #EditBuildingAddressContainer class="hidden">
+                <div class="edit-building-address-container">
+                  <div class="edit-building-address-input"><app-address-input [_class]="'edit-building-input'" #EditBuildingAddressInput ></app-address-input></div>
+                  <div class="edit-building-address-submit"><fa-icon class="small-circle-btn" (click)="editBuildingAddress(EditBuildingAddressInput, item, EditBuildingAddressContainer)" [icon]="['fa','check-circle']"></fa-icon></div>
+                </div>
+                <div *ngIf="errors['editBuildingAddress-'+item.id]" class="error-msg building-error-msg">{{errors['editBuildingAddress-'+item.id]}}</div>
+              </div>
+              <div #EditBuildingLatLngContainer class="hidden">
+                <div class="edit-building-address-container">
+                  <div class="edit-building-address-input d-flex">
+                    <input type="text" #EditBuildingLatInput placeholder="Lat" class="edit-location-lat-input">
+                    <input type="text" #EditBuildingLngInput placeholder="Lng" class="edit-location-lng-input">
+                  </div>
+                  <div class="edit-building-address-submit"><fa-icon class="small-circle-btn" (click)="editBuildingLocation(EditBuildingLatInput, EditBuildingLngInput, item, EditBuildingLatLngContainer)" [icon]="['fa','check-circle']"></fa-icon></div>
+                </div>
+                <div *ngIf="errors['editBuildingLocation-'+item.id]" class="error-msg building-error-msg">{{errors['editBuildingLocation-'+item.id]}}</div>
+              </div>
             </div>
-            <div *ngIf="errors['editBuildingLocation-'+item.id]" class="error-msg building-error-msg">{{errors['editBuildingLocation-'+item.id]}}</div>
           </div>
-        </div>
-      </div>
-      <ng-container *ngIf="item.expanded">
-        <div infiniteScroll (scrolled)="loadMore(item, next)" [scrollWindow]="true" [infiniteScrollContainer]="PlannerContainer" infiniteScrollDistance="30">
-          <ng-container *ngFor="let child of item.children; let i = index">
-            <div (dndStart)="onDragStart($event, child)" [ngClass]="{'cursor-grab': isMovable(child)}" [dndEffectAllowed]="'move'" [dndDraggable]="{next: next+':'+i, id: child.id}" [dndDisableIf]="!isMovable(child)" (dndEnd)="onDragEnd($event)">
-              <ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>
+          <ng-container *ngIf="item.expanded">
+            <div infiniteScroll (scrolled)="loadMore(item, next)" [scrollWindow]="true" [infiniteScrollContainer]="PlannerContainer" infiniteScrollDistance="30">
+              <ng-container *ngFor="let child of item.children; let i = index">
+                <ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i, draggable: child.type === 'capId' || child.type === 'streetId'}"></ng-container>
+              </ng-container>
             </div>
           </ng-container>
         </div>
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
+
+    <!-- Not Draggable item -->
+
+    <ng-container *ngIf="!draggable" >
+      <div dndDropzone class="drop-area" (dndDrop)="onDrop($event, item)" [ngClass]="{'drop-location': isDropLocation(item), 'cant-drop-location': isNonDropLocation(item)}">
+        <div [contextMenu]="contextMenu" [ngClass]="{'odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
+          <div class="item-row">
+            <div class="more" *ngIf="!item._end" (click)="listNode(item, next)">
+              <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
+              <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
+            </div>
+            <div class="select-container" (click)="select(item)">
+              <div class="selected" *ngIf="item.selected && !item.partiallySelected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+              <div class="selected" *ngIf="item.partiallySelected"><fa-icon [icon]="['fa','minus']"></fa-icon></div>
+              <div class="not-selected" *ngIf="!item.selected && !item.partiallySelected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+            </div>
+            <div class="marker-container">
+              <div class="marker {{item.marker.color}}" [style.background]="item.marker.color" *ngIf="item.marker">{{item.marker.text}}</div>
+            </div>
+            <div class="text" #itemText>{{item.text}}</div>
+            <div class="rename-input" #itemNameInput><input type="text" value="{{item.text}}" (change)="nameChanged($event, item, itemText, itemNameInput)"></div>
+            <div class="right-side">
+              <div class="warning" *ngIf="item.warning">!</div>
+              <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
+              <div class="small-more" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
+              <div *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'" class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
+                <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rinominare</a>
+                <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">Sposta in un altra strada</a>
+                <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingAddressContainer, [EditBuildingLatLngContainer])">Change Address</a>
+                <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="changeLocationOnMap(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">Edit Location</a>
+              </div>
+            </div>
+            <div class="clear-both"></div>
+            <div #EditBuildingAddressContainer class="hidden">
+              <div class="edit-building-address-container">
+                <div class="edit-building-address-input"><app-address-input [_class]="'edit-building-input'" #EditBuildingAddressInput ></app-address-input></div>
+                <div class="edit-building-address-submit"><fa-icon class="small-circle-btn" (click)="editBuildingAddress(EditBuildingAddressInput, item, EditBuildingAddressContainer)" [icon]="['fa','check-circle']"></fa-icon></div>
+              </div>
+              <div *ngIf="errors['editBuildingAddress-'+item.id]" class="error-msg building-error-msg">{{errors['editBuildingAddress-'+item.id]}}</div>
+            </div>
+            <div #EditBuildingLatLngContainer class="hidden">
+              <div class="edit-building-address-container">
+                <div class="edit-building-address-input d-flex">
+                  <input type="text" #EditBuildingLatInput placeholder="Lat" class="edit-location-lat-input">
+                  <input type="text" #EditBuildingLngInput placeholder="Lng" class="edit-location-lng-input">
+                </div>
+                <div class="edit-building-address-submit"><fa-icon class="small-circle-btn" (click)="editBuildingLocation(EditBuildingLatInput, EditBuildingLngInput, item, EditBuildingLatLngContainer)" [icon]="['fa','check-circle']"></fa-icon></div>
+              </div>
+              <div *ngIf="errors['editBuildingLocation-'+item.id]" class="error-msg building-error-msg">{{errors['editBuildingLocation-'+item.id]}}</div>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="item.expanded">
+          <div infiniteScroll (scrolled)="loadMore(item, next)" [scrollWindow]="true" [infiniteScrollContainer]="PlannerContainer" infiniteScrollDistance="30">
+            <ng-container *ngFor="let child of item.children; let i = index">
+              <ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i, draggable: child.type === 'capId' || child.type === 'streetId'}"></ng-container>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
   </ng-template>
 </ng-template>
 

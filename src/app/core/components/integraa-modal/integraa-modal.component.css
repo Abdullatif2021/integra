@@ -7,13 +7,25 @@
 }
 .integraa-modal-container{
     display: block;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 98;
+    background-color: #44444447;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-color: #44444447;
+    position: fixed;
+    display: block;
+    z-index: 98;
+    right: auto;
+    bottom: auto;
+}
+
+.integraa-modal-backlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #77777738;
 }
 .integraa-modal-container.hidden {
     display: none;
@@ -56,7 +68,7 @@
 
 .integraa-modal-body {
     padding: 0px;
-    height: 100%;
+    height: calc(100% - 30px);
 }
 .m-frame{
     width: 100%;
