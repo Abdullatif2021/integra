@@ -1,9 +1,10 @@
 .parameters-container{
-    padding: 20px 10px;
+    padding: 15px 10px;
     font-size: 13px;
     background-color: #ffffff;
     border-radius: 5px;
-    height: 634px;
+    min-height: 100%;
+    max-height: 600px;
     overflow-y: scroll;
 }
 .parameters-section-title{
@@ -89,7 +90,7 @@
     border-radius: 0px;
 }
 .pre-dispatches-container {
-    height: 420px;
+    height: 400px;
     overflow-y: scroll;
 }
 .modal-warning-icon {

@@ -68,7 +68,7 @@
 
 .integraa-modal-body {
     padding: 0px;
-    height: calc(100% - 30px);
+    height: calc(100% - 40px);
 }
 .m-frame{
     width: 100%;
@@ -144,4 +144,8 @@
 .minimized-modal-title {
     color: #FFF;
     font-size: 13px;
+}
+.integraa-modal {
+    max-width: 100vw;
+    max-height: 100vh;
 }

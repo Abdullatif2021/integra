@@ -169,15 +169,18 @@ export class ResultComponent implements OnInit, OnDestroy {
       const markers = <[MapMarker]>[];
       // groups
       markersData.forEach((elm) => {
-          console.log(elm);
          const priority = (elm.groups ? elm.groups[0].map_priority : elm.priority) + 1 + '' ;
          const icon = `https://mt.google.com/vt/icon/text=${priority}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1` ;
          let infoWindowText = `<table class="table"><thead><tr><th class="text-center">Order</th>
-                                    <th scope="col" class="text-center">Act code</th></tr></thead><tbody>`;
+                                    <th scope="col" class="text-center">Recipient</th><th class="text-center">Act code</th>
+                                    <th class="text-center">Product</th><th class="text-center">Barcode</th></tr></thead><tbody>`;
          elm.groups.forEach(group => {
-             group.act_codes.forEach(act_code => {
-                 infoWindowText += `<tr><th class="text-center">${group.map_priority + 1}</th>
-                                        <td class="text-center">${act_code}</td></tr>`;
+             group.products.forEach(product => {
+                 infoWindowText += `<tr><th class="text-center">${product.priority + 1}</th>
+                                        <td class="text-center">${product.recipient.name}</td>
+                                        <td class="text-center">${product.act_code}</td>
+                                        <td class="text-center">${product.integra_name.name}</td
+                                        ><td class="text-center">${product.barcode}</td></tr>`;
              });
          });
          infoWindowText += `</tbody></table>`;

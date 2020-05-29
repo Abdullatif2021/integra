@@ -30,7 +30,7 @@
 
 .map-header {
     background-color: #fff;
-    min-height: 50px;
+    min-height: 47px;
     border-radius: 5px;
     padding: 0px 10px;
 }
@@ -44,7 +44,7 @@
 
 .map {
     /*height: calc(100vh - 130px);*/
-    height: 634px;
+    height: 100%
 }
 
 .nFoundItemModal, .nFoundItemModal input{
@@ -139,5 +139,20 @@
 }
 .map-container {
     position: relative;
+    height: 100%;
 }
-
+.left-col {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+.right-col {
+    display: flex;
+    flex-direction: column;
+}
+.router-container {
+    flex: 1;
+}
+.map-upper-container {
+    flex: 1;
+}

@@ -1,8 +1,11 @@
 .planner-container{
     background-color: #fff;
-    height: 634px;
+    /*height: 600px;*/
+    min-height: 100%;
     border-radius: 4px;
     overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
 }
 .addresses-container,.arrival-container{
     padding: 12px 20px;
@@ -59,7 +62,9 @@
 
 /* items */
 .items{
-    min-height: 360px;
+    flex: 1;
+    max-height: 330px;
+    overflow: scroll
 }
 .right-side{
     float: right;

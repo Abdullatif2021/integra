@@ -288,3 +288,6 @@ a:hover {
 .contains-open-modal {
     overflow: hidden;
 }
+.full-height {
+    min-height: 100vh;
+}

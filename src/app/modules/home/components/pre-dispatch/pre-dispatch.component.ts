@@ -130,7 +130,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   openIntegraaModal(elm) {
       this.integraaModalService.open(
           '/schedule/' + elm.id,
-          {width: 1400, height: 680, title: elm.name},
+          {width: 1420, height: 710, title: elm.name},
           {location: 'schedule', id: elm.id}
           );
   }
@@ -138,7 +138,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   openAddProductsModal(elm) {
       this.integraaModalService.open(
           `/?actionsonly=addproductstopd&activepredispatch=${elm.id}`,
-          {width: 1400, height: 680, title: elm.name},
+          {width: 1400, height: 690, title: elm.name},
           {location: 'home', id: elm.id}
       );
   }

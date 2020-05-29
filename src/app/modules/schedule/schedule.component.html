@@ -1,8 +1,8 @@
 <!--<app-user-nav></app-user-nav>-->
-<div class="the-yellow-bar mt-3 mb-3"></div>
-<div class="container-fluid page-container">
-  <div class="row">
-    <div class="col-lg-4 col-md-12 v-wide-col mt-md-20px">
+<!--<div class="the-yellow-bar mt-3 mb-3"></div>-->
+<div class="container-fluid page-container pt-1">
+  <div class="row full-height">
+    <div class="col-xl-4 col-lg-5 col-md-12 v-wide-col mt-md-20px left-col">
       <div class="mt-1">
         <div class="schedule-nav">
           <button class="btn schedule-nav-btn schedule-nav-left-btn" [ngClass]="{'active': '/schedule/'+preDispatch === router.url}" routerLink="/schedule/{{preDispatch}}">Indirizzi</button>
@@ -11,11 +11,11 @@
           <button class="btn schedule-nav-btn schedule-nav-right-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/result' === router.url}" routerLink="/schedule/{{preDispatch}}/result">Risultato</button>
         </div>
       </div>
-      <div class="mt-2">
+      <div class="mt-2 router-container">
         <router-outlet></router-outlet>
       </div>
     </div>
-    <div class="col-lg-8 col-mf-12 v-wide-col">
+    <div class="col-xl-8 col-lg-7 col-md-12 v-wide-col right-col">
       <div class="mt-1">
         <div class="map-header">
           <div class="locating-btn integraa-btn" *ngIf="nextAction === 'locating'" (click)="runNextAction()">Localizza</div>
@@ -36,7 +36,7 @@
           <div class="clear-both"></div>
         </div>
       </div>
-      <div class="mt-2">
+      <div class="mt-2 map-upper-container">
         <div class="map-container" [ngClass]="{'hidden': !show_map}">
           <div class="map-search">
             <app-address-input (changed)="navigateMap($event)" [_class]="'bg-white'"></app-address-input>
