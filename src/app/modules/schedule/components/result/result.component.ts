@@ -159,7 +159,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       let markersData = [];
       if (onlyMarkers) {
           const temp = await <any>this.resultsService.getSetMarkers(postman.id).toPromise();
-          markersData = temp.data ;
+          markersData = temp.data.data ;
       } else {
           const path = await <any>this.resultsService.getSetPath(postman.id).toPromise();
           markersData = path.data.coordinates ;
