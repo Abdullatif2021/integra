@@ -28,12 +28,12 @@ export class FiltersService {
       );
   }
 
-  updateFilters(filters) {
+  updateFilters(filters, placeholders = {}) {
     const grouping = filters.grouping;
     this.grouping =  grouping ? grouping : 'by_cap' ;
     this.filters = Object.assign({}, filters) ;
     delete this.filters.grouping ;
-    this.filtersChanges.emit(filters);
+    this.filtersChanges.emit(<any>{filters: filters, placeholders: placeholders});
   }
 
   getGrouping() {

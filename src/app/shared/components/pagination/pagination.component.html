@@ -1,8 +1,8 @@
 <div class="d-flex justify-content-end" [ngClass]="{'dark-theme':theme=='dark'}" *ngIf="!loading;else skeleton">
   <ng-container *ngIf="!hide">
     <!-- Results per page {  -->
-    <div class="d-inline-flex rpg-label"><label class="rpg-label">Risultati per pagina</label></div>
-    <div class="d-inline-flex rpg-select"><ng-select placeholder="{{rpp}}" bindLabel="key" [clearable]="false" (change)="rppChanged($event)" [items]="pages_list" class="integraa-select results-per-page"></ng-select></div>
+    <div class="d-inline-flex rpp-label"><label class="rpg-label">Risultati per pagina</label></div>
+    <div class="d-inline-flex rpp-select"><ng-select placeholder="{{rpp}}" bindLabel="key" [clearable]="false" (change)="rppChanged($event)" [items]="pages_list" class="integraa-select results-per-page"></ng-select></div>
     <div *ngIf="results_count" class="results-count">
       <span class="ml-1">
         {{((current_page-1) * rpp) + 1}} -

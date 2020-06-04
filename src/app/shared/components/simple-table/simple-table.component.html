@@ -10,11 +10,11 @@
     <div *ngIf="pagination && pagination.total" class="header-qta">Q.t: {{pagination.total}}</div>
   </div>
   <div class="search-section">
-    <app-search-box [placeholder]="table.searchPlaceHolder" (changed)="search($event)" ></app-search-box>
+    <app-search-box [placeholder]="table.searchPlaceHolder" [value]="searchValue" (changed)="search($event)" ></app-search-box>
   </div>
   <div class="table-body" infiniteScroll (scrolled)="loadMore()" [scrollWindow]="false">
     <div class="item odd-bg flipInX animated" *ngIf="items && !table.custom" (click)="selectItem(null)" [ngClass]="{'active-item':_all_selected, 'custom': table.custom}">
-      <ng-container [ngTemplateOutlet]="item_body" [ngTemplateOutletContext]="{item:{name:'ALL',count:pagination.totalProduct},table:table}"></ng-container>
+      <ng-container [ngTemplateOutlet]="item_body" [ngTemplateOutletContext]="{item:{name:table.all_label ? table.all_label : 'Tutti',count:pagination.totalProduct},table:table}"></ng-container>
     </div>
     <ng-container *ngFor="let item of items; let idx = index">
       <div class="item flipInX animated" (click)="selectItem(item)" [ngClass]="{'odd-bg':(idx%2),'even-bg':!(idx%2),'active-item':selected[item.id], 'custom': table.custom}">
@@ -26,12 +26,11 @@
 </div>
 
 <ng-template #item_body let-item="item" let-table="table">
-  <div *ngIf="!table.custom" class="select-row float-left select-row-n-selected"><div class="select-row-input rounded-circle"></div></div>
-  <div *ngIf="!table.custom" class="select-row float-left select-row-selected"><div class="select-row-input rounded-circle"><fa-icon [icon]="['fa','check']"></fa-icon></div></div>
-  <div *ngIf="table.icon" class="item-icon float-left ml-2"><img class="item-icon-img" src="{{table.icon}}"></div>
-  <div class="item-name ml-2 mt-1 float-left" [ngClass]="{'full-width': table.custom}">{{item[table.text] ? item[table.text] : item.name }}</div>
-  <div class="item-qt float-right mt-1" *ngIf="item.count !== undefined">Q.t: {{item.count+''}}</div>
-  <div class="clear-both"></div>
+  <div *ngIf="!table.custom" class="select-row select-row-n-selected"><div class="select-row-input rounded-circle"></div></div>
+  <div *ngIf="!table.custom" class="select-row select-row-selected"><div class="select-row-input rounded-circle"><fa-icon [icon]="['fa','check']"></fa-icon></div></div>
+  <div *ngIf="table.icon" class="item-icon ml-2"><img class="item-icon-img" src="{{table.icon}}"></div>
+  <div class="item-name ml-2 mt-1" [ngClass]="{'full-width': table.custom}">{{item[table.text] ? item[table.text] : item.name }}</div>
+  <div class="item-qt mt-1" *ngIf="item.count !== undefined">Q.t: {{item.count+''}}</div>
 </ng-template>
 
 <ng-template #skeletons>

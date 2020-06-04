@@ -13,8 +13,8 @@
       </ng-container>
       <ng-template #ActualModal>
         <h6>Crea nuova Pre-Distinta</h6>
-        <div *ngIf="data.method === 'selected'" class="selected-count-confirm">
-          ATTENZIONE! Stai per processare <b>{{selectedCount}}</b> righe. Assicurati che la quantità sia corretta,
+        <div class="selected-count-confirm">
+          ATTENZIONE! Stai per processare <b *ngIf="data.method === 'selected'" >{{selectedCount}}</b><b *ngIf="data.method === 'filters'" >{{filteredProductsCount}}</b> righe. Assicurati che la quantità sia corretta,
           altrimenti riprova o contatta l'assistenz. Premi su Conferma se non hai dubbi sull'operazione.
         </div>
         <div class="row mt-4">

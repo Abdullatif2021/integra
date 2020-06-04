@@ -6,6 +6,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 export class PaginationService {
 
   resultsCountChanges = new EventEmitter<number>() ;
+  resultsCount = 0 ;
   loadingStateChanges = new EventEmitter<boolean>() ;
   rppValueChanges = new EventEmitter<number>() ;
   currentPageChanges = new EventEmitter<number>() ;
@@ -16,6 +17,7 @@ export class PaginationService {
 
   updateResultsCount(count: number) {
     this.resultsCountChanges.emit(count);
+    this.resultsCount = count;
   }
 
   updateLoadingState(state: boolean) {

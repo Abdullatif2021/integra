@@ -24,11 +24,14 @@ export class CitiesService {
         const citiesType = this.filtersService.getGrouping();
         if (citiesType === 'by_client') {
             options.params = options.params.set('type', citiesType);
+            if (name !== null) { options.params = options.params.set('cityName', name); }
+            if (name !== null) { options.params = options.params.set('clientName', name); }
+        } else {
+            if (name !== null) { options.params = options.params.set('cityName', name); }
         }
         if (order) {
             options.params = options.params.set('orderMethod', order);
         }
-        if (name !== null) { options.params = options.params.set('cityName', name); }
         options.params = this.filtersService.getHttpParams(options.params) ;
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCities, options).pipe(
             catchError(this.handleError)

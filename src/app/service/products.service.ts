@@ -39,7 +39,7 @@ export class ProductsService {
           }
           if (cities.search) {
               if (citiesType === 'by_client') {
-                  options.params = options.params.set('by_clients_search', cities.items);
+                  options.params = options.params.set('by_clients_search', cities.search);
               } else {
                   options.params = options.params.set('byCitiesSearch', cities.search);
               }

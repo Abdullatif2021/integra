@@ -58,6 +58,9 @@ export class IntegraaModalComponent implements OnInit {
       setTimeout(() => {modal.height = document.getElementsByTagName('body')[0].clientHeight ; }, 0);
       this.modals.push(modal) ;
       this.integraaModalService.updateModals(this.modals);
+      if (opt.expand) {
+          this.expand(modal);
+      }
   }
 
   setCurrentScroll() {

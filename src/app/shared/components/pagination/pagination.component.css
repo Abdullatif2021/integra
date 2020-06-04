@@ -1,11 +1,11 @@
 /* pagination {  */
-.rpg-label{
+.rpp-label{
     font-size: 13px;
     margin-top: 5px;
     color: #111;
 }
-.rpg-select{
-    min-width: 60px;
+.rpp-select{
+    min-width: 65px;
     margin-left: 10px;
 }
 .pages-container{

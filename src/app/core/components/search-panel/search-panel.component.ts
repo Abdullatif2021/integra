@@ -42,7 +42,7 @@ export class SearchPanelComponent implements OnInit {
   actions: any = [];
   loaded = false ;
 
-  filters = {};
+  filters = <any>{};
   @ViewChild(ModalDirective) modalHost: ModalDirective;
   @ViewChild('confirmUnAppliedFiltersModalRef') confirmUnAppliedFiltersModalRef: ElementRef;
   unsubscribeTo(name) {
@@ -68,13 +68,16 @@ export class SearchPanelComponent implements OnInit {
           }
       });
       this.filtersService.cleared.subscribe(() => {
-          this._active_filters = [];
+          this._active_filters = this.fieldsData && this.fieldsData.fields &&
+            this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {};;
           this._m_active_action = null ;
           this.active_action = null ;
           this._search = null ;
-          this.filters = {};
+          this.filters = this.fieldsData && this.fieldsData.fields &&
+              this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {};
           this._has_active_filters = false ;
           this.isCollapsed = true ;
+          this._changed_filters = {};
       });
       this.filtersService.fields.subscribe((data) => {
           this.fieldsData = data ;
@@ -106,7 +109,6 @@ export class SearchPanelComponent implements OnInit {
   }
 
   changeFiltersValue(event, key, type, idx) {
-
     // if filters has action that needs to run on change, run it.
     if (typeof this.filtersFields[idx].change === 'function') {
         return this.filtersFields[idx].change(event) ;
@@ -133,7 +135,15 @@ export class SearchPanelComponent implements OnInit {
   }
 
   filter() {
-      this.filtersService.updateFilters(this.filters) ;
+      // filtersData,
+      const placeholders = {};
+      if (this.filters_data && this.filters_data.caps_group && this.filters.recipientCap) {
+          const recipientCap = this.filters['recipientCap'];
+          // find cap name.
+          const result = this.filters_data.caps_group.find(item => item.id === recipientCap) ;
+          placeholders['recipientCap'] = result.name;
+      }
+      this.filtersService.updateFilters(this.filters, placeholders) ;
       this._active_filters = Object.assign({}, this.filters) ;
       this._changed_filters = {} ;
       this._has_active_filters = Object.keys(this._active_filters).length ? true : false ;
@@ -142,10 +152,11 @@ export class SearchPanelComponent implements OnInit {
   }
 
   clearFilters() {
-      this.filters = {} ;
-      this._active_filters = {};
+      this.filters = Object.assign({}, this.fieldsData.fields.default_filters);
+      this._active_filters = Object.assign({}, this.fieldsData.fields.default_filters);
       this._changed_filters = {};
       this._has_active_filters = false ;
+
       this.filtersService.updateFilters(this.filters) ;
   }
 

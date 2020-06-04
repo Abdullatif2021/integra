@@ -1,20 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ModalComponent} from '../modal.component';
 import {ActionsService} from '../../../../service/actions.service';
 import {ProductsService} from '../../../../service/products.service';
 import {FiltersService} from '../../../../service/filters.service';
+import {PaginationService} from '../../../../service/pagination.service';
+import {takeUntil} from 'rxjs/internal/operators';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-pre-dispatch-new',
   templateUrl: './pre-dispatch-new.component.html',
   styleUrls: ['./pre-dispatch-new.component.css']
 })
-export class PreDispatchNewComponent extends ModalComponent  implements OnInit {
+export class PreDispatchNewComponent extends ModalComponent  implements OnInit, OnDestroy {
 
   constructor(
       private actionsService: ActionsService,
       public productsService: ProductsService,
-      public filtersService: FiltersService
+      public filtersService: FiltersService,
+      public paginationService: PaginationService
   ) {
       super();
   }
@@ -23,13 +27,22 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit {
   error: any = false ;
   filtersCount = 0 ;
   selectedCount = 0;
+  filteredProductsCount = 0
   confirmed = false ;
+  unsubscribe: Subject<void> = new Subject();
 
   ngOnInit() {
+    this.filteredProductsCount = this.paginationService.resultsCount ;
     this.filtersCount = Object.keys(this.filtersService.filters).length;
     this.selectedCount = this.productsService.selectedProducts.length ;
     if (this.filtersService.specials.cities && !this.filtersService.specials.cities.all) { this.filtersCount++;}
     if (this.filtersService.specials.streets && !this.filtersService.specials.streets.all) { this.filtersCount++;}
+    this.paginationService.resultsCountChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
+        data => {
+          this.filteredProductsCount = data;
+        }
+    );
+
   }
 
   changeName(event) {
@@ -47,4 +60,8 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit {
     modal.close();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
 }

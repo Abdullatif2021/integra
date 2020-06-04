@@ -6,7 +6,7 @@
     <ng-container *ngIf="isCollapsed && !_has_active_filters">
       <!-- easy search input { -->
       <div class="col-lg-2 wide-col" >
-        <app-search-box *ngIf="!_search" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
+        <app-search-box *ngIf="!_search" [placeholder]="'Cerca'" [style]="'thin'" [value]="search_value" ></app-search-box>
         <ng-container *ngFor="let field of searchFields">
           <ng-container *ngIf="field.type === 'text'">
             <app-search-box (changed)="search_value = $event" *ngIf="_search && _search.key == field.key" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>

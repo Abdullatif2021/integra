@@ -127,17 +127,26 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       this.paginationService.currentPageChanges.pipe(takeUntil(this.unsubscribe)).subscribe( (page: number) => {
           this.loadProducts(false) ;
       });
-      this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filters: any) => {
-          this.loadProducts(true) ;
+      this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filtersData: any) => {
+          const filters = filtersData.filters ;
           this.citiesTable.title = filters.grouping === 'by_client' ? 'Cliente' : 'Paese' ;
+          this.citiesTable.searchPlaceHolder = filters.grouping === 'by_client' ? 'Cerca Cliente' : 'Cerca Paese' ;
+          if (filters.grouping === 'by_cap' && filters.recipientCap && filtersData.placeholders && filtersData.placeholders.recipientCap) {
+              this._streetsTable.clearData();
+              this._citiesTable.setSearchValue(filtersData.placeholders.recipientCap);
+              this.current_cities = {all: true, items: [], search: filtersData.placeholders.recipientCap};
+          } else if (this._citiesTable.resetIfAuto()){
+              this.current_cities = {all: true, items: [], search: null};
+          }
+          this.loadProducts(true) ;
           this._streetsTable.reload();
           this._citiesTable.reload();
       });
       this.actionsService.setActions(this.actions);
       this.actionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
           this.loadProducts(false) ;
-          this._citiesTable.reload();
-          this._streetsTable.reload();
+          this._citiesTable.reload(true);
+          this._streetsTable.reload(true);
           this.productsService.selectedProducts = [] ;
       });
       this.productsService.selectAllOnLoadEvent.pipe(takeUntil(this.unsubscribe)).subscribe((state: boolean) => {

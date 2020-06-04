@@ -94,7 +94,10 @@
     margin: 4px 2px 0px 1px;
     cursor: pointer;
 }
-
+.action-icon-container {
+    position: relative;
+    display: inline-block;
+}
 /* table footer  */
 .pagination-footer{
     border-top-right-radius: 0px;

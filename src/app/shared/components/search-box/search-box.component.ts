@@ -11,12 +11,17 @@ export class SearchBoxComponent implements OnInit {
 
   @Input() placeholder = 'Search';
   @Input() style = 'normal';
+  @Input() value = '';
   @Output() changed = new EventEmitter<string>();
   ngOnInit() {
   }
 
   change(event) {
     this.changed.emit(event.target.value);
+  }
+
+  setValue(value) {
+    this.value = value;
   }
 
 }

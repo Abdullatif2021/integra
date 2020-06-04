@@ -15,7 +15,8 @@ export const TablesConfig = {
             icon: 'assets/images/cityscape.svg',
             searchPlaceHolder: 'Cerca Paese',
             order: '1',
-            text: 'name'
+            text: 'name',
+            all_label: 'Tutti',
         },
         // streets table structure
         streetsTable: {
@@ -24,6 +25,7 @@ export const TablesConfig = {
             searchPlaceHolder: 'Cerca Strada',
             order: '1',
             text: 'name',
+            all_label: 'Tutte',
         },
         // postmen table structure
         postmenTable: {

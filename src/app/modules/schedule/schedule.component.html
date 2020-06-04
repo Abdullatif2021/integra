@@ -76,7 +76,7 @@
         Il sistema non è riuscito a localizzare gli indirizzo sotto indicati
       </h6>
       <div *ngFor="let nFoundItem of nFoundItems" class="mt-2 pr-5 pl-5">
-        <h6 class="mb-0"><span class="text-warning font-size-13">{{nFoundItem.street}}, {{nFoundItem.houseNumber}}, {{nFoundItem.cap}} {{nFoundItem.city}}</span></h6>
+        <h6 class="mb-0"><span class="font-size-13">{{nFoundItem.street}}, {{nFoundItem.houseNumber}}, {{nFoundItem.cap}} {{nFoundItem.city}}</span></h6>
         <div>
           <div class="form-group">
             <label>Modifica indirizzo</label>
@@ -85,14 +85,14 @@
           </div>
           <div class="form-group mb-1">
             <input id="lat-lng-input-activate" (change)="latLngInputActivate($event, nFoundItem, latInput, lngInput)" type="checkbox"> &nbsp;
-            <label for="lat-lng-input-activate">Enter lat,lng instead </label>
+            <label for="lat-lng-input-activate">Inserisci Posizione</label>
           </div>
           <div class="row">
             <div class="col-6 col-xs-12">
-              <input #latInput (change)="notFoundCoordinatesChanged($event, 'lat', nFoundItem)" [disabled]="!latLngInputState[nFoundItem.id]" type="text" class="form-control" placeholder="latitude">
+              <input #latInput (change)="notFoundCoordinatesChanged($event, 'lat', nFoundItem)" [disabled]="!latLngInputState[nFoundItem.id]" type="text" class="form-control" placeholder="Latitudine">
             </div>
             <div class="col-6 col-xs-12">
-              <input #lngInput (change)="notFoundCoordinatesChanged($event, 'long', nFoundItem)" [disabled]="!latLngInputState[nFoundItem.id]" type="text" class="form-control" placeholder="longitude">
+              <input #lngInput (change)="notFoundCoordinatesChanged($event, 'long', nFoundItem)" [disabled]="!latLngInputState[nFoundItem.id]" type="text" class="form-control" placeholder="Longitudine">
             </div>
           </div>
         </div>
@@ -100,7 +100,7 @@
       </div>
       <div class="btns-container mt-3">
         <button type="button" (click)="modal.close();fixLocation()" class="integraa-btn ml-2 float-right" >Esegui</button>
-        <button type="button" (click)="modal.close();fixLocation(true)" class="integraa-btn integraa-btn-dark ml-2 float-right" >Skip</button>
+        <button type="button" (click)="modal.close();fixLocation(true)" class="integraa-btn integraa-btn-dark ml-2 float-right" >Salta</button>
         <div class="clear-both"></div>
       </div>
     </div>

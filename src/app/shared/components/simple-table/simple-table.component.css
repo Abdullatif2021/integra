@@ -26,6 +26,7 @@
 
 .item-name{
     width: 40%;
+    flex: 1;
 }
 .table-body{
     padding: 0px 5px;
@@ -57,6 +58,7 @@
     cursor: pointer;
     border: 1px solid transparent;
     min-height: 33px;
+    display: flex;
 }
 .item:hover{
     background-color: #e5e5ff !important;

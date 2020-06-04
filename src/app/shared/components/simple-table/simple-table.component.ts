@@ -1,6 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
-import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-simple-table',
@@ -34,6 +33,8 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   subscription: any = false ;
   currentOrder = null ;
   @Input() selected = {} ;
+  selectedSave ;
+  changeState = 'user';
 
   ngOnInit() {
     // this.loadData(false);
@@ -48,7 +49,7 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     }
   }
 
-  loadData(append: boolean) {
+  loadData(append: boolean, keep_selected = false) {
 
     if (typeof this.getMethod !== 'function') {
       if (this.items) { this.loading = false ; }
@@ -68,9 +69,21 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     } else {
         this.subscription = observable.subscribe((res: ApiResponseInterface) => {
             this.handleResponse(res);
+            this.handleOldSelected(keep_selected);
         });
     }
     return this ;
+  }
+
+  handleOldSelected(keep_selected) {
+    if (!keep_selected || !this.selectedSave) {return this.selectedSave = null;}
+    console.log(this.selectedSave);
+    Object.keys(this.selectedSave).forEach((key) => {
+      if (this.items.find((i) => i.id === this.selectedSave[key].id)) {
+        this.selected[key] = this.selectedSave[key];
+        this._all_selected = false;
+      }
+    });
   }
 
   handleResponse(res: ApiResponseInterface) {
@@ -98,7 +111,18 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     if (this.table.searchMethod && typeof this.table.searchMethod === 'function') {
       return this.items = this.table.searchMethod(this._items, event) ;
     }
+    this.changeState = 'user'; // value changed because of user change.
     this.loadData(false) ;
+  }
+
+  resetIfAuto() {
+    if (this.changeState === 'user') { return 0; }
+    this.searchValue = '' ;
+    this.page = 1 ;
+    this._all_selected = true ;
+    this.selected = {} ;
+    this.changeState = 'user'; // value changed because of user change.
+    return 1;
   }
 
   selectItem(item) {
@@ -124,25 +148,6 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this._all_selected = false ;
     return this.changed.emit({all: this._all_selected,
         items: Object.keys(this.selected), search: this.searchValue, order: this.currentOrder});
-      // if (!this.multi) {
-    //   this._selected = item ;
-    //   return this.changed.emit(item) ;
-    // }
-    // if (!item) {
-    //   this._selected = [] ;
-    //   this._all_selected = !this._all_selected;
-    //   return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
-    // }
-    // for (let i = 0; i < this._selected.length; ++i) {
-    //   if (!this._selected[i]) {
-    //       this._selected.splice(i, 1);
-    //   } else if (this._selected[i] === item.id) {
-    //     this._selected.splice(i, 1);
-    //     return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
-    //   }
-    // }
-    // this._selected.push(item.id);
-    // return this.changed.emit({all: this._all_selected, items: this._selected, search: this.searchValue, order: this.currentOrder});
   }
 
 
@@ -150,18 +155,21 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this.currentOrder = order ;
     this.page = 1 ;
     this.loadData(false) ;
-    this.selected = {} ;
+    this.selected = {};
     this._all_selected = true ;
     this.changed.emit({all: true, items: [], search: this.searchValue, order: this.currentOrder});
   }
 
-  reload() {
-    this.page = 1 ;
+  reload(keep_selected = false) {
     this.loaded = false ;
     this.loading = true ;
+    this.page = 1 ;
+    if (keep_selected) {
+      this.selectedSave = this.selected;
+    }
     this.selected = {} ;
     this._all_selected = true ;
-    this.loadData(false) ;
+    this.loadData(false, keep_selected) ;
   }
 
   clearData() {
@@ -171,6 +179,11 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this.selected = {} ;
     this._all_selected = true ;
     this.items = [] ;
+  }
+
+  setSearchValue(value) {
+    this.changeState = 'auto'; // value changed because of code change.
+    this.searchValue = value;
   }
 
 }
