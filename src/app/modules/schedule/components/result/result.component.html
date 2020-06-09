@@ -19,7 +19,7 @@
           <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
           <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
         </div>
-        <div class="text">{{item.day}}</div>
+        <div class="text">{{item.day | date: 'd/m/y'}}</div>
       </div>
     </div>
     <ng-container *ngIf="item.expanded" >
@@ -155,7 +155,7 @@
           <div class="product-items-header" *ngIf="item.children">
             <div class="d-flex">
               <div class="col-1 d-flex"><div class="m-auto"></div></div>
-              <div class="col-6 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Recipient</div></div><div class="m-auto">Product Name</div></div>
+              <div class="col-6 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Destinatario</div></div><div class="m-auto">Prodotto</div></div>
               <!--<div class="col-4 d-flex"><div class="m-auto"></div></div>-->
               <div class="col-5 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Codice a Barre</div></div><div class="m-auto">Codice Atto</div></div>
               <!--<div class="col-2 d-flex text-center"><div class="m-auto"></div></div>-->

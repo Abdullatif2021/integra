@@ -3,7 +3,7 @@
     <div class="modal-body">
       <ng-container *ngIf="data.method === 'filters' &&  !filtersCount && !confirmed; else ActualModal" >
         <div class="no-filters-warning-message">
-          ATTENZIONE! ci sono dei filtri non applicati. Per continuare e necessario applicarli, vuoi procedere
+          ATTENZIONE! Non è stato applicato nessun filtro, sei sicuro di voler eseguire?
         </div>
         <div class="btns-container mt-3">
           <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="confirm()">Esegui</button>

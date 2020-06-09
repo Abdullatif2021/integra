@@ -118,7 +118,7 @@ export const TablesConfig = {
                     ]},
                 {title: 'NOME DISTINTA', field: 'name', actions: [], order: '1'},
                 {title: 'DISTINTA', field: 'code', actions: [], order: '4'},
-                {title: 'STATO / ESITO', field: 'status', actions: [
+                {title: 'STATO / ESITO', field: (item, container) => container.getTranslatedState(item), actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ], order: '3'},

@@ -152,4 +152,8 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       instance.data = data  ;
       this.modalService.open(instance.modalRef, { windowClass: 'animated slideInDown', backdrop: 'static' }) ;
   }
+
+  getTranslatedState(item) {
+      return this.preDispatchService.translateStatus(item.status);
+  }
 }

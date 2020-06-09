@@ -92,15 +92,15 @@
                     <ng-container *ngFor="let col of (table.cols)">
                         <!-- item cell {  -->
                         <td class="table-item-cell justify-content-center" [ngStyle]="{width: col.width+'%'}">
-                            <span *ngIf="typeof(col.field) === 'string' && item[col.field] && typeof(col.field) === 'string'" [ngClass]="col.classes !== undefined ? (col.classes[col.field] ? col.classes[col.field] : '') : ''">{{item[col.field]}}</span>
-                            <span *ngIf="typeof(col.field) === 'string' && item[col.field] && typeof(col.field) === 'function'" [ngClass]="col.classes !== undefined ? (col.classes[col.field] ? col.classes[col.field] : '') : ''">{{col.field(item)}}</span>
+                            <span *ngIf="item[col.field] && typeof(col.field) === 'string'" [ngClass]="col.classes !== undefined ? (col.classes[col.field] ? col.classes[col.field] : '') : ''">there{{item[col.field]}}</span>
+                            <span *ngIf="typeof(col.field) === 'function'" [ngClass]="col.classes !== undefined ? (col.classes[col.field] ? col.classes[col.field] : '') : ''">{{col.field(item, parent)}}</span>
                             <!-- if the cell contains many fields then print them all  -->
                             <span *ngIf="typeof(col.field) === 'object'">
                             <ng-container *ngFor="let field of col.field; let idx = index">
                               <div class="separator" *ngIf="idx && col.value_separator == 'dashed'"></div>
                               <div class="line-separator" *ngIf="idx && col.value_separator == 'line'"></div>
                               <div *ngIf="typeof(field) === 'string'"><span [ngClass]="col.classes !== undefined ? (col.classes[field] ? col.classes[field] : '') : ''">{{item[field]}}</span></div>
-                              <div *ngIf="typeof(field) === 'function'"><span [ngClass]="col.classes !== undefined ? (col.classes[idx] ? col.classes[idx] : '') : ''" [innerHTML]="field(item)"></span></div>
+                              <div *ngIf="typeof(field) === 'function'"><span [ngClass]="col.classes !== undefined ? (col.classes[idx] ? col.classes[idx] : '') : ''" [innerHTML]="field(item, parent)"></span></div>
                             </ng-container>
                         </span>
                             <ng-container *ngFor="let action of col.actions">

@@ -23,21 +23,30 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit, 
       super();
   }
 
-  name = '' ;
-  error: any = false ;
-  filtersCount = 0 ;
-  selectedCount = 0;
-  filteredProductsCount = 0
-  confirmed = false ;
-  unsubscribe: Subject<void> = new Subject();
+  name = '' ; // the new pre-dispatch name
+  error: any = false ; // error to display.
+  filtersCount = 0 ; // the total number of applied filters.
+  selectedCount = 0; // the total number of selected products.
+  filteredProductsCount = 0 ; // the total number of products when a filter is applied.
+  confirmed = false ; // the confirmation status, used to check if user had agreed to the warning message.
+  unsubscribe: Subject<void> = new Subject(); // used to kill subscriptions.
 
   ngOnInit() {
-    this.filteredProductsCount = this.paginationService.resultsCount ;
+
+    // get the number of applied filters.
     this.filtersCount = Object.keys(this.filtersService.filters).length;
+
+    // get selected products count.
     this.selectedCount = this.productsService.selectedProducts.length ;
-    if (this.filtersService.specials.cities && !this.filtersService.specials.cities.all) { this.filtersCount++;}
-    if (this.filtersService.specials.streets && !this.filtersService.specials.streets.all) { this.filtersCount++;}
-    this.paginationService.resultsCountChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
+
+    // if a street or a city is selected change the filters count.
+    // Note that cities and streets filters are treated in a special way in filters service, we'r doing this step because of that.
+    if (this.filtersService.specials.cities && !this.filtersService.specials.cities.all) { this.filtersCount++; }
+    if (this.filtersService.specials.streets && !this.filtersService.specials.streets.all) { this.filtersCount++; }
+
+    // get total filtered products counts and subscribe to the count changes.
+      this.filteredProductsCount = this.paginationService.resultsCount ;
+      this.paginationService.resultsCountChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
         data => {
           this.filteredProductsCount = data;
         }
@@ -54,10 +63,14 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit, 
   }
 
   run(modal) {
+    // if name was not entered stop with error 1 (the pre-dispatch name is required).
     if ( !this.name || this.name === '' ) { return this.error = 1; }
+    // if new was less than 3 chars stop with error 2 (the pre-dispatch name must be at least 3 chars).
     if ( this.name.length < 3 ) { return this.error = 2; }
+
+    // if every thing is ok, create the pre-dispatch
     this.actionsService.createNewPreDispatch(this.data, this.name) ;
-    modal.close();
+    modal.close(); // close the modal.
   }
 
   ngOnDestroy() {

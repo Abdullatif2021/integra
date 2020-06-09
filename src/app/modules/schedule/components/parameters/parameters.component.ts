@@ -209,6 +209,8 @@ export class ParametersComponent implements OnInit, OnDestroy {
         data['departure_date'] = (data.departure_date ? (typeof data.departure_date === 'object' ?
             Object.values(data.departure_date).join('/') :  data.departure_date) : '') +
             (data.departure_time ? ' ' + data.departure_time : '');
+        data['hours_per_day_hour'] = data.hours_per_day ? data.hours_per_day.split(':')[0] : null;
+        data['hours_per_day_minute'] = data.hours_per_day ? data.hours_per_day.split(':')[1] : null;
         data['hours_per_day'] = (data.hours_per_day_hour ? parseInt(data.hours_per_day_hour, 10)  : 0 ) +
             (data.hours_per_day_minute ? parseInt(data.hours_per_day_minute, 10) / Math.pow(10, data.hours_per_day_minute.length) : 0);
         data['pre_dispatch_id'] = this.preDispatch ;
@@ -314,7 +316,32 @@ export class ParametersComponent implements OnInit, OnDestroy {
         );
     }
 
+    validateAll() {
+        let valid = true ;
+        if (!this.data.departure_date ||
+            (typeof this.data.departure_date !== 'object' && !this.data.departure_date.match(/^\d{2}[./-]\d{2}[./-]\d{4}$/))) {
+            valid = false;
+            this.errors['departure_date'] = true;
+        }
+        if (!this.data.departure_time) {
+            valid = false ;
+            this.errors['departure_time'] = true;
+        }
+        if (!this.data.post_man_number || this.data.post_man_number < 1) {
+            valid = false ;
+            this.errors['post_man_number'] = true;
+        }
+        if (!this.data.max_product || this.data.max_product < 1) {
+            valid = false ;
+            this.errors['max_product'] = true;
+        }
+        return valid;
+    }
+
     async save() {
+        if (!this.validateAll()) {
+            return ;
+        }
         if (this.backProcessingService.isRunning('planning-' + this.preDispatch)) {
             this.snotifyService.warning('already in planning !', {
                 position: 'centerTop',
@@ -362,6 +389,12 @@ export class ParametersComponent implements OnInit, OnDestroy {
         Object.keys(this.errors).forEach((key) => {
            if (this.data[key]) { delete this.errors[key]; }
         });
+    }
+
+    validateDate(date, field) {
+        if (!date.match(/^\d{2}[./-]\d{2}[./-]\d{4}$/)) {
+            this.errors[field] = true;
+        }
     }
 
     async startPlanning() {

@@ -30,6 +30,18 @@ export class PreDispatchService {
     }
     // }
 
+    translateStatus(status) {
+        switch (status) {
+            case 'in_localize': return 'Localizing';
+            case 'notPlanned': return 'Non Pianificato';
+            case 'in_divide': return 'In Divisione';
+            case 'planned': return 'Pianificata';
+            case 'inPlanning': return 'Nella Pianificazione';
+            case 'localized': return 'Localizzato';
+            default: return status;
+        }
+    }
+
     getPreDispatchList(page = 1, pageSize = '50') {
         const options = { params: new HttpParams() };
         options.params = options.params.set('page', page + '') ;

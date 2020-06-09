@@ -103,7 +103,7 @@
               <div class="right-side">
                 <div class="warning" *ngIf="item.warning">!</div>
                 <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
-                <div class="small-more" id="actions-dropdown-f" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
+                <div class="small-more" *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'"  id="actions-dropdown-f" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
                 <div *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'" class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
                   <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rinominare</a>
                   <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">Sposta in un altra strada</a>
@@ -165,7 +165,7 @@
             <div class="right-side">
               <div class="warning" *ngIf="item.warning">!</div>
               <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
-              <div class="small-more" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
+              <div class="small-more" *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
               <div *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'" class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
                 <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rinominare</a>
                 <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">Sposta in un altra strada</a>

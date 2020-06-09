@@ -52,7 +52,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private snotifyService: SnotifyService,
         public backProcessingService: BackProcessingService,
         private loadingService: LoadingService,
-        private preDispatchService: PreDispatchService,
+        public preDispatchService: PreDispatchService,
         private scheduleService: ScheduleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,

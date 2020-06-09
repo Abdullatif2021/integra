@@ -108,3 +108,6 @@
 .error-input {
     border: 1px solid red;
 }
+.w-65 {
+    width: 65% !important;
+}
