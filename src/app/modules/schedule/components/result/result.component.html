@@ -1,11 +1,11 @@
 
-<div class="results-container" #ResultsContainer>
+<div class="results-container hidden-scroll" #ResultsContainer>
   <div class="items mt-2" #itemContainer>
     <ng-container *ngFor="let item of scheduleResults; let idx = index">
       <ng-container [ngTemplateOutlet]="dateItem" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx}"></ng-container>
     </ng-container>
   </div>
-  <button class="float-right integraa-btn" (click)="makeDispatchesVisible()">Create Dispatches</button>
+  <button class="float-right integraa-btn" (click)="makeDispatchesVisible()">Crea Distinta</button>
 </div>
 
 <ng-template let-item="item" let-idx="idx" let-next="next" #dateItem>
@@ -37,8 +37,8 @@
   <ng-container *ngIf="!item.skeleton">
     <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2), 'selected-postman': item.id == selected_set.id}" class="{{getLvlClass(next)}} {{getStatusClass(item)}} postman-tree-node" (click)="selectPostman(item)">
       <div class="item-row">
-        <div class="row">
-          <div class="col-1-half col-md-2 wide-col">
+        <div class="d-flex">
+          <div class="col-md-2 wide-col">
             <div class="more" *ngIf="item.children" (click)="expand(item)">
               <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
               <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
@@ -52,6 +52,8 @@
             <ng-select class="integraa-select postman-select" [items]="postmen[parent.day]" [placeholder]="'Not Assigned'" (change)="assignPostman($event, item, parent)" [clearable]="false" [bindLabel]="'full_name'" [(ngModel)]="selectedPostmen[parent.day][item.id]"></ng-select>
           </div> </div>
           <div class="col-4 v-wide-col"> <div class="count mt-1">{{item.quantity}} Consegne</div> </div>
+        </div>
+        <div class="d-flex">
           <div class="col-2 "> <div class="time mt-1">{{item.time}}</div> </div>
           <div class="col-1"> <div class="distance mt-1">{{item.distance}}</div> </div>
         </div>
@@ -77,7 +79,7 @@
   <!--<ng-container *ngIf="!item.skeleton">-->
     <!--<div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" class="{{getLvlClass(next)}} {{getStatusClass(item)}}">-->
       <!--<div class="item-row">-->
-        <!--<div class="row">-->
+        <!--<div class="d-flex">-->
           <!--<div class="v-wide-col" [ngClass]="{'col-1-half': item.marker, 'col-half': !item.marker}">-->
             <!--<div class="more" *ngIf="item.children" (click)="expand(item)">-->
               <!--<fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>-->
@@ -114,7 +116,7 @@
 
 <ng-template let-idx="idx" let-next="next" let-item="item" #streetItems>
   <div class="street-items-header" *ngIf="item.children">
-    <div class="row">
+    <div class="d-flex">
       <div class="col-1"></div>
       <div class="col-1"></div>
       <div class="col-4 wide-col"><div class="street-items-header-cell">Indirizzo</div></div>
@@ -133,7 +135,7 @@
       <ng-container  *ngIf="!child.skeleton;">
         <div class="street-item" [ngClass]="{'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"
              (dndStart)="onDragStart($event, child)" class="{{getStatusClass(child)}}">
-          <div class="row">
+          <div class="d-flex"s>
             <div class="col-1 wide-col d-flex">
               <div dndHandle class="drag-handle">☰</div>
               <div class="more" *ngIf="child.products" (click)="child.expanded = !child.expanded">

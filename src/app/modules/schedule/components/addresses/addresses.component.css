@@ -2,6 +2,7 @@
     background-color: #fff;
     /*height: 600px;*/
     min-height: 100%;
+    max-height: 100%;
     border-radius: 4px;
     overflow-y: scroll;
     display: flex;
@@ -63,8 +64,10 @@
 /* items */
 .items{
     flex: 1;
-    max-height: 330px;
-    overflow: scroll
+    /*max-height: 330px;*/
+    height: calc(100% - 260px);
+    max-height: calc(100% - 260px);
+    overflow-y: scroll
 }
 .right-side{
     float: right;

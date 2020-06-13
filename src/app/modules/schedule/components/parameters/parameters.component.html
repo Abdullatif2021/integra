@@ -1,4 +1,4 @@
-<div class="parameters-container">
+<div class="parameters-container hidden-scroll">
 
   <div class="parameters-header-section pb-3">
     <ng-select class="integraa-select" [clearable]="false" (change)="changeView()" [(ngModel)]="visibleView" [items]="views"></ng-select>
@@ -6,122 +6,124 @@
 
 
   <ng-container *ngIf="visibleView.value == 1">
-    <!-- Section 1 -->
-    <div class="parameters-section">
-      <div class="parameters-section-title">Impostazioni Generali</div>
-      <div class="row parameter-item">
-        <div class="col-5"> <label>Giorno di Partenza</label> </div>
-        <div class="col-7"> <input  [ngClass]="{'error-input': errors['departure_date']}" [(ngModel)]="data.departure_date" type="text" ngbDatepicker #timeOfServiceDP="ngbDatepicker" (focus)="timeOfServiceDP.toggle()" (change)="removeErrors();validateDate($event.target.value, 'departure_date')" (dateSelect)="removeErrors()" placeholder="DD/MM/YYYY" class="parameter-text-input"> </div>
-        <span class="error-msg col-5" *ngIf="errors['departure_date']">Valore errato</span>
-      </div>
-      <div class="row parameter-item">
-        <div class="col-5"> <label>Ora di Partenza</label> </div>
-        <div class="col-7">
-          <!--<ngx-timepicker-field [(ngModel)]="data.departure_time" (keyup)="someTimeChanged($event)" [format]="24" class="w-75" [controlOnly]="true"></ngx-timepicker-field>-->
-          <input type="text" [(ngModel)]="data.departure_time" [ngClass]="{'error-input': errors['departure_time']}" (keyup)="timeChangeFormat($event)" (change)="removeErrors();formatTime($event.target.value, 'departure_time')" class="parameter-text-input parameter-medium-input" placeholder="HH:MM" min="0" max="24">
+    <div class="parameters-inner-container">
+      <!-- Section 1 -->
+      <div class="parameters-section">
+        <div class="parameters-section-title">Impostazioni Generali</div>
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Giorno di Partenza</label> </div>
+          <div class="col-7"> <input  [ngClass]="{'error-input': errors['departure_date']}" [(ngModel)]="data.departure_date" type="text" ngbDatepicker #timeOfServiceDP="ngbDatepicker" (focus)="timeOfServiceDP.toggle()" (change)="removeErrors();validateDate($event.target.value, 'departure_date')" (dateSelect)="removeErrors()" placeholder="DD/MM/YYYY" class="parameter-text-input"> </div>
+          <span class="error-msg col-5" *ngIf="errors['departure_date']">Valore errato</span>
         </div>
-        <span class="error-msg col-12 d-block" *ngIf="errors['departure_time']">Valore errato</span>
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Ora di Partenza</label> </div>
+          <div class="col-7">
+            <!--<ngx-timepicker-field [(ngModel)]="data.departure_time" (keyup)="someTimeChanged($event)" [format]="24" class="w-75" [controlOnly]="true"></ngx-timepicker-field>-->
+            <input type="text" [(ngModel)]="data.departure_time" [ngClass]="{'error-input': errors['departure_time']}" (keyup)="timeChangeFormat($event)" (change)="removeErrors();formatTime($event.target.value, 'departure_time')" class="parameter-text-input parameter-medium-input" placeholder="HH:MM" min="0" max="24">
+          </div>
+          <span class="error-msg col-12 d-block" *ngIf="errors['departure_time']">Valore errato</span>
 
-      </div>
-      <div class="row parameter-item">
-        <div class="col-5"> <label>Tempo di Servizio (singolo)</label> </div>
-        <div class="col-7"> <ng-select class="integraa-select parameter-select-input" [bindLabel]="'label'" [clearable]="false" [(ngModel)]="data.service_time_single" [items]="options.serviceTimeOptions"></ng-select> </div>
-      </div>
-      <div class="row parameter-item">
-        <div class="col-5"> <label>Tempo di Servizio (multiplo)</label> </div>
-        <div class="col-7"> <ng-select class="integraa-select parameter-select-input" [bindLabel]="'label'" [clearable]="false" [(ngModel)]="data.service_time_multiple" [items]="options.serviceTimeOptions"></ng-select> </div>
-      </div>
-      <div class="row parameter-item">
-        <div class="col-5"> <label>Tempo di pausa</label> </div>
-        <div class="col-7">
-          <!--<div class="d-flex">-->
+        </div>
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Tempo di Servizio (singolo)</label> </div>
+          <div class="col-7"> <ng-select class="integraa-select parameter-select-input" [bindLabel]="'label'" [clearable]="false" [(ngModel)]="data.service_time_single" [items]="options.serviceTimeOptions"></ng-select> </div>
+        </div>
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Tempo di Servizio (multiplo)</label> </div>
+          <div class="col-7"> <ng-select class="integraa-select parameter-select-input" [bindLabel]="'label'" [clearable]="false" [(ngModel)]="data.service_time_multiple" [items]="options.serviceTimeOptions"></ng-select> </div>
+        </div>
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Tempo di pausa</label> </div>
+          <div class="col-7">
+            <!--<div class="d-flex">-->
             <!--<span class="mt-auto mb-auto mr-1">Della : </span>-->
             <!--<ngx-timepicker-field [(ngModel)]="data.pause_time_start" [format]="24" [controlOnly]="true"></ngx-timepicker-field>-->
             <!--<span class="mt-auto mb-auto ml-2 mr-1">Alle : </span><ngx-timepicker-field [(ngModel)]="data.pause_time_end" [format]="24" [controlOnly]="true"></ngx-timepicker-field>-->
-          <!--</div>-->
+            <!--</div>-->
 
-          <span> Delle : </span><input type="text" [(ngModel)]="data.pause_time_start" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'pause_time_start')" >
-          <span> Alle : </span><input type="text" [(ngModel)]="data.pause_time_end" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'pause_time_end')" >
+            <span> Delle : </span><input type="text" [(ngModel)]="data.pause_time_start" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'pause_time_start')" >
+            <span> Alle : </span><input type="text" [(ngModel)]="data.pause_time_end" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'pause_time_end')" >
+          </div>
+        </div>
+        <div class="row parameter-item mt-0">
+          <div class="col-5 pt-2"> <label>Modalità di viaggio</label> </div>
+          <div class="col-7"> <ng-select [bindLabel]="'label'" [clearable]="false" [(ngModel)]="data.travel_mode" [items]="options.travelModes" class="integraa-select parameter-select-input"></ng-select></div>
         </div>
       </div>
-      <div class="row parameter-item mt-0">
-        <div class="col-5 pt-2"> <label>Modalità di viaggio</label> </div>
-        <div class="col-7"> <ng-select [bindLabel]="'label'" [clearable]="false" [(ngModel)]="data.travel_mode" [items]="options.travelModes" class="integraa-select parameter-select-input"></ng-select></div>
-      </div>
-    </div>
 
 
-    <!-- Section 2  -->
+      <!-- Section 2  -->
 
-    <div class="parameters-section">
-      <div class="parameters-section-title">Postini multipli</div>
-      <div class="row parameter-item mt-0">
-        <div class="col-5 pt-2"> <label>Numero di Postini</label></div>
-        <div class="col-7"> <input [(ngModel)]="data.post_man_number" min="1" type="number" (change)="validateNumber($event.target.value, 'post_man_number', 0)" class="parameter-number-input" (change)="removeErrors()" [ngClass]="{'error-input': errors['post_man_number']}">
-          <span> postino.</span>
+      <div class="parameters-section">
+        <div class="parameters-section-title">Postini multipli</div>
+        <div class="row parameter-item mt-0">
+          <div class="col-5 pt-2"> <label>Numero di Postini</label></div>
+          <div class="col-7"> <input [(ngModel)]="data.post_man_number" min="1" type="number" (change)="validateNumber($event.target.value, 'post_man_number', 0)" class="parameter-number-input" (change)="removeErrors()" [ngClass]="{'error-input': errors['post_man_number']}">
+            <span> postino.</span>
+          </div>
+          <span class="error-msg col-5" *ngIf="errors['post_man_number']">Valore errato</span>
         </div>
-        <span class="error-msg col-5" *ngIf="errors['post_man_number']">Valore errato</span>
-      </div>
-      <div class="row parameter-item">
-        <div class="col-5"> <label>Ore di lavoro al gg.</label> </div>
-        <div class="col-7">
-          <input type="text" [(ngModel)]="data.hours_per_day" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'hours_per_day')" >
-          <!--<input type="text" [(ngModel)]="data.hours_per_day_hour" type="number" min="0" max="24" (change)="validateNumber($event.target.value, 'hours_per_day_hour', 0, 24, 2)" class="parameter-number-input"> Ore.-->
-          <!--<input type="text" [(ngModel)]="data.hours_per_day_minute" type="number" min="0" max="60" (change)="validateNumber($event.target.value, 'hours_per_day_minute', 0, 60, 2)" class="parameter-number-input"> Min.-->
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Ore di lavoro al gg.</label> </div>
+          <div class="col-7">
+            <input type="text" [(ngModel)]="data.hours_per_day" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'hours_per_day')" >
+            <!--<input type="text" [(ngModel)]="data.hours_per_day_hour" type="number" min="0" max="24" (change)="validateNumber($event.target.value, 'hours_per_day_hour', 0, 24, 2)" class="parameter-number-input"> Ore.-->
+            <!--<input type="text" [(ngModel)]="data.hours_per_day_minute" type="number" min="0" max="60" (change)="validateNumber($event.target.value, 'hours_per_day_minute', 0, 60, 2)" class="parameter-number-input"> Min.-->
+          </div>
+        </div>
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Massimo di prodotti al gg.</label> </div>
+          <div class="col-7">
+            <input [(ngModel)]="data.max_product" min="1" type="number" min="0" (change)="validateNumber($event.target.value, 'max_product', 0)" class="parameter-text-input parameter-number-input" (change)="removeErrors()" [ngClass]="{'error-input': errors['max_product']}">
+            <span> prodotti.</span>
+          </div>
+          <div class="error-msg col-5" *ngIf="errors['max_product']">Valore errato</div>
+        </div>
+        <div class="row parameter-item mt-0">
+          <div class="col-5 pt-2"> <label>Consenti deviazione</label> </div>
+          <div class="col-7"><ng-select class="integraa-select parameter-select-input d-inline-block w-65" [(ngModel)]="data.deviation" [clearable]="false" [items]="options.devision"></ng-select>          <span> prodotti.</span></div>
         </div>
       </div>
-      <div class="row parameter-item">
-        <div class="col-5"> <label>Massimo di prodotti al gg.</label> </div>
-        <div class="col-7">
-          <input [(ngModel)]="data.max_product" min="1" type="number" min="0" (change)="validateNumber($event.target.value, 'max_product', 0)" class="parameter-text-input parameter-number-input" (change)="removeErrors()" [ngClass]="{'error-input': errors['max_product']}">
-          <span> prodotti.</span>
+
+      <!-- Section 3  -->
+
+      <div class="parameters-section">
+        <div class="parameters-section-title">Opzioni di Ottimizzazione</div>
+        <div class="row parameter-item mt-0">
+          <div class="col-5 pt-2"> <label>Obiettivo</label> </div>
+          <div class="col-7"> <ng-select [(ngModel)]="data.target" [clearable]="false" [bindLabel]="'label'" [items]="options.target" class="integraa-select parameter-select-input"></ng-select> </div>
         </div>
-        <div class="error-msg col-5" *ngIf="errors['max_product']">Valore errato</div>
+        <div class="row parameter-item mt-0">
+          <div class="col-5 pt-2"> <label>Città mischiati</label> </div>
+          <div class="col-7"><ng-select [(ngModel)]="data.mixed_cities" [clearable]="false" [bindLabel]="'label'" [items]="options.mixedCities" class="integraa-select parameter-select-input"></ng-select></div>
+        </div>
+        <div class="row parameter-item mt-0">
+          <div class="col-5 pt-2"> <label>Partenza</label> </div>
+          <div class="col-7"><ng-select [(ngModel)]="data.path_start" [clearable]="false" [bindLabel]="'label'" [items]="options.pathStart" class="integraa-select parameter-select-input"></ng-select></div>
+        </div>
       </div>
-      <div class="row parameter-item mt-0">
-        <div class="col-5 pt-2"> <label>Consenti deviazione</label> </div>
-        <div class="col-7"><ng-select class="integraa-select parameter-select-input d-inline-block w-65" [(ngModel)]="data.deviation" [clearable]="false" [items]="options.devision"></ng-select>          <span> prodotti.</span></div>
+
+      <!-- Section 4  -->
+
+      <div class="parameters-section">
+        <div class="parameters-section-title">Operazione/Stampa</div>
+        <div class="row parameter-item">
+          <div class="col-5"> <label>Prendere in considerazione lavorazione di Stampa</label> </div>
+          <div class="col-7"> <input type="checkbox"> </div>
+        </div>
       </div>
-    </div>
 
-    <!-- Section 3  -->
+      <!-- Submit section -->
 
-    <div class="parameters-section">
-      <div class="parameters-section-title">Opzioni di Ottimizzazione</div>
-      <div class="row parameter-item mt-0">
-        <div class="col-5 pt-2"> <label>Obiettivo</label> </div>
-        <div class="col-7"> <ng-select [(ngModel)]="data.target" [clearable]="false" [bindLabel]="'label'" [items]="options.target" class="integraa-select parameter-select-input"></ng-select> </div>
+      <div class="submit-section mt-3">
+        <button class="integraa-btn float-right" [ngClass]="{'disabled': !can_plan}" [disabled]="!can_plan"  (click)="save()">Pianifica</button>
+        <div class="clear-both"></div>
       </div>
-      <div class="row parameter-item mt-0">
-        <div class="col-5 pt-2"> <label>Città mischiati</label> </div>
-        <div class="col-7"><ng-select [(ngModel)]="data.mixed_cities" [clearable]="false" [bindLabel]="'label'" [items]="options.mixedCities" class="integraa-select parameter-select-input"></ng-select></div>
-      </div>
-      <div class="row parameter-item mt-0">
-        <div class="col-5 pt-2"> <label>Partenza</label> </div>
-        <div class="col-7"><ng-select [(ngModel)]="data.path_start" [clearable]="false" [bindLabel]="'label'" [items]="options.pathStart" class="integraa-select parameter-select-input"></ng-select></div>
-      </div>
-    </div>
-
-    <!-- Section 4  -->
-
-    <div class="parameters-section">
-      <div class="parameters-section-title">Operazione/Stampa</div>
-      <div class="row parameter-item">
-        <div class="col-5"> <label>Prendere in considerazione lavorazione di Stampa</label> </div>
-        <div class="col-7"> <input type="checkbox"> </div>
-      </div>
-    </div>
-
-    <!-- Submit section -->
-
-    <div class="submit-section mt-3">
-      <button class="integraa-btn float-right" [ngClass]="{'disabled': preDispatchData.status === 'planned'}" [disabled]="preDispatchData.status === 'planned'"  (click)="save()">Pianifica</button>
-      <div class="clear-both"></div>
     </div>
   </ng-container>
 
   <ng-container *ngIf="visibleView.value == 2">
-    <div class="parameters-section">
+    <div class="parameters-fullheight-section">
       <div class="all-pre-dispatches-select-section">Predistinte pianificate</div>
       <div class="search-box-container">
         <app-search-box (changed)="searchPreDispatches($event)" [placeholder]="'Nome'"></app-search-box>
@@ -146,7 +148,7 @@
         </ng-container>
       </div>
 
-      <button class="integraa-btn float-right mt-3" [ngClass]="{'disabled': preDispatchData.status === 'planned'}" [disabled]="preDispatchData.status === 'planned'" (click)="changePreDispatch()">Pianifica</button>
+      <button class="integraa-btn float-right mt-3" [ngClass]="{'disabled': !can_plan}" [disabled]="!can_plan" (click)="changePreDispatch()">Pianifica</button>
 
     </div>
   </ng-container>

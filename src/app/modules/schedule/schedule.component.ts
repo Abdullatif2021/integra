@@ -66,6 +66,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     latitude = 40.8440337;
     longitude = 14.3435834;
     zoom = 11;
+    can_plan = false;
     paths = [] ;
     @ViewChild(PageDirective) pageHost: PageDirective;
 
@@ -77,7 +78,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
                     this.modalService.open(this.modalRef, {windowClass: 'animated slideInDown', backdrop: 'static'});
                 }
             }
-        )
+        );
         this.mapService.markersChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => { this.markers = data ; }
         );
@@ -103,6 +104,9 @@ export class ScheduleComponent implements OnInit, OnDestroy {
                this.paths = paths;
             }
         );
+        this.preDispatchService.canPlanChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
+            can_plan => { this.can_plan = can_plan; }
+        );
 
         this.startInterval();
     }
@@ -110,6 +114,9 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     startInterval() {
         this.preDispatchService.getPreDispatchData(this.preDispatch, true).pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
+                if (data && data.data && data.data.status && data.data.status === 'planned' && this.preDispatchData.status !== 'planned') {
+                    this.preDispatchService.preDispatchStatusChanged(data.data.status);
+                }
                 this.preDispatchData = data.data ;
                 this.scheduleService.prodcastPreDispatchData(this.preDispatchData);
                 // this.backProcessingService.handlePreDispatchActionsChanges(this.preDispatchData);

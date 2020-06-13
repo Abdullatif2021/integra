@@ -107,7 +107,6 @@ export class BackProcessingService {
         if (this._ignore_one[key]) {
             this._ignore_one[key] = false ;
         }
-        console.log(`can update stat for ${key} returned :`, !state);
         return !state ;
     }
 
@@ -140,7 +139,7 @@ export class BackProcessingService {
         if (['notPlanned', 'in_grouping', 'in_localize'].find((item) => item === status)) {
             return 'locating';
         }
-        if (status === 'inPlanning' || status === 'in_divide' || status === 'drawing_paths') {
+        if (status === 'inPlanning' || status === 'in_divide' || status === 'drawing_paths' || status === 'localized') {
             return 'planning';
         }
     }

@@ -39,7 +39,7 @@ export class DragAndDropService {
         if (Array.isArray(this.drag_elm)) {
             this.drag_elm.forEach((elm) => list.push(elm.id));
         } else { list.push(this.drag_elm.id); }
-        return list ;
+        return {list: list, items: this.drag_elm} ;
     }
 
     // handles address reorder and adding address from not matched tree.

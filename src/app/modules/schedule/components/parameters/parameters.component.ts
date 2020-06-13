@@ -10,6 +10,9 @@ import {ScheduleService} from '../../service/schedule.service';
 import {SnotifyService} from 'ng-snotify';
 import {BackProcessingService} from '../../../../service/back-processing.service';
 import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-global-actions.service';
+import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
+import {Tree} from '@angular/router/src/utils/tree';
+import {ListTreeService} from '../../service/list-tree.service';
 
 @Component({
     selector: 'app-parameter',
@@ -28,7 +31,9 @@ export class ParametersComponent implements OnInit, OnDestroy {
         private scheduleService: ScheduleService,
         private snotifyService: SnotifyService,
         private backProcessingService: BackProcessingService,
-        private preDispatchGlobalActionsService: PreDispatchGlobalActionsService
+        private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
+        private listTreeService: ListTreeService,
+
     ) {
         this.preDispatch = this.route.snapshot.parent.params.id;
         this.preDispatchData = this.route.snapshot.parent.data.data ;
@@ -86,7 +91,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
     selectedPreDispatch;
     preDispatchesLoaded = false ;
     matchRateData;
-
+    can_plan = false;
     options2Data = {
         departure_date: null,
         departure_time: null
@@ -102,7 +107,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
     errors = {} ;
 
 
-    ngOnInit() {
+    async ngOnInit() {
         this.visibleView = this.views[0];
         // update the pre-dispatch data in case it was outdated, then initiate the form data object.
         this.preDispatchService.getPreDispatchData(this.preDispatchData.id).subscribe(
@@ -131,6 +136,22 @@ export class ParametersComponent implements OnInit, OnDestroy {
         this.preDispatchGlobalActionsService.planningErrors.pipe(takeUntil(this.unsubscribe)).subscribe((e) => {
             this.checkErrors();
         });
+        // check if there is items to plan ;
+       this.checkIfCanPlan();
+       this.preDispatchService.preDispatchStatusChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
+           status => {
+               this.checkIfCanPlan();
+           }
+       );
+    }
+
+    async checkIfCanPlan() {
+        const inPlanningItems = await this.listTreeService.listNode(this.preDispatch,
+            <TreeNodeInterface>{id: '0', text: '', subtype: '', children: <[TreeNodeInterface]>[],
+                parent: <TreeNodeInterface>{}, type: 'root', status: 0, page: 0}
+            , 1, [0, 0, 0], 'to_planning');
+        this.can_plan = (inPlanningItems && inPlanningItems.length) ? true : false;
+        this.preDispatchService.setCanPlan(this.can_plan);
     }
 
     updateDataObject() {
@@ -348,15 +369,8 @@ export class ParametersComponent implements OnInit, OnDestroy {
                 showProgressBar: false,
             });
         }
-        await this.planningService.saveParameters(this.getData(), () => {
-            if (this.preDispatchData.status === 'localized') {
-                this.snotifyService.error('No Items to plan !', {
-                    position: 'centerTop',
-                    timeout: 6000,
-                    showProgressBar: false,
-                });
-                return 'Data Saved !';
-            }
+        await this.planningService.saveParameters(this.getData(), async () => {
+
             if (['notPlanned', 'in_grouping', 'in_localize'].find((elm) => elm === this.preDispatchData.status)) {
                 this.snotifyService.warning('Per iniziare la pianificazione, è necessario localizzare questa pre-distinta',
                     {
@@ -374,6 +388,14 @@ export class ParametersComponent implements OnInit, OnDestroy {
                         ]
                     }
                 );
+                return 'Data Saved !';
+            }
+            if (!this.can_plan) {
+                this.snotifyService.error('Nessun oggetto da pianificare!', {
+                    position: 'centerTop',
+                    timeout: 6000,
+                    showProgressBar: false,
+                });
                 return 'Data Saved !';
             }
             this.startPlanning();

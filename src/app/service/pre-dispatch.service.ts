@@ -19,7 +19,9 @@ export class PreDispatchService {
     ) {}
 
     public selectedPreDispatches = [] ;
-
+    canPlanChanges = new EventEmitter<boolean>();
+    preDispatchStatusChanges = new EventEmitter();
+    can_plan = false;
     // used when an Integraa modal is opened to perform an action on a specific pre-Dispatch {
     private activePredispatch = null ;
     getActivePreDispatch() {
@@ -30,14 +32,24 @@ export class PreDispatchService {
     }
     // }
 
+
+    preDispatchStatusChanged(status) {
+        this.preDispatchStatusChanges.emit(status);
+    }
+    setCanPlan(can_plan) {
+        this.can_plan = can_plan ;
+        this.canPlanChanges.emit(can_plan);
+    }
+
     translateStatus(status) {
         switch (status) {
-            case 'in_localize': return 'Localizing';
+            case 'in_localize': return 'In localizzazione';
             case 'notPlanned': return 'Non Pianificato';
-            case 'in_divide': return 'In Divisione';
             case 'planned': return 'Pianificata';
-            case 'inPlanning': return 'Nella Pianificazione';
+            case 'inPlanning': return 'In Pianificazione';
             case 'localized': return 'Localizzato';
+            case 'in_grouping': return 'Ragruppamento';
+            case 'in_divide': return 'In Divisione';
             default: return status;
         }
     }

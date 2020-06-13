@@ -10,6 +10,7 @@ import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {ListTreeService} from '../../service/list-tree.service';
 import {MapService} from '../../service/map.service';
 import {MapMarker} from '../../../../core/models/map-marker.interface';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-result',
@@ -271,7 +272,9 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   dropProduct(event, target, index) {
-      const list = this.dragAndDropService.drop(index, this.preDispatch);
+      const result = this.dragAndDropService.drop(index, this.preDispatch);
+      console.log(result);
+      const list = result.list;
       if (!list) { return ; }
 
       // clear selected .
@@ -284,19 +287,21 @@ export class ResultComponent implements OnInit, OnDestroy {
       });
       target.children = target.children.filter(c => !trash.filter(i => i === c.id).length);
       target.children.splice(index, 0, {address: 'loading...', productsCount: list.length, products: []});
+      result.items.forEach(item => {
+          this.scheduleResults.forEach(day => {
+              day.sets.forEach(set => {
+                  if (set.id === item.set_id) {
+                      set.children.forEach(group => {
+                          if (group.id === item.group_id){
+                              group.productsCount--;
+                          }
+                      });
+                  }
+              });
+          });
+      });
       this.resultsService.createNewGroup(this.preDispatch, list, index).pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
-              console.log(data, {
-                  id: data.data.id,
-                  address: data.data.address[0] ,
-                  loaded: false,
-                  parent: parent,
-                  type: 'building',
-                  addressId: data.data.id,
-                  products: data.data.products,
-                  priority: data.data.mapPriority,
-                  productsCount: data.data.products.length
-              });
               target.children[index] = {
                   id: data.data.id,
                   address: data.data.address[0] ,

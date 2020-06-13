@@ -1,6 +1,6 @@
 <!--<app-user-nav></app-user-nav>-->
 <!--<div class="the-yellow-bar mt-3 mb-3"></div>-->
-<div class="container-fluid page-container pt-1">
+<div class="container-fluid page-container">
   <div class="row full-height">
     <div class="col-xl-4 col-lg-5 col-md-12 v-wide-col mt-md-20px left-col">
       <div class="mt-1">
@@ -22,7 +22,7 @@
           <div class="move-to-in-plan-btn integraa-btn" *ngIf="'/schedule/'+preDispatch === router.url && nextAction !== 'locating'" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Sposta in da pianificare</div>
           <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url && nextAction !== 'locating'" (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">Sposta in indirizzi</div>
           <!-- Export results {-->
-          <a class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/result' === router.url && preDispatchData.status === 'planned'" href="{{exportResultsLink}}" target="_blank">Export</a>
+          <a class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/result' === router.url && preDispatchData.status === 'planned'" href="{{exportResultsLink}}" target="_blank">Esporta</a>
           <!-- } Export results -->
           <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': false}" [ngStyle]="{width: preDispatchData.percent + '%'}">&nbsp;</div><div class="progress-action-text-value horiz">
             <span class="percent-value">{{preDispatchData.percent}} %</span>
@@ -31,7 +31,7 @@
           <div class="pre-dispatch-status">{{preDispatchService.translateStatus(preDispatchData.status)}}</div>
           <img *ngIf="actionInRun && (preDispatchData.localize_status === 'play' || backProcessingService.isRunningAny(preDispatch))" (click)="stopAction()" src="assets/images/pause.svg" class="action-icon play-pause-icon">
           <img *ngIf="actionInRun && preDispatchData.localize_status !== 'play' && backProcessingService.isRunningAny(preDispatch) !== true" (click)="runNextAction()" src="assets/images/play.svg" class="action-icon play-pause-icon">
-          <button class="continue-btn integraa-btn" [ngClass]="{'disabled': preDispatchData.status === 'planned'}" [disabled]="preDispatchData.status === 'planned'"  (click)="next()" *ngIf="'/schedule/'+preDispatch+'/parameters' === router.url">
+          <button class="continue-btn integraa-btn" [ngClass]="{'disabled': !can_plan}" [disabled]="!can_plan"  (click)="next()" *ngIf="'/schedule/'+preDispatch+'/parameters' === router.url">
             Pianifica
           </button>
           <div class="clear-both"></div>

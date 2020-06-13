@@ -56,8 +56,11 @@
 .table-item:hover{
     background-color: #e5e5ff !important;
 }
-.selected-row, .selected-row.table-item:hover {
-    /*background-color: #feda44 !important ;*/
+.selected-row{
+    background-color: #FFCC99!important
+}
+.selected-row.table-item:hover {
+    background-color: #0099CC !important;
 }
 .select-row{
     width: 15px;

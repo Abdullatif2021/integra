@@ -1,7 +1,9 @@
 .results-container{
     background-color: #fff;
     min-height: 100%;
-    max-height: 600px;
+    /*max-height: 600px;*/
+    height: 100%;
+    max-height: 100%;
     border-radius: 4px;
     font-size: 11px;
     padding-top: 1px;
@@ -143,7 +145,8 @@
 }
 
 .items{
-    height: 540px;
+    /*height: 540px;*/
+    height: calc(100% - 45px);
     overflow-y: scroll;
 }
 .selected-postman {
