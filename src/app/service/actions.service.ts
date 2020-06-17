@@ -27,25 +27,28 @@ export class ActionsService {
       const promise = new Promise(function(resolve, reject) {
           method.subscribe(
               data => {
-                  console.log('Dataaaaa', data);
                   if (data.status === 'success' || data.success === true) {
-                      let body = 'Success' ;
+                      let body = data.message ? data.message : 'Success' ;
                       if (typeof success === 'function') {
-                          body = success(data);
+                          const _msg = success(data);
+                          body = _msg ? _msg : body;
                       }
                       resolve({body: body, config: { showProgressBar: false, timeout: 3000 }});
                   } else {
                       let body = data.message ? data.message : 'Error' ;
                       if (typeof failed === 'function') {
-                          body = failed(data) ;
+                          const _msg = failed(data);
+                          body = _msg ? _msg : body ;
                       }
                       resolve({body: body, config: { showProgressBar: false, timeout: 3000 }});
                   }
               },
               error => {
-                  let body = error.msg ? error.msg : 'Error' ;
+                  let body = (error.error && error.error.message) ? error.error.message :
+                      (error.msg ? error.msg : (error.message ? error.message : 'Error'));
                   if (typeof failed === 'function') {
-                      body = failed(error) ;
+                      const _msg = failed(error);
+                      body = _msg ? _msg : body ;
                   }
                   reject({body: body, config: { showProgressBar: false, timeout: 3000 }});
               }
