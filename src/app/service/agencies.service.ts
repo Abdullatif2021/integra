@@ -8,25 +8,19 @@ import {Observable, throwError} from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class RecipientsService {
+export class AgenciesService {
 
   constructor(private http: HttpClient) { }
 
-  getRecipientsByName(name) {
+  getAgenciesByName(name): Observable<any> {
       const options = { params: new HttpParams().set('name', name)};
-      return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getRecipients, options).pipe(
+      return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getAgencies, options).pipe(
           catchError(this.handleError)
       );
   }
 
-  getCapCity(term) {
-      const options = { params: new HttpParams().set('name', term)};
-      return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCapCity, options).pipe(
-          catchError(this.handleError)
-      );
-  }
 
-  handleError(error: HttpErrorResponse) {
+  handleError(error: HttpErrorResponse): Observable<any> {
       if (error.error instanceof ErrorEvent) {
           console.error('An error occurred:', error.error.message);
       } else {

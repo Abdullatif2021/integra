@@ -27,6 +27,7 @@ export class ActionsService {
       const promise = new Promise(function(resolve, reject) {
           method.subscribe(
               data => {
+                  console.log('Dataaaaa', data);
                   if (data.status === 'success' || data.success === true) {
                       let body = 'Success' ;
                       if (typeof success === 'function') {
@@ -96,7 +97,7 @@ export class ActionsService {
               data.finish() ;
           }
           return 'Pre-distinta Creata con successo' ;
-      }, (error) => error.error.message );
+      }, (error) => { console.log(error) ; });
 
   }
 
@@ -109,7 +110,7 @@ export class ActionsService {
       const items = [] ;
       preDispatches.forEach((elm) => {
           items.push(elm.id) ;
-      })
+      });
 
       const method = this.preDispatchService.merge(items, name) ;
       this.run(method, 'Unione in corso', () => {

@@ -194,7 +194,7 @@ export class SearchPanelComponent implements OnInit {
           this.unsubscribeTo('fieldRemoteData') ;
           field.loadingState = true ;
           this.subscriptions.fieldRemoteData = field.getMethod(event.term).subscribe((res: ApiResponseInterface) => {
-              if (res.status === 'success') {
+              if (res.status === 'success' || res.success) {
                   field.originalItems = field.items ;
                   field.items = res.data ;
                   field.loadingState = false ;

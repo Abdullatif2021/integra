@@ -80,8 +80,10 @@ export const AppConfig = {
         getSetMarkers: (id) => `${api_url}/api/set/${id}/coordinate`,
         exportPreDispatchResults: (id) => `${api_url}/api/preDispatch/${id}/exportResults`,
         getPredispatchLog: (id) => `${api_url}/api/preDispatch/${id}/logs`,
-        createNewGroup: (id) => `${api_url}/api/preDispatch/${id}/createNewGroup`
-
+        createNewGroup: (id) => `${api_url}/api/preDispatch/${id}/createNewGroup`,
+        getCapCity: `${api_url}/api/recipientCap`,
+        getAgencies: `${api_url}/api/agencies`,
+        getCustomers: `${api_url}/api/customers`,
     },
 
 };

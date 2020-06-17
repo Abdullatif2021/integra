@@ -19,6 +19,8 @@ import {RecipientsService} from '../../../../service/recipients.service';
 import {ActivatedRoute} from '@angular/router';
 import {PreDispatchAddDirectComponent} from '../../modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
+import {AgenciesService} from '../../../../service/agencies.service';
+import {CustomersService} from '../../../../service/customers.service';
 
 @Component({
   selector: 'app-to-deliver',
@@ -95,7 +97,9 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private actionsService: ActionsService,
       protected recipientsService: RecipientsService,
       private activatedRoute: ActivatedRoute,
-      private preDispatchService: PreDispatchService
+      private preDispatchService: PreDispatchService,
+      private agenciesService: AgenciesService,
+      private customersService: CustomersService
   ) {
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
