@@ -199,7 +199,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
     stopAction() {
         this.preDispatchData.localize_status = 'pause';
-        this.backProcessingService.ultimatePause(this.preDispatch);
+        window.parent.postMessage({pausePreDispatch: this.preDispatchData}, '*');
     }
 
     next() {

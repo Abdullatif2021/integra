@@ -13,7 +13,7 @@ export class RecipientsService {
   constructor(private http: HttpClient) { }
 
   getRecipientsByName(name) {
-      const options = { params: new HttpParams().set('name', name)};
+      const options = { params: new HttpParams().set('name', name).set('perPage', '100')};
       return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getRecipients, options).pipe(
           catchError(this.handleError)
       );

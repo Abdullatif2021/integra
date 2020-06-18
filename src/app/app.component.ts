@@ -45,6 +45,9 @@ export class AppComponent {
             this.preDispatchGlobalActionsService.modalMessageRecived(e.data.handleSaysHi.message);
         } else if (e.data.locatingFixItems) {
             this.preDispatchGlobalActionsService.fixLocatingItems(e.data);
+        } else if (e.data.pausePreDispatch) {
+            console.log('here pause ----', e.data.pausePreDispatch);
+            this.backProcessingService.ultimatePause(e.data.pausePreDispatch.id);
         }
     }
 

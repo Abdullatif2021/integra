@@ -7,7 +7,7 @@ export const AppConfig = {
         getStreet: `${api_url}/api/getStreet`, // get streets list
         getProducts: `${api_url}/api/getProducts`, // get to deliver products list
         getFiltersData: `${api_url}/api/initFilterData`,
-        getRecipients: `${api_url}/api/recipient`,
+        getRecipients: `${api_url}/api/recipients`,
         getPreDispatched: `${api_url}/api/preDispatch`,
         createPreDispatched: `${api_url}/api/preDispatch`,
         preDispatchAddProducts: `${api_url}/api/preDispatch/addProducts`,

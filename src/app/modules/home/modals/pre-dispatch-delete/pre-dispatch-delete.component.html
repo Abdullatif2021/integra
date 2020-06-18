@@ -22,7 +22,7 @@
         </ng-container>
 
         <div class="btns-container mt-3">
-          <button type="button" *ngIf="items && items.length" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="run(modal, confirmDeleteModal)">Esegui</button>
+          <button type="button" *ngIf="items && items.length" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="run(modal, confirmDeleteModal, hasSomeRunningItemsModal)">Esegui</button>
           <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Cancel</button>
           <div class="clear-both"></div>
         </div>
@@ -46,7 +46,7 @@
       </div>
       <div class="row mt-2">
         <div class="col-12 align-self-center">
-          <div class="pre-dispatch-data" *ngFor="let item of unDeletedItems">
+          <div class="pre-dispatch-data" *ngFor="let item of needsToConfirmPreDispatches">
             <div class="pre-dispatch-name ml-2 d-inline-block">{{ item.name }}</div>
             <div class="pre-dispatch-code ml-2 d-inline-block">{{ item.code }}</div>
           </div>
@@ -55,6 +55,27 @@
       <div class="btns-container mt-3">
         <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="runConfirm(modal)">Esegui</button>
         <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template  #hasSomeRunningItemsModal let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <div class="cant-delete-now">
+        Was not able to delete this pre-dispatches, because they are running.
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 align-self-center">
+          <div class="pre-dispatch-data" *ngFor="let item of runningPreDispatches">
+            <div class="pre-dispatch-name ml-2 d-inline-block">{{ item.name }}</div>
+            <div class="pre-dispatch-code ml-2 d-inline-block">{{ item.code }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="btns-container mt-3">
+        <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="runConfirmNotDeletablePreDispatches(modal, confirmDeleteModal)">Ok</button>
         <div class="clear-both"></div>
       </div>
     </div>
