@@ -59,6 +59,7 @@ export class PreDispatchService {
             case 'in_grouping': return 'Ragruppamento';
             case 'in_divide': return 'In Divisione';
             case 'in_drawing': return 'Percoso in disegnamento';
+            case 'drawing_paths': return 'Disegno percorso ';
             default: return status;
         }
     }
