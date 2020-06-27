@@ -5,8 +5,9 @@ import {EventEmitter, Injectable} from '@angular/core';
 })
 export class DragAndDropService {
 
-    static DRAGGED_TYPE_ADDRESS = 0 ;
-    static DRAGGED_TYPE_PRODUCT = -1 ;
+    static DRAGGED_TYPE_ADDRESS = 0 ; // used for not matches and re-order, distinguished by the remote field value
+    static DRAGGED_TYPE_PRODUCT = -1 ; // use for create new group
+    static DRAGGED_TYPE_NOT_FIXED = 2 ; // used for not fixed items
 
     constructor() { }
 
@@ -15,6 +16,10 @@ export class DragAndDropService {
     draggedElementType = 0 ;
     drag_elm: any ;
     remote = false ;
+
+    getDraggedElementType(){
+        return this.draggedElementType;
+    }
 
     drag(elm, remote = false, type = DragAndDropService.DRAGGED_TYPE_ADDRESS) {
         this.drag_elm = elm ;
@@ -27,9 +32,15 @@ export class DragAndDropService {
         // if the dragged element is a product, call product drop.
         if (this.draggedElementType === DragAndDropService.DRAGGED_TYPE_PRODUCT) {
             return this.productDrop(index, target);
-        } else { // if the dragged element is an address, call address drop.
+        } else if (this.draggedElementType === DragAndDropService.DRAGGED_TYPE_NOT_FIXED) {
+           return this.notFixedDrop(index, target);
+        } else{ // if the dragged element is an address, call address drop.
             return this.addressDrop(index, target);
         }
+    }
+
+    notFixedDrop(index, target) {
+        return this.dropped.emit({item: this.drag_elm, index: index, fromNotFixed: true});
     }
 
     // handles creating new group

@@ -6,6 +6,7 @@ import {throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {FiltersService} from './filters.service';
 import {PaginationService} from './pagination.service';
+import {IntegraaModalService} from './integraa-modal.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +16,17 @@ export class PreDispatchService {
     constructor(
         private http: HttpClient,
         private filtersService: FiltersService,
-        private paginationService: PaginationService
+        private paginationService: PaginationService,
+        private integraaModalService: IntegraaModalService
     ) {}
 
     public selectedPreDispatches = [] ;
     canPlanChanges = new EventEmitter<boolean>();
     preDispatchStatusChanges = new EventEmitter();
+    resultsMoveToButtonClicked = new EventEmitter();
     can_plan = false;
+    showConfirmPlanningModalCalls = new EventEmitter();
+    confirmPlanningModalGotUserResponse = new EventEmitter();
     // used when an Integraa modal is opened to perform an action on a specific pre-Dispatch {
     private activePredispatch = null ;
     getActivePreDispatch() {
@@ -33,6 +38,9 @@ export class PreDispatchService {
     // }
 
 
+    clickResultsMoveToButton(to) {
+        this.resultsMoveToButtonClicked.emit(to);
+    }
     preDispatchStatusChanged(status) {
         this.preDispatchStatusChanges.emit(status);
     }
@@ -50,6 +58,7 @@ export class PreDispatchService {
             case 'localized': return 'Localizzato';
             case 'in_grouping': return 'Ragruppamento';
             case 'in_divide': return 'In Divisione';
+            case 'in_drawing': return 'Percoso in disegnamento';
             default: return status;
         }
     }
@@ -181,6 +190,20 @@ export class PreDispatchService {
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchData(preDispatchId), options).pipe(
             catchError(this.handleError)
         );
+    }
+
+
+    showConfirmPlanningModal(preDispatch, force = false) {
+        this.showConfirmPlanningModalCalls.emit(true);
+        return new Promise((resolve, reject) => {
+            const subscription = this.confirmPlanningModalGotUserResponse.subscribe(
+                data => {
+                    subscription.unsubscribe();
+                    return resolve(data);
+
+                }
+            );
+        });
     }
 
     merge(items, name) {

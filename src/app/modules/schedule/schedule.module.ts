@@ -39,6 +39,7 @@ import { NotMatchesTreeComponent } from './parts-components/not-matches-tree/not
 import {DndModule} from 'ngx-drag-drop';
 import {MarkersService} from './service/markers.service';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { NotFixedTreeComponent } from './parts-components/not-fixed-tree/not-fixed-tree.component';
 
 
 @NgModule({
@@ -68,6 +69,7 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
       ResultComponent,
       ToPlanComponent,
       NotMatchesTreeComponent,
+      NotFixedTreeComponent,
   ],
   exports: [
       ScheduleRoutingModule
@@ -83,7 +85,10 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
       ScheduleService,
       MarkersService,
   ],
-  entryComponents: [ NotMatchesTreeComponent ],
+  entryComponents: [
+      NotMatchesTreeComponent,
+      NotFixedTreeComponent
+  ],
 
 
 

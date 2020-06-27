@@ -29,7 +29,12 @@ export class AppComponent {
     beforeunload(event: Event) {
         event.preventDefault();
         this.locatingService.stopAllLocatingProcess() ;
-        const msg = this.backProcessingService.checkLeaving();
+        let msg = this.backProcessingService.checkLeaving();
+        if (msg) {
+            event.returnValue = true;
+            return msg;
+        }
+        msg = this.backProcessingService.hasAnythingBlocking();
         if (msg) {
             event.returnValue = true;
             return msg;
@@ -46,9 +51,14 @@ export class AppComponent {
         } else if (e.data.locatingFixItems) {
             this.preDispatchGlobalActionsService.fixLocatingItems(e.data);
         } else if (e.data.pausePreDispatch) {
-            console.log('here pause ----', e.data.pausePreDispatch);
             this.backProcessingService.ultimatePause(e.data.pausePreDispatch.id);
+        } else if (e.data.showPlanningConfirmMessage) {
+            this.preDispatchService.showConfirmPlanningModal(e.data.showPlanningConfirmMessage, true);
         }
+
+        // else if (e.data.confirmPlanningClicked) {
+        //     this.preDispatchService.confirmPlanningModalGotUserResponse.emit(e.data.confirmPlanningClicked);
+        // }
     }
 
 }

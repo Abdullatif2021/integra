@@ -112,8 +112,9 @@ export class PlanningService {
 
     /*** Auto Planning { ***/
 
-    divideToDistenta(preDispatch) {
-        return this.http.post<any>(AppConfig.endpoints.divideToDistenta(preDispatch), {}).pipe(
+    divideToDistenta(preDispatch, checkResult = null) {
+        const data = <any>{confirm: checkResult};
+        return this.http.post<any>(AppConfig.endpoints.divideToDistenta(preDispatch), data).pipe(
             catchError(this.handleError)
         );
     }

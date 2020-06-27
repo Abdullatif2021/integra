@@ -1,0 +1,45 @@
+<div class="col-6 v-wide-col not-fixed-upper-container">
+  <div class="not-fixed-container" #notFixedTreeContainer infiniteScroll (scrolled)="loadMore()" [scrollWindow]="true" [infiniteScrollContainer]="notFixedTreeContainer" infiniteScrollDistance="30" >
+    <div class="items">
+      <div class="street-items-header">
+        <div class="d-flex">
+          <div class="col-1"></div>
+          <div class="col-1"></div>
+          <div class="col-4 wide-col"><div class="street-items-header-cell">Indirizzo</div></div>
+          <div class="col-3 text-center"><div class="street-items-header-cell">Consegne</div></div>
+          <div class="col-3 wide-col pl-1"><div class="street-items-header-cell">Ora d’arrivo</div></div>
+        </div>
+      </div>
+      <div mdbSortableList>
+        <div *ngFor="let item of list; let idx = index" [dndDraggable]="{item: 2}" [dndEffectAllowed]="'move'" (dndStart)="onDragStart($event, item)">
+          <div class="street-items" dndDropzone [dndHorizontal]="false" (dndDrop)="onDrop($event, item)" [ngClass]="{'drop-location': dragging && dragging.type === 'building'}">
+            <ng-container [ngTemplateOutlet]="streetItems" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx+''}"></ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template let-idx="idx" let-next="next" let-item="item" #streetItems>
+  <ng-container *ngIf="item.skeleton;">
+    <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
+  </ng-container>
+  <ng-container  *ngIf="!item.skeleton;">
+    <div class="street-item" [ngClass]="{'odd-bg': idx%2, 'even-bg': !(idx%2)}" [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"
+         (dndStart)="onDragStart($event, item)">
+      <div class="d-flex"s>
+        <div class="col-1 wide-col d-flex">
+          <div dndHandle class="drag-handle">☰</div>
+        </div>
+        <div class="col-1 wide-col d-flex">
+          <div class="m-auto select-container">
+            <div class="ml-1 priority-container" *ngIf="!item.selected "><span></span></div>
+          </div>
+        </div>
+        <div class="col-4 wide-col pl-3"> <div class="text">{{item.address}}</div> </div>
+        <div class="col-3 text-center"> <div class="count">{{item.productsCount}}</div> </div>
+        <div class="col-3 wide-col pl-1"> <div class="count">{{item.time}}</div> </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

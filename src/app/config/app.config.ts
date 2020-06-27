@@ -58,6 +58,7 @@ export const AppConfig = {
         updatePreDispatchRunningStatus: (id) => `${api_url}/api/preDispatch/${id}/changeLocalizeStatus`,
         divideToDistenta: (id) => `${api_url}/api/preDispatch/${id}/toSets`,
         getScheduleResults: (id) => `${api_url}/api/preDispatch/${id}/scheduleResults`,
+        getSetByStatus: (id) => `${api_url}/api/preDispatch/${id}/getSetByStatus`,
         getSetTreeNode: (id) => `${api_url}/api/set/${id}/tree`,
         getPostmenByPreDispatch: (id) => `${api_url}/api/preDispatch/${id}/schedulePostmen`,
         updateSetPostman: (id) => `${api_url}/api/sets/${id}/updatePostman`,
@@ -67,6 +68,7 @@ export const AppConfig = {
         getMatchesRate: (id) => `${api_url}/api/preDispatch/${id}/getMatchRate`,
         confirmPlanning: (id) => `${api_url}/api/preDispatch/${id}/confirmPlanning`,
         makeDispatchesVisible: (id) => `${api_url}/api/preDispatch/${id}/makeSetsVisible`,
+        publishPreDispatchSets: (id) => `${api_url}/api/preDispatch/${id}/publishSet`,
         assignToSet: (id) => `${api_url}/api/set/${id}/assignManual`,
         orderTreeNode: (id) => `${api_url}/api/preDispatch/${id}/shift`,
         getAddressesTreeMapMarkers: (id) => `${api_url}/api/preDispatch/${id}/markers`,
@@ -84,6 +86,9 @@ export const AppConfig = {
         getCapCity: `${api_url}/api/recipientCap`,
         getAgencies: `${api_url}/api/agencies`,
         getCustomers: `${api_url}/api/customers`,
+        deleteResults: (id) => `${api_url}/api/preDispatch/${id}/deleteResults`,
+        getNotFixedItems: (id) => `${api_url}/api/preDispatch/${id}/getNotFixedProduct`,
+        moveNotFixesGroupToSet: (id) => `${api_url}/api/group/${id}/moveToSet`,
     },
 
 };

@@ -318,3 +318,7 @@
     margin: auto 5px auto -17px;
     color: #212121;
 }
+.small-marker-text{
+    font-size: 9px !important;
+    padding: 2.5px 0px !important;
+}

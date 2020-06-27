@@ -158,11 +158,12 @@
 }
 .to-plan-container{
     background-color: #fff;
-    padding: 15px 0px;
-    max-height: 600px;
     min-height: 100%;
+    max-height: 100%;
     border-radius: 4px;
     overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
 }
 .node {
     background-color: #dfdfdf;
@@ -174,4 +175,8 @@
 }
 .context-menu-item:hover {
     background: #fcda4b7d;
+}
+.small-marker-text{
+    font-size: 9px !important;
+    padding: 2.5px 0px !important;
 }

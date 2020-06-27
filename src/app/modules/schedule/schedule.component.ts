@@ -70,7 +70,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     paths = [] ;
     @ViewChild(PageDirective) pageHost: PageDirective;
 
-    ngOnInit() {
+    async ngOnInit() {
         this.preDispatchGlobalActionsService.modalHandleMessages.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
                 if (data.nfound) {
@@ -109,6 +109,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         );
 
         this.startInterval();
+
     }
 
     startInterval() {
@@ -217,6 +218,10 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
         const componentRef = viewContainerRef.createComponent(componentFactory);
         (<any>componentRef.instance).data = data;
+    }
+
+    resultsMoveTo(to) {
+        this.preDispatchService.clickResultsMoveToButton(to);
     }
 
     mapReady(map) {

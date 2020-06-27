@@ -22,7 +22,18 @@
           <div class="move-to-in-plan-btn integraa-btn" *ngIf="'/schedule/'+preDispatch === router.url && nextAction !== 'locating'" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Sposta in da pianificare</div>
           <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url && nextAction !== 'locating'" (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">Sposta in indirizzi</div>
           <!-- Export results {-->
-          <a class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/result' === router.url && preDispatchData.status === 'planned'" href="{{exportResultsLink}}" target="_blank">Esporta</a>
+
+          <div class="dropdown position-relative" id="results-move-to-drop-down" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" *ngIf="'/schedule/'+preDispatch+'/result' === router.url && preDispatchData.status === 'planned'">
+            <a class="move-back-to-addresses-btn integraa-btn mr-1">
+              <fa-icon [icon]="['fa','chevron-down']"></fa-icon>
+              <span class="ml-1">Move To</span>
+            </a>
+            <div class="dropdown-menu integraa-dropdown-menu" aria-labelledby="results-move-to-drop-down">
+              <a class="dropdown-item" (click)="resultsMoveTo('created')">Created</a>
+              <a class="dropdown-item" (click)="resultsMoveTo('to_planning')">To Planning</a>
+            </div>
+          </div>
+          <a class="move-back-to-addresses-btn integraa-btn ml-1" *ngIf="'/schedule/'+preDispatch+'/result' === router.url && preDispatchData.status === 'planned'" href="{{exportResultsLink}}" target="_blank">Esporta</a>
           <!-- } Export results -->
           <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': false}" [ngStyle]="{width: preDispatchData.percent + '%'}">&nbsp;</div><div class="progress-action-text-value horiz">
             <span class="percent-value">{{preDispatchData.percent}} %</span>
@@ -122,4 +133,5 @@
     </div>
   </div>
 </ng-template>
+
 

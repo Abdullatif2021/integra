@@ -123,6 +123,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+      this.citiesTable.title = 'Paese';
+      this.citiesTable.searchPlaceHolder =  'Cerca Paese';
       this.filtersService.clear();
       this.loadProducts(false);
       this.paginationService.rppValueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((rpp: number) => {

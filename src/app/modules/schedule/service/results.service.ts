@@ -20,9 +20,11 @@ export class ResultsService implements OnDestroy {
     markers = {cities: 65, caps: {}} ;
     levels = ['set', 'cityId', 'capId', 'streetId', 'client', 'end'];
 
-    getScheduleResults(preDispatch) {
+    getScheduleResults(preDispatch, type = 'not_assigned') {
         return new Promise((resolve, reject) => {
-            this.http.get<any>(AppConfig.endpoints.getScheduleResults(preDispatch), {})
+            const options = {params: new HttpParams()};
+            options.params = options.params.set('type', type);
+            this.http.get<any>(AppConfig.endpoints.getSetByStatus(preDispatch), options)
                 .subscribe(
                 data => {
                     if (!data.success) { return reject(data); }
@@ -33,7 +35,8 @@ export class ResultsService implements OnDestroy {
                         elm.sets.forEach((set) => {
                            sets.push({
                                id: set.id, type: 'set', children: [], parent: null, text: '', postman: set.postman,
-                               quantity: set.quantity, page: 1, expanded: false, setId: set.id, loaded: false, addressId: set.addressId
+                               quantity: set.quantity, page: 1, expanded: false, setId: set.id, loaded: false, addressId: set.addressId,
+                               is_distenta_created: set.is_distenta_created, have_not_fixed_products: set.have_not_fixed_products
                            });
                         });
                         res.push({day: elm.day, sets: sets});
@@ -125,8 +128,8 @@ export class ResultsService implements OnDestroy {
             postman_id: postmanId
         });
     }
-    makeDispatchesVisible(postmanId) {
-        return this.http.post<any>(AppConfig.endpoints.makeDispatchesVisible(postmanId), {});
+    makeDispatchesVisible(postmanId, sets) {
+        return this.http.post<any>(AppConfig.endpoints.publishPreDispatchSets(postmanId), {sets: sets});
     }
 
     getSetPath(setId): Observable<TreeNodeResponseInterface> {
@@ -171,22 +174,30 @@ export class ResultsService implements OnDestroy {
 
     reshapeGroupsData(parent, groups) {
         const result = [] ;
-        groups.forEach(elm => {
-           result.push({
-               id: elm.id,
-               address: elm.address[0] ,
-               loaded: false,
-               parent: parent,
-               type: 'building',
-               addressId: elm.id,
-               products: elm.products,
-               priority: elm.mapPriority,
-               productsCount: elm.productsCount
-           });
-        });
+        for (let i = 0; i < groups.length; ++i) {
+            result.push({
+                id: groups[i].id,
+                address: groups[i].address[0] ,
+                loaded: false,
+                parent: parent,
+                type: 'building',
+                addressId: groups[i].id,
+                priority: groups[i].mapPriority,
+                productsCount: groups[i].productsCount,
+                fromNotFixed: groups[i].fromNotFixed,
+            });
+            result[i]['products'] = this.reshapeGroupProducts(groups[i].products, result[i]);
+        }
         return result ;
     }
 
+    reshapeGroupProducts(products, group) {
+        if (!products || !products.length) { return []; }
+        for (let i = 0; i < products.length; ++i) {
+            products[i].parent = group ;
+        }
+        return products;
+    }
     sendGetSetGroupsRequest(setId, page = 1) {
         const options = {params: new HttpParams()};
         options.params = options.params.set('page', page + '');
@@ -195,9 +206,34 @@ export class ResultsService implements OnDestroy {
         return <any>this.http.get(AppConfig.endpoints.getSetGroups(setId), options);
     }
 
+    moveResultsTo(to, selected, preDispatch) {
+        // create the data shape
+        const items = [] ;
+        selected.forEach(item => {
+            items.push({
+                id: item.id,
+                state: to,
+                root: item._type === 'set' ? 1 : (item._type === 'group' ? 2 : 3),
+                parent: item._type === 'product' ? item.group_id : ( item._type === 'set' ? null : item.parent.id)
+            });
+        });
+        return <any>this.http.post(AppConfig.endpoints.deleteResults(preDispatch), {items: items});
+    }
+
+    getNotFixedItems(preDispatch, page = 1) {
+        const options = {params: new HttpParams()};
+        options.params = options.params.set('page', page + '');
+        options.params = options.params.set('pageSize', '15');
+        return <any>this.http.get(AppConfig.endpoints.getNotFixedItems(preDispatch), options);
+    }
+
     createNewGroup(preDispatch, list, index) {
         const data = {products: list, priority: index};
         return <any>this.http.post(AppConfig.endpoints.createNewGroup(preDispatch), data);
+    }
+    moveNotFixesGroupToSet(data) {
+        // const data = {set: set, priority: index};
+        return <any>this.http.post(AppConfig.endpoints.moveNotFixesGroupToSet(1), data);
     }
 
     ngOnDestroy() {

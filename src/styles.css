@@ -315,7 +315,15 @@ a:hover {
     width: 0px;
 }
 
-
 .show-more-tooltip div{
     min-width: 70px;
+}
+.integraa-dropdown-menu .dropdown-item {
+    font-size: 13px;
+}
+.integraa-dropdown-menu .dropdown-item:active {
+    background-color: #fcda4b;
+}
+.force-scroll {
+    height: 20vh;
 }

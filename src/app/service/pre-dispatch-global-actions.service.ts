@@ -57,6 +57,7 @@ export class PreDispatchGlobalActionsService {
     }
 
     async runPlanning(preDispatchData, handle, data: any = {}) {
+
         const planningService =  Object.assign(
             Object.create( Object.getPrototypeOf(this.planningService)), this.planningService
         );
@@ -70,6 +71,15 @@ export class PreDispatchGlobalActionsService {
                 this.snotifyService.error('Qualcosa è andato storto, controlla le impostazioni...', {showProgressBar: false, });
                 this.planningErrors.emit('error');
             });
+            if (sets.statusCode === 480) {
+                // show confirm modal
+                const checkResult = await this.preDispatchService.showConfirmPlanningModal(preDispatchData.id);
+                sets = await planningService.divideToDistenta(preDispatchData.id, checkResult).toPromise().catch(e => {
+                    this.backProcessingService.ultimatePause(preDispatchData.id);
+                    this.snotifyService.error('Qualcosa è andato storto, controlla le impostazioni...', {showProgressBar: false, });
+                    this.planningErrors.emit('error');
+                });
+            }
         }
         if (sets && sets.data) {
             const drawing: any = await this.planningService.drawPaths(sets.data, preDispatchData, handle);

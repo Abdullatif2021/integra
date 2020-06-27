@@ -1,0 +1,12 @@
+<ng-template  #confirmPlanningModalRed let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <h6 class="text-center">Vuoi ripianificare gli indirizzi non assegnati o pianificare solo i nuovi indirizzi.</h6>
+      <div class="btns-container mt-3">
+        <button type="button" (click)="modal.close();confirmPlanningActionChosen(false)" class="integraa-btn ml-2 float-right" >Solo i nuovi</button>
+        <button type="button" (click)="modal.close();confirmPlanningActionChosen(true)" class="integraa-btn ml-2 float-right" >Ripianifica tutto</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

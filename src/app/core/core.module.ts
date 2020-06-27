@@ -22,6 +22,7 @@ import {faWindowMinimize} from '@fortawesome/free-solid-svg-icons/faWindowMinimi
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons/faExternalLinkAlt';
 import {IntegraaModalComponent} from './components/integraa-modal/integraa-modal.component';
 import {AngularDraggableModule} from 'angular2-draggable';
+import { GlobalModalsComponent } from './components/global-modals/global-modals.component';
 
 @NgModule({
   imports: [
@@ -39,13 +40,15 @@ import {AngularDraggableModule} from 'angular2-draggable';
       UserNavComponent,
       MainNavComponent,
       SearchPanelComponent,
-      IntegraaModalComponent
+      IntegraaModalComponent,
+      GlobalModalsComponent
   ],
   exports: [
     UserNavComponent,
     MainNavComponent,
     SearchPanelComponent,
-    IntegraaModalComponent
+    IntegraaModalComponent,
+    GlobalModalsComponent
   ],
 })
 export class CoreModule {

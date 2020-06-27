@@ -30,5 +30,17 @@ export class IntegraaModalService {
     this.modals = modals;
   }
 
+  getModals() {
+    return this.modals;
+  }
+
+  getModal(location, id) {
+    for (let i = 0; i < this.modals.length; ++i) {
+        if ( this.modals[i].data.loaction === location && this.modals[i].data.id === id ) {
+            return this.modals[i];
+        }
+    }
+    return false ;
+  }
 
 }

@@ -1,10 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {AppConfig} from '../config/app.config';
-import {catchError} from 'rxjs/operators';
 import {ApiResponseInterface} from '../core/models/api-response.interface';
-import {LocatingService} from './locating/locating.service';
 import {takeUntil} from 'rxjs/internal/operators';
 
 @Injectable({
@@ -22,7 +19,7 @@ export class BackProcessingService {
     _end_informers = {};
     globalMessenger = new EventEmitter();
     // _queue = {} ;
-
+    blockingMessage = null ;
     async run(key, action, namespace = 'general', id = -1) {
         if (this._actions[namespace]) {
             this._actions[namespace].push(id) ;
@@ -158,6 +155,18 @@ export class BackProcessingService {
             this.pause(`${action}-` + preDispatchData.id);
             // this.backProcessingService.updatePreDispatchActionStatus(preDispatchData.id, null);
         }
+    }
+
+    hasAnythingBlocking() {
+        return this.blockingMessage ;
+    }
+
+    blockExit(message) {
+        this.blockingMessage = message;
+    }
+
+    unblockExit() {
+        this.blockingMessage = null ;
     }
 
     /*** } Pre-Dispatch ***/

@@ -151,6 +151,9 @@
     display: flex;
     flex-direction: column;
 }
+.right-side-container {
+    height: 100%;
+}
 .router-container {
     flex: 1;
     max-height: calc(100vh - 60px);

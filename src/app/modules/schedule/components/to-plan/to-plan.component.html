@@ -1,9 +1,10 @@
 <div class="to-plan-container" #ToPlanContainer>
-  <div class="items">
-    <div infiniteScroll (scrolled)="loadMore(tree[0], -1)" [scrollWindow]="true" >
+  <div class="items" #itemsContainer>
+    <div infiniteScroll (scrolled)="loadMore(tree[0], -1)" [scrollWindow]="true" [infiniteScrollContainer]="itemsContainer">
       <ng-container *ngFor="let item of tree[0].children; let idx = index">
         <ng-container  [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx+''}"></ng-container>
       </ng-container>
+      <div class="force-scroll"></div>
     </div>
   </div>
 
@@ -27,7 +28,7 @@
             <div class="not-selected" *ngIf="!item.selected && !item.partiallySelected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
           </div>
           <div class="marker-container">
-            <div class="marker {{item.marker.color}}" [style.background]="item.marker.color" *ngIf="item.marker">{{item.marker.text}}</div>
+            <div class="marker {{item.marker.color}}" [style.background]="item.marker.color" [ngClass]="{'small-marker-text': item.marker.text.length > 2}" *ngIf="item.marker">{{item.marker.text}}</div>
           </div>
           <div class="text" #itemText>{{item.text}}</div>
           <div class="right-side">

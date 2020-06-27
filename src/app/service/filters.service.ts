@@ -120,6 +120,8 @@ export class FiltersService {
   clear() {
       this.filters = [] ;
       this.specials = {} ;
+      this.grouping = 'by_cap';
+      this.clearBarcodFilter();
       this.cleared.emit(1);
   }
 
