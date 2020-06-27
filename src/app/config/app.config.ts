@@ -88,7 +88,7 @@ export const AppConfig = {
         getCustomers: `${api_url}/api/customers`,
         deleteResults: (id) => `${api_url}/api/preDispatch/${id}/deleteResults`,
         getNotFixedItems: (id) => `${api_url}/api/preDispatch/${id}/getNotFixedProduct`,
-        moveNotFixesGroupToSet: (id) => `${api_url}/api/group/${id}/moveToSet`,
+        moveNotFixesGroupToSet: `${api_url}/api/group/moveToSet`,
     },
 
 };

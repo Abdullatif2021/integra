@@ -233,7 +233,7 @@ export class ResultsService implements OnDestroy {
     }
     moveNotFixesGroupToSet(data) {
         // const data = {set: set, priority: index};
-        return <any>this.http.post(AppConfig.endpoints.moveNotFixesGroupToSet(1), data);
+        return <any>this.http.post(AppConfig.endpoints.moveNotFixesGroupToSet, {data: data});
     }
 
     ngOnDestroy() {
