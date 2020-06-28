@@ -32,7 +32,10 @@ export class DragAndDropService {
         // if the dragged element is a product, call product drop.
         if (this.draggedElementType === DragAndDropService.DRAGGED_TYPE_PRODUCT) {
             return this.productDrop(index, target);
-        } else if (this.draggedElementType === DragAndDropService.DRAGGED_TYPE_NOT_FIXED) {
+        } else if (
+            this.draggedElementType === DragAndDropService.DRAGGED_TYPE_NOT_FIXED ||
+            this.drag_elm._hint === 'not_fixed'
+        ) {
            return this.notFixedDrop(index, target);
         } else{ // if the dragged element is an address, call address drop.
             return this.addressDrop(index, target);

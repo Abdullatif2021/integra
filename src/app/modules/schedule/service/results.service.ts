@@ -153,6 +153,7 @@ export class ResultsService implements OnDestroy {
         };
         return this.http.post<any>(AppConfig.endpoints.assignToSet(setId), data);
     }
+
     orderTreeNode(groupId, level) {
         const data = {
             newPriority: level
@@ -231,9 +232,10 @@ export class ResultsService implements OnDestroy {
         const data = {products: list, priority: index};
         return <any>this.http.post(AppConfig.endpoints.createNewGroup(preDispatch), data);
     }
+
     moveNotFixesGroupToSet(data) {
         // const data = {set: set, priority: index};
-        return <any>this.http.post(AppConfig.endpoints.moveNotFixesGroupToSet, {data: data});
+        return <any>this.http.post(AppConfig.endpoints.moveNotFixesGroupToSet, {groups: data});
     }
 
     ngOnDestroy() {

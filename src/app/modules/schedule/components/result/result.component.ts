@@ -319,9 +319,15 @@ export class ResultComponent implements OnInit, OnDestroy {
       }
       if (this.dragAndDropService.getDraggedElementType() === DragAndDropService.DRAGGED_TYPE_PRODUCT) {
           this.dropProduct(event, target, index);
-      } else if (this.dragAndDropService.getDraggedElementType() === DragAndDropService.DRAGGED_TYPE_NOT_FIXED) {
+      } else if (
+          this.dragAndDropService.getDraggedElementType() === DragAndDropService.DRAGGED_TYPE_NOT_FIXED ||
+          this.dragAndDropService.drag_elm._hint === 'not_fixed' /* if item was moved to fixed but was not saved yet */
+      ) {
           this.dropNotFixed(event, target, index) ;
       } else {
+          if (target.id !== this.dragAndDropService.drag_elm.parent.id) {
+              return ;
+          }
           this.dropAddress(event, target, index) ;
       }
 
@@ -329,9 +335,15 @@ export class ResultComponent implements OnInit, OnDestroy {
 
   async dropNotFixed(event, target, index) {
       this.dragAndDropService.drop(index, target);
-      // console.log();
       const elm = this.dragAndDropService.drag_elm ;
+      console.log(elm);
+      if (elm.parent) {
+          elm.parent.children = elm.parent.children.filter( ix => ix.id !== elm.id );
+      }
+
       elm.fromNotFixed = true ;
+      elm._hint = 'not_fixed' ;
+      elm.parent = target;
       target.children.splice(index, 0, elm);
 
       let nfixedcount = 0;
@@ -343,13 +355,14 @@ export class ResultComponent implements OnInit, OnDestroy {
           i++;
       });
       this.backProcessingService.blockExit('Some Items was not saved, are you sure you want to exit');
-      this.movedNotFixedStorage.push({group: elm.id, set: target.id, index: index});
+      this.movedNotFixedStorage = this.movedNotFixedStorage.filter(ix => ix.id !== elm.id);
+      this.movedNotFixedStorage.push({id: elm.id, set: target.id, index: index});
   }
 
   async saveMovedNotFixed() {
       const save = this.movedNotFixedStorage ;
       this.movedNotFixedStorage = [];
-      const result = await this.resultsService.moveNotFixesGroupToSet(this.movedNotFixedStorage).toPromise().catch( e => {});
+      const result = await this.resultsService.moveNotFixesGroupToSet(save).toPromise().catch( e => {});
       if (!result || !result.success) {
           // remove the new Item
           this.movedNotFixedStorage = this.movedNotFixedStorage.concat(save);
