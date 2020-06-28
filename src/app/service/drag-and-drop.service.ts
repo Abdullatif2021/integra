@@ -113,7 +113,8 @@ export class DragAndDropService {
             addressId: elm.addressId,
             products: elm.products,
             priority: elm.mapPriority,
-            productsCount: elm.productsCount
+            productsCount: elm.productsCount,
+            fromNotFixed: elm.fromNotFixed,
         };
     }
 

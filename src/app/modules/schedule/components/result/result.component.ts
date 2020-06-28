@@ -364,6 +364,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.movedNotFixedStorage = [];
       const result = await this.resultsService.moveNotFixesGroupToSet(save).toPromise().catch( e => {});
       if (!result || !result.success) {
+          this.backProcessingService.unblockExit();
           // remove the new Item
           this.movedNotFixedStorage = this.movedNotFixedStorage.concat(save);
           this.snotifyService.error('Qualcosa è andato storto spostando il prodotto', { showProgressBar: false, timeout: 1500 });
@@ -422,7 +423,9 @@ export class ResultComponent implements OnInit, OnDestroy {
       if (result) {
           result.item.marker = this.resultsService.getMarker(result.item.type, result.item.parent);
       }
-
+      if (result.fromNotFixed) {
+          return ;
+      }
       if (result.remote) {
           this.resultsService.assignToSet(target.setId, result.item.addressId,
               target.addressId ? target.addressId : target.id, index, result.item.type).subscribe(
