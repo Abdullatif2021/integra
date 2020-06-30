@@ -462,7 +462,6 @@ export class ResultComponent implements OnInit, OnDestroy {
             this.selectedPostmen[day.day][set.id] = set.postman ;
         });
     });
-    this.updateItemsMarkers();
     this.loadPostmen();
   }
 

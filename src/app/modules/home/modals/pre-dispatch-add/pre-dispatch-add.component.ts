@@ -86,7 +86,6 @@ export class PreDispatchAddComponent extends ModalComponent implements OnInit, O
   search(event) {
     const term = event.term ;
     this.searching = true;
-    console.log(event);
     this.preDispatchService.getPreDispatchList(1, '100', term).subscribe((res: ApiResponseInterface) => {
       if (res.status === 'success') {
         this.preDispatches = this.formatData(res.data);
