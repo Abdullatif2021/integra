@@ -147,6 +147,7 @@ export class ResultComponent implements OnInit, OnDestroy {
           );
           item.children =  result;
           item.loaded = false ;
+          this.updateItemsMarkers(item);
       }
   }
 
@@ -162,12 +163,14 @@ export class ResultComponent implements OnInit, OnDestroy {
       item.loaded = true ;
       const result = await <any>this.resultsService.getSetGroups(item).catch(
           error => this.snotifyService.error('Qualcosa è andato storto!!', { showProgressBar: false, timeout: 1500 })
-      );      item.children.pop();
+      );
+      item.children.pop();
       if (!result.length) {
           return ;
       }
       item.loaded = false ;
       item.children = item.children.concat(result);
+      this.updateItemsMarkers(item);
   }
 
   getLvlClass(next) {
@@ -346,18 +349,20 @@ export class ResultComponent implements OnInit, OnDestroy {
       elm._hint = 'not_fixed' ;
       elm.parent = target;
       target.children.splice(index, 0, elm);
-
-      let nfixedcount = 0;
-      let i = 0;
-      // update not fixed count
-      target.children.forEach(child => {
-          if (child.fromNotFixed) { nfixedcount++ ; }
-          this.notFixedCount[i] = nfixedcount;
-          i++;
-      });
+      this.updateItemsMarkers(target);
       this.backProcessingService.blockExit('Some Items was not saved, are you sure you want to exit');
       this.movedNotFixedStorage = this.movedNotFixedStorage.filter(ix => ix.id !== elm.id);
       this.movedNotFixedStorage.push({id: elm.id, set: target.id, index: index});
+  }
+
+  updateItemsMarkers(set) {
+      let marker = 0 ;
+      for (let i = 0; i < set.children.length; ++i) {
+          if (!set.children[i].fromNotFixed) {
+              set.children[i]._marker = ++marker;
+          } else { set.children[i]._marker = 'NA' ; }
+      }
+      console.log('data update', this.scheduleResults);
   }
 
   async saveMovedNotFixed() {
@@ -430,12 +435,12 @@ export class ResultComponent implements OnInit, OnDestroy {
       if (result.remote) {
           this.resultsService.assignToSet(target.setId, result.item.addressId,
               target.addressId ? target.addressId : target.id, index, result.item.type).subscribe(
-              data => {
-              }
+              data => { this.updateItemsMarkers(target); }
           );
       } else {
           this.resultsService.orderTreeNode(result.item.addressId, index).subscribe(
               data => {
+                  this.updateItemsMarkers(target);
                   this.loadPath(this.selected_set, true);
               }
           );
@@ -447,6 +452,7 @@ export class ResultComponent implements OnInit, OnDestroy {
     this.scheduleResults = null ; // show the skeleton loading.
     this.selected = [];
     this.all_selected = false;
+    this.notFixedCount = [];
     this.scheduleResults = await <any>this.resultsService.getScheduleResults(this.preDispatch, type).catch(e => {});
     this.scheduleResults.forEach((day) => {
         day.sets.forEach((set) => {
@@ -456,6 +462,7 @@ export class ResultComponent implements OnInit, OnDestroy {
             this.selectedPostmen[day.day][set.id] = set.postman ;
         });
     });
+    this.updateItemsMarkers();
     this.loadPostmen();
   }
 
@@ -491,7 +498,6 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   selectDay(item, select = false) {
-      console.log('select', select)
       item.sets.forEach(set => {
           if (select) {
               set.selected = true ;

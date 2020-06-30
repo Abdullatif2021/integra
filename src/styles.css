@@ -340,6 +340,17 @@ a:hover {
     height: 30px !important;
     border: 1px solid #ced4da !important;
 }
+
+.active-filter,  .active-filter > .ng-select-container{
+
+}
+.filters-select-input.filled-filter .autocomplete-container input{
+    background: #FFF58C!important;
+}
+.filters-select-input.active-filter .autocomplete-container input{
+    background: #ccF58C!important;
+
+}
 .autocomplete-container a, .autocomplete-container .x .material-icons {
     font-size: 13px !important;
 }

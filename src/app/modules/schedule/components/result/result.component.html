@@ -5,7 +5,7 @@
       <div class="results-tab-filtering" [ngClass]="{'active': scheduleResultsDisplayedTab === 'not_assigned'}" (click)="changeActiveFilteringTab('not_assigned')">Non assegnati</div>
       <div class="results-tab-filtering" [ngClass]="{'active': scheduleResultsDisplayedTab === 'assigned'}" (click)="changeActiveFilteringTab('assigned')">Assegnati</div>
     </div>
-    <div class="row">
+    <div class="d-flex" *ngIf="scheduleResults">
       <div class="col-2 v-wide-col">
         <div class="mt-auto mb-auto select-container select-all-container" (click)="select(scheduleResults, 'all', $event)">
           <div class="selected" *ngIf="all_selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
@@ -175,7 +175,7 @@
             <div class="col-1 wide-col d-flex">
               <div class="m-auto select-container" (click)="select(child, 'group', $event)">
                 <div class="selected" *ngIf="child.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
-                <div class="ml-1 priority-container" *ngIf="!child.selected "><span *ngIf="!child.fromNotFixed && notFixedCount[i]">{{ i + 1 - notFixedCount[i]}}</span><span *ngIf="!child.fromNotFixed && !notFixedCount[i]">{{ i + 1 }}</span><span *ngIf="child.fromNotFixed;">NA</span></div>
+                <div class="ml-1 priority-container" *ngIf="!child.selected "><span>{{child._marker}}</span></div>
               </div>
             </div>
             <div class="col-4 wide-col pl-3"> <div class="text">{{child.address}}</div> </div>
