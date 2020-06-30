@@ -327,3 +327,28 @@ a:hover {
 .force-scroll {
     height: 20vh;
 }
+
+
+.filters-select-input .autocomplete-container{
+    height: 30px !important;
+    box-shadow: none;
+}
+.filters-select-input .autocomplete-container input{
+    background-color: #f5f5f5 !important;
+    border-radius: 0px !important;
+    font-size: 13px !important;
+    height: 30px !important;
+    border: 1px solid #ced4da !important;
+}
+.autocomplete-container a, .autocomplete-container .x .material-icons {
+    font-size: 13px !important;
+}
+.bg-white {
+    background-color: #FFF;
+}
+
+.auto-complete .ng-arrow-wrapper {
+    display: none !important;
+}
+
+/*.filled-filter*/

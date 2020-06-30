@@ -15,15 +15,35 @@
       <div class="col-12">
         <label>Pre-distinte:</label>
         <!--<ng-select [clearable]="false" *ngIf="bindLabel=='name'" (change)="select($event)" [items]="preDispatches" [bindLabel]="'name'" class="integraa-select"></ng-select>-->
-        <ng-select [clearable]="false" (change)="select($event)" [items]="preDispatches" [bindLabel]="'name_code'" class="integraa-select"></ng-select>
+        <ng-select [clearable]="false" [loading]="searching" (search)="search($event)" (change)="select($event)" [items]="preDispatches" [bindLabel]="'name_code'" class="integraa-select auto-complete"></ng-select>
       </div>
     </div>
 
     <div class="btns-container mt-3">
-      <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">Esegui</button>
+      <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal, products_already_in_use)">Esegui</button>
       <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
       <div class="clear-both"></div>
     </div>
   </div>
 </div>
+</ng-template>
+<ng-template  #products_already_in_use let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <div class="cant-delete-now">
+        Questi prodotti sono stati già usati in un'altra pre-distinta
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 align-self-center">
+          <div class="product-data" *ngFor="let item of products_with_errors">
+            <div class="product-barcode ml-2 d-inline-block">{{ item.barcode }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="btns-container mt-3">
+        <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="modal.close()">Ok</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
 </ng-template>

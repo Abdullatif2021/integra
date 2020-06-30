@@ -32,6 +32,12 @@ export class FiltersService {
     const grouping = filters.grouping;
     this.grouping =  grouping ? grouping : 'by_cap' ;
     this.filters = Object.assign({}, filters) ;
+      // fix filters
+    Object.keys(this.filters).forEach(key => {
+        if (typeof this.filters[key] === 'object' && !Array.isArray(this.filters[key])) {
+            this.filters[key] = this.filters[key].id ;
+        }
+    });
     delete this.filters.grouping ;
     this.filtersChanges.emit(<any>{filters: filters, placeholders: placeholders});
   }

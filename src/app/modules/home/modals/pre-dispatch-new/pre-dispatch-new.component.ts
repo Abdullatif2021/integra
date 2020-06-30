@@ -6,6 +6,7 @@ import {FiltersService} from '../../../../service/filters.service';
 import {PaginationService} from '../../../../service/pagination.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {Subject} from 'rxjs';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-pre-dispatch-new',
@@ -18,7 +19,8 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit, 
       private actionsService: ActionsService,
       public productsService: ProductsService,
       public filtersService: FiltersService,
-      public paginationService: PaginationService
+      public paginationService: PaginationService,
+      private modalService: NgbModal
   ) {
       super();
   }
@@ -30,7 +32,7 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit, 
   filteredProductsCount = 0 ; // the total number of products when a filter is applied.
   confirmed = false ; // the confirmation status, used to check if user had agreed to the warning message.
   unsubscribe: Subject<void> = new Subject(); // used to kill subscriptions.
-
+  products_with_errors = [];
   ngOnInit() {
 
     // get the number of applied filters.
@@ -62,14 +64,20 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit, 
     this.confirmed = true ;
   }
 
-  run(modal) {
+  run(modal, already_in_other_modal_ref) {
     // if name was not entered stop with error 1 (the pre-dispatch name is required).
     if ( !this.name || this.name === '' ) { return this.error = 1; }
     // if new was less than 3 chars stop with error 2 (the pre-dispatch name must be at least 3 chars).
     if ( this.name.length < 3 ) { return this.error = 2; }
 
     // if every thing is ok, create the pre-dispatch
-    this.actionsService.createNewPreDispatch(this.data, this.name) ;
+    this.actionsService.createNewPreDispatch(this.data, this.name, (error) => {
+      if (error && error.statusCode && error.statusCode === 507) {
+          // show the repeated data modal
+          this.products_with_errors = error.data ;
+          this.modalService.open(already_in_other_modal_ref);
+      }
+    }) ;
     modal.close(); // close the modal.
   }
 

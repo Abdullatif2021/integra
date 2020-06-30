@@ -49,6 +49,7 @@ export class ResultComponent implements OnInit, OnDestroy {
 
   selected = [];
   scheduleResults: any;
+  all_selected = false;
   scheduleResultsDisplayedTab = 'not_assigned';
   preDispatch: number;
   preDispatchData: any;
@@ -184,7 +185,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.resultsService.makeDispatchesVisible(this.preDispatch, sets).subscribe(
           data => {
               if (data.success) {
-                  this.snotifyService.success('Pre-distinta è stata creata con successo!',  { showProgressBar: false, timeout: 1500 });
+                  this.snotifyService.success('Distinta è stata creata con successo!',  { showProgressBar: false, timeout: 1500 });
                   this.selected.forEach(item => {
                       if ( item._type === 'set' ) { item.is_distenta_created = true; }
                   });
@@ -444,6 +445,8 @@ export class ResultComponent implements OnInit, OnDestroy {
   async changeActiveFilteringTab(type) {
     this.scheduleResultsDisplayedTab = type ;
     this.scheduleResults = null ; // show the skeleton loading.
+    this.selected = [];
+    this.all_selected = false;
     this.scheduleResults = await <any>this.resultsService.getScheduleResults(this.preDispatch, type).catch(e => {});
     this.scheduleResults.forEach((day) => {
         day.sets.forEach((set) => {
@@ -459,6 +462,19 @@ export class ResultComponent implements OnInit, OnDestroy {
   select(item, type, event) {
       event.preventDefault();
       event.stopPropagation();
+      if (type === 'day') {
+          // select all sets in day
+          item.selected = !item.selected;
+          return this.selectDay(item, item.selected);
+      }
+      if (type === 'all') {
+          this.all_selected = !this.all_selected;
+          this.scheduleResults.forEach(day => {
+              day.selected = this.all_selected;
+              this.selectDay(day, day.selected);
+          });
+          return ;
+      }
       if (type === 'product') {
           this.selectProduct(item);
       }
@@ -466,13 +482,26 @@ export class ResultComponent implements OnInit, OnDestroy {
           return ;
       }
       item.selected = !item.selected ;
-
       item._type = type ;
       if (item.selected) {
           this.selected.push(item);
       } else {
           this.selected = this.selected.filter((elm) => elm.id !== item.id);
       }
+  }
+
+  selectDay(item, select = false) {
+      console.log('select', select)
+      item.sets.forEach(set => {
+          if (select) {
+              set.selected = true ;
+              this.selected = this.selected.filter((elm) => elm.id !== set.id);
+              this.selected.push(set);
+          } else {
+              set.selected = false ;
+              this.selected = this.selected.filter((elm) => elm.id !== set.id);
+          }
+      });
   }
 
   selectProduct(product: any) {
@@ -535,6 +564,9 @@ export class ResultComponent implements OnInit, OnDestroy {
               if (!this.scheduleResults) { return ; }
               this.scheduleResults.forEach(day => {
                   day.sets = day.sets.filter(_set => _set.id !== item.id);
+                  if (!day.sets.length) {
+                      this.scheduleResults = this.scheduleResults.filter(ix => ix.day === day.day);
+                  }
               });
           } else {
               item.parent[item._type === 'group' ? 'children' : 'products'] =

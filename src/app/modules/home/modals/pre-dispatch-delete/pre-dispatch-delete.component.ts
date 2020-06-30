@@ -25,7 +25,7 @@ export class PreDispatchDeleteComponent extends ModalComponent implements OnInit
   items = [] ;
   needsToConfirmPreDispatches = [] ;
   runningPreDispatches = [] ;
-
+  products_with_errors = [];
   ngOnInit() {
 
     if (this.data.deleteItem) {

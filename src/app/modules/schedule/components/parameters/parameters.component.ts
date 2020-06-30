@@ -189,7 +189,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
         return ;
     }
 
-    formatTime(time, key) {
+    formatTime(time, key, copy = null) {
         time = time.split(':');
         time.length < 2 ? time.push('00') : (time.length > 2 ? time = [time[0], time[1]] : time = time);
         time = time.map((v, j) => {
@@ -199,6 +199,9 @@ export class ParametersComponent implements OnInit, OnDestroy {
             return v.length === 1 ? '0' + v : v;
         });
         this.data[key] = time.join(':');
+        if (copy) {
+            this.data[copy] = this.data[key];
+        }
         return this.data[key];
     }
 

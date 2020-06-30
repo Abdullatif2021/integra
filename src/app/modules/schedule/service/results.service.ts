@@ -31,15 +31,15 @@ export class ResultsService implements OnDestroy {
                     const res = [] ;
                     // convert api response to Nodes
                     data.data.forEach((elm) => {
-                        const sets = [] ;
+                        const day = {day: elm.day, sets: []};
                         elm.sets.forEach((set) => {
-                           sets.push({
-                               id: set.id, type: 'set', children: [], parent: null, text: '', postman: set.postman,
+                            day.sets.push({
+                               id: set.id, parent: day, type: 'set', _type: 'set', children: [], text: '', postman: set.postman,
                                quantity: set.quantity, page: 1, expanded: false, setId: set.id, loaded: false, addressId: set.addressId,
                                is_distenta_created: set.is_distenta_created, have_not_fixed_products: set.have_not_fixed_products
                            });
                         });
-                        res.push({day: elm.day, sets: sets});
+                        res.push(day);
                     });
                     resolve(res) ;
                 }, error => { reject(error); }
@@ -129,7 +129,7 @@ export class ResultsService implements OnDestroy {
         });
     }
     makeDispatchesVisible(postmanId, sets) {
-        return this.http.post<any>(AppConfig.endpoints.publishPreDispatchSets(postmanId), {sets: sets});
+        return this.http.post<any>(AppConfig.endpoints.publishPreDispatchSets(postmanId), {sets: sets, all: false});
     }
 
     getSetPath(setId): Observable<TreeNodeResponseInterface> {

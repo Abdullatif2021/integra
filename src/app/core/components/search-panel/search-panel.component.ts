@@ -109,29 +109,31 @@ export class SearchPanelComponent implements OnInit {
   }
 
   changeFiltersValue(event, key, type, idx) {
-    // if filters has action that needs to run on change, run it.
-    if (typeof this.filtersFields[idx].change === 'function') {
-        return this.filtersFields[idx].change(event) ;
-    }
-
-    // remove the active filter
-    delete this._active_filters[key];
-    this._changed_filters[key] = 1;
-
-    if (this.filters[key] && typeof this.filters[key] === 'object' ? !this.filters[key].length : !this.filters[key]) {
-        delete this.filters[key];
-    }
-
-    // changes the filterField value, required in some filters, (the once with remote data loading.).
-    if (typeof this.filtersFields[idx].key === 'string') {
-        this.filtersFields[idx].value = this.filters[key] ;
-    } else {
-        if (!this.filtersFields[idx].value) {
-            this.filtersFields[idx].value = {} ;
+    setTimeout(() => {
+        // if filters has action that needs to run on change, run it.
+        if (typeof this.filtersFields[idx].change === 'function') {
+            return this.filtersFields[idx].change(event) ;
         }
-        this.filtersFields[idx].value[key] = this.filters[key] ;
-    }
 
+        // remove the active filter
+        delete this._active_filters[key];
+        this._changed_filters[key] = 1;
+
+        if (this.filters[key] && typeof this.filters[key] === 'object' ?
+            (Array.isArray(this.filters[key]) ? !this.filters[key].length : false) : !this.filters[key]) {
+            delete this.filters[key];
+        }
+
+        // changes the filterField value, required in some filters, (the once with remote data loading.).
+        if (typeof this.filtersFields[idx].key === 'string') {
+            this.filtersFields[idx].value = this.filters[key] ;
+        } else {
+            if (!this.filtersFields[idx].value) {
+                this.filtersFields[idx].value = {} ;
+            }
+            this.filtersFields[idx].value[key] = this.filters[key] ;
+        }
+    });
   }
 
   filter() {
@@ -141,8 +143,11 @@ export class SearchPanelComponent implements OnInit {
           const recipientCap = this.filters['recipientCap'];
           // find cap name.
           const result = this.filters_data.caps_group.find(item => item.id === recipientCap) ;
-          placeholders['recipientCap'] = result.name;
+          if (result) {
+              placeholders['recipientCap'] = result.name;
+          }
       }
+
       this.filtersService.updateFilters(this.filters, placeholders) ;
       this._active_filters = Object.assign({}, this.filters) ;
       this._changed_filters = {} ;
@@ -186,14 +191,18 @@ export class SearchPanelComponent implements OnInit {
   // }
 
   getFieldRemoteData(event, field) {
-      if (!event.term || event.term === '') {
+      this.auGetFieldRemoteData(event.term, field);
+  }
+
+  auGetFieldRemoteData(term, field) {
+      if (!term || term === '') {
           field.items = field.originalItems ? field.originalItems : [] ;
           this.unsubscribeTo('fieldRemoteData') ;
           field.loadingState = false ;
       } else if (typeof field.getMethod === 'function') {
           this.unsubscribeTo('fieldRemoteData') ;
           field.loadingState = true ;
-          this.subscriptions.fieldRemoteData = field.getMethod(event.term).subscribe((res: ApiResponseInterface) => {
+          this.subscriptions.fieldRemoteData = field.getMethod(term).subscribe((res: ApiResponseInterface) => {
               if (res.status === 'success' || res.success) {
                   field.originalItems = field.items ;
                   field.items = res.data ;

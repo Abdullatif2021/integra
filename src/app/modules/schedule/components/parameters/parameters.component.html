@@ -41,7 +41,7 @@
             <!--<span class="mt-auto mb-auto ml-2 mr-1">Alle : </span><ngx-timepicker-field [(ngModel)]="data.pause_time_end" [format]="24" [controlOnly]="true"></ngx-timepicker-field>-->
             <!--</div>-->
 
-            <span> Delle : </span><input type="text" [(ngModel)]="data.pause_time_start" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'pause_time_start')" >
+            <span> Dalle : </span><input type="text" [(ngModel)]="data.pause_time_start" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'pause_time_start')" >
             <span> Alle : </span><input type="text" [(ngModel)]="data.pause_time_end" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'pause_time_end')" >
           </div>
         </div>
@@ -66,7 +66,7 @@
         <div class="row parameter-item">
           <div class="col-5"> <label>Ore di lavoro al gg.</label> </div>
           <div class="col-7">
-            <input type="text" [(ngModel)]="data.hours_per_day" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'hours_per_day')" >
+            <input type="text" [(ngModel)]="data.hours_per_day_hour" (keyup)="timeChangeFormat($event)" class="parameter-number-input" placeholder="HH:MM" (change)="formatTime($event.target.value, 'hours_per_day_hour', 'hours_per_day')" >
             <!--<input type="text" [(ngModel)]="data.hours_per_day_hour" type="number" min="0" max="24" (change)="validateNumber($event.target.value, 'hours_per_day_hour', 0, 24, 2)" class="parameter-number-input"> Ore.-->
             <!--<input type="text" [(ngModel)]="data.hours_per_day_minute" type="number" min="0" max="60" (change)="validateNumber($event.target.value, 'hours_per_day_minute', 0, 60, 2)" class="parameter-number-input"> Min.-->
           </div>

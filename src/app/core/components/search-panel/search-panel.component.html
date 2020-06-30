@@ -141,6 +141,22 @@
         <ng-select  [(ngModel)]="filters[input.key]" [bindValue]="'id'" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" [loading]="input.loadingState" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
         <ng-select  [(ngModel)]="filters[input.key]" [bindValue]="'id'" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
       </ng-container>
+      <ng-container *ngIf="input.type === 'auto-complete'">
+        <ng-autocomplete
+                class="filters-select-input {{input._class}}"
+                [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}"
+                [(ngModel)]="filters[input.key]"
+                [data]="input.items"
+                [searchKeyword]="input.labelVal"
+                (selected)='changeFiltersValue($event, input.key, input.type, idx)'
+                (inputCleared)='changeFiltersValue(null, input.key, input.type, idx)'
+                (inputChanged)='auGetFieldRemoteData($event,input)'
+                [itemTemplate]="itemTemplate"
+                [notFoundTemplate]="notFoundTemplate"
+                [minQueryLength]="3"
+        >
+        </ng-autocomplete>
+      </ng-container>
       <ng-container *ngIf="input.type === 'tag'">
         <ng-select [(ngModel)]="filters[input.key]" [addTag]="'any'" [multiple]="true" notFoundText="Add Item" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" class="filters-select-input {{input._class}}" [items]="input.items" placeholder="Cerca"></ng-select>
       </ng-container>
@@ -180,4 +196,13 @@
       </div>
     </div>
   </div>
+</ng-template>
+
+
+<ng-template #itemTemplate let-item>
+  <a [innerHTML]="item.name"></a>
+</ng-template>
+
+<ng-template #notFoundTemplate let-notFound>
+  <div class="bg-white" >Nessun risultato</div>
 </ng-template>

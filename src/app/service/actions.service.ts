@@ -40,7 +40,10 @@ export class ActionsService {
                           const _msg = failed(data);
                           body = _msg ? _msg : body ;
                       }
-                      resolve({body: body, config: { showProgressBar: false, timeout: 3000 }});
+                      if (data.statusCode === 507) {
+                          body = 'Questi prodotti sono stati già usati in un\'altra pre-distinta';
+                      }
+                      reject({body: body, config: { showProgressBar: false, timeout: 3000 }});
                   }
               },
               error => {
@@ -57,7 +60,7 @@ export class ActionsService {
       this.snotifyService.async(msg, promise, { showProgressBar: true, timeout: 10000 });
   }
 
-  addToPreDispatch(data, preDispatchId) {
+  addToPreDispatch(data, preDispatchId, failed:any = null) {
 
       const products: any = this.productsService.selectedProducts ;
       let method ;
@@ -76,10 +79,17 @@ export class ActionsService {
       this.run(method, 'Aggiunta in corso', () => {
           setTimeout(() => {this.reloadData.emit(true) ; }, 500 );
           return 'Prodotti aggiunti con successo' ;
-      }, (error) => error.error.message );
+      }, (error) => {
+          if (typeof failed === 'function') {
+              failed(error);
+          }
+          if (error && error.statusCode && error.statusCode === 507) {
+              setTimeout(() => {this.reloadData.emit(true) ; }, 500 );
+          }
+      } );
   }
 
-  createNewPreDispatch(data, name) {
+  createNewPreDispatch(data, name, failed: any = false) {
       const products: any = this.productsService.selectedProducts ;
       let method ;
       if (!data.method || data.method === 'selected' ) {
@@ -100,7 +110,14 @@ export class ActionsService {
               data.finish() ;
           }
           return 'Pre-distinta Creata con successo' ;
-      }, (error) => { console.log(error) ; });
+      }, (error) => {
+          if (typeof failed === 'function') {
+              failed(error);
+          }
+          if (error && error.statusCode && error.statusCode === 507) {
+              setTimeout(() => {this.reloadData.emit(true) ; }, 500 );
+          }
+      });
 
   }
 

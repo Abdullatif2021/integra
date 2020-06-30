@@ -5,6 +5,15 @@
       <div class="results-tab-filtering" [ngClass]="{'active': scheduleResultsDisplayedTab === 'not_assigned'}" (click)="changeActiveFilteringTab('not_assigned')">Non assegnati</div>
       <div class="results-tab-filtering" [ngClass]="{'active': scheduleResultsDisplayedTab === 'assigned'}" (click)="changeActiveFilteringTab('assigned')">Assegnati</div>
     </div>
+    <div class="row">
+      <div class="col-2 v-wide-col">
+        <div class="mt-auto mb-auto select-container select-all-container" (click)="select(scheduleResults, 'all', $event)">
+          <div class="selected" *ngIf="all_selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+          <div class="not-selected" *ngIf="!all_selected"></div>
+        </div>
+      </div>
+      <div class="col-10 v-wide-col"><span class="select-all-label">Toutto</span></div>
+    </div>
     <ng-container *ngIf="scheduleResults; else sKeleTons">
       <ng-container *ngFor="let item of scheduleResults; let idx = index">
         <ng-container [ngTemplateOutlet]="dateItem" [ngTemplateOutletContext]="{idx: idx, item:item, next: idx}"></ng-container>
@@ -32,7 +41,11 @@
           <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
           <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
         </div>
-        <div class="text">{{item.day | date: 'd/m/y'}}</div>
+        <div class="mt-auto mb-auto ml-1 select-container" (click)="select(item, 'day', $event)">
+          <div class="selected" *ngIf="item.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+          <div class="not-selected" *ngIf="!item.selected "><fa-icon [icon]="['fa','check']"></fa-icon></div>
+        </div>
+        <div class="text">{{item.day}}</div>
       </div>
     </div>
     <ng-container *ngIf="item.expanded" >

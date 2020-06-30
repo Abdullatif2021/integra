@@ -23,6 +23,7 @@ import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons/faExternalLin
 import {IntegraaModalComponent} from './components/integraa-modal/integraa-modal.component';
 import {AngularDraggableModule} from 'angular2-draggable';
 import { GlobalModalsComponent } from './components/global-modals/global-modals.component';
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { GlobalModalsComponent } from './components/global-modals/global-modals.
     SharedModule,
     RouterModule,
     AngularDraggableModule,
+    AutocompleteLibModule
   ],
   declarations: [
       UserNavComponent,

@@ -76,14 +76,18 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   }
 
   handleOldSelected(keep_selected) {
-    if (!keep_selected || !this.selectedSave) {return this.selectedSave = null;}
-    console.log(this.selectedSave);
+    if (!keep_selected || !this.selectedSave) { return this.selectedSave = null; }
+    let at_least_one_selected = false ;
     Object.keys(this.selectedSave).forEach((key) => {
       if (this.items.find((i) => i.id === this.selectedSave[key].id)) {
         this.selected[key] = this.selectedSave[key];
         this._all_selected = false;
+        at_least_one_selected = true ;
       }
     });
+    if (!at_least_one_selected) {
+        this.changed.emit({all: this._all_selected, items: Object.keys(this.selected), search: this.searchValue});
+    }
   }
 
   handleResponse(res: ApiResponseInterface) {

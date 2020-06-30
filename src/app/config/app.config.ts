@@ -89,6 +89,7 @@ export const AppConfig = {
         deleteResults: (id) => `${api_url}/api/preDispatch/${id}/deleteResults`,
         getNotFixedItems: (id) => `${api_url}/api/preDispatch/${id}/getNotFixedProduct`,
         moveNotFixesGroupToSet: `${api_url}/api/group/moveToSet`,
+        getCategories: `${api_url}/api/categories`,
     },
 
 };

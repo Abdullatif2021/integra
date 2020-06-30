@@ -269,3 +269,10 @@
     background-color: #ef6963 !important;
     color: #FFF;
 }
+.select-all-container {
+    margin-left: 40px !important;
+}
+.select-all-label {
+    font-size: 12px;
+    margin-top: 3px;
+}
