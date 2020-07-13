@@ -79,7 +79,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
         hours_per_day_hour: '',
         hours_per_day_minute: '',
         max_product: '',
-        with_pre: false
+        resolve_absent_products: false
     };
 
     preDispatch;
@@ -244,7 +244,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
                 data[key] = value ? value['value'] : null ;
             }
         }
-        data['with_pre'] = data['with_pre'] ? 1 : 0;
+        data['resolve_absent_products'] = data['resolve_absent_products'] ? 1 : 0;
         return data ;
     }
 
