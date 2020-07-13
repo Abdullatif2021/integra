@@ -56,7 +56,9 @@ export class SimpleTableComponent implements OnInit, OnChanges {
       return false ;
     }
     this.loading = true ;
-
+    if (keep_selected) {
+        this.selectedSave = Object.assign(this.selected, {});
+    }
     if (!append) { this.items = [] ; this._all_selected = true ; this.selected = {}; }
     if ( this.subscription ) { this.subscription.unsubscribe(); }
 
@@ -78,14 +80,14 @@ export class SimpleTableComponent implements OnInit, OnChanges {
   handleOldSelected(keep_selected) {
     if (!keep_selected || !this.selectedSave) { return this.selectedSave = null; }
     let at_least_one_selected = false ;
-    Object.keys(this.selectedSave).forEach((key) => {
-      if (this.items.find((i) => i.id === this.selectedSave[key].id)) {
+      Object.keys(this.selectedSave).forEach((key) => {
+        if (this.items.find((i) => i.id === this.selectedSave[key].id)) {
         this.selected[key] = this.selectedSave[key];
         this._all_selected = false;
         at_least_one_selected = true ;
       }
     });
-    if (!at_least_one_selected) {
+    if (!at_least_one_selected && Object.keys(this.selectedSave).length) {
         this.changed.emit({all: this._all_selected, items: Object.keys(this.selected), search: this.searchValue});
     }
   }
@@ -168,11 +170,6 @@ export class SimpleTableComponent implements OnInit, OnChanges {
     this.loaded = false ;
     this.loading = true ;
     this.page = 1 ;
-    if (keep_selected) {
-      this.selectedSave = this.selected;
-    }
-    this.selected = {} ;
-    this._all_selected = true ;
     this.loadData(false, keep_selected) ;
   }
 

@@ -69,7 +69,7 @@ export class SearchPanelComponent implements OnInit {
       });
       this.filtersService.cleared.subscribe(() => {
           this._active_filters = this.fieldsData && this.fieldsData.fields &&
-            this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {};;
+            this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {} ;
           this._m_active_action = null ;
           this.active_action = null ;
           this._search = null ;
@@ -164,31 +164,6 @@ export class SearchPanelComponent implements OnInit {
 
       this.filtersService.updateFilters(this.filters) ;
   }
-
-  // groupByChanged(val) {
-  //     this.grouping.active = val.id ;
-  //     let selected = {} ;
-  //     switch (val.id) {
-  //         case 'cap': selected = {
-  //             type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
-  //                 {name: 'Tutto', id: 'all'},
-  //                 {name: 'Conpause_time_start Filtri Applicati', id: 'filters'}
-  //             ], labelVal: 'name', change: (value) => {this.grouping.filters = value.id ; },
-  //             selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'}, unclearbale: true} ; break ;
-  //         case 'client': selected = {
-  //             type: 'ng-select', key: '__quantity_', label: 'Quantita per Client:', items : [
-  //                 {name: 'Tutto', id: 'all'},
-  //                 {name: 'Con Filtri Applicati', id: 'filters'}
-  //             ], labelVal: 'name', change: (value) => {this.grouping.filters = value.id ; },
-  //             selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'}, unclearbale: true} ; break ;
-  //     }
-  //     for (let i = 0; i < this.filtersFields.length ; ++i) {
-  //         if ( this.filtersFields[i].key && this.filtersFields[i].key === '__quantity_') {
-  //             this.filtersFields[i] = selected ;
-  //         }
-  //     }
-  //     this.filtersService.updateGrouping(val);
-  // }
 
   getFieldRemoteData(event, field) {
       this.auGetFieldRemoteData(event.term, field);

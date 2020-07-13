@@ -18,6 +18,8 @@ import { ImportFromBarcodesComponent } from './modals/import-from-barcodes/impor
 import { PreDispatchEditComponent } from './modals/pre-dispatch-edit/pre-dispatch-edit.component';
 import { PreDispatchDeleteComponent } from './modals/pre-dispatch-delete/pre-dispatch-delete.component';
 import { PreDispatchAddDirectComponent } from './modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
+import { PwsisbsConfirmModalComponent } from './modals/pwsisbs-confirm-modal/pwsisbs-confirm-modal.component';
+import { PsbatpdwsiConfirmModalComponent } from './modals/psbatpdwsi-confirm-modal/psbatpdwsi-confirm-modal.component';
 
 @NgModule({
   imports: [
@@ -42,6 +44,8 @@ import { PreDispatchAddDirectComponent } from './modals/pre-dispatch-add-direct/
       PreDispatchEditComponent,
       PreDispatchDeleteComponent,
       PreDispatchAddDirectComponent,
+      PwsisbsConfirmModalComponent,
+      PsbatpdwsiConfirmModalComponent,
   ],
   exports: [
       HomeComponent,
@@ -55,7 +59,9 @@ import { PreDispatchAddDirectComponent } from './modals/pre-dispatch-add-direct/
       PreDispatchMergeComponent,
       ImportFromBarcodesComponent,
       PreDispatchEditComponent,
-      PreDispatchDeleteComponent
+      PreDispatchDeleteComponent,
+      PwsisbsConfirmModalComponent,
+      PsbatpdwsiConfirmModalComponent
   ],
 
 })

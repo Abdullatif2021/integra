@@ -10,3 +10,15 @@
     </div>
   </div>
 </ng-template>
+<ng-template  #confirmPlanningAddProductsModalRed let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <h6 class="text-center">There is products in tab 1 must be added before planning</h6>
+      <div class="btns-container mt-3">
+        <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(true)" class="integraa-btn ml-2 float-right" >Ok</button>
+        <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(false)" class="integraa-btn ml-2 float-right" >Cancel</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

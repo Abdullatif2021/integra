@@ -20,13 +20,16 @@ export class GlobalModalsComponent implements OnInit, OnDestroy {
   ) { }
 
   @ViewChild('confirmPlanningModalRed') planningConfirmModal;
+  @ViewChild('confirmPlanningAddProductsModalRed') planningAddProductsConfirmModal;
   unsubscribe: Subject<void> = new Subject();
 
   ngOnInit() {
       this.preDispatchService.showConfirmPlanningModalCalls.pipe(takeUntil(this.unsubscribe)).subscribe(
           data => { this.modalService.open(this.planningConfirmModal, {backdrop: 'static'}); }
       );
-
+      this.preDispatchService.showConfirmPlanningAddProductsModalCalls.pipe(takeUntil(this.unsubscribe)).subscribe(
+          data => { this.modalService.open(this.planningAddProductsConfirmModal, {backdrop: 'static'}); }
+      );
   }
 
 
@@ -34,6 +37,10 @@ export class GlobalModalsComponent implements OnInit, OnDestroy {
       // window.parent.postMessage({confirmPlanningClicked: action}, '*');
       this.preDispatchService.confirmPlanningModalGotUserResponse.emit(action);
 
+  }
+
+  confirmPlanningAddProductsChosen(action) {
+      this.preDispatchService.confirmPlanningAddProductsModalGotUserResponse.emit(action);
   }
 
   ngOnDestroy() {

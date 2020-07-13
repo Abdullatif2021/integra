@@ -97,10 +97,24 @@ export class ResultComponent implements OnInit, OnDestroy {
                   this.scheduleResultsDisplayedTab === 'not_assigned' && event.id !== null ||
                   (this.scheduleResultsDisplayedTab === 'assigned' && event.id === null)
               ) {
-                  day.sets = day.sets.filter(i => i.id !== set.id);
-                  if (!day.sets || !day.sets.length) {
-                      this.scheduleResults = this.scheduleResults.filter(i => i.day !== day.day);
-                  }
+                  // filter all days according to assigned sets got from the response.
+                  this.scheduleResults.forEach(_day => {
+                      _day.sets = _day.sets.filter(i => data.data.indexOf(i.id) === -1);
+                      if (!_day.sets || !_day.sets.length) {
+                          this.scheduleResults = this.scheduleResults.filter(i => i.day !== _day.day);
+                      }
+                  });
+              } else if (this.scheduleResultsDisplayedTab === 'assigned' && event.id !== null) {
+                  // if the active tab was assigned and the user changed a set postman,
+                  // and server returned that other sets should change too, change the postman on the other sets
+                  this.scheduleResults.forEach(_day => {
+                      _day.sets.forEach(_set => {
+                          if (data.data.indexOf(_set.id) !== -1) {
+                              console.log('index of', _set.id, data.data);
+                              this.selectedPostmen[_day.day][_set.id] = event;
+                          }
+                      });
+                  });
               }
               this.snotifyService.success('Postino assegnato', { showProgressBar: false, timeout: 1500 });
           },

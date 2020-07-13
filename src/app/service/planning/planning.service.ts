@@ -112,8 +112,11 @@ export class PlanningService {
 
     /*** Auto Planning { ***/
 
-    divideToDistenta(preDispatch, checkResult = null) {
+    divideToDistenta(preDispatch, checkResult = null, checkAddProductsResult = null) {
         const data = <any>{confirm: checkResult};
+        if (checkAddProductsResult) {
+            data.productConfirm = checkAddProductsResult;
+        }
         return this.http.post<any>(AppConfig.endpoints.divideToDistenta(preDispatch), data).pipe(
             catchError(this.handleError)
         );
@@ -131,7 +134,7 @@ export class PlanningService {
             return 'Pre-Dispatches was matched';
         }, (error) => {
             errorHandler(error);
-            return 'Something went wring';
+            return 'Something went wrong';
         });
     }
 
@@ -153,14 +156,16 @@ export class PlanningService {
     }
 
     savePath(setId, path) {
-        const options = { path: path ? JSON.stringify(path) : '[]' };
-        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.saveSetPath(setId), options).pipe(
+        const options = { path: path ? JSON.stringify(path) : '[]'};
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.saveSetPath(setId), options,
+            {headers: new HttpHeaders({'ignoreLoadingBar': ''})}).pipe(
             catchError(this.handleError)
         );
     }
     setMapPriority(order) {
         const options = { data: order };
-        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.setMapPriority, options).pipe(
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.setMapPriority, options,
+            {headers: new HttpHeaders({'ignoreLoadingBar': ''})}).pipe(
             catchError(this.handleError)
         );
     }

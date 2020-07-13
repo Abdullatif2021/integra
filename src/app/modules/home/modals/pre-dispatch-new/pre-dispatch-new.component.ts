@@ -7,6 +7,7 @@ import {PaginationService} from '../../../../service/pagination.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 
 @Component({
   selector: 'app-pre-dispatch-new',
@@ -20,7 +21,8 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit, 
       public productsService: ProductsService,
       public filtersService: FiltersService,
       public paginationService: PaginationService,
-      private modalService: NgbModal
+      private modalService: NgbModal,
+      private preDispatchService: PreDispatchService,
   ) {
       super();
   }

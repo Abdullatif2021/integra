@@ -60,7 +60,7 @@ export class ActionsService {
       this.snotifyService.async(msg, promise, { showProgressBar: true, timeout: 10000 });
   }
 
-  addToPreDispatch(data, preDispatchId, failed:any = null) {
+  addToPreDispatch(data, preDispatchId, failed: any = null) {
 
       const products: any = this.productsService.selectedProducts ;
       let method ;
@@ -89,7 +89,7 @@ export class ActionsService {
       } );
   }
 
-  createNewPreDispatch(data, name, failed: any = false) {
+  createNewPreDispatch(data, name, failed: any = false, confirm = false, appendData = []) {
       const products: any = this.productsService.selectedProducts ;
       let method ;
       if (!data.method || data.method === 'selected' ) {
@@ -98,11 +98,14 @@ export class ActionsService {
           }
           const productsIds = [] ;
           products.forEach((elm) => {
-              productsIds.push(elm.id) ;
+              productsIds.push(elm.id);
           });
-          method = this.preDispatchService.createBySelected(name, productsIds);
+          appendData.forEach((elm) => {
+              productsIds.push(elm.id);
+          })
+          method = this.preDispatchService.createBySelected(name, productsIds, confirm);
       } else {
-          method = this.preDispatchService.createByFilters(name) ;
+          method = this.preDispatchService.createByFilters(name, confirm) ;
       }
       this.run(method, 'Creazione Pre-Distinta in corsot', () => {
           setTimeout(() => {this.reloadData.emit(true) ; }, 500 );
@@ -113,6 +116,15 @@ export class ActionsService {
       }, (error) => {
           if (typeof failed === 'function') {
               failed(error);
+          }
+          if (error && error.statusCode && error.statusCode === 508) {
+              this.preDispatchService.showConfirmProductsWithSameInfoShouldBeSelected(
+                  {data: error.data, name: name, defaultData: data}
+              );
+          } else if (error && error.statusCode && error.statusCode === 509) {
+              this.preDispatchService.showConfirmProductsShouldBeAddedToPreDispatchWithSameInfo(
+                  {data: error.data, name: name, defaultData: data}
+              );
           }
           if (error && error.statusCode && error.statusCode === 507) {
               setTimeout(() => {this.reloadData.emit(true) ; }, 500 );

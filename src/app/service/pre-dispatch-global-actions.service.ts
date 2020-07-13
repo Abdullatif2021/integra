@@ -71,13 +71,28 @@ export class PreDispatchGlobalActionsService {
                 this.snotifyService.error('Qualcosa è andato storto, controlla le impostazioni...', {showProgressBar: false, });
                 this.planningErrors.emit('error');
             });
+            let checkResult: any = false
             if (sets.statusCode === 480) {
                 // show confirm modal
-                const checkResult = await this.preDispatchService.showConfirmPlanningModal(preDispatchData.id);
+                checkResult = await this.preDispatchService.showConfirmPlanningModal(preDispatchData.id);
                 sets = await planningService.divideToDistenta(preDispatchData.id, checkResult).toPromise().catch(e => {
                     this.backProcessingService.ultimatePause(preDispatchData.id);
                     this.snotifyService.error('Qualcosa è andato storto, controlla le impostazioni...', {showProgressBar: false, });
                     this.planningErrors.emit('error');
+                });
+            }
+            let checkAddProductsResult: any = false ;
+            if (sets.statusCode === 510) {
+                checkAddProductsResult = await this.preDispatchService.showConfirmPlanningAddProductsModal(preDispatchData.id);
+                if (!checkAddProductsResult) {
+                    this.backProcessingService.ultimatePause(preDispatchData.id);
+                    return this.snotifyService.error('Process Aborted', {showProgressBar: false, });
+                }
+                sets = await planningService.divideToDistenta(preDispatchData.id, checkResult, checkAddProductsResult).toPromise()
+                    .catch(e => {
+                        this.backProcessingService.ultimatePause(preDispatchData.id);
+                        this.snotifyService.error('Qualcosa è andato storto, controlla le impostazioni...', {showProgressBar: false, });
+                        this.planningErrors.emit('error');
                 });
             }
         }

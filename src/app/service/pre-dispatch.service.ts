@@ -24,9 +24,13 @@ export class PreDispatchService {
     canPlanChanges = new EventEmitter<boolean>();
     preDispatchStatusChanges = new EventEmitter();
     resultsMoveToButtonClicked = new EventEmitter();
+    confirmProductsWithSameInfoShouldBeSelected = new EventEmitter();
+    confirmProductsShouldBeAddedToPreDispatchWithSameInfo = new EventEmitter();
     can_plan = false;
     showConfirmPlanningModalCalls = new EventEmitter();
+    showConfirmPlanningAddProductsModalCalls = new EventEmitter();
     confirmPlanningModalGotUserResponse = new EventEmitter();
+    confirmPlanningAddProductsModalGotUserResponse = new EventEmitter();
     // used when an Integraa modal is opened to perform an action on a specific pre-Dispatch {
     private activePredispatch = null ;
     getActivePreDispatch() {
@@ -74,6 +78,14 @@ export class PreDispatchService {
         );
     }
 
+    showConfirmProductsWithSameInfoShouldBeSelected(data) {
+        this.confirmProductsWithSameInfoShouldBeSelected.emit(data);
+    }
+
+    showConfirmProductsShouldBeAddedToPreDispatchWithSameInfo(data) {
+        this.confirmProductsShouldBeAddedToPreDispatchWithSameInfo.emit(data);
+    }
+
     getPlannedPreDispatches(page = 1, pageSize = '50', search = '') {
         const options = { params: new HttpParams() };
         options.params = options.params.set('page', page + '') ;
@@ -109,20 +121,22 @@ export class PreDispatchService {
         );
     }
 
-    createBySelected(name, products) {
+    createBySelected(name, products, confirm = false) {
         const options = {
             name: name,
             product_ids: products,
             byFilter: 0,
+            confirm: confirm,
         }
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.createPreDispatched, options);
     }
 
-    createByFilters(name) {
+    createByFilters(name, confirm) {
         const options = {
             name: name,
             byFilter: 1,
-            filters: this.filtersService.getFiltersObject()
+            filters: this.filtersService.getFiltersObject(),
+            confirm: confirm
         };
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.createPreDispatched, options).pipe(
             catchError(this.handleError)
@@ -199,6 +213,19 @@ export class PreDispatchService {
         this.showConfirmPlanningModalCalls.emit(true);
         return new Promise((resolve, reject) => {
             const subscription = this.confirmPlanningModalGotUserResponse.subscribe(
+                data => {
+                    subscription.unsubscribe();
+                    return resolve(data);
+
+                }
+            );
+        });
+    }
+
+    showConfirmPlanningAddProductsModal(preDispatch, force = false) {
+        this.showConfirmPlanningAddProductsModalCalls.emit(true);
+        return new Promise((resolve, reject) => {
+            const subscription = this.confirmPlanningAddProductsModalGotUserResponse.subscribe(
                 data => {
                     subscription.unsubscribe();
                     return resolve(data);

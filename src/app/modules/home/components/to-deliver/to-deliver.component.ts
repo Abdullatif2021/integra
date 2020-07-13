@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { CitiesService } from '../../../../service/cities.service';
 import { TablesConfig } from '../../../../config/tables.config';
 import {StreetsService} from '../../../../service/streets.service';
@@ -22,6 +22,10 @@ import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {AgenciesService} from '../../../../service/agencies.service';
 import {CustomersService} from '../../../../service/customers.service';
 import {CategoriesService} from '../../../../service/categories.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ModalDirective} from '../../../../shared/directives/modal.directive';
+import {PwsisbsConfirmModalComponent} from '../../modals/pwsisbs-confirm-modal/pwsisbs-confirm-modal.component';
+import {PsbatpdwsiConfirmModalComponent} from '../../modals/psbatpdwsi-confirm-modal/psbatpdwsi-confirm-modal.component';
 
 @Component({
   selector: 'app-to-deliver',
@@ -37,6 +41,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   @ViewChild('CitiesTable') _citiesTable: SimpleTableComponent ;
   @ViewChild('StreetsTable') _streetsTable: SimpleTableComponent ;
   @ViewChild('ProductsTable') _productsTable: TableComponent ;
+  @ViewChild(ModalDirective) modalHost: ModalDirective;
   subscription: any = false ;
   current_cities = {all: true, items: [], search: null} ;
   current_streets = {all: true, items: [], search: null};
@@ -101,7 +106,9 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private preDispatchService: PreDispatchService,
       private agenciesService: AgenciesService,
       private customersService: CustomersService,
-      protected categoriesService: CategoriesService
+      protected categoriesService: CategoriesService,
+      private componentFactoryResolver: ComponentFactoryResolver,
+      private modalService: NgbModal
   ) {
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
@@ -122,6 +129,16 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
               this.preDispatchService.setActivePreDispatch(params['activepredispatch']);
           }
       });
+      this.preDispatchService.confirmProductsWithSameInfoShouldBeSelected.pipe(takeUntil(this.unsubscribe)).subscribe(
+          data => {
+              this.openModal(PwsisbsConfirmModalComponent, data);
+          }
+      );
+      this.preDispatchService.confirmProductsShouldBeAddedToPreDispatchWithSameInfo.pipe(takeUntil(this.unsubscribe)).subscribe(
+          data => {
+              this.openModal(PsbatpdwsiConfirmModalComponent, data);
+          }
+      )
   }
 
   ngOnInit() {
@@ -224,6 +241,17 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
 
   getCategoriesByName(name) {
       return this.categoriesService.getCategoriesByName(name);
+  }
+
+  openModal(modal, data, options = {}) {
+      const componentFactory = this.componentFactoryResolver.resolveComponentFactory(modal);
+      const viewContainerRef = this.modalHost.viewContainerRef ;
+      viewContainerRef.clear() ;
+      const componentRef = viewContainerRef.createComponent(componentFactory);
+      const instance = <any>componentRef.instance ;
+      instance.data = data ;
+      const modalOptions = <any>Object.assign({ windowClass: 'animated slideInDown', backdrop: 'static' }, options);
+      this.modalService.open(instance.modalRef, modalOptions) ;
   }
 
   ngOnDestroy() {
