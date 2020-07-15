@@ -92,6 +92,17 @@ export class ProductsService {
       this.selectAllOnLoadEvent.emit(val);
   }
 
+  // get the pagination of products that should be added on pre-dispatch create
+  getProductByCategory(products_ids, on_create = true, page = 2, per_page = 25) {
+      const options = {
+          products_ids: products_ids,
+          on_create: on_create,
+          page: page,
+          per_page: per_page,
+      }
+      return this.http.post<ApiResponseInterface>(AppConfig.endpoints.getProductByCategory, options);
+  }
+
   handleError(error: HttpErrorResponse) {
       if (error.error instanceof ErrorEvent) {
           console.error('An error occurred:', error.error.message);

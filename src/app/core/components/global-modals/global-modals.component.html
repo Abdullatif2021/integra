@@ -14,6 +14,42 @@
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
       <h6 class="text-center">There is products in tab 1 must be added before planning</h6>
+      <div class="items-display-area">
+        <div class="pagination-area">
+          <div class="next-page pagination-button" [ngClass]="{'disabled': planning_add_products_items.length < 24}" (click)="paginatePlanningAddProducts(1)"> <span><fa-icon [icon]="['fa','caret-right']"></fa-icon></span> </div>
+          <div class="prev-page pagination-button" [ngClass]="{'disabled': planning_add_products_page < 2}" (click)="paginatePlanningAddProducts(-1)"> <span><fa-icon [icon]="['fa','caret-left']"></fa-icon></span> </div>
+          <div class="clear-both"></div>
+        </div>
+        <div class="items-area">
+          <div class="to-add-item header-item">
+            <div class="to-add-item-category">Category</div>
+            <div class="to-add-item-barcode">Barcode</div>
+            <div class="to-add-item-recipient">Recipient</div>
+            <div class="to-add-item-address">Address</div>
+          </div>
+          <div class="to-add-item" *ngFor="let product of planning_add_products_items; let idx = index"  [ngClass]="{'odd-bg':(idx%2),'even-bg':!(idx%2)}">
+            <div class="to-add-item-category">{{product.category}}</div>
+            <div class="to-add-item-barcode">{{product.barcode}}</div>
+            <div class="to-add-item-recipient">{{product.recipient}}</div>
+            <div class="to-add-item-address">{{product.address}}</div>
+          </div>
+
+          <div *ngIf="planning_add_products_loading && !planning_add_products_items.length">
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+          </div>
+        </div>
+      </div>
       <div class="btns-container mt-3">
         <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(true)" class="integraa-btn ml-2 float-right" >Ok</button>
         <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(false)" class="integraa-btn ml-2 float-right" >Cancel</button>

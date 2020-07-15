@@ -160,7 +160,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
               this._streetsTable.clearData();
               this._citiesTable.setSearchValue(filtersData.placeholders.recipientCap);
               this.current_cities = {all: true, items: [], search: filtersData.placeholders.recipientCap};
-          } else if (this._citiesTable.resetIfAuto()){
+          } else if (this._citiesTable.resetIfAuto()) {
               this.current_cities = {all: true, items: [], search: null};
           }
           this.loadProducts(true) ;

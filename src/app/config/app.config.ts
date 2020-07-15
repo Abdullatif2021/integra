@@ -90,6 +90,7 @@ export const AppConfig = {
         getNotFixedItems: (id) => `${api_url}/api/preDispatch/${id}/getNotFixedProduct`,
         moveNotFixesGroupToSet: `${api_url}/api/group/moveToSet`,
         getCategories: `${api_url}/api/categories`,
+        getProductByCategory: `${api_url}/api/getProductByCategory`,
     },
 
 };

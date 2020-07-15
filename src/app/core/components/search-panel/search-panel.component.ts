@@ -140,11 +140,10 @@ export class SearchPanelComponent implements OnInit {
       // filtersData,
       const placeholders = {};
       if (this.filters_data && this.filters_data.caps_group && this.filters.recipientCap) {
-          const recipientCap = this.filters['recipientCap'];
-          // find cap name.
-          const result = this.filters_data.caps_group.find(item => item.id === recipientCap) ;
-          if (result) {
-              placeholders['recipientCap'] = result.name;
+          if (typeof this.filters['recipientCap'] === 'object') {
+              placeholders['recipientCap'] = this.filters['recipientCap'].name;
+          } else {
+              placeholders['recipientCap'] = this.filters['recipientCap'];
           }
       }
 

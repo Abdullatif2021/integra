@@ -20,14 +20,21 @@ import { PreDispatchDeleteComponent } from './modals/pre-dispatch-delete/pre-dis
 import { PreDispatchAddDirectComponent } from './modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
 import { PwsisbsConfirmModalComponent } from './modals/pwsisbs-confirm-modal/pwsisbs-confirm-modal.component';
 import { PsbatpdwsiConfirmModalComponent } from './modals/psbatpdwsi-confirm-modal/psbatpdwsi-confirm-modal.component';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+    faCaretLeft,
+    faCaretRight
+} from '@fortawesome/free-solid-svg-icons';
+import {faBackward} from '@fortawesome/free-solid-svg-icons/faBackward';
 @NgModule({
   imports: [
     CommonModule,
     CoreModule,
     SharedModule,
     HomeRoutingModule,
-    NgSelectModule
+    NgSelectModule,
+    FontAwesomeModule
   ],
   declarations: [
       ToDeliverComponent,
@@ -65,4 +72,9 @@ import { PsbatpdwsiConfirmModalComponent } from './modals/psbatpdwsi-confirm-mod
   ],
 
 })
-export class HomeModule { }
+export class HomeModule {
+    constructor() {
+        library.add(faCaretLeft);
+        library.add(faCaretRight);
+    }
+}

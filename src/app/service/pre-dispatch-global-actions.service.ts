@@ -83,7 +83,7 @@ export class PreDispatchGlobalActionsService {
             }
             let checkAddProductsResult: any = false ;
             if (sets.statusCode === 510) {
-                checkAddProductsResult = await this.preDispatchService.showConfirmPlanningAddProductsModal(preDispatchData.id);
+                checkAddProductsResult = await this.preDispatchService.showConfirmPlanningAddProductsModal(preDispatchData.id, sets.data);
                 if (!checkAddProductsResult) {
                     this.backProcessingService.ultimatePause(preDispatchData.id);
                     return this.snotifyService.error('Process Aborted', {showProgressBar: false, });

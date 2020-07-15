@@ -222,8 +222,8 @@ export class PreDispatchService {
         });
     }
 
-    showConfirmPlanningAddProductsModal(preDispatch, force = false) {
-        this.showConfirmPlanningAddProductsModalCalls.emit(true);
+    showConfirmPlanningAddProductsModal(preDispatch, _data) {
+        this.showConfirmPlanningAddProductsModalCalls.emit(_data);
         return new Promise((resolve, reject) => {
             const subscription = this.confirmPlanningAddProductsModalGotUserResponse.subscribe(
                 data => {

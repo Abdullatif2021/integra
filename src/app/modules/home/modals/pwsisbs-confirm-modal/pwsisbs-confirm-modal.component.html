@@ -4,6 +4,42 @@
       <div class="no-filters-warning-message">
         ATTENZIONE! Products with same street/category should be selected
       </div>
+      <div class="items-display-area">
+        <div class="pagination-area">
+          <div class="next-page pagination-button" [ngClass]="{'disabled': items.length < 24}" (click)="paginate(1)"> <span><fa-icon [icon]="['fa','caret-right']"></fa-icon></span> </div>
+          <div class="prev-page pagination-button" [ngClass]="{'disabled': page < 2}" (click)="paginate(-1)"> <span><fa-icon [icon]="['fa','caret-left']"></fa-icon></span> </div>
+          <div class="clear-both"></div>
+        </div>
+        <div class="items-area">
+          <div class="to-add-item header-item">
+            <div class="to-add-item-category">Category</div>
+            <div class="to-add-item-barcode">Barcode</div>
+            <div class="to-add-item-recipient">Recipient</div>
+            <div class="to-add-item-address">Address</div>
+          </div>
+          <div class="to-add-item" *ngFor="let product of items; let idx = index"  [ngClass]="{'odd-bg':(idx%2),'even-bg':!(idx%2)}">
+            <div class="to-add-item-category">{{product.category}}</div>
+            <div class="to-add-item-barcode">{{product.barcode}}</div>
+            <div class="to-add-item-recipient">{{product.recipient}}</div>
+            <div class="to-add-item-address">{{product.address}}</div>
+          </div>
+
+          <div *ngIf="loading && !items.length">
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+            <div class="rect-loading-skeleton w-100 h-33 mt-1" ></div>
+          </div>
+        </div>
+      </div>
       <div class="btns-container mt-3">
         <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="runContinue(modal)">Continue</button>
         <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
