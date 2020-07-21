@@ -4,6 +4,8 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {SettingsService} from '../settings.service';
 import {LocatedBuildingInterface, BuildingLocationInterface} from '../../core/models/building.interface';
+import {StreetLocationInterface} from '../../core/models/street.location.interface';
+import {LocatedStreetInterface} from '../../core/models/located-street.interface';
 
 @Injectable()
 export class MapBoxGeocodeService {
@@ -37,6 +39,15 @@ export class MapBoxGeocodeService {
 
     }
 
+    sendStreetGeocodeRequest(street: StreetLocationInterface): Observable<MapBoxGeocodeResponceInterface> {
+        const options = { params: new HttpParams(),  headers: new HttpHeaders({'ignoreLoadingBar': ''})};
+        const address = `${street.address}, 1`;
+        options.params = options.params.set('address', address);
+        options.params = options.params.set('access_token', this.keys[0].name) ;
+        return this.http.get<MapBoxGeocodeResponceInterface>
+        (`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json`, options);
+    }
+
     locate(building: BuildingLocationInterface): Promise<LocatedBuildingInterface> {
         return new Promise<LocatedBuildingInterface>(async (resolve) => {
             if (this.invalid_keys_alerted) { return resolve(null); }
@@ -67,6 +78,36 @@ export class MapBoxGeocodeService {
                 long: res.center[1],
                 is_fixed: true,
                 name: res.place_name.split(',')[0],
+            });
+
+        });
+    }
+
+    locateStreet(street: StreetLocationInterface): Promise<LocatedStreetInterface> {
+        return new Promise<LocatedStreetInterface>(async (resolve) => {
+            if (this.invalid_keys_alerted) { return resolve(null); }
+            if (!this.keys) { await this.loadKeys(); }
+            const mRes = await this.sendStreetGeocodeRequest(street).toPromise().catch((e) => {
+                if (e.statusText === 'Unauthorized' && !this.invalid_keys_alerted) {
+                    alert('MapBox Keys are invalid, this provider will be ignored') ;
+                    this.invalid_keys_alerted = true ;
+                    resolve(null);
+                }
+            });
+            if (!mRes || !mRes.features.length) {
+                return resolve(null) ;
+            }
+
+            const res = mRes[0];
+            if (!res) {
+                return resolve(null);
+            }
+            return resolve({
+                id: street.id,
+                lat: res.center[0],
+                long: res.center[1],
+                isFixed: true,
+                fixedName: res.place_name.split(',')[0],
             });
 
         });

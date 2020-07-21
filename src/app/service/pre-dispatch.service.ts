@@ -27,8 +27,8 @@ export class PreDispatchService {
     confirmProductsWithSameInfoShouldBeSelected = new EventEmitter();
     confirmProductsShouldBeAddedToPreDispatchWithSameInfo = new EventEmitter();
     can_plan = false;
-    showConfirmPlanningModalCalls = new EventEmitter();
-    showConfirmPlanningAddProductsModalCalls = new EventEmitter();
+    showConfirmPlanningModalCalls = new EventEmitter<any>();
+    showConfirmPlanningAddProductsModalCalls = new EventEmitter<any>();
     confirmPlanningModalGotUserResponse = new EventEmitter();
     confirmPlanningAddProductsModalGotUserResponse = new EventEmitter();
     // used when an Integraa modal is opened to perform an action on a specific pre-Dispatch {

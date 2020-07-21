@@ -26,6 +26,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../../shared/directives/modal.directive';
 import {PwsisbsConfirmModalComponent} from '../../modals/pwsisbs-confirm-modal/pwsisbs-confirm-modal.component';
 import {PsbatpdwsiConfirmModalComponent} from '../../modals/psbatpdwsi-confirm-modal/psbatpdwsi-confirm-modal.component';
+import {StreetsLocatingService} from '../../../../service/locating/streets-locating.service';
 
 @Component({
   selector: 'app-to-deliver',
@@ -108,7 +109,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private customersService: CustomersService,
       protected categoriesService: CategoriesService,
       private componentFactoryResolver: ComponentFactoryResolver,
-      private modalService: NgbModal
+      private modalService: NgbModal,
   ) {
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
@@ -138,7 +139,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
           data => {
               this.openModal(PsbatpdwsiConfirmModalComponent, data);
           }
-      )
+      );
   }
 
   ngOnInit() {

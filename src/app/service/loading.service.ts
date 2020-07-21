@@ -74,7 +74,7 @@ export class LoadingService implements OnDestroy{
       );
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
       this.unsubscribe.next();
       this.unsubscribe.complete();
   }

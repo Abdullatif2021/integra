@@ -1,9 +1,9 @@
 // not used for now
 export interface LocatedStreetInterface {
-    name: string;
+    fixedName: string;
     lat: number;
     long: number;
     id: number;
-    cap_id: number;
-    city_id: number;
+    isFixed: boolean;
+    original_address?: string;
 }

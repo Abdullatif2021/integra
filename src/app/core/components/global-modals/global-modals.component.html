@@ -13,7 +13,9 @@
 <ng-template  #confirmPlanningAddProductsModalRed let-modal>
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
-      <h6 class="text-center">There is products in tab 1 must be added before planning</h6>
+      <h6 class="text-center">
+        Ci sono {{planning_add_products_data.count ? planning_add_products_data.count : 'Null'}} prodotti nella lista da consegnare della stessa categoria e stessa strada che non sono aggiunti, i prodotti saranno aggiunti automaticamente prima di creare le
+      </h6>
       <div class="items-display-area">
         <div class="pagination-area">
           <div class="next-page pagination-button" [ngClass]="{'disabled': planning_add_products_items.length < 24}" (click)="paginatePlanningAddProducts(1)"> <span><fa-icon [icon]="['fa','caret-right']"></fa-icon></span> </div>
@@ -51,8 +53,8 @@
         </div>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(true)" class="integraa-btn ml-2 float-right" >Ok</button>
-        <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(false)" class="integraa-btn ml-2 float-right" >Cancel</button>
+        <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(true)" class="integraa-btn ml-2 float-right" >Continua</button>
+        <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(false)" class="integraa-btn ml-2 float-right" >Annulla</button>
         <div class="clear-both"></div>
       </div>
     </div>

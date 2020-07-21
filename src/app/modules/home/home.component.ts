@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {PreDispatchAddDirectComponent} from './modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
+import {StreetsLocatingService} from '../../service/locating/streets-locating.service';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,7 @@ export class HomeComponent implements OnInit {
   constructor(
       private router: Router,
       private activatedRoute: ActivatedRoute,
+      private streetsLocatingService: StreetsLocatingService
   ) { }
 
   active_tab = 'to-deliver';
@@ -28,11 +30,13 @@ export class HomeComponent implements OnInit {
           this.active_tab = this.router.url.substr(1);
       } else { this.active_tab = 'to-deliver' ; }
     });
-      this.activatedRoute.queryParams.subscribe(params => {
-          if (typeof params['actionsonly'] !== 'undefined') {
-              this.actions_only = true ;
-          }
-      });
+    this.activatedRoute.queryParams.subscribe(params => {
+        if (typeof params['actionsonly'] !== 'undefined') {
+            this.actions_only = true ;
+        }
+    });
+    setTimeout(() => { this.streetsLocatingService.startLocating(); }, 3000);
+
   }
 
 }

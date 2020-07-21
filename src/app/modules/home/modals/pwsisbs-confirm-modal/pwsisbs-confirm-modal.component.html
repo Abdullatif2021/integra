@@ -2,7 +2,7 @@
   <div class="modal-container">
     <div class="modal-body">
       <div class="no-filters-warning-message">
-        ATTENZIONE! Products with same street/category should be selected
+        Ci sono {{data.data.count ? data.data.count : 'Null'}} prodotti nella lista da consegnare della stessa categoria e stessa strada che non sono aggiunti, i prodotti saranno aggiunti automaticamente.
       </div>
       <div class="items-display-area">
         <div class="pagination-area">
@@ -41,8 +41,8 @@
         </div>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="runContinue(modal)">Continue</button>
-        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
+        <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="runContinue(modal)">Continua</button>
+        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Annulla</button>
         <div class="clear-both"></div>
       </div>
     </div>

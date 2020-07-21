@@ -4,6 +4,8 @@ import {Observable} from 'rxjs';
 import {LocatedBuildingInterface, BuildingLocationInterface, FormattedAddress } from '../../core/models/building.interface';
 import {GoogleGeocodeResponseInterface} from '../../core/models/google-geocode-responce.interface';
 import {SettingsService} from '../settings.service';
+import {LocatedStreetInterface} from '../../core/models/located-street.interface';
+import {StreetLocationInterface} from '../../core/models/street.location.interface';
 
 @Injectable()
 export class GoogleGeocodeService {
@@ -34,6 +36,13 @@ export class GoogleGeocodeService {
         return this.http.get<GoogleGeocodeResponseInterface>('https://maps.googleapis.com/maps/api/geocode/json', options);
     }
 
+    sendStreetGeocodeRequest(street: StreetLocationInterface): Observable<GoogleGeocodeResponseInterface> {
+        const options = { params: new HttpParams(),  headers: new HttpHeaders({'ignoreLoadingBar': ''})};
+        options.params = options.params.set('address', `${street.address}, 1`) ;
+        options.params = options.params.set('key', this.keys[0].name) ;
+        return this.http.get<GoogleGeocodeResponseInterface>('https://maps.googleapis.com/maps/api/geocode/json', options);
+    }
+
     locate(building: BuildingLocationInterface): Promise<LocatedBuildingInterface> {
         return new Promise<LocatedBuildingInterface>(async (resolve) => {
             if (this.invalid_keys_alerted) { return resolve(null); }
@@ -57,7 +66,7 @@ export class GoogleGeocodeService {
                     }
                 }
             }
-            if (!_b) {return resolve(null);}
+            if (!_b) { return resolve(null); }
             const address = this.getAddressObject(gRes) ;
             return resolve({
                 id: building.id,
@@ -81,7 +90,7 @@ export class GoogleGeocodeService {
           country: '',
         };
 
-        if (!address.results[0].address_components){
+        if (!address.results[0].address_components) {
             return formattedAddress;
         }
 
@@ -109,5 +118,31 @@ export class GoogleGeocodeService {
         }
     }
 
-
+    locateStreet(street) {
+        return new Promise<LocatedStreetInterface>(async (resolve) => {
+            if (this.invalid_keys_alerted) { return resolve(null); }
+            if (!this.keys) { await this.loadKeys(); }
+            const gRes = <GoogleGeocodeResponseInterface> await this.sendStreetGeocodeRequest(street).toPromise().catch((e) => {
+                if (e.statusText === 'Unauthorized') { this.handleExpiredToken(); }
+            });
+            if (!gRes || gRes.status !== 'OK') {
+                if (gRes.status === 'REQUEST_DENIED') {
+                    this.handleExpiredToken();
+                }
+                return resolve(null) ;
+            }
+            const address = this.getAddressObject(gRes) ;
+            if (!address.street) {
+                return resolve(null);
+            }
+            return resolve({
+                id: street.id,
+                original_address: street.address,
+                lat: gRes.results[0].geometry.location.lat,
+                long: gRes.results[0].geometry.location.lng,
+                isFixed: true,
+                fixedName: address.street,
+            });
+        });
+    }
 }

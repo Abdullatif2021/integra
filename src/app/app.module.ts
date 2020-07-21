@@ -18,6 +18,7 @@ import {PlanningService} from './service/planning/planning.service';
 import {GoogleDirectionsService} from './service/planning/google-directions.service';
 import {AgenciesService} from './service/agencies.service';
 import {CustomersService} from './service/customers.service';
+import {StreetsLocatingService} from './service/locating/streets-locating.service';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import {CustomersService} from './service/customers.service';
       LocatingService,
       PlanningService,
       GoogleDirectionsService,
+      StreetsLocatingService
   ],
   bootstrap: [AppComponent]
 })

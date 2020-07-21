@@ -91,6 +91,8 @@ export const AppConfig = {
         moveNotFixesGroupToSet: `${api_url}/api/group/moveToSet`,
         getCategories: `${api_url}/api/categories`,
         getProductByCategory: `${api_url}/api/getProductByCategory`,
+        getStreetToLocalize: `${api_url}/api/getStreetToLocalize`,
+        saveLocalizedStreets: `${api_url}/api/localizeStreets`,
     },
 
 };
