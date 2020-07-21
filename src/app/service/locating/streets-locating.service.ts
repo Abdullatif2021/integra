@@ -32,7 +32,7 @@ export class StreetsLocatingService {
         if (!streets) {
             return ;
         }
-        this.snotifyService.info('Some streets are being located!', { showProgressBar: false});
+        this.snotifyService.info('Some streets are being localized!', { showProgressBar: false});
         this.running = true ;
         while (streets) {
             const located = [];
