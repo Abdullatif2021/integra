@@ -25,11 +25,10 @@ export class StreetsLocatingService {
 
     async startLocating() {
         if (this.running) {
-            console.log('running');
             return ;
         }
         let streets = await this.getStreets().toPromise().catch(e => {});
-        if (!streets) {
+        if (!streets || !streets.length) {
             return ;
         }
         this.snotifyService.info('Some streets are being localized!', { showProgressBar: false});
