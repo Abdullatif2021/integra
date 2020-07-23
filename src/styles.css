@@ -357,6 +357,14 @@ a:hover {
 .autocomplete-container .suggestions-container ul li a {
     padding: 10px 15px !important;
 }
+.autocomplete-container .suggestions-container {
+    z-index: 999;
+}
+.autocomplete-container .not-found {
+    z-index: 99;
+    position: absolute;
+    width: 100%;
+}
 .bg-white {
     background-color: #FFF;
 }

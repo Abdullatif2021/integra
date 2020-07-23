@@ -48,7 +48,7 @@ export class StreetsLocatingService {
                     located.push(result);
                 } else {
                     // add the street as a none located item.
-                    located.push({ id: streets[i],  isFixed: false});
+                    located.push({ id: streets[i].id,  isFixed: false});
                 }
             }
             streets = null;
