@@ -34,7 +34,7 @@ export class StreetsLocatingService {
         }
         this.snotifyService.info('Some streets are being localized!', { showProgressBar: false});
         this.running = true ;
-        while (streets) {
+        while (streets && streets.length) {
             const located = [];
             const not_located = [] ;
             // loop through all of the streets and locate them
