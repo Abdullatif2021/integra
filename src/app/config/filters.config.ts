@@ -47,6 +47,9 @@ export const FilterConfig = {
             {type: 'ng-select', label: 'Raggruppamento quantita:', labelVal: 'name', key: 'grouping',
                 items: [{name: 'Quantità per CAP', id: 'by_cap'}, {name: 'Quantità per Cliente', id: 'by_client'}], unclearbale: true,
                 selectedAttribute: {name: 'Quantità per CAP', id: 'by_cap'}},
+            {type: 'ng-select', label: 'Street Localization:', labelVal: 'name', key: 'fixed',
+                items: [{name: 'Tutti', id: 'null'}, {name: 'Localizzati', id: '1'}, {name: 'Non localizzati', id: '0'}], unclearbale: true,
+                selectedAttribute: {name: 'Tutti', id: 'null'}},
             // {type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
             //         {name: 'Tutto', id: 'all'}, {name: 'Con Filtri Applicati', id: 'filters'} ], labelVal: 'name',
             //     selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'},
@@ -58,7 +61,7 @@ export const FilterConfig = {
             {type: ['date', 'date'], label: 'Data Accettazione:', group: true, key: ['fromAcceptanceDate', 'toAcceptanceDate']},
         ],
         grouping: false,
-        default_filters: {'grouping': 'by_cap'}
+        default_filters: {'grouping': 'by_cap', 'fixed': 'null'}
     },
     pre_dispatch: {
         search: (container, sp) => [

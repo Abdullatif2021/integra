@@ -16,7 +16,7 @@
   </ng-container>
   <ng-template #actualItem >
     <div class="drop-area not-used">
-      <div [contextMenu]="contextMenu" [ngClass]="{'odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
+      <div [contextMenu]="contextMenu" [ngClass]="{'important-odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
         <div class="item-row">
           <div class="more" *ngIf="!item._end" (click)="listNode(item)">
             <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>

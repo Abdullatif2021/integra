@@ -62,6 +62,19 @@ export class StreetsLocatingService {
         return this.http.get<any>(AppConfig.endpoints.getStreetToLocalize, options).pipe(map(response => response.data));
     }
 
+    relocate(street) {
+        return new Promise<any>(async (resolve, reject) => {
+            let result = null ;
+            const address = `${street.city}, ${street.cap}, ${street.name}`;
+            if (result = await this.googleGeocodeService.locateStreet({id: street.id, address: address})) {
+            } else if (result = await this.tuttocittaGeocodeService.locateStreet({id: street.id, address: address})) {
+            } else if (result = await this.mapBoxGeocodeService.locateStreet({id: street.id, address: address})) {}
+
+            if (!result) { return reject(null); }
+            const save = await this.save([result]).toPromise().catch(e => {console.log('error fetching streets')});
+            return resolve(result);
+        });
+    }
 
     save(located) {
         const data = { streets: located };

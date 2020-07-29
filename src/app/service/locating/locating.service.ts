@@ -291,6 +291,7 @@ export class LocatingService implements OnDestroy {
             return _resolve(true);
         });
     }
+
     sleep(time) {
         return new Promise<any>((_resolve) => {
             setTimeout(() => { _resolve(true); }, time);

@@ -26,6 +26,12 @@ export const TablesConfig = {
             order: '1',
             text: 'name',
             all_label: 'Tutte',
+            actions: [
+                {action: 'rename', label: 'Change Name', hide: (item) => item.is_fixed}
+            ],
+            styles: {
+                'background-color': (item) => item.is_fixed ? null : '#ff000066'
+            }
         },
         // postmen table structure
         postmenTable: {

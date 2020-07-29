@@ -5,6 +5,8 @@ import {catchError} from 'rxjs/operators';
 import {AppConfig} from '../config/app.config';
 import {Observable, throwError} from 'rxjs';
 import {FiltersService} from './filters.service';
+import {LocatingService} from './locating/locating.service';
+import {StreetsLocatingService} from './locating/streets-locating.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,7 @@ export class StreetsService {
     constructor(
         private http: HttpClient,
         private filtersService: FiltersService,
+        private streetsLocatingService: StreetsLocatingService
         ) { }
 
     getStreets(page, rpp, name, cities, order) {
@@ -53,6 +56,20 @@ export class StreetsService {
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getStreet, options).pipe(
             catchError(this.handleError)
         );
+    }
+
+    renameStreet(street, newName) {
+        return new Promise(async(resolve, reject) => {
+            const oldName = street.name ;
+            street.name = newName ;
+            const result = await this.streetsLocatingService.relocate(street).catch(e => {});
+            if (!result) {
+                street.name = oldName ;
+                return reject({body: 'Street was not found!'});
+            }
+            street.name = result.fixedName;
+            return resolve({body: 'Street was localized Successfully'});
+        });
     }
 
     handleError(error: HttpErrorResponse) {

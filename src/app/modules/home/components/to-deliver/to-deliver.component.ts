@@ -27,6 +27,7 @@ import {ModalDirective} from '../../../../shared/directives/modal.directive';
 import {PwsisbsConfirmModalComponent} from '../../modals/pwsisbs-confirm-modal/pwsisbs-confirm-modal.component';
 import {PsbatpdwsiConfirmModalComponent} from '../../modals/psbatpdwsi-confirm-modal/psbatpdwsi-confirm-modal.component';
 import {StreetsLocatingService} from '../../../../service/locating/streets-locating.service';
+import {SnotifyService} from 'ng-snotify';
 
 @Component({
   selector: 'app-to-deliver',
@@ -110,6 +111,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       protected categoriesService: CategoriesService,
       private componentFactoryResolver: ComponentFactoryResolver,
       private modalService: NgbModal,
+      private snotifyService: SnotifyService
   ) {
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
@@ -253,6 +255,14 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       instance.data = data ;
       const modalOptions = <any>Object.assign({ windowClass: 'animated slideInDown', backdrop: 'static' }, options);
       this.modalService.open(instance.modalRef, modalOptions) ;
+  }
+
+  handleStreetsAction(event) {
+      if (event.action.action === 'rename') {
+          const promise = this.streetsService.renameStreet(event.item, event.inputValue);
+          this.snotifyService.async('Relocating', promise, { showProgressBar: true, timeout: 3000 });
+          return ;
+      }
   }
 
   ngOnDestroy() {
