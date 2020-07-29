@@ -32,8 +32,8 @@ export class SettingsService {
             const mapBoxProvider = data.find((elm) => elm.name === 'Mapbox') ;
             const googleProvider = data.find((elm) => elm.name === 'Google maps') ;
             this.providersKeys = {
-                google_maps: provider ? googleProvider.provider_keys : [],
-                mapbox: provider ? mapBoxProvider.provider_keys : []
+                google_maps: googleProvider ? googleProvider.provider_keys : [],
+                mapbox: mapBoxProvider ? mapBoxProvider.provider_keys : []
             }
 
             return resolve(typeof this.providersKeys[provider] !== 'undefined' ? this.providersKeys[provider] : []);

@@ -10,7 +10,7 @@ import {
     faChevronRight,
     faChevronUp, faForward,
     faMinus,
-    faSearch
+    faSearch, faSortDown
 } from '@fortawesome/free-solid-svg-icons';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
@@ -80,6 +80,7 @@ export class SharedModule {
         library.add(faBackward);
         library.add(faForward);
         library.add(faCaretRight);
+        library.add(faSortDown);
     }
 
 }

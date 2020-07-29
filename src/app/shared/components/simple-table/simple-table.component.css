@@ -27,6 +27,7 @@
 .item-name{
     width: 40%;
     flex: 1;
+    word-break: break-all;
 }
 .table-body{
     padding: 0px 5px;
@@ -115,4 +116,17 @@
 
 .custom.active-item {
     background-color: #feda44 !important;
+}
+.actions-dropdown {
+    margin-left: 5px;
+    font-size: 15px;
+    cursor: pointer;
+}
+.actions-dropdown-menu {
+    z-index: 9;
+}
+.rename-input {
+    width: 90%;
+    border: 0px;
+    padding: 2px;
 }

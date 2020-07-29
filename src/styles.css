@@ -71,11 +71,15 @@ body{
     display: block;
 }
 
-.odd-bg{
-    background-color: #f1f1f1 !important;
-}
+
 .even-bg{
-    background-color: #dfdfdf !important;
+    background-color: #dfdfdf;
+}
+.odd-bg{
+    background-color: #f1f1f1;
+}
+.important-odd-bg{
+    background-color: #f1f1f1 !important;
 }
 .clear-both{
     clear: both;
@@ -111,9 +115,11 @@ body{
 /*  TODO change this styling system */
 .small-table{
     flex: 0 0 18%;
+    max-width: 18%;
 }
 .large-table{
     flex: 0 0 64%;
+    max-width: 64%;
 }
 .full-width-table{
     flex: 0 0 100%;
@@ -374,3 +380,6 @@ a:hover {
 }
 
 /*.filled-filter*/
+.small-text-dropdown-item {
+    font-size: 13px;
+}

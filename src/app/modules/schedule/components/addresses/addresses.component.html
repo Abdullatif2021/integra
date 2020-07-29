@@ -84,7 +84,7 @@
     <ng-container *ngIf="draggable" >
       <div (dndStart)="onDragStart($event, item)" [ngClass]="{'cursor-grab': isMovable(item)}" [dndEffectAllowed]="'move'" [dndDraggable]="{next: next, id: item.id}" [dndDisableIf]="!isMovable(item)" (dndEnd)="onDragEnd($event)">
         <div dndDropzone class="drop-area" (dndDrop)="onDrop($event, item)" [ngClass]="{'drop-location': isDropLocation(item), 'cant-drop-location': isNonDropLocation(item)}">
-          <div [contextMenu]="contextMenu" [ngClass]="{'odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
+          <div [contextMenu]="contextMenu" [ngClass]="{'important-odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
             <div class="item-row">
               <div dndHandle class="drag-handle">☰</div>
               <div class="more" *ngIf="!item._end" (click)="listNode(item, next)">
