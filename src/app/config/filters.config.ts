@@ -47,8 +47,8 @@ export const FilterConfig = {
             {type: 'ng-select', label: 'Raggruppamento quantita:', labelVal: 'name', key: 'grouping',
                 items: [{name: 'Quantità per CAP', id: 'by_cap'}, {name: 'Quantità per Cliente', id: 'by_client'}], unclearbale: true,
                 selectedAttribute: {name: 'Quantità per CAP', id: 'by_cap'}},
-            {type: 'ng-select', label: 'Street Localization:', labelVal: 'name', key: 'fixed',
-                items: [{name: 'Tutti', id: 'null'}, {name: 'Localizzati', id: '1'}, {name: 'Non localizzati', id: '0'}], unclearbale: true,
+            {type: 'ng-select', label: 'Localizzazione strada:', labelVal: 'name', key: 'fixed',
+                items: [{name: 'Tutti', id: 'null'}, {name: 'Localizzato', id: '1'}, {name: 'Non localizzato', id: '0'}], unclearbale: true,
                 selectedAttribute: {name: 'Tutti', id: 'null'}},
             // {type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
             //         {name: 'Tutto', id: 'all'}, {name: 'Con Filtri Applicati', id: 'filters'} ], labelVal: 'name',

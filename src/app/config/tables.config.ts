@@ -27,7 +27,7 @@ export const TablesConfig = {
             text: 'name',
             all_label: 'Tutte',
             actions: [
-                {action: 'rename', label: 'Change Name', hide: (item) => item.is_fixed}
+                {action: 'rename', label: 'Cambia nome', hide: (item) => item.is_fixed}
             ],
             styles: {
                 'background-color': (item, idx) => item.is_fixed ? null : (idx % 2 ? '#ff00008f' : '#ff000066')

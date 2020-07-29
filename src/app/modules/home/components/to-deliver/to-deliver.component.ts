@@ -260,11 +260,11 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   handleStreetsAction(event) {
       if (event.action.action === 'rename') {
           if (event.inputValue.length < 2 ) {
-              this.snotifyService.warning('Street name is too short', { showProgressBar: false, timeout: 2000 });
+              this.snotifyService.warning('Il nuovo nome è molto corto', { showProgressBar: false, timeout: 2000 });
               return ;
           }
           const promise = this.streetsService.renameStreet(event.item, event.inputValue);
-          this.snotifyService.async('Relocating', promise, { showProgressBar: true, timeout: 4000 });
+          this.snotifyService.async('Re-localizza', promise, { showProgressBar: true, timeout: 4000 });
           return ;
       }
   }

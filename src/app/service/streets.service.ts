@@ -65,10 +65,10 @@ export class StreetsService {
             const result = await this.streetsLocatingService.relocate(street).catch(e => {});
             if (!result) {
                 street.name = oldName ;
-                return reject({body: 'Street was not found!'});
+                return reject({body: 'Strada non è stata trovata!'});
             }
             street.name = result.fixedName;
-            return resolve({body: 'Street was localized Successfully'});
+            return resolve({body: 'Strada localizzata con successo'});
         });
     }
 
