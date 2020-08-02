@@ -80,7 +80,7 @@
             <!-- print table items -->
             <ng-container *ngFor="let item of items; let idx = index; trackBy: trackItems">
                 <!-- row item {  -->
-                <tr #tableRow class="table-item" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx, 'selected-row':isSelectedRow(item)}">
+                <tr #tableRow class="table-item" (click)="selectItem(item)" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx, 'selected-row':isSelectedRow(item)}">
                     <!-- select row item <static item > {  -->
                     <td class="table-item-cell select-cell" [ngStyle]="{width: '1%'}">
                         <div class="select-row rounded-circle" (click)="selectItem(item)">
@@ -161,28 +161,28 @@
 <!-- TODO complete this thing -->
 <!--  Actions templates { -->
 <ng-template #view let-action="action" let-item="item">
-    <div class="action-icon-container"><img (click)="action.click && action.click(item, parent)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="Visualizza"></div>
+    <div class="action-icon-container"><img (click)="$event.stopPropagation(); action.click && action.click(item, parent)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="Visualizza"></div>
 </ng-template>
 <ng-template #book><div class="action-icon-container"><img src="assets/images/notepad.svg" class="action-icon"></div></ng-template>
 <ng-template #print><div class="action-icon-container"><img src="assets/images/printer.svg" class="action-icon" placement="bottom" ngbTooltip="Stampa"></div></ng-template>
-<ng-template #excel_export let-action="action" let-item="item"><div class="action-icon-container"><img (click)="action.click && action.click(item, parent)" src="assets/images/excel.svg" class="action-icon" placement="bottom" ngbTooltip="Esporta"></div></ng-template>
-<ng-template #edit let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/edit.svg" (click)="action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="Modifica"></div></ng-template>
+<ng-template #excel_export let-action="action" let-item="item"><div class="action-icon-container"><img (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/excel.svg" class="action-icon" placement="bottom" ngbTooltip="Esporta"></div></ng-template>
+<ng-template #edit let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/edit.svg" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="Modifica"></div></ng-template>
 <ng-template #pPlay let-action="action" let-item="item">
-    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/play.svg" placement="bottom" ngbTooltip="Riprendi" class="action-icon play-pause-icon"></div>
+    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/play.svg" placement="bottom" ngbTooltip="Riprendi" class="action-icon play-pause-icon"></div>
 </ng-template>
 <ng-template #pPause let-action="action" let-item="item">
-    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/pause.svg" placement="bottom" ngbTooltip="Pausa" class="action-icon play-pause-icon"></div>
+    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/pause.svg" placement="bottom" ngbTooltip="Pausa" class="action-icon play-pause-icon"></div>
 </ng-template>
 <ng-template #pDelete let-action="action" let-item="item">
-    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="action.click && action.click(item, parent)" src="assets/images/delete.x.png" placement="bottom" ngbTooltip="Elimina" class="action-icon"></div>
+    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/delete.x.png" placement="bottom" ngbTooltip="Elimina" class="action-icon"></div>
 </ng-template>
 <ng-template #progress let-action="action" let-item="item">
     <div class="action-icon-container"><div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': itemsProgressWarning[item.id]}" [ngStyle]="{width:item[action.field]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz {{action.status ? action.status(item) : ''}}">{{item[action.field]}} %</div></div></div>
 </ng-template>
 <ng-template #more let-item="item" let-action="action">
     <div class="action-icon-container"><span class="collapse-arrow action-icon">
-        <fa-icon *ngIf="!isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id];" [icon]="['fa','chevron-right']" placement="bottom" tooltipClass="show-more-tooltip" ngbTooltip="Di Più"></fa-icon>
-        <fa-icon *ngIf="isCollapsed[item.id]" (click)="isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-up']"  placement="bottom" tooltipClass="show-more-tooltip" ngbTooltip="Di meno"></fa-icon>
+        <fa-icon *ngIf="!isCollapsed[item.id]" (click)="$event.stopPropagation(); isCollapsed[item.id] = !isCollapsed[item.id];" [icon]="['fa','chevron-right']" placement="bottom" tooltipClass="show-more-tooltip" ngbTooltip="Di Più"></fa-icon>
+        <fa-icon *ngIf="isCollapsed[item.id]" (click)="$event.stopPropagation(); isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-up']"  placement="bottom" tooltipClass="show-more-tooltip" ngbTooltip="Di meno"></fa-icon>
     </span></div>
 </ng-template>
 

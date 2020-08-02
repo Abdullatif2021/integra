@@ -14,6 +14,7 @@ export class GoogleGeocodeService {
     }
 
     keys: any;
+    key_at = 0 ;
     invalid_keys_alerted = false ;
 
     private async loadKeys(): Promise<any> {
@@ -28,11 +29,9 @@ export class GoogleGeocodeService {
     sendGeocodeRequest(building: BuildingLocationInterface): Observable<GoogleGeocodeResponseInterface> {
         const options = { params: new HttpParams(),  headers: new HttpHeaders({'ignoreLoadingBar': ''})};
         const houseNumber = building.houseNumber ? building.houseNumber : 1 ;
-        // options.params = options.params.set('address',
-        //     `${building.street}, ${houseNumber}, ${building.cap} ${building.city}`) ;
         options.params = options.params.set('address', `${building.validAddress.indirizzo}, ${building.validAddress.civico}` ) ;
         options.params = options.params.set('components', 'postal_code:' + building.cap) ;
-        options.params = options.params.set('key', this.keys[0].name) ;
+        options.params = options.params.set('key', this.keys[this.key_at].name) ;
         return this.http.get<GoogleGeocodeResponseInterface>('https://maps.googleapis.com/maps/api/geocode/json', options);
     }
 
@@ -47,11 +46,17 @@ export class GoogleGeocodeService {
         return new Promise<LocatedBuildingInterface>(async (resolve) => {
             if (this.invalid_keys_alerted) { return resolve(null); }
             if (!this.keys) { await this.loadKeys(); }
+
+            let error = null ;
             const gRes = <GoogleGeocodeResponseInterface> await this.sendGeocodeRequest(building).toPromise().catch((e) => {
-                if (e.statusText === 'Unauthorized') { this.handleExpiredToken(); }
+                if (e.statusText === 'Unauthorized') { error = 'REQUEST_DENIED'; }
             });
-            if (!gRes || gRes.status !== 'OK') {
+            if (!gRes || gRes.status !== 'OK' || error === 'REQUEST_DENIED') {
                 if (gRes.status === 'REQUEST_DENIED') {
+                    if (this.key_at < this.keys.length ) {
+                        this.key_at++ ;
+                        return resolve(await this.locate(building));
+                    }
                     this.handleExpiredToken();
                 }
                 return resolve(null) ;
@@ -122,11 +127,15 @@ export class GoogleGeocodeService {
         return new Promise<LocatedStreetInterface>(async (resolve) => {
             if (this.invalid_keys_alerted) { return resolve(null); }
             if (!this.keys) { await this.loadKeys(); }
+
+            let error = null ;
             const gRes = <GoogleGeocodeResponseInterface> await this.sendStreetGeocodeRequest(street).toPromise().catch((e) => {
-                if (e.statusText === 'Unauthorized') { this.handleExpiredToken(); }
+                if (e.statusText === 'Unauthorized') {
+                    error = 'REQUEST_DENIED';
+                }
             });
             if (!gRes || gRes.status !== 'OK') {
-                if (gRes.status === 'REQUEST_DENIED') {
+                if (gRes.status === 'REQUEST_DENIED' || error === 'REQUEST_DENIED') {
                     this.handleExpiredToken();
                 }
                 return resolve(null) ;

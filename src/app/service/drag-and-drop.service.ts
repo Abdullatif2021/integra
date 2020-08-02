@@ -16,6 +16,7 @@ export class DragAndDropService {
     draggedElementType = 0 ;
     drag_elm: any ;
     remote = false ;
+    readyToShowMap = false ;
 
     getDraggedElementType(){
         return this.draggedElementType;
@@ -143,6 +144,10 @@ export class DragAndDropService {
         this.drag_elm.page = 1;
         this.drag_elm.setId = target.setId ;
         this.drag_elm.children = [] ;
+    }
+
+    setReadyToShowMap(state: boolean) {
+        return this.readyToShowMap = state ;
     }
 
     _reset() {

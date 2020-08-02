@@ -1,28 +1,20 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {SettingsService} from '../settings.service';
+import {GoogleApiService} from '../../shared/service/google.api.service';
 
 @Injectable()
 export class GoogleDirectionsService {
 
-    constructor(private http: HttpClient, private settingsService: SettingsService) {
-    }
-
-    keys: any;
-    invalid_keys_alerted = false ;
-
-    private async loadKeys(): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
-            this.settingsService.getMapProviderKey('google_maps').then((data) => {
-                this.keys = data.length ? data : [{name: 'AIzaSyDc5fJyy9BGpFE4t6kh_4dH1-WRYzKd_wI'}] ;
-                resolve(true);
-            });
-        });
+    constructor(
+        private http: HttpClient,
+        private googleApiService: GoogleApiService
+    ) {
     }
 
     sendDirectionRequest(origin, waypoints, destination): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const directionsService = new (<any>window).google.maps.DirectionsService;
+            let done = false ;
             directionsService.route({
                 origin: origin,
                 destination: destination,
@@ -30,52 +22,60 @@ export class GoogleDirectionsService {
                 optimizeWaypoints: true,
                 travelMode: 'DRIVING'
             }, function(response, status) {
+                done = true ;
                 if (status === 'OK') {
-                    resolve(response);
-                } else {
-                    reject(status);
+                    return resolve(response);
                 }
+                return reject(status);
             });
+            setTimeout(() => {if (!done) {reject('REQUEST_LOCALLY_IGNORED')}}, 7000);
         });
     }
 
     clearWaypoints(waypoints) {
-        console.log(waypoints);
         return waypoints.filter((elm) => elm.lat !== '0' && elm.long !== '0');
     }
 
-    getDirections(origin, waypoints, destination): Promise<any> {
-        return new Promise<any>(async (resolve) => {
-            let path = [] ;
-            const order = [] ;
-            let order_count = 0;
-            waypoints = this.clearWaypoints(waypoints);
-            const d_waypoints = [...waypoints] ;
-            while (waypoints.length) {
-                const _origin = this.convertPoint(path.length ? path[path.length - 1] : origin);
-                const _waypoints = this.convertMultiplePoints(waypoints.splice(0, 25));
-                const _destination = this.convertPoint(waypoints.length ? waypoints.splice(0, 1)[0] : destination);
-                const dRes = await this.sendDirectionRequest(_origin, _waypoints, _destination).catch((e) => {
-                    console.log(e);
-                });
-                if (!dRes || dRes.status !== 'OK') {
-                    if (dRes && dRes.status === 'REQUEST_DENIED') {
-                        this.handleExpiredToken();
+    async getDirections(origin, waypoints, destination): Promise<any> {
+        let path = [] ;
+        const order = [] ;
+        let order_count = 0;
+        waypoints = this.clearWaypoints(waypoints);
+        const d_waypoints = [...waypoints] ;
+        while (waypoints.length) {
+            let error = null ;
+            const dRes = await this.sendDirectionRequest(
+                this.convertPoint(path.length ? path[path.length - 1] : origin),
+                this.convertMultiplePoints(waypoints.splice(0, 25)),
+                this.convertPoint(waypoints.length ? waypoints.splice(0, 1)[0] : destination)
+            ).catch((e) => { error = e; });
+            if (!dRes || dRes.status !== 'OK') {
+                if ((dRes && dRes.status === 'REQUEST_DENIED') || error === 'REQUEST_DENIED' || error === 'REQUEST_LOCALLY_IGNORED') {
+                    // change the key then try all over again.
+                    if (await this.googleApiService.loadJsUsingNextKey()) {
+                        console.log('returning here');
+                        return await this.getDirections(origin, waypoints, destination);
                     }
-                    return resolve(path) ;
+                    this.handleExpiredToken();
                 }
-                dRes.routes[0].waypoint_order.forEach((idx) => {
-                   order.push({ id: d_waypoints[idx].id, priority: order_count++ });
-                });
-                d_waypoints.splice(0, dRes.routes[0].waypoint_order.length);
-                if (d_waypoints.length) {
-                    order.push({ id: d_waypoints[0].id, priority: order_count++ });
-                    d_waypoints.splice(0, 1);
-                }
-                path = path.concat(this.formatPath(dRes));
+                console.log('returning here donna why', error, dRes);
+                return false ;
             }
-            return resolve({path: path, order: order});
-        });
+
+            // every thing is ok, format the output and add it the the final output.
+            dRes.routes[0].waypoint_order.forEach((idx) => {
+                order.push({ id: d_waypoints[idx].id, priority: order_count++ });
+            });
+            d_waypoints.splice(0, dRes.routes[0].waypoint_order.length);
+            if (d_waypoints.length) {
+                order.push({ id: d_waypoints[0].id, priority: order_count++ });
+                d_waypoints.splice(0, 1);
+            }
+            path = path.concat(this.formatPath(dRes));
+        }
+        console.log('returning result');
+        // return the result.
+        return {path: path, order: order};
     }
 
     convertPoint(point) {
@@ -108,10 +108,7 @@ export class GoogleDirectionsService {
     }
 
     handleExpiredToken() {
-        if (!this.invalid_keys_alerted) {
-            alert('Google Maps Keys are invalid, this provider will be ignored') ;
-            this.invalid_keys_alerted = true;
-        }
+        // stop the operation.
     }
 
 

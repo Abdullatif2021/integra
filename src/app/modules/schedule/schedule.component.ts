@@ -56,7 +56,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private scheduleService: ScheduleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
-        private ref: ChangeDetectorRef,
     ) {
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data;

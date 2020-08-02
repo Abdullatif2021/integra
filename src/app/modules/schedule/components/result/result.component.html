@@ -12,7 +12,7 @@
           <div class="not-selected" *ngIf="!all_selected"></div>
         </div>
       </div>
-      <div class="col-10 v-wide-col"><span class="select-all-label">Toutto</span></div>
+      <div class="col-10 v-wide-col"><span class="select-all-label">Seleziona tutto</span></div>
     </div>
     <ng-container *ngIf="scheduleResults; else sKeleTons">
       <ng-container *ngFor="let item of scheduleResults; let idx = index">
@@ -22,7 +22,7 @@
     <div class="force-scroll"></div>
   </div>
   <button class="float-right integraa-btn" [ngClass]="{'disabled': scheduleResultsDisplayedTab  === 'not_assigned' || !scheduleResults}" [disabled]="scheduleResultsDisplayedTab === 'not_assigned' || !scheduleResults" (click)="makeDispatchesVisible()">Crea Distinta</button>
-  <button class="float-right integraa-btn mr-1" *ngIf="preDispatchData.has_not_fixed_products" [ngClass]="{'disabled': !movedNotFixedStorage.length}" [disabled]="!movedNotFixedStorage.length" (click)="saveMovedNotFixed()">Salve distinte spostate</button>
+  <button class="float-right integraa-btn mr-1" *ngIf="preDispatchData.has_not_fixed_products" [ngClass]="{'disabled': !movedNotFixedStorage.length}" [disabled]="!movedNotFixedStorage.length" (click)="saveMovedNotFixed()">Salva Indirizzi spostati</button>
 </div>
 
 <ng-template #sKeleTons>
@@ -41,7 +41,7 @@
           <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>
           <fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>
         </div>
-        <div class="mt-auto mb-auto ml-1 select-container" (click)="select(item, 'day', $event)">
+        <div class="mt-auto mb-auto ml-1 select-container" *ngIf="item.sets_that_are_not_distintas > 0" (click)="select(item, 'day', $event)">
           <div class="selected" *ngIf="item.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
           <div class="not-selected" *ngIf="!item.selected "><fa-icon [icon]="['fa','check']"></fa-icon></div>
         </div>

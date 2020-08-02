@@ -194,7 +194,7 @@ export class ResultComponent implements OnInit, OnDestroy {
   makeDispatchesVisible() {
       const sets = [] ;
       this.selected.forEach(item => {
-          if ( item._type === 'set' ) { sets.push(item.id); }
+          if ( item._type === 'set' && !item.is_distenta_created) { sets.push(item.id); }
       });
       if (!sets.length) {
           return this.snotifyService.warning('Nessuna distinta selezionata', { showProgressBar: false, timeout: 1500 });
@@ -204,9 +204,10 @@ export class ResultComponent implements OnInit, OnDestroy {
               if (data.success) {
                   this.snotifyService.success('Distinta è stata creata con successo!',  { showProgressBar: false, timeout: 1500 });
                   this.selected.forEach(item => {
-                      if ( item._type === 'set' ) { item.is_distenta_created = true; }
+                      if ( item._type === 'set' ) { item.is_distenta_created = true; item.parent.sets_that_are_not_distintas--; }
                   });
                   this.selected = [] ;
+                  this.all_selected = false ;
               } else {
                   this.snotifyService.error(data.message,  { showProgressBar: false, timeout: 1500 });
               }
@@ -354,14 +355,13 @@ export class ResultComponent implements OnInit, OnDestroy {
   async dropNotFixed(event, target, index) {
       this.dragAndDropService.drop(index, target);
       const elm = this.dragAndDropService.drag_elm ;
-      console.log(elm);
       if (elm.parent) {
           elm.parent.children = elm.parent.children.filter( ix => ix.id !== elm.id );
       }
-
       elm.fromNotFixed = true ;
       elm._hint = 'not_fixed' ;
       elm.parent = target;
+      target.quantity++;
       target.children.splice(index, 0, elm);
       this.updateItemsMarkers(target);
       this.backProcessingService.blockExit('Some Items was not saved, are you sure you want to exit');
@@ -376,7 +376,6 @@ export class ResultComponent implements OnInit, OnDestroy {
               set.children[i]._marker = ++marker;
           } else { set.children[i]._marker = 'NA' ; }
       }
-      console.log('data update', this.scheduleResults);
   }
 
   async saveMovedNotFixed() {
@@ -389,6 +388,10 @@ export class ResultComponent implements OnInit, OnDestroy {
           this.movedNotFixedStorage = this.movedNotFixedStorage.concat(save);
           this.snotifyService.error('Qualcosa è andato storto spostando il prodotto', { showProgressBar: false, timeout: 1500 });
       } else {
+          console.log('saved succesffuly', this.dragAndDropService.readyToShowMap)
+          if (this.dragAndDropService.readyToShowMap) {
+              this.scheduleService.showRightSideMap();
+          }
           this.backProcessingService.unblockExit();
           this.snotifyService.success('Prodotti spostati con successo', { showProgressBar: false, timeout: 1500 });
           this.changeActiveFilteringTab(this.scheduleResultsDisplayedTab);
@@ -469,11 +472,15 @@ export class ResultComponent implements OnInit, OnDestroy {
     this.notFixedCount = [];
     this.scheduleResults = await <any>this.resultsService.getScheduleResults(this.preDispatch, type).catch(e => {});
     this.scheduleResults.forEach((day) => {
+        day.sets_that_are_not_distintas = 0 ;
         day.sets.forEach((set) => {
             if (!this.selectedPostmen[day.day]) {
                 this.selectedPostmen[day.day] = <any>{} ;
             }
             this.selectedPostmen[day.day][set.id] = set.postman ;
+            if (!set.is_distenta_created) {
+                day.sets_that_are_not_distintas++;
+            }
         });
     });
     this.loadPostmen();

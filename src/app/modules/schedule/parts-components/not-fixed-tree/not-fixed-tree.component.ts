@@ -44,9 +44,8 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
         (_d: any) => {
             if (!_d.fromNotFixed) { return ; }
             this.list = this.list.filter( i => i.id !== _d.item.id);
-            if (!this.list.length) {
-                this.scheduleService.showRightSideMap();
-            } else if (this.list.length < 20 && !this.allLoaded) {
+            this.dragAndDropService.setReadyToShowMap(this.list.length ? false : true);
+            if (this.list.length < 20 && !this.allLoaded) {
               this.loadMore();
             }
         }

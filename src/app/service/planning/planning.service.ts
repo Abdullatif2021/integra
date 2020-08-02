@@ -188,13 +188,16 @@ export class PlanningService {
                     endPoint = waypoints.data[waypoints.data.length];
                 }
                 const temp = await this.googleDirectionsService.getDirections(startPoint, waypoints.data.data, preDispatch.endPoint) ;
-                path = path.concat(temp.path);
-                temp.order.forEach(item => {
-                    item.priority += lp;
-                    order.push(item);
-                });
-                lp += order.length;
-                const priority = await this.setMapPriority(order).toPromise();
+                console.log(temp);
+                if (temp && temp.order && temp.path) {
+                    path = path.concat(temp.path);
+                    temp.order.forEach(item => {
+                        item.priority += lp;
+                        order.push(item);
+                    });
+                    lp += order.length;
+                    const priority = await this.setMapPriority(order).toPromise();
+                } else { console.log('something went wrong, was not able to fund a part of the path'); }
                 page ++ ;
             } while ( !waypoints.data.last_page );
             // this.test.emit(path.path);

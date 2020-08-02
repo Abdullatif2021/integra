@@ -147,7 +147,7 @@
 
     <ng-container *ngIf="!draggable" >
       <div dndDropzone class="drop-area" (dndDrop)="onDrop($event, item)" [ngClass]="{'drop-location': isDropLocation(item), 'cant-drop-location': isNonDropLocation(item)}">
-        <div [contextMenu]="contextMenu" [ngClass]="{'odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
+        <div [contextMenu]="contextMenu" [ngClass]="{'important-odd-bg': (getStepIdx(idx))%2}" [contextMenuSubject]="{node: item, next: next}" class="node {{idx}} {{getLvlClass(next)}} {{getStatusClass(item)}}">
           <div class="item-row">
             <div class="more" *ngIf="!item._end" (click)="listNode(item, next)">
               <fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>

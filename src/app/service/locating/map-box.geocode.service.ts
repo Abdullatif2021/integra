@@ -16,6 +16,7 @@ export class MapBoxGeocodeService {
     ) {}
 
     keys ;
+    key_at = 0 ;
     invalid_keys_alerted = false ;
 
     private async loadKeys(): Promise<any> {
@@ -33,7 +34,7 @@ export class MapBoxGeocodeService {
         options.params = options.params.set('postcode', building.cap);
         options.params = options.params.set('place', building.city);
         options.params = options.params.set('address', houseNumber);
-        options.params = options.params.set('access_token', this.keys[0].name) ;
+        options.params = options.params.set('access_token', this.keys[this.key_at].name) ;
         return this.http.get<MapBoxGeocodeResponceInterface>
         (`https://api.mapbox.com/geocoding/v5/mapbox.places/${building.street.replace('\\', '')}.json`, options);
 
@@ -43,7 +44,7 @@ export class MapBoxGeocodeService {
         const options = { params: new HttpParams(),  headers: new HttpHeaders({'ignoreLoadingBar': ''})};
         const address = `${street.address}, 1`;
         options.params = options.params.set('address', address);
-        options.params = options.params.set('access_token', this.keys[0].name) ;
+        options.params = options.params.set('access_token', this.keys[this.key_at].name) ;
         return this.http.get<MapBoxGeocodeResponceInterface>
         (`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json`, options);
     }
@@ -52,14 +53,21 @@ export class MapBoxGeocodeService {
         return new Promise<LocatedBuildingInterface>(async (resolve) => {
             if (this.invalid_keys_alerted) { return resolve(null); }
             if (!this.keys) { await this.loadKeys(); }
-            const mRes = await this.sendGeocodeRequest(building).toPromise().catch((e) => {
+
+            let error = null ;
+            const mRes = await this.sendGeocodeRequest(building).toPromise().catch(async (e) => {
                 if (e.statusText === 'Unauthorized' && !this.invalid_keys_alerted) {
-                    alert('MapBox Keys are invalid, this provider will be ignored') ;
-                    this.invalid_keys_alerted = true ;
-                    resolve(null);
+                    error = 'Unauthorized';
                 }
             });
+
             if (!mRes || !mRes.features.length) {
+                if (error === 'Unauthorized' && this.key_at < this.keys.length) {
+                    this.key_at++ ;
+                    return resolve(await this.locate(building));
+                } else if (error === 'Unauthorized') {
+                    this.handleExpiredToken();
+                }
                 return resolve(null) ;
             }
             let res ;
@@ -74,8 +82,8 @@ export class MapBoxGeocodeService {
             }
             return resolve({
                 id: building.id,
-                lat: res.center[0],
-                long: res.center[1],
+                lat: res.center[1],
+                long: res.center[0],
                 is_fixed: true,
                 name: res.place_name.split(',')[0],
             });
@@ -87,11 +95,11 @@ export class MapBoxGeocodeService {
         return new Promise<LocatedStreetInterface>(async (resolve) => {
             if (this.invalid_keys_alerted) { return resolve(null); }
             if (!this.keys) { await this.loadKeys(); }
+
+            let error = null;
             const mRes = await this.sendStreetGeocodeRequest(street).toPromise().catch((e) => {
                 if (e.statusText === 'Unauthorized' && !this.invalid_keys_alerted) {
-                    alert('MapBox Keys are invalid, this provider will be ignored') ;
-                    this.invalid_keys_alerted = true ;
-                    resolve(null);
+                    error = 'Unauthorized';
                 }
             });
             if (!mRes || !mRes.features.length) {
@@ -100,12 +108,18 @@ export class MapBoxGeocodeService {
 
             const res = mRes[0];
             if (!res) {
+                if (error === 'Unauthorized' && this.key_at < this.keys.length) {
+                    this.key_at++ ;
+                    return resolve(await this.locateStreet(street));
+                } else if (error === 'Unauthorized') {
+                    this.handleExpiredToken();
+                }
                 return resolve(null);
             }
             return resolve({
                 id: street.id,
-                lat: res.center[0],
-                long: res.center[1],
+                lat: res.center[1],
+                long: res.center[0],
                 isFixed: true,
                 fixedName: res.place_name.split(',')[0],
             });
@@ -113,5 +127,10 @@ export class MapBoxGeocodeService {
         });
     }
 
-
+    handleExpiredToken() {
+        if (!this.invalid_keys_alerted) {
+            alert('Mapbox Keys are invalid, this provider will be ignored') ;
+            this.invalid_keys_alerted = true;
+        }
+    }
 }

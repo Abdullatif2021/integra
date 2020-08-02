@@ -4,7 +4,7 @@ import { ScheduleComponent } from './schedule.component';
 import {ScheduleRoutingModule} from './schedule-routing.module';
 import {SharedModule} from '../../shared/shared.module';
 import {CoreModule} from '../../core/core.module';
-import { AgmCoreModule } from '@agm/core';
+import { AgmCoreModule, LAZY_MAPS_API_CONFIG } from '@agm/core';
 import { AddressesComponent } from './components/addresses/addresses.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -40,7 +40,7 @@ import {DndModule} from 'ngx-drag-drop';
 import {MarkersService} from './service/markers.service';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { NotFixedTreeComponent } from './parts-components/not-fixed-tree/not-fixed-tree.component';
-
+import {GoogleMapsConfig} from './service/google-maps-config';
 
 @NgModule({
   imports: [
@@ -49,10 +49,7 @@ import { NotFixedTreeComponent } from './parts-components/not-fixed-tree/not-fix
     SharedModule,
     FontAwesomeModule,
     CoreModule,
-    // TODO get apiKey From google api key settings.
-    AgmCoreModule.forRoot({
-        apiKey: 'AIzaSyDc5fJyy9BGpFE4t6kh_4dH1-WRYzKd_wI'
-    }),
+    AgmCoreModule.forRoot(),
     NgSelectModule,
     InfiniteScrollModule,
     DndModule,
@@ -84,6 +81,8 @@ import { NotFixedTreeComponent } from './parts-components/not-fixed-tree/not-fix
       ResultesResolver,
       ScheduleService,
       MarkersService,
+      {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig}
+
   ],
   entryComponents: [
       NotMatchesTreeComponent,
@@ -107,6 +106,5 @@ export class ScheduleModule {
         library.add(faMapMarkedAlt);
         library.add(faMinus);
         library.add(faExclamationCircle);
-
     }
 }
