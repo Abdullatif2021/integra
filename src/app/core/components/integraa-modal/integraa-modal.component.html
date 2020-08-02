@@ -11,7 +11,7 @@
 <ng-template #modalRef let-modal="modal">
   <div class="integraa-modal-container" id="{{modal.id}}" [ngClass]="{'hidden':modal.options.minimized}">
     <div class="integraa-modal z-depth-1" [handle]="handle" [bounds]="bounds"
-         [inBounds]="modal.inBounds" ngDraggable [ngResizable]="!modal.expanded" [ngStyle]="{
+         [inBounds]="modal.inBounds" [ngDraggable]="!modal.expanded" [ngResizable]="!modal.expanded" [ngStyle]="{
          'width': modal.options.width + modal.options.sizeUnit,
          'height': modal.options.height + modal.options.sizeUnit
          }" (endOffset)="onEndOffset($event, modal)" [position]="modal.options.position"

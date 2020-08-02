@@ -21,7 +21,7 @@
     </ng-container>
     <div class="force-scroll"></div>
   </div>
-  <button class="float-right integraa-btn" [ngClass]="{'disabled': scheduleResultsDisplayedTab  === 'not_assigned' || !scheduleResults}" [disabled]="scheduleResultsDisplayedTab === 'not_assigned' || !scheduleResults" (click)="makeDispatchesVisible()">Crea Distinta</button>
+  <button class="float-right integraa-btn" [ngClass]="{'disabled': scheduleResultsDisplayedTab  === 'not_assigned' || !scheduleResults || !selected.length}" [disabled]="scheduleResultsDisplayedTab === 'not_assigned' || !scheduleResults || !selected.length" (click)="makeDispatchesVisible()">Crea Distinta</button>
   <button class="float-right integraa-btn mr-1" *ngIf="preDispatchData.has_not_fixed_products" [ngClass]="{'disabled': !movedNotFixedStorage.length}" [disabled]="!movedNotFixedStorage.length" (click)="saveMovedNotFixed()">Salva Indirizzi spostati</button>
 </div>
 
