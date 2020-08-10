@@ -89,7 +89,7 @@ export class ActionsService {
       } );
   }
 
-  createNewPreDispatch(data, name, failed: any = false, confirm = false, appendData = []) {
+  createNewPreDispatch(data, name, failed: any = false, confirm = false, appendData = [], pre_dispatch_id = null) {
       const products: any = this.productsService.selectedProducts ;
       let method ;
       if (!data.method || data.method === 'selected' ) {
@@ -102,8 +102,8 @@ export class ActionsService {
           });
           appendData.forEach((elm) => {
               productsIds.push(elm.id);
-          })
-          method = this.preDispatchService.createBySelected(name, productsIds, confirm);
+          });
+          method = this.preDispatchService.createBySelected(name, productsIds, confirm, pre_dispatch_id);
       } else {
           method = this.preDispatchService.createByFilters(name, confirm) ;
       }

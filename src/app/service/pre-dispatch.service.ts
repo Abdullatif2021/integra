@@ -121,12 +121,15 @@ export class PreDispatchService {
         );
     }
 
-    createBySelected(name, products, confirm = false) {
-        const options = {
+    createBySelected(name, products, confirm = false, pre_dispatch_id = null) {
+        const options = <any>{
             name: name,
             product_ids: products,
             byFilter: 0,
             confirm: confirm,
+        }
+        if (pre_dispatch_id) {
+            options.pre_dispatch_id = pre_dispatch_id ;
         }
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.createPreDispatched, options);
     }

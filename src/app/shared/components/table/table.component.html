@@ -83,7 +83,7 @@
                 <tr #tableRow class="table-item" (click)="selectItem(item)" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx, 'selected-row':isSelectedRow(item)}">
                     <!-- select row item <static item > {  -->
                     <td class="table-item-cell select-cell" [ngStyle]="{width: '1%'}">
-                        <div class="select-row rounded-circle" (click)="selectItem(item)">
+                        <div class="select-row rounded-circle" (click)="$event.stopPropagation();selectItem(item)">
                             <div class="selected" *ngIf="isSelectedRow(item)"><fa-icon [icon]="['fa','check']"></fa-icon></div>
                         </div>
                     </td>

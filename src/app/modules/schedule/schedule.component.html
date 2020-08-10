@@ -29,8 +29,8 @@
               <span class="ml-1">Move To</span>
             </a>
             <div class="dropdown-menu integraa-dropdown-menu" aria-labelledby="results-move-to-drop-down">
-              <a class="dropdown-item" (click)="resultsMoveTo('created')">Created</a>
-              <a class="dropdown-item" (click)="resultsMoveTo('to_planning')">To Planning</a>
+              <a class="dropdown-item" (click)="resultsMoveTo('created')">Indirizzi</a>
+              <a class="dropdown-item" (click)="resultsMoveTo('to_planning')">Da pianificare</a>
             </div>
           </div>
           <a class="move-back-to-addresses-btn integraa-btn ml-1" *ngIf="'/schedule/'+preDispatch+'/result' === router.url && preDispatchData.status === 'planned'" href="{{exportResultsLink}}" target="_blank">Esporta</a>

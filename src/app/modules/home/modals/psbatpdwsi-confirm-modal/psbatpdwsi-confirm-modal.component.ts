@@ -28,6 +28,7 @@ export class PsbatpdwsiConfirmModalComponent extends ModalComponent implements O
       if (!this.data.data[0]) {
           this.snotifyService.error('Something went wrong', { showProgressBar: false, timeout: 3000 });
       }
-      this.actionsService.addToPreDispatch(this.data.defaultData, this.data.data[0].id, (error) => {}) ;
+      this.actionsService.createNewPreDispatch(this.data.defaultData, this.data.name, (error) => {
+      }, true, [], this.data.data[0].id) ;
   }
 }
