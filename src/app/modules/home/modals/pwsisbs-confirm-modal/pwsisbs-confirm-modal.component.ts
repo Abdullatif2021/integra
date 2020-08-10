@@ -26,7 +26,6 @@ export class PwsisbsConfirmModalComponent extends ModalComponent implements OnIn
   loading = false;
 
   ngOnInit() {
-      console.log(this.data);
       this.items = this.data.data.products;
   }
 

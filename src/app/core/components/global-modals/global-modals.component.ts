@@ -4,6 +4,7 @@ import {PreDispatchService} from '../../../service/pre-dispatch.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
 import {ProductsService} from '../../../service/products.service';
+import {ModalDirective} from '../../../shared/directives/modal.directive';
 
 @Component({
     selector: 'app-global-modals',
@@ -22,24 +23,25 @@ export class GlobalModalsComponent implements OnInit, OnDestroy {
     ) {
     }
 
-    @ViewChild('confirmPlanningModalRed') planningConfirmModal;
-    @ViewChild('confirmPlanningAddProductsModalRed') planningAddProductsConfirmModal;
+    @ViewChild('confirmPlanningModalRef') planningConfirmModal;
+    @ViewChild('confirmPlanningAddProductsModalRef') planningAddProductsConfirmModal;
     unsubscribe: Subject<void> = new Subject();
     planning_add_products_items = [];
     planning_add_products_page = 1;
     planning_add_products_loading = false ;
     planning_add_products_data: any;
+
     ngOnInit() {
         this.preDispatchService.showConfirmPlanningModalCalls.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
-                this.modalService.open(this.planningConfirmModal, {backdrop: 'static'});
+                this.modalService.open(this.planningConfirmModal, {backdrop: 'static', keyboard: false});
             }
         );
         this.preDispatchService.showConfirmPlanningAddProductsModalCalls.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
                 this.planning_add_products_data = data ;
                 this.planning_add_products_items = data.data;
-                this.modalService.open(this.planningAddProductsConfirmModal, {backdrop: 'static'});
+                this.modalService.open(this.planningAddProductsConfirmModal, {backdrop: 'static', keyboard: false});
             }
         );
     }
