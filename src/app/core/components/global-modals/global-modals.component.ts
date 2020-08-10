@@ -38,7 +38,7 @@ export class GlobalModalsComponent implements OnInit, OnDestroy {
         this.preDispatchService.showConfirmPlanningAddProductsModalCalls.pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
                 this.planning_add_products_data = data ;
-                this.planning_add_products_items = data.products;
+                this.planning_add_products_items = data.data;
                 this.modalService.open(this.planningAddProductsConfirmModal, {backdrop: 'static'});
             }
         );

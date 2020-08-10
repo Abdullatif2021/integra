@@ -188,7 +188,6 @@ export class PlanningService {
                     endPoint = waypoints.data[waypoints.data.length];
                 }
                 const temp = await this.googleDirectionsService.getDirections(startPoint, waypoints.data.data, preDispatch.endPoint) ;
-                console.log(temp);
                 if (temp && temp.order && temp.path) {
                     path = path.concat(temp.path);
                     temp.order.forEach(item => {

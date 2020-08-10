@@ -1,0 +1,56 @@
+.to-add-item {
+    display: flex;
+}
+.items-area {
+    max-height: 55vh;
+    overflow-y: scroll;
+}
+.header-item{
+    background-color: #111111;
+    color: #feda44;
+    padding: 5px;
+}
+.to-add-item-category, .to-add-item-barcode, .to-add-item-recipient {
+    width: 23%;
+    padding-left: 3px;
+    word-break: break-all;
+    line-break: strict;
+    font-size: 12px;
+    text-align: center;
+}
+.to-add-item-address {
+    width: 31%;
+    font-size: 12px;
+    text-align: center;
+}
+/* Pagination Area */
+.pagination-area {
+    padding: 5px;
+}
+.pagination-button {
+    color: #fff;
+    background-color: #000;
+    border: 1px solid #000;
+    margin: 0px 3px;
+    font-size: 11px;
+    display: flex;
+    text-align: center;
+    padding: 2px;
+    min-width: 22px;
+    cursor: pointer;
+    height: 22px;
+    border-radius: 50%;
+    float: right;
+}
+.pagination-button span {
+    font-size: 18px;
+    margin-top: -5px;
+    margin-left: 6px;
+}
+.prev-page span{
+    margin-left: 3px;
+}
+.pagination-button.disabled{
+    pointer-events: none;
+    opacity: 0.5;
+}
