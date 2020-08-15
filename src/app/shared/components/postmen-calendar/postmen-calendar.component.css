@@ -71,6 +71,7 @@
 .postman-name {
     margin: auto 3px;
     flex: 1;
+    text-align: left;
 }
 
 .odd.bg-green {
