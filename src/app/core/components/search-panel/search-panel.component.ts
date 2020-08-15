@@ -81,6 +81,7 @@ export class SearchPanelComponent implements OnInit {
       });
       this.filtersService.fields.subscribe((data) => {
           this.fieldsData = data ;
+          console.log(this.fieldsData);
           this.filters = Object.assign({}, data.fields.default_filters);
           this._active_filters = Object.assign({}, data.fields.default_filters);
           if ( this.loaded ) {
@@ -237,6 +238,10 @@ export class SearchPanelComponent implements OnInit {
       if (event.code === 'Enter' && typeof this.active_action.submit === 'function') {
           this.active_action.submit(this.active_action, event);
       }
+  }
+
+  changeViewButtonClicked(value) {
+      this.filtersService.clickChangeViewButton(value);
   }
 
   initFields() {

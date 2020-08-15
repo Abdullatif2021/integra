@@ -40,6 +40,31 @@ export const TablesConfig = {
             searchPlaceHolder: 'Cerca postino previsto',
             text: 'full_name'
         },
+        customPostmenTable: {
+            custom: true,
+            title: 'Expected Postmen',
+            icon: 'assets/images/postman-icon.png',
+            searchPlaceHolder: 'Cerca postino previsto',
+            text: 'full_name'
+        },
+        reviserTable: {
+            custom: true,
+            title: 'Revisori',
+            icon: 'assets/images/postman-icon.png',
+            searchPlaceHolder: 'Cerca postino previsto',
+            text: 'full_name'
+        },
+        dispatch: {
+            custom: true,
+            title: 'Distinte',
+            icon: 'assets/images/dispatch-icon.svg',
+            searchPlaceHolder: 'Cerca distinte',
+            text: 'pre_dispatch_code',
+            extra_fields: [
+                {label: '', value: (row) => row.started_at.substr(0, 10)},
+                {label: 'Q.ta', value: (row) => row.quantity + ' prodotti'}
+            ]
+        },
         settingsTable: {
             custom: true,
             title: 'Impostazioni',

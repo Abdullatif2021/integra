@@ -9,8 +9,8 @@ import {
     faCheck,
     faChevronRight,
     faChevronUp, faForward,
-    faMinus,
-    faSearch, faSortDown
+    faMinus, faPen,
+    faSearch, faSortDown, faUpload
 } from '@fortawesome/free-solid-svg-icons';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
@@ -28,6 +28,8 @@ import {GoogleApiService} from './service/google.api.service';
 import {PageDirective} from './directives/page.directive';
 import {faBackward} from '@fortawesome/free-solid-svg-icons/faBackward';
 import { IframeComponent } from './components/iframe/iframe.component';
+import { PostmenCalendarComponent } from './components/postmen-calendar/postmen-calendar.component';
+import {NgxFileDropModule} from 'ngx-file-drop';
 
 @NgModule({
   imports: [
@@ -38,6 +40,7 @@ import { IframeComponent } from './components/iframe/iframe.component';
     InfiniteScrollModule,
     RouterModule,
     GooglePlaceModule,
+    NgxFileDropModule
 
   ],
   declarations: [
@@ -49,7 +52,8 @@ import { IframeComponent } from './components/iframe/iframe.component';
       PageDirective,
       LoadingComponent,
       AddressInputComponent,
-      IframeComponent
+      IframeComponent,
+      PostmenCalendarComponent
   ],
   exports: [
       SearchBoxComponent,
@@ -61,6 +65,7 @@ import { IframeComponent } from './components/iframe/iframe.component';
       LoadingComponent,
       AddressInputComponent,
       IframeComponent,
+      PostmenCalendarComponent
   ],
   providers: [
       PlacesAutocompleteService,
@@ -81,6 +86,8 @@ export class SharedModule {
         library.add(faForward);
         library.add(faCaretRight);
         library.add(faSortDown);
+        library.add(faPen);
+        library.add(faUpload);
     }
 
 }

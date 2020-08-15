@@ -1,4 +1,4 @@
-<div class="table-container">
+<div class="table-container" [ngClass]="{'table-container-mid-height': mid_height}">
   <div class="table-head">
     <span>{{table.title}}</span>
     <ng-container *ngIf="table.order">
@@ -28,7 +28,6 @@
 </div>
 
 <ng-template #item_body let-item="item" let-table="table">
-
   <div *ngIf="!table.custom" class="select-row select-row-n-selected"><div class="select-row-input rounded-circle"></div></div>
   <div *ngIf="!table.custom" class="select-row select-row-selected"><div class="select-row-input rounded-circle"><fa-icon [icon]="['fa','check']"></fa-icon></div></div>
   <div *ngIf="table.icon" class="item-icon ml-2"><img class="item-icon-img" src="{{table.icon}}"></div>
@@ -37,6 +36,12 @@
       <input type="text" (click)="stopPropagation($event)" (keydown)="inputActionKeyDown($event)" class="rename-input" value="{{item[table.text] ? item[table.text] : item.name }}">
     </ng-container>
     <ng-template #normalName>{{item[table.text] ? item[table.text] : item.name }}</ng-template>
+    <div class="extra-fields d-flex" *ngIf="table.extra_fields && item.id">
+      <div class="extra-field-container" *ngFor="let field of table.extra_fields">
+        <span class="extra-field-label">{{field.label}}</span>
+        <span class="extra-field-value">{{field.value(item)}}</span>
+      </div>
+    </div>
   </div>
   <div class="item-qt mt-1" *ngIf="item.count !== undefined">Q.t: {{item.count+''}}</div>
   <div class="dropdown" id="actions-dropdown">

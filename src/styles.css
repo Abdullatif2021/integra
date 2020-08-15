@@ -383,3 +383,24 @@ a:hover {
 .small-text-dropdown-item {
     font-size: 13px;
 }
+
+
+/* Drop zone */
+.drop-file-area {
+    border-radius: 0px;
+    border: 1px dashed gray;
+    color: #666666;
+}
+.drop-file-area .select-file-button{
+    border: 0px;
+    background: #fcda4b;
+    border-radius: 3px;
+    padding: 8px;
+    font-size: 13px;
+    color: #333;
+    margin: auto;
+    display: block;
+}
+.drop-file-area .drop-file-label{
+    color: #111111;
+}

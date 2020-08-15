@@ -5,6 +5,12 @@
     height: calc( 100vh - 100px ) ;
     position: relative;
     overflow: hidden;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding-bottom: 10px;
+}
+.table-container-mid-height {
+    height: calc( 50vh - 50px ) ;
 }
 .search-section{
     padding: 10px 10px;
@@ -38,7 +44,7 @@
     scrollbar-width: thin;
     /*overflow: -moz-scrollbars-none;*/
     /*-ms-overflow-style: none;*/
-    height: 100%
+    height: calc( 100% - 93px ) ;
 }
 .table-body::-webkit-scrollbar-thumb {
     background-color: #C1BEBC;
@@ -129,4 +135,10 @@
     width: 90%;
     border: 0px;
     padding: 2px;
+}
+.extra-field-container {
+    flex: 1;
+}
+.extra-field-value {
+    margin-left: 3px;
 }

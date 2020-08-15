@@ -1,0 +1,93 @@
+.postmen-calender-container {
+    width: 100%;
+    height: calc(100vh - 100px);
+    background-color: #FFF;
+    border-radius: 5px;
+    padding: 10px;
+    overflow-x: scroll;
+    scrollbar-width: thin;
+    font-size: 13px;
+}
+.postmen-calender-container::-webkit-scrollbar-thumb {
+    background-color: #C1BEBC;
+    outline: 1px solid slategrey;
+    border-radius: 4px;
+}
+.postmen-calender-container::-webkit-scrollbar {
+    width: 5px;
+}
+.date-value {
+    text-align: center;
+    font-size: 14px;
+    padding: 5px 0px 15px 0px;
+}
+.calender-table {
+    display: flex;
+    width: 100%;
+    border: 1px solid #F3F3F3;
+    text-align: center;
+}
+.calender-day-col {
+    flex: 0 0 14.28%;
+    width: 14.28%;
+    border-right: 1px solid #F3F3F3;
+}
+.day-row {
+    padding: 7px 0px;
+    border-bottom: 1px solid #F3F3F3;
+    word-break: break-all;
+}
+.day-note, .day-attachment {
+    font-size: 12px;
+    line-height: 16px;
+}
+.note-text {
+    flex: 1;
+    padding: 0px 5px;
+}
+.edit-icon {
+    padding-right: 5px;
+    cursor: pointer;
+    font-size: 10px;
+    margin: auto;
+}
+.edit-icon:hover {
+    color: #fcda4b;
+}
+/* data set */
+.data-set-header {
+    padding: 5px;
+    background-color: #222222;
+    color: #feda44;
+}
+.data-set-row {
+    padding: 4px 6px;
+}
+.postman-note {
+    text-align: left;
+    font-size: 12px;
+    line-height: 16px;
+}
+.postman-name {
+    margin: auto 3px;
+    flex: 1;
+}
+
+.odd.bg-green {
+    background: #35781b;
+}
+.even.bg-green {
+    background: #429223;
+}
+.odd.bg-red {
+    background: #ce464c;
+}
+.even.bg-red {
+    background: #c02c27;
+}
+
+.day-part{
+    display: block;
+}
+
+/* Drop zone */

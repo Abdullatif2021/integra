@@ -12,6 +12,8 @@
           <div class="not-selected" *ngIf="!all_selected"></div>
         </div>
       </div>
+
+
       <div class="col-10 v-wide-col"><span class="select-all-label">Seleziona tutto</span></div>
     </div>
     <ng-container *ngIf="scheduleResults; else sKeleTons">
@@ -21,7 +23,7 @@
     </ng-container>
     <div class="force-scroll"></div>
   </div>
-  <button class="float-right integraa-btn" [ngClass]="{'disabled': scheduleResultsDisplayedTab  === 'not_assigned' || !scheduleResults || !selected.length}" [disabled]="scheduleResultsDisplayedTab === 'not_assigned' || !scheduleResults || !selected.length" (click)="makeDispatchesVisible()">Crea Distinta</button>
+  <button class="float-right integraa-btn" [ngClass]="{'disabled': scheduleResultsDisplayedTab  === 'not_assigned' || !scheduleResults || !selected_sets.length}" [disabled]="scheduleResultsDisplayedTab === 'not_assigned' || !scheduleResults || !selected_sets.length" (click)="makeDispatchesVisible()">Crea Distinta</button>
   <button class="float-right integraa-btn mr-1" *ngIf="preDispatchData.has_not_fixed_products" [ngClass]="{'disabled': !movedNotFixedStorage.length}" [disabled]="!movedNotFixedStorage.length" (click)="saveMovedNotFixed()">Salva Indirizzi spostati</button>
 </div>
 

@@ -21,6 +21,7 @@ import {SnotifyService} from 'ng-snotify';
           styles: null
       };
       @Input() items;
+      @Input() mid_height = false;
       @Output() onAction = new EventEmitter();
       @Input() getMethod;
       @Input() multi = true;

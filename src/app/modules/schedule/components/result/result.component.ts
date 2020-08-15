@@ -10,7 +10,6 @@ import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {ListTreeService} from '../../service/list-tree.service';
 import {MapService} from '../../service/map.service';
 import {MapMarker} from '../../../../core/models/map-marker.interface';
-import {forEach} from '@angular/router/src/utils/collection';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {NotFixedTreeComponent} from '../../parts-components/not-fixed-tree/not-fixed-tree.component';
@@ -68,6 +67,8 @@ export class ResultComponent implements OnInit, OnDestroy {
   @ViewChild('ConfirmMoveToModal') confirmMoveToModal: ElementRef;
   notFixedCount = [];
   movedNotFixedStorage = [];
+  selected_sets = [];
+
   async ngOnInit() {
       this.loadPostmen();
       const results = await this.listTreeService.listNode(this.preDispatch,
@@ -191,15 +192,19 @@ export class ResultComponent implements OnInit, OnDestroy {
       return ('lvl-' + (next + '').split(':').length);
   }
 
-  makeDispatchesVisible() {
+  collectSelectedSets() {
       const sets = [] ;
       this.selected.forEach(item => {
           if ( item._type === 'set' && !item.is_distenta_created) { sets.push(item.id); }
       });
-      if (!sets.length) {
+      return sets ;
+  }
+
+  makeDispatchesVisible() {
+      if (!this.selected_sets.length) {
           return this.snotifyService.warning('Nessuna distinta selezionata', { showProgressBar: false, timeout: 1500 });
       }
-      this.resultsService.makeDispatchesVisible(this.preDispatch, sets).subscribe(
+      this.resultsService.makeDispatchesVisible(this.preDispatch, this.selected_sets).subscribe(
           data => {
               if (data.success) {
                   this.snotifyService.success('Distinta è stata creata con successo!',  { showProgressBar: false, timeout: 1500 });
@@ -500,7 +505,6 @@ export class ResultComponent implements OnInit, OnDestroy {
               day.selected = this.all_selected;
               this.selectDay(day, day.selected);
           });
-          return ;
       }
       if (type === 'product') {
           this.selectProduct(item);
@@ -510,6 +514,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       }
       item.selected = !item.selected ;
       item._type = type ;
+      this.selected_sets = this.collectSelectedSets();
       if (item.selected) {
           this.selected.push(item);
       } else {
@@ -528,6 +533,7 @@ export class ResultComponent implements OnInit, OnDestroy {
               this.selected = this.selected.filter((elm) => elm.id !== set.id);
           }
       });
+      this.selected_sets = this.collectSelectedSets();
   }
 
   selectProduct(product: any) {

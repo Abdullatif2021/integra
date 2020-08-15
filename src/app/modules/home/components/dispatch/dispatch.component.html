@@ -1,8 +1,26 @@
-<div class="d-flex tables-area full-width">
+<div class="d-flex tables-area full-width" *ngIf="viewType === 'table'">
   <div class="medium-table v-wide-col">
     <app-simple-table #postmenTable (changed)="changePostman($event)" [getMethod]="postmenGetMethod" [table]="postmenTableConfig"></app-simple-table>
   </div>
   <div class="v-large-table v-wide-col">
     <app-table #dispatchTable [items]="dispatchList" [table]="dispatchTableConfig" (orderChange)="changeOrder($event)" [parent]="this"></app-table>
+  </div>
+</div>
+
+<div class="d-flex tables-area full-width" *ngIf="viewType === 'calendar'">
+  <div class="calender-view-container">
+
+    <div class="small-table v-wide-col">
+        <app-simple-table #CitiesTable [table]="customPostmenTableConfig" [mid_height]="true" [getMethod]="postmenGetMethod"></app-simple-table>
+        <app-simple-table #CitiesTable [table]="reviserTableConfig" [mid_height]="true" [getMethod]="postmenGetMethod"></app-simple-table>
+    </div>
+    <div class="small-table v-wide-col">
+        <app-simple-table #CitiesTable [table]="simpleDispatchTableConfig" [getMethod]="dispatchGetMethod"></app-simple-table>
+    </div>
+
+    <div class="large-table v-wide-col">
+        <app-postmen-calendar [data]="calendar_data"></app-postmen-calendar>
+    </div>
+
   </div>
 </div>

@@ -88,12 +88,14 @@ export const FilterConfig = {
             {type: 'number', label: 'Quantity', key: 'quantity'},
             {type: ['date', 'date'], label: 'Data :', group: true, key: ['formDate', 'toDate']},
         ],
-        grouping: false
+        grouping: false,
     },
     dispatch: {
         search: (container, sp) => [],
         filters: (container, sp) => [],
-        grouping: false
+        grouping: false,
+        changeViewButton: {icon: '/assets/images/calendar.png', value: 'calendar'}
+
     }
 
 

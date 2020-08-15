@@ -52,6 +52,10 @@
         </ng-container>
         <ng-template #collapseArrowUp><fa-icon [icon]="['fa','chevron-up']"></fa-icon></ng-template>
       </button>
+
+      <button *ngIf="fieldsData && fieldsData.fields.changeViewButton" type="button" class="change-view-button float-right" (click)="changeViewButtonClicked(fieldsData.fields.changeViewButton.value)">
+        <img src="{{fieldsData.fields.changeViewButton.icon}}">
+      </button>
     </div>
     <!-- } expanded search expand btn -->
   </div>

@@ -17,6 +17,9 @@ export class FiltersService {
   // the filters was changed but the changes was not committed
   cleared = new EventEmitter<number>() ;
   fields = new EventEmitter() ;
+
+  // the user had clicked on change view type button
+  changeViewButtonClicked = new EventEmitter() ;
   filters = <any>{};
   specials: any = {};
   barcodes = [];
@@ -121,6 +124,11 @@ export class FiltersService {
 
   setSpecialFilter(key, value) {
       this.specials[key] = value ;
+  }
+
+
+  clickChangeViewButton(data) {
+      this.changeViewButtonClicked.emit(data);
   }
 
   clear() {

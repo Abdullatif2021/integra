@@ -117,3 +117,13 @@
     margin: auto;
     color: #222222;
 }
+
+.change-view-button {
+    border: 0px;
+    background: transparent;
+    margin: auto 10px;
+    width: 35px;
+}
+.change-view-button img {
+    width: 100%;
+}
