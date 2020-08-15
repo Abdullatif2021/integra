@@ -48,7 +48,7 @@ export class PostmenCalendarComponent implements OnInit {
   openEditDayAttachmentModal(day, idx) {
       day._idx = idx ;
       this.activeday = day ;
-      this.modelService.open(this.editDayAttachmentModal);
+      this.modelService.open(this.editDayAttachmentModal, {backdrop: 'static', keyboard: false});
   }
 
   fileSelected(event) {
@@ -60,6 +60,11 @@ export class PostmenCalendarComponent implements OnInit {
   saveDayAttachment() {
       if (this.selected_file) {
           this.activeday.attachment = this.selected_file.relativePath;
+          this.selected_file = null ;
       }
+  }
+
+  clearSelectedFile() {
+      this.selected_file = null;
   }
 }
