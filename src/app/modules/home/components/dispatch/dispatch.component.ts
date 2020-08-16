@@ -39,10 +39,11 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // DUMMY DATA {
   calendar_data = {
-      date: '16 - 23 agosto 2020',
+      date: '10 - 16 agosto 2020',
       days: [
           {
               note: 'Some note',
+              number: 10,
               attachment: 'something.docx',
               revisers: {
                   occupied: [
@@ -71,6 +72,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
           },
           {
               note: 'Some note',
+              number: 11,
               attachment: 'something.docx',
               revisers: {
                   occupied: [
@@ -100,6 +102,69 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
               },
           },
           {
+              number: 12,
+              note: 'Some note',
+              attachment: 'something.docx',
+              revisers: {
+                  occupied: [
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 2', note: ''},
+                  ],
+                  available: [
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 2', note: ''},
+                      {name: 'Postino 2', note: ''},
+                      {name: 'Postino 3', note: ''},
+                  ]
+              },
+              postmen: {
+                  occupied: [
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 2', note: ''},
+                  ],
+                  available: [
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 2', note: ''},
+                      {name: 'Postino 3', note: ''},
+                      {name: 'Postino 3', note: ''},
+                  ]
+              },
+          },
+          {
+              number: 13,
+              note: 'Some note',
+              attachment: 'something.docx',
+              revisers: {
+                  occupied: [
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 2', note: ''},
+                  ],
+                  available: [
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 2', note: ''},
+                      {name: 'Postino 2', note: ''},
+                      {name: 'Postino 3', note: ''},
+                  ]
+              },
+              postmen: {
+                  occupied: [
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 2', note: ''},
+                  ],
+                  available: [
+                      {name: 'Postino 1', note: ''},
+                      {name: 'Postino 2', note: ''},
+                      {name: 'Postino 3', note: ''},
+                      {name: 'Postino 3', note: ''},
+                  ]
+              },
+          },
+          {
+              number: 14,
               note: 'Some note',
               attachment: 'something.docx',
               revisers: {
@@ -131,6 +196,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
           },
           {
               note: 'Some note',
+              number: 15,
               attachment: 'something.docx',
               revisers: {
                   occupied: [
@@ -161,66 +227,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
           },
           {
               note: 'Some note',
-              attachment: 'something.docx',
-              revisers: {
-                  occupied: [
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 2', note: ''},
-                  ],
-                  available: [
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 2', note: ''},
-                      {name: 'Postino 2', note: ''},
-                      {name: 'Postino 3', note: ''},
-                  ]
-              },
-              postmen: {
-                  occupied: [
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 2', note: ''},
-                  ],
-                  available: [
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 2', note: ''},
-                      {name: 'Postino 3', note: ''},
-                      {name: 'Postino 3', note: ''},
-                  ]
-              },
-          },
-          {
-              note: 'Some note',
-              attachment: 'something.docx',
-              revisers: {
-                  occupied: [
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 2', note: ''},
-                  ],
-                  available: [
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 2', note: ''},
-                      {name: 'Postino 2', note: ''},
-                      {name: 'Postino 3', note: ''},
-                  ]
-              },
-              postmen: {
-                  occupied: [
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 2', note: ''},
-                  ],
-                  available: [
-                      {name: 'Postino 1', note: ''},
-                      {name: 'Postino 2', note: ''},
-                      {name: 'Postino 3', note: ''},
-                      {name: 'Postino 3', note: ''},
-                  ]
-              },
-          },
-          {
-              note: 'Some note',
+              number: 16,
               attachment: 'something.docx',
               revisers: {
                   occupied: [

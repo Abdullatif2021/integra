@@ -6,24 +6,24 @@
         <ng-container *ngFor="let day of data.days; let idx = index">
             <div class="calender-day-col" *ngIf="idx < days.length">
                 <div class="day-name day-row">{{days[idx]}}</div>
-                <div class="day-number day-row">{{idx + 1}}</div>
+                <div class="day-number day-row">{{day.number}}</div>
                 <div class="day-note day-row d-flex"><div class="note-text">{{day.note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(day, idx)"><fa-icon [icon]="['fa','pen']"></fa-icon></div></div>
                 <div class="day-attachment day-row d-flex"><a class="note-text text-truncate" href="#">{{day.attachment}}</a><div (click)="openEditDayAttachmentModal(day, idx)" class="edit-icon"><fa-icon [icon]="['fa','pen']"></fa-icon></div></div>
                 <div class="day-part revisers-part">
                     <div class="occupied-revisers-sub-part day-sub-part">
-                        <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.revisers.occupied,klass:'bg-green'}"></ng-container>
+                        <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.postmen.available,klass:'bg-green', title: 'Postman disponibili'}"></ng-container>
                     </div>
                     <div class="available-revisers-sub-part day-sub-part">
-                        <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.revisers.available,klass:'bg-red'}"></ng-container>
+                        <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.postmen.occupied,klass:'bg-red', title: 'Postman occupati'}"></ng-container>
                     </div>
                 </div>
 
                 <div class="day-part postmen-part mt-4">
                     <div class="occupied-postmen-sub-part day-sub-part">
-                        <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.postmen.occupied,klass:'bg-green'}"></ng-container>
+                        <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.revisers.available,klass:'bg-green', title: 'Revisori disponibili'}"></ng-container>
                     </div>
                     <div class="available-postmen-sub-part day-sub-part">
-                        <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.postmen.available,klass:'bg-red'}"></ng-container>
+                        <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.revisers.occupied,klass:'bg-red', title: 'Revisori occupati'}"></ng-container>
                     </div>
                 </div>
             </div>
@@ -33,9 +33,9 @@
 </div>
 
 
-<ng-template #data_set let-data="data" let-klass="klass">
+<ng-template #data_set let-data="data" let-klass="klass" let-title="title">
     <div class="data-set occupied-set">
-        <div class="data-set-header"> Revisori Occupati </div>
+        <div class="data-set-header">{{title}}</div>
         <div class="data-set-body">
             <ng-container *ngFor="let row of data; let idx = index">
                 <div class="data-set-row {{klass}}" [ngClass]="{'odd': idx%2, 'even': !(idx%2)}">

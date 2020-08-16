@@ -42,7 +42,7 @@ export const TablesConfig = {
         },
         customPostmenTable: {
             custom: true,
-            title: 'Expected Postmen',
+            title: 'Postmen',
             icon: 'assets/images/postman-icon.png',
             searchPlaceHolder: 'Cerca postino previsto',
             text: 'full_name'
