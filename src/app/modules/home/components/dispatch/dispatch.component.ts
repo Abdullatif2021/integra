@@ -31,11 +31,13 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
   current_postmen = null;
   viewType: any = 'table';
   _dispatchTable = null ;
+  subViewType = 'week';
   @ViewChild('dispatchTable') set content(elemnt: ElementRef) {
       if ( elemnt ) {
           this._dispatchTable = elemnt;
       }
   }
+  filtersConfig = null ;
 
   // DUMMY DATA {
   calendar_data = {
@@ -44,6 +46,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
           {
               note: 'Some note',
               number: 10,
+              date: '31 Marzo 2020',
               attachment: 'something.docx',
               revisers: {
                   occupied: [
@@ -74,6 +77,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
               note: 'Some note',
               number: 11,
               attachment: 'something.docx',
+              date: '1 Aprile 2020',
               revisers: {
                   occupied: [
                       {name: 'Postino 1', note: ''},
@@ -105,6 +109,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
               number: 12,
               note: 'Some note',
               attachment: 'something.docx',
+              date: '2 Aprile 2020',
               revisers: {
                   occupied: [
                       {name: 'Postino 1', note: ''},
@@ -119,6 +124,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
                   ]
               },
               postmen: {
+                  date: '3 Aprile 2020',
                   occupied: [
                       {name: 'Postino 1', note: ''},
                       {name: 'Postino 1', note: ''},
@@ -136,6 +142,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
               number: 13,
               note: 'Some note',
               attachment: 'something.docx',
+              date: '4 Aprile 2020',
               revisers: {
                   occupied: [
                       {name: 'Postino 1', note: ''},
@@ -167,6 +174,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
               number: 14,
               note: 'Some note',
               attachment: 'something.docx',
+              date: '5 Aprile 2020',
               revisers: {
                   occupied: [
                       {name: 'Postino 1', note: ''},
@@ -198,6 +206,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
               note: 'Some note',
               number: 15,
               attachment: 'something.docx',
+              date: '6 Aprile 2020',
               revisers: {
                   occupied: [
                       {name: 'Postino 1', note: ''},
@@ -229,6 +238,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
               note: 'Some note',
               number: 16,
               attachment: 'something.docx',
+              date: '7 Aprile 2020',
               revisers: {
                   occupied: [
                       {name: 'Postino 1', note: ''},
@@ -274,20 +284,39 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
       this.actionsService.setActions(this.actions) ;
       this.filtersService.clear();
       this.filtersService.setFields(FilterConfig.dispatch, this) ;
+      this.filtersConfig = <any>Object.assign({}, FilterConfig.dispatch);
+
+      // view change tables / calendar
       this.filtersService.changeViewButtonClicked.pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               this.viewType = data;
-              const filtersConfig = Object.assign({}, FilterConfig.dispatch);
-              filtersConfig.changeViewButton = this.viewType === 'table' ?
+              this.filtersConfig.changeViewButton = this.viewType === 'table' ?
                   {icon: '/assets/images/calendar.png', value: 'calendar'} :
                   {icon: '/assets/images/table.png', value: 'table'} ;
-              this.filtersService.setFields(filtersConfig, this) ;
-              console.log(this.viewType);
+              this.filtersConfig.helperButton = this.viewType === 'calendar' ? (
+                  this.subViewType === 'day' ?
+                      {icon: '/assets/images/week_icon.svg', value: 'week'} :
+                      {icon: '/assets/images/day_icon.png', value: 'day'}
+              ) : null;
+              this.filtersService.setFields(this.filtersConfig, this) ;
               if (this.viewType === 'table') {
                   this.loadItems(true);
               }
           }
       );
+
+      // subview change week / day
+      this.filtersService.helperButtonClicked.pipe(takeUntil(this.unsubscribe)).subscribe(
+          data => {
+              this.subViewType = data;
+              this.filtersConfig.helperButton = this.viewType === 'calendar' ? (
+                  this.subViewType === 'day' ?
+                      {icon: '/assets/images/week_icon.svg', value: 'week'} :
+                      {icon: '/assets/images/day_icon.png', value: 'day'}
+              ) : null;
+              this.filtersService.setFields(this.filtersConfig, this) ;
+          }
+      )
   }
 
   ngAfterViewInit() {

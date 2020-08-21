@@ -244,6 +244,10 @@ export class SearchPanelComponent implements OnInit {
       this.filtersService.clickChangeViewButton(value);
   }
 
+  clickHelperButton(value) {
+      this.filtersService.clickHelperButton(value);
+  }
+
   initFields() {
       this.filtersFields = this.fieldsData.fields.filters( this.fieldsData.container, this);
       this.searchFields = this.fieldsData.fields.search( this.fieldsData.container, this);

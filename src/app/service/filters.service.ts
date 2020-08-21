@@ -20,6 +20,7 @@ export class FiltersService {
 
   // the user had clicked on change view type button
   changeViewButtonClicked = new EventEmitter() ;
+  helperButtonClicked = new EventEmitter<string>() ;
   filters = <any>{};
   specials: any = {};
   barcodes = [];
@@ -129,6 +130,10 @@ export class FiltersService {
 
   clickChangeViewButton(data) {
       this.changeViewButtonClicked.emit(data);
+  }
+
+  clickHelperButton(data) {
+      this.helperButtonClicked.emit(data);
   }
 
   clear() {

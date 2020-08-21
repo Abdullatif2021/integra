@@ -9,7 +9,8 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 export class PostmenCalendarComponent implements OnInit {
 
   @Input() data ;
-
+  @Input() view = 'week';
+  current_day = 0;
   days = ['Lunedi', 'Martedi', 'Mercoledi', 'Giovedi', 'Venerdi', 'Sabato', 'Domenica']
 
 
@@ -19,6 +20,7 @@ export class PostmenCalendarComponent implements OnInit {
   activepostman = null ;
   activeday = null;
   selected_file = null ;
+  displayed_postman = null ;
   constructor(private modelService: NgbModal) { }
 
   ngOnInit() {
@@ -62,6 +64,17 @@ export class PostmenCalendarComponent implements OnInit {
           this.activeday.attachment = this.selected_file.relativePath;
           this.selected_file = null ;
       }
+  }
+
+  changeCurrentDay(step) {
+      if ((this.current_day === 0 && step < 0) || (this.current_day >= 6 && step > 0)){
+          return ;
+      }
+      this.current_day += step;
+  }
+
+  displayedPostman(postman) {
+      this.displayed_postman = postman;
   }
 
   clearSelectedFile() {

@@ -1,0 +1,25 @@
+.new-comment-button{
+    float: right;
+}
+.comments-title {
+    font-weight: bold;
+    font-size: 14px;
+}
+.comment-header {
+    display: flex;
+}
+.comment-user {
+    flex: 1;
+    font-weight: bold;
+}
+.comment-input {
+    font-size: 13px;
+}
+.comment-date {
+    margin: auto;
+    font-weight: bold;
+    font-size: 11px;
+}
+.comment-text {
+    margin-top: 2px;
+}

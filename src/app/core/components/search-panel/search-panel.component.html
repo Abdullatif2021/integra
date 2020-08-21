@@ -56,6 +56,10 @@
       <button *ngIf="fieldsData && fieldsData.fields.changeViewButton" type="button" class="change-view-button float-right" (click)="changeViewButtonClicked(fieldsData.fields.changeViewButton.value)">
         <img src="{{fieldsData.fields.changeViewButton.icon}}">
       </button>
+
+      <button *ngIf="fieldsData && fieldsData.fields.helperButton" type="button" class="change-view-button float-right" (click)="clickHelperButton(fieldsData.fields.helperButton.value)">
+        <img src="{{fieldsData.fields.helperButton.icon}}">
+      </button>
     </div>
     <!-- } expanded search expand btn -->
   </div>

@@ -30,6 +30,8 @@ import {faBackward} from '@fortawesome/free-solid-svg-icons/faBackward';
 import { IframeComponent } from './components/iframe/iframe.component';
 import { PostmenCalendarComponent } from './components/postmen-calendar/postmen-calendar.component';
 import {NgxFileDropModule} from 'ngx-file-drop';
+import {faChevronLeft} from '@fortawesome/free-solid-svg-icons/faChevronLeft';
+import { CommentsComponent } from './components/comments/comments.component';
 
 @NgModule({
   imports: [
@@ -53,7 +55,8 @@ import {NgxFileDropModule} from 'ngx-file-drop';
       LoadingComponent,
       AddressInputComponent,
       IframeComponent,
-      PostmenCalendarComponent
+      PostmenCalendarComponent,
+      CommentsComponent
   ],
   exports: [
       SearchBoxComponent,
@@ -77,6 +80,7 @@ export class SharedModule {
     constructor() {
         library.add(faSearch);
         library.add(faChevronRight);
+        library.add(faChevronLeft);
         library.add(faChevronUp);
         library.add(faCheck);
         library.add(faMinus);
