@@ -15,7 +15,7 @@
         <app-simple-table #CitiesTable [table]="reviserTableConfig" [mid_height]="true" [getMethod]="postmenGetMethod"></app-simple-table>
     </div>
     <div class="small-table v-wide-col">
-        <app-simple-table #CitiesTable [table]="simpleDispatchTableConfig" [getMethod]="dispatchGetMethod"></app-simple-table>
+        <app-simple-table #CitiesTable [multi]="false" [table]="simpleDispatchTableConfig" [getMethod]="dispatchGetMethod"></app-simple-table>
     </div>
 
     <div class="large-table v-wide-col">

@@ -178,6 +178,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
             hours_per_day_hour: this.preDispatchData.hours_per_day_hour,
             hours_per_day_minute: this.preDispatchData.hours_per_day_minute,
             max_product: this.preDispatchData.max_product,
+            resolve_absent_products: this.preDispatchData.resolve_absent_products
         };
     }
 

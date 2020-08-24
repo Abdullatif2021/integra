@@ -227,7 +227,8 @@ import {SnotifyService} from 'ng-snotify';
               }
           }
           if (!this.multi) { // if the table was single element select.
-              this.selected = item;
+              this.selected = {};
+              this.selected[item.id] = item;
               return this.changed.emit(item);
           }
           // handle multiple items select.

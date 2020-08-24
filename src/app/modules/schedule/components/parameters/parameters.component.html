@@ -114,7 +114,7 @@
       </div>
       <!-- Section 5  -->
 
-      <div class="parameters-section">
+      <div class="parameters-section" *ngIf="!preDispatchData.is_mixed">
         <div class="parameters-section-title">.</div>
         <div class="row parameter-item">
           <div class="col-10"> <label>Vuoi far uscire sulla stessa via gli esiti degli assenti e non assenti per fare i passaggi successivi nella stessa distinta?</label> </div>

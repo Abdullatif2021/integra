@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UserNavComponent } from './components/user-nav/user-nav.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCogs, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import {faCogs, faChevronDown, faChevronUp, faCalendarWeek} from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { SearchPanelComponent } from './components/search-panel/search-panel.component';
@@ -24,6 +24,7 @@ import {IntegraaModalComponent} from './components/integraa-modal/integraa-modal
 import {AngularDraggableModule} from 'angular2-draggable';
 import { GlobalModalsComponent } from './components/global-modals/global-modals.component';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+import {faCalendarDay} from '@fortawesome/free-solid-svg-icons/faCalendarDay';
 
 @NgModule({
   imports: [
@@ -66,5 +67,7 @@ export class CoreModule {
         library.add(faArrowsAltH);
         library.add(faExternalLinkAlt);
         library.add(faTimes);
+        library.add(faCalendarDay);
+        library.add(faCalendarWeek);
     }
 }

@@ -21,6 +21,8 @@ export class PostmenCalendarComponent implements OnInit {
   activeday = null;
   selected_file = null ;
   displayed_postman = null ;
+
+  current_day_info = {delivered_expanded: false, not_delivered_expanded: false};
   constructor(private modelService: NgbModal) { }
 
   ngOnInit() {

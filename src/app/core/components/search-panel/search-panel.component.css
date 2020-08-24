@@ -127,3 +127,18 @@
 .change-view-button img {
     width: 100%;
 }
+
+.change-view-tabs-container {
+    display: flex;
+    float: right;
+}
+.change-view-tab {
+    font-size: 13px;
+    padding: 2px 14px;
+    margin-right: 5px;
+    border-bottom: 2px solid #c1c1c1;
+    cursor: pointer;
+}
+.change-view-tab:hover, .active-view-tab {
+    border-bottom: 2px solid #fcda4b;
+}

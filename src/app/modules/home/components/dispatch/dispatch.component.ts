@@ -293,11 +293,13 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
               this.filtersConfig.changeViewButton = this.viewType === 'table' ?
                   {icon: '/assets/images/calendar.png', value: 'calendar'} :
                   {icon: '/assets/images/table.png', value: 'table'} ;
-              this.filtersConfig.helperButton = this.viewType === 'calendar' ? (
-                  this.subViewType === 'day' ?
-                      {icon: '/assets/images/week_icon.svg', value: 'week'} :
-                      {icon: '/assets/images/day_icon.png', value: 'day'}
-              ) : null;
+              this.filtersConfig.changeViewTabs = this.viewType === 'calendar' ? {
+                  tabs: [
+                      {text: 'Week', value: 'week', active: this.subViewType === 'week', icon: ['fa', 'calendar-week']},
+                      {text: 'Day', value: 'day', active: this.subViewType === 'day', icon: ['fa', 'calendar-day']},
+                  ]
+              } : null ;
+              console.log(this.filtersConfig);
               this.filtersService.setFields(this.filtersConfig, this) ;
               if (this.viewType === 'table') {
                   this.loadItems(true);
@@ -306,17 +308,12 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
       );
 
       // subview change week / day
-      this.filtersService.helperButtonClicked.pipe(takeUntil(this.unsubscribe)).subscribe(
+      this.filtersService.changeViewTabsChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               this.subViewType = data;
-              this.filtersConfig.helperButton = this.viewType === 'calendar' ? (
-                  this.subViewType === 'day' ?
-                      {icon: '/assets/images/week_icon.svg', value: 'week'} :
-                      {icon: '/assets/images/day_icon.png', value: 'day'}
-              ) : null;
               this.filtersService.setFields(this.filtersConfig, this) ;
           }
-      )
+      );
   }
 
   ngAfterViewInit() {

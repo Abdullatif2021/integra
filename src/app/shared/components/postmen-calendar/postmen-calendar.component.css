@@ -178,3 +178,6 @@
     word-break: break-all;
     padding: 0px;
 }
+.show-more-statuses-count {
+    cursor: pointer;
+}

@@ -244,8 +244,10 @@ export class SearchPanelComponent implements OnInit {
       this.filtersService.clickChangeViewButton(value);
   }
 
-  clickHelperButton(value) {
-      this.filtersService.clickHelperButton(value);
+  clickHelperButton(tab) {
+      this.fieldsData.fields.changeViewTabs.tabs.forEach((_tab) => _tab.active = false);
+      tab.active = true ;
+      this.filtersService.changeViewTabsChanged(tab.value);
   }
 
   initFields() {

@@ -44,7 +44,7 @@
       </div>
     </div>
     <!-- expanded search expand btn { -->
-    <div class="col-lg-2" [ngClass]="{'offset-10':!isCollapsed, 'offset-3':!_has_active_filters}">
+    <div class="col-lg-3" [ngClass]="{'offset-9':!isCollapsed, 'offset-2':!_has_active_filters}">
       <button type="button" class="integraa-btn search-panel-collapse-btn float-right" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="isCollapsed" aria-controls="searchCollapse">
         <span class="mr-1">Filtra</span>
         <ng-container *ngIf="isCollapsed; else collapseArrowUp">
@@ -57,9 +57,12 @@
         <img src="{{fieldsData.fields.changeViewButton.icon}}">
       </button>
 
-      <button *ngIf="fieldsData && fieldsData.fields.helperButton" type="button" class="change-view-button float-right" (click)="clickHelperButton(fieldsData.fields.helperButton.value)">
-        <img src="{{fieldsData.fields.helperButton.icon}}">
-      </button>
+      <div class="change-view-tabs-container" *ngIf="fieldsData && fieldsData.fields.changeViewTabs">
+        <div class="change-view-tab" *ngFor="let tab of fieldsData.fields.changeViewTabs.tabs" (click)="clickHelperButton(tab)" [ngClass]="{'active-view-tab': tab.active}" >
+          <fa-icon *ngIf="tab.icon" [icon]="tab.icon"></fa-icon>
+          {{tab.text}}
+        </div>
+      </div>
     </div>
     <!-- } expanded search expand btn -->
   </div>

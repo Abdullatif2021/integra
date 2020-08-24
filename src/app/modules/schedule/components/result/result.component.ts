@@ -197,6 +197,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.selected.forEach(item => {
           if ( item._type === 'set' && !item.is_distenta_created) { sets.push(item.id); }
       });
+      console.log(this.selected, sets);
       return sets ;
   }
 
@@ -514,12 +515,12 @@ export class ResultComponent implements OnInit, OnDestroy {
       }
       item.selected = !item.selected ;
       item._type = type ;
-      this.selected_sets = this.collectSelectedSets();
       if (item.selected) {
           this.selected.push(item);
       } else {
           this.selected = this.selected.filter((elm) => elm.id !== item.id);
       }
+      this.selected_sets = this.collectSelectedSets();
   }
 
   selectDay(item, select = false) {
