@@ -18,6 +18,7 @@ import {Router} from '@angular/router';
 import {BackProcessingService} from '../../../../service/back-processing.service';
 import {LocatingService} from '../../../../service/locating/locating.service';
 import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-global-actions.service';
+import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 
 @Component({
   selector: 'app-pre-dispatch',
@@ -46,6 +47,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       private filtersService: FiltersService,
       private preDispatchService: PreDispatchService,
       private actionsService: ActionsService,
+      private preDispatchActionsService: PreDispatchActionsService,
       private integraaModalService: IntegraaModalService,
       private componentFactoryResolver: ComponentFactoryResolver,
       private modalService: NgbModal,
@@ -59,7 +61,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
         this.actionsService.setActions(this.actions) ;
         this.filtersService.clear();
         this.loadItems(true, true);
-        this.actionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
+        this.preDispatchActionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
             this.loadItems(false) ;
             this.preDispatchService.selectedPreDispatches = [] ;
         });

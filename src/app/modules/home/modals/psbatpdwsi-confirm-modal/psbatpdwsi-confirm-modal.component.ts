@@ -3,6 +3,7 @@ import {ModalComponent} from '../modal.component';
 import {ApiResponseInterface} from '../../../../core/models/api-response.interface';
 import {ActionsService} from '../../../../service/actions.service';
 import {SnotifyService} from 'ng-snotify';
+import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 
 @Component({
   selector: 'app-psbatpdwsi-confirm-modal',
@@ -12,7 +13,7 @@ import {SnotifyService} from 'ng-snotify';
 export class PsbatpdwsiConfirmModalComponent extends ModalComponent implements OnInit {
 
   constructor(
-      private actionsService: ActionsService,
+      private preDispatchActionsService: PreDispatchActionsService,
       private snotifyService: SnotifyService,
   ) {
       super();
@@ -28,7 +29,7 @@ export class PsbatpdwsiConfirmModalComponent extends ModalComponent implements O
       if (!this.data.data[0]) {
           this.snotifyService.error('Something went wrong', { showProgressBar: false, timeout: 3000 });
       }
-      this.actionsService.createNewPreDispatch(this.data.defaultData, this.data.name, (error) => {
+      this.preDispatchActionsService.createNewPreDispatch(this.data.defaultData, this.data.name, (error) => {
       }, true, [], this.data.data[0].id) ;
   }
 }

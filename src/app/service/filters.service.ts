@@ -33,6 +33,7 @@ export class FiltersService {
   }
 
   updateFilters(filters, placeholders = {}) {
+      console.log('updated', filters);
     const grouping = filters.grouping;
     this.grouping =  grouping ? grouping : 'by_cap' ;
     this.filters = Object.assign({}, filters) ;
@@ -102,7 +103,7 @@ export class FiltersService {
 
   addBarcodeFilter(barcode) {
       this.barcodes.push(barcode) ;
-      this.updateFilters([{key: 'barcode', value: this.barcodes}]);
+      this.updateFilters({barcode: this.barcodes});
   }
 
   clearBarcodFilter() {

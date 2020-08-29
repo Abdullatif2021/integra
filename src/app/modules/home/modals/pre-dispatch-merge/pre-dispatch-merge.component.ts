@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ModalComponent} from '../modal.component';
-import {ActionsService} from '../../../../service/actions.service';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
+import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 
 @Component({
   selector: 'app-pre-dispatch-merge',
@@ -11,7 +11,7 @@ import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 export class PreDispatchMergeComponent extends ModalComponent implements OnInit {
 
   constructor(
-      private actionsService: ActionsService,
+      private preDispatchActionsService: PreDispatchActionsService,
       public preDispatchService: PreDispatchService
   ) {
     super();
@@ -33,7 +33,7 @@ export class PreDispatchMergeComponent extends ModalComponent implements OnInit 
     if ( !this.name || this.name === '') { return this.error = 1 ; }
     if ( this.name.length < 3 ) { return this.error = 2 ; }
 
-    this.actionsService.mergePreDispatches(this.name) ;
+    this.preDispatchActionsService.mergePreDispatches(this.name) ;
     modal.close();
   }
 

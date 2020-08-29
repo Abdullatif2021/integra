@@ -34,7 +34,7 @@ export class ImportFromBarcodesComponent extends ModalComponent implements OnIni
 
   run(modal) {
       this.productsService.selectAllOnLoad(true);
-      this.filtersService.updateFilters([{key: 'barcode', value: this.items}]);
+      this.filtersService.updateFilters({barcode: this.items});
       modal.close();
   }
 

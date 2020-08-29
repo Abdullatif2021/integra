@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {ModalComponent} from '../modal.component';
-import {ActionsService} from '../../../../service/actions.service';
 import {FiltersService} from '../../../../service/filters.service';
 import {ProductsService} from '../../../../service/products.service';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
+import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 
 @Component({
   selector: 'app-pre-dispatch-add-direct',
@@ -12,7 +12,7 @@ import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 })
 export class PreDispatchAddDirectComponent extends ModalComponent implements OnInit {
     constructor(
-        private actionsService: ActionsService,
+        private preDispatchActionsService: PreDispatchActionsService,
         public productsService: ProductsService,
         public filtersService: FiltersService,
         private preDispatchService: PreDispatchService
@@ -35,7 +35,7 @@ export class PreDispatchAddDirectComponent extends ModalComponent implements OnI
 
     run(modal) {
         console.log('sdfsd', this.preDispatchService.getActivePreDispatch());
-        this.actionsService.addToPreDispatch(this.data, this.preDispatchService.getActivePreDispatch()) ;
+        this.preDispatchActionsService.addToPreDispatch(this.data, this.preDispatchService.getActivePreDispatch()) ;
         modal.close();
     }
 }

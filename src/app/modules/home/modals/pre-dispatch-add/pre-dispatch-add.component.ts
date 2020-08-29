@@ -8,6 +8,7 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {PaginationService} from '../../../../service/pagination.service';
 import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 
 @Component({
   selector: 'app-pre-dispatch-add',
@@ -32,7 +33,7 @@ export class PreDispatchAddComponent extends ModalComponent implements OnInit, O
   searching = false;
   constructor(
       private preDispatchService: PreDispatchService,
-      private actionsService: ActionsService,
+      private preDispatchActionsService: PreDispatchActionsService,
       public productsService: ProductsService,
       public paginationService: PaginationService,
       private modalService: NgbModal
@@ -73,7 +74,7 @@ export class PreDispatchAddComponent extends ModalComponent implements OnInit, O
 
   run(modal, already_in_other_modal_ref) {
     if (!this.selected) { return this.error = 1 ; }
-    this.actionsService.addToPreDispatch(this.data, this.selected, (error) => {
+    this.preDispatchActionsService.addToPreDispatch(this.data, this.selected, (error) => {
         if (error && error.statusCode && error.statusCode === 507) {
             // show the repeated data modal
             this.products_with_errors = error.data ;

@@ -93,11 +93,17 @@ body{
 .h-33{
     height: 33px !important;
 }
+.h-30 {
+    height: 25px !important;
+}
 .h-39{
     height: 39px !important;
 }
 .h-45{
     height: 45px !important;
+}
+.w-90 {
+    width: 90% !important;
 }
 .success-text{
     color: #4CAF50;

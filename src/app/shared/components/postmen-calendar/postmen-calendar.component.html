@@ -1,32 +1,46 @@
 <ng-container *ngIf="view==='week'">
     <div class="postmen-calender-container">
 
-        <div class="date-value">{{data.date}}</div>
+        <div class="date-value">{{formatted_date}}</div>
 
         <div class="calender-table">
-            <ng-container *ngFor="let day of data.days; let idx = index">
-                <div class="calender-day-col" *ngIf="idx < days.length">
-                    <div class="day-name day-row">{{days[idx]}}</div>
-                    <div class="day-number day-row">{{day.number}}</div>
+            <ng-container *ngFor="let day of data; let idx = index">
+                <div class="calender-day-col" *ngIf="day.skeleton">
+                    <div class="day-name day-row"><div class="rect-loading-skeleton w-90 h-30"></div></div>
+                    <div class="day-number day-row"><div class="rect-loading-skeleton w-90 h-30"></div></div>
+                    <div class="day-note day-row d-flex"><div class="note-text"><div class="rect-loading-skeleton w-90 h-30"></div></div></div>
+                    <div class="day-attachment day-row d-flex"><a class="note-text text-truncate" href="#"><div class="rect-loading-skeleton w-90 h-30"></div></a></div>
+                    <div class="day-part revisers-part">
+                        <div class="occupied-revisers-sub-part day-sub-part">
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[{skeleton: true},{skeleton: true}],klass:'bg-green', title: 'Postman disponibili'}"></ng-container>
+                        </div>
+                        <div class="available-revisers-sub-part day-sub-part">
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[{skeleton: true},{skeleton: true}],klass:'bg-red', title: 'Postman occupati'}"></ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="calender-day-col" *ngIf="!day.skeleton">
+                    <div class="day-name day-row">{{day.dayName}}</div>
+                    <div class="day-number day-row">{{day.dayNumber}}</div>
                     <div class="day-note day-row d-flex"><div class="note-text">{{day.note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(day, idx)"><fa-icon [icon]="['fa','pen']"></fa-icon></div></div>
                     <div class="day-attachment day-row d-flex"><a class="note-text text-truncate" href="#">{{day.attachment}}</a><div (click)="openEditDayAttachmentModal(day, idx)" class="edit-icon"><fa-icon [icon]="['fa','pen']"></fa-icon></div></div>
                     <div class="day-part revisers-part">
                         <div class="occupied-revisers-sub-part day-sub-part">
-                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.postmen.available,klass:'bg-green', title: 'Postman disponibili'}"></ng-container>
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.availablePostmen,day: day,klass:'bg-green', title: 'Postman disponibili', more: 'availablePostmen'}"></ng-container>
                         </div>
                         <div class="available-revisers-sub-part day-sub-part">
-                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.postmen.occupied,klass:'bg-red', title: 'Postman occupati'}"></ng-container>
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.postmen,day: day,klass:'bg-red', title: 'Postman occupati'}"></ng-container>
                         </div>
                     </div>
 
-                    <div class="day-part postmen-part mt-4">
-                        <div class="occupied-postmen-sub-part day-sub-part">
-                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.revisers.available,klass:'bg-green', title: 'Revisori disponibili'}"></ng-container>
-                        </div>
-                        <div class="available-postmen-sub-part day-sub-part">
-                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.revisers.occupied,klass:'bg-red', title: 'Revisori occupati'}"></ng-container>
-                        </div>
-                    </div>
+                    <!--<div class="day-part postmen-part mt-4">-->
+                        <!--<div class="occupied-postmen-sub-part day-sub-part">-->
+                            <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[],day: day,klass:'bg-green', title: 'Revisori disponibili'}"></ng-container>-->
+                        <!--</div>-->
+                        <!--<div class="available-postmen-sub-part day-sub-part">-->
+                            <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[],day: dayklass:'bg-red', title: 'Revisori occupati'}"></ng-container>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </div>
             </ng-container>
         </div>
@@ -34,137 +48,166 @@
     </div>
 </ng-container>
 <ng-container *ngIf="view==='day'">
-    <div class="postmen-calender-container">
-
-        <div class="single-day-header">
+    <div class="postmen-calender-container" *ngIf="data && data.length">
+        <div class="single-day-header" *ngIf="!data[current_day].skeleton">
             <div class="single-day-date-switch">
                 <div class="single-day-date-switch-left" (click)="changeCurrentDay(-1)" [ngClass]="{'disabled-day-change': current_day === 0}"><fa-icon [icon]="['fa', 'chevron-left']"></fa-icon></div>
                 <div class="single-day-date-switch-cinter">
-                    <div class="single-day-date-value">{{data.days[current_day].date}}</div>
-                    <div>{{days[current_day]}}</div>
+                    <div class="single-day-date-value">{{data[current_day].dayDate}}</div>
+                    <div>{{data[current_day].dayName}}</div>
                 </div>
-                <div class="single-day-date-switch-right" (click)="changeCurrentDay(1)" [ngClass]="{'disabled-day-change': current_day === 6}"><fa-icon [icon]="['fa', 'chevron-right']"></fa-icon></div>
+                <div class="single-day-date-switch-right" (click)="changeCurrentDay(1)" [ngClass]="{'disabled-day-change': current_day === data.length - 1}"><fa-icon [icon]="['fa', 'chevron-right']"></fa-icon></div>
             </div>
-            <div class="single-day-note-text">{{data.days[current_day].note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(data.days[current_day], current_day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
+            <div class="single-day-note-text">{{data[current_day].note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(data[current_day], current_day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
             <div class="single-day-attachment"><img src="/assets/images/file_icon.svg"></div>
         </div>
-
+        <div class="single-day-header" *ngIf="data[current_day].skeleton">
+            <div class="rect-loading-skeleton w-100 h-30"></div>
+        </div>
         <div class="d-flex postman-info-content">
             <div [ngClass]="{'full-width-single-day-calender-table': !displayed_postman}" class="single-day-calender-table mt-2">
-                <div class="single-day-col">
+                <div class="single-day-col" *ngIf="!data[current_day].skeleton">
                     <div class="day-part revisers-part">
                         <div class="occupied-revisers-sub-part day-sub-part">
-                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data.days[current_day].postmen.available,klass:'bg-green', title: 'Postman disponibili'}"></ng-container>
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].availablePostmen,day: data[current_day], klass:'bg-green', title: 'Postman disponibili', more: 'availablePostmen'}"></ng-container>
                         </div>
                         <div class="available-revisers-sub-part day-sub-part">
-                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data.days[current_day].postmen.occupied,klass:'bg-red', title: 'Postman occupati'}"></ng-container>
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].postmen,day: data[current_day], klass:'bg-red', title: 'Postman occupati'}"></ng-container>
                         </div>
                     </div>
 
-                    <div class="day-part postmen-part mt-4">
-                        <div class="occupied-postmen-sub-part day-sub-part">
-                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data.days[current_day].revisers.available,klass:'bg-green', title: 'Revisori disponibili'}"></ng-container>
+                    <!--<div class="day-part postmen-part mt-4">-->
+                        <!--<div class="occupied-postmen-sub-part day-sub-part">-->
+                            <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].revisers.available,day: data[current_day], klass:'bg-green', title: 'Revisori disponibili'}"></ng-container>-->
+                        <!--</div>-->
+                        <!--<div class="available-postmen-sub-part day-sub-part">-->
+                            <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].revisers.occupied,day: data[current_day], klass:'bg-red', title: 'Revisori occupati'}"></ng-container>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                </div>
+                <div class="single-day-col" *ngIf="data[current_day].skeleton">
+                    <div class="day-part revisers-part">
+                        <div class="occupied-revisers-sub-part day-sub-part">
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[{skeleton: true}, {skeleton: true}],klass:'bg-green', title: 'Postman disponibili'}"></ng-container>
                         </div>
-                        <div class="available-postmen-sub-part day-sub-part">
-                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data.days[current_day].revisers.occupied,klass:'bg-red', title: 'Revisori occupati'}"></ng-container>
+                        <div class="available-revisers-sub-part day-sub-part">
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[{skeleton: true}, {skeleton: true}],klass:'bg-red', title: 'Postman occupati'}"></ng-container>
                         </div>
                     </div>
+
+                    <!--<div class="day-part postmen-part mt-4">-->
+                        <!--<div class="occupied-postmen-sub-part day-sub-part">-->
+                            <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[{skeleton: true}, {skeleton: true}],klass:'bg-green', title: 'Revisori disponibili'}"></ng-container>-->
+                        <!--</div>-->
+                        <!--<div class="available-postmen-sub-part day-sub-part">-->
+                            <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[{skeleton: true}, {skeleton: true}],klass:'bg-red', title: 'Revisori occupati'}"></ng-container>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </div>
             </div>
             <div  *ngIf="displayed_postman" class="postman-info-table mt-2">
-                <div class="postman-info-container">
-                    <div class="postman-info-row">
-                        <div class="postman-info-label">Distinta</div>
-                        <div class="postman-info-value">de-5x8659f896129-1103201911-35208</div>
-                    </div>
+                <div *ngIf="!details">
+                    <div class="rect-loading-skeleton w-100 h-30"></div>
+                    <div class="rect-loading-skeleton w-100 h-30"></div>
+                    <div class="rect-loading-skeleton w-100 h-30"></div>
+                    <div class="rect-loading-skeleton w-100 h-30"></div>
+                    <div class="rect-loading-skeleton w-100 h-30"></div>
+                </div>
+                <div *ngIf="details" class="postman-info-container">
+                    <!--<div class="postman-info-row">-->
+                        <!--<div class="postman-info-label">Distinta</div>-->
+                        <!--<div class="postman-info-value">de-5x8659f896129-1103201911-35208</div>-->
+                    <!--</div>-->
                     <div class="postman-info-row">
                         <div class="postman-info-label">Data creazione</div>
-                        <div class="postman-info-value">15/08/2020</div>
+                        <div class="postman-info-value">{{details.createdAt}}</div>
                     </div>
                     <div class="postman-info-row">
                         <div class="postman-info-label">Data lavorazione</div>
-                        <div class="postman-info-value">20/08/2020</div>
+                        <div class="postman-info-value">{{details.startedAt}}</div>
                     </div>
                     <div class="postman-info-row">
                         <div class="postman-info-label">Postino</div>
-                        <div class="postman-info-value">Turco Luca</div>
+                        <div class="postman-info-value">{{details.postmanName}}</div>
                     </div>
                     <div class="postman-info-row">
                         <div class="postman-info-label">Quantita prodotti</div>
-                        <div class="postman-info-value">200 prodotti</div>
+                        <div class="postman-info-value">{{details.quantity}} prodotti</div>
                     </div>
                     <div class="postman-info-row2">
                         <div class="postman-info-label">Specifica Consegna</div>
                         <div class="postman-info-value">
-                            <div><span class="show-more-statuses-count" (click)="current_day_info.delivered_expanded = !current_day_info.delivered_expanded"><fa-icon [icon]="['fa', !current_day_info.delivered_expanded ? 'chevron-right' : 'chevron-down']"></fa-icon></span> 20 Consegnati</div>
-                            <div class="statuses-counts-collabse pl-4" *ngIf="current_day_info.delivered_expanded">
-                                <div>Raccomendate: 5</div>
-                                <div>Notiche: 11</div>
-                                <div>Posta: 4</div>
-                            </div>
-                            <div><span class="show-more-statuses-count" (click)="current_day_info.not_delivered_expanded = !current_day_info.not_delivered_expanded"><fa-icon [icon]="['fa', !current_day_info.not_delivered_expanded ? 'chevron-right' : 'chevron-down']"></fa-icon></span> 180 Non Consegnati</div>
-                            <div class="statuses-counts-collabse pl-4" *ngIf="current_day_info.not_delivered_expanded">
-                                <div>Raccomendate: 30</div>
-                                <div>Notiche: 40</div>
-                                <div>Posta: 24</div>
-                                <div>Massiva: 86</div>
-                            </div>
+                            <div><span class="show-more-statuses-count" (click)="current_day_info.delivered_expanded = !current_day_info.delivered_expanded"><fa-icon [icon]="['fa', !current_day_info.delivered_expanded ? 'chevron-right' : 'chevron-down']"></fa-icon></span> {{details.deliveredProducts}} Consegnati</div>
+                            <!--<div class="statuses-counts-collabse pl-4" *ngIf="current_day_info.delivered_expanded">-->
+                                <!--<div>Raccomendate: 5</div>-->
+                                <!--<div>Notiche: 11</div>-->
+                                <!--<div>Posta: 4</div>-->
+                            <!--</div>-->
+                            <div><span class="show-more-statuses-count" (click)="current_day_info.not_delivered_expanded = !current_day_info.not_delivered_expanded"><fa-icon [icon]="['fa', !current_day_info.not_delivered_expanded ? 'chevron-right' : 'chevron-down']"></fa-icon></span> {{details.notDeliveredProducts}} Non Consegnati</div>
+                            <!--<div class="statuses-counts-collabse pl-4" *ngIf="current_day_info.not_delivered_expanded">-->
+                                <!--<div>Raccomendate: 30</div>-->
+                                <!--<div>Notiche: 40</div>-->
+                                <!--<div>Posta: 24</div>-->
+                                <!--<div>Massiva: 86</div>-->
+                            <!--</div>-->
                         </div>
                     </div>
                     <div class="postman-info-row2">
                         <div class="postman-info-label">Specifica Prodotti</div>
                         <div class="postman-info-value">
-                            <div>Raccomendate: 10</div>
-                            <div>Notiche: 50</div>
-                            <div>Posta: 40</div>
-                            <div>Massiva: 100</div>
+                            <div class="font-size-12px" *ngFor="let item of details.productsByCategories">
+                                {{item.key}}: {{item.value}}
+                            </div>
                         </div>
                     </div>
                     <div class="postman-info-row2">
                         <div class="postman-info-label">Specifica Distribuzione</div>
                         <ul class="postman-info-value ml-3">
-                            <li>40023 - Imola - Notiche - 10 Prodotti</li>
-                            <li>40024 - Imola - Notiche - 50 Prodotti</li>
-                            <li>40025 - Imola - Notiche - 40 Prodotti</li>
-                            <li>40026 - Imola - Notiche - 100 Prodotti</li>
+                            <li class="font-size-12px" *ngFor="let item of details.productsByAddresses">
+                                {{item.key}} - {{item.value}} Prodotti
+                            </li>
                         </ul>
                     </div>
                     <div class="postman-info-row2">
                         <div class="postman-info-label">Operatore che prepara la borsa</div>
-                        <ng-select class="integraa-select" [bindLabel]="'name'" [items]="[{id:1, name:'Mario Rossi'}, {id:2, name:'Someone Somthing'}]"></ng-select>
+                        <ng-select class="integraa-select" [bindLabel]="'name'" [items]="availableUsers" (change)="assignToUser($event)"></ng-select>
                     </div>
                     <div class="postman-info-row2">
                         <div class="postman-info-label">Esito preparazione borsa</div>
                         <ng-select class="integraa-select" [bindLabel]="'name'" [items]="[{id:1, name:'Borsa Pronta alla consegna'}]"></ng-select>
                     </div>
                     <div class="notes postman-info-row2 mt-3">
-                        <app-comments title="Note interne"></app-comments>
+                        <app-comments title="Note interne" [comments]="details.internalNotes" (commentAdded)="addSetNote($event, 'internal_note')"></app-comments>
                     </div>
                     <div class="postman-notifications postman-info-row2 mt-3">
-                        <app-comments title="Notifica per postino"></app-comments>
+                        <app-comments title="Notifica per postino" [comments]="details.postmanNotes"></app-comments>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="postmen-calender-container no-data-postmen-calender-container" *ngIf="!data"></div>
 </ng-container>
 
 <!-- Templates -->
-<ng-template #data_set let-data="data" let-klass="klass" let-title="title">
+<ng-template #data_set let-data="data" let-more='more' let-day='day' let-klass="klass" let-title="title">
     <div class="data-set occupied-set">
         <div class="data-set-header">{{title}}</div>
         <div class="data-set-body">
             <ng-container *ngFor="let row of data; let idx = index">
-                <div class="data-set-row {{klass}}" (click)="displayedPostman(row)" [ngClass]="{'odd': idx%2, 'even': !(idx%2)}">
+                <div *ngIf="row.skeleton"><div class="rect-loading-skeleton mt-2 w-90 h-30"></div></div>
+                <div *ngIf="!row.skeleton" class="data-set-row {{klass}}" (click)="displayedPostman(row)" [ngClass]="{'odd': idx%2, 'even': !(idx%2)}">
                     <div class="d-flex">
                         <div class="postman-icon"><img src="/assets/images/postman-icon.png"></div>
-                        <div class="postman-name">{{row.name}}</div>
-                        <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal(row)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
+                        <div class="postman-name">{{row.full_name}}</div>
+                        <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal(row, day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
                     </div>
                     <div class="postman-note">{{row.note}}</div>
                 </div>
             </ng-container>
-
+            <div *ngIf="data.length > 4 && more" class="data-set-row {{klass}} more-button" (click)="showMore(day, more)" [ngClass]="{'odd': data.length%2, 'even': !(data.length%2)}">
+                More
+            </div>
         </div>
     </div>
 </ng-template>
@@ -225,6 +268,34 @@
             <div class="btns-container mt-3">
                 <button type="button" (click)="modal.close();saveDayAttachment()" class="integraa-btn ml-2 float-right" >Continua</button>
                 <button type="button" (click)="modal.close();clearSelectedFile()" class="integraa-btn ml-2 bg-light float-right" >Annulla</button>
+                <div class="clear-both"></div>
+            </div>
+        </div>
+    </div>
+
+</ng-template>
+<ng-template #showMoreAvailablePostmenModal let-modal>
+
+    <div class="modal-container nFoundItemModal">
+        <div class="modal-body">
+            <h6 class="text-center">
+                Available Postmen.
+            </h6>
+            <div class="data-set-body show-more-body" infiniteScroll (scrolled)="showEvenMore()">
+                <ng-container *ngFor="let row of moreData; let idx = index">
+                    <div *ngIf="row.skeleton"><div class="rect-loading-skeleton mt-2 w-90 h-30 ml-auto mr-auto d-block"></div></div>
+                    <div *ngIf="!row.skeleton" class="data-set-row" (click)="displayedPostman(row)" [ngClass]="{'odd': idx%2, 'even': !(idx%2)}">
+                        <div class="d-flex">
+                            <div class="postman-icon"><img src="/assets/images/postman-icon.png"></div>
+                            <div class="postman-name">{{row.full_name}}</div>
+                            <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal(row, day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
+                        </div>
+                        <div class="postman-note">{{row.note}}</div>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="btns-container mt-3">
+                <button type="button" (click)="closeShowMoreModal(modal)" class="integraa-btn ml-2 float-right" >OK</button>
                 <div class="clear-both"></div>
             </div>
         </div>

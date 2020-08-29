@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ModalComponent} from '../modal.component';
-import {ActionsService} from '../../../../service/actions.service';
 import {ProductsService} from '../../../../service/products.service';
 import {FiltersService} from '../../../../service/filters.service';
 import {PaginationService} from '../../../../service/pagination.service';
@@ -8,6 +7,7 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
+import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 
 @Component({
   selector: 'app-pre-dispatch-new',
@@ -17,7 +17,7 @@ import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 export class PreDispatchNewComponent extends ModalComponent  implements OnInit, OnDestroy {
 
   constructor(
-      private actionsService: ActionsService,
+      private preDispatchActionsService: PreDispatchActionsService,
       public productsService: ProductsService,
       public filtersService: FiltersService,
       public paginationService: PaginationService,
@@ -73,7 +73,7 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit, 
     if ( this.name.length < 3 ) { return this.error = 2; }
 
     // if every thing is ok, create the pre-dispatch
-    this.actionsService.createNewPreDispatch(this.data, this.name, (error) => {
+    this.preDispatchActionsService.createNewPreDispatch(this.data, this.name, (error) => {
       if (error && error.statusCode && error.statusCode === 507) {
           // show the repeated data modal
           this.products_with_errors = error.data ;

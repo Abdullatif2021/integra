@@ -197,7 +197,6 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.selected.forEach(item => {
           if ( item._type === 'set' && !item.is_distenta_created) { sets.push(item.id); }
       });
-      console.log(this.selected, sets);
       return sets ;
   }
 
@@ -213,6 +212,7 @@ export class ResultComponent implements OnInit, OnDestroy {
                       if ( item._type === 'set' ) { item.is_distenta_created = true; item.parent.sets_that_are_not_distintas--; }
                   });
                   this.selected = [] ;
+                  this.selected_sets = [];
                   this.all_selected = false ;
               } else {
                   this.snotifyService.error(data.message,  { showProgressBar: false, timeout: 1500 });

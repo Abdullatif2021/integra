@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-comments',
@@ -9,6 +9,7 @@ export class CommentsComponent implements OnInit {
 
   @Input() title = '';
   @Input() comments = [];
+  @Output() commentAdded = new EventEmitter();
 
   constructor() { }
 
@@ -19,9 +20,10 @@ export class CommentsComponent implements OnInit {
     if ( !commentInput.value.trim() ) { return ; }
     this.comments.push({
         user: 'Nome Operatore',
-        date: '20/08/2020 - 17:00',
-        text: commentInput.value.trim()
+        created_at: '20/08/2020 - 17:00',
+        note: commentInput.value.trim()
     });
+    this.commentAdded.emit(commentInput.value.trim());
     commentInput.value = '';
   }
 

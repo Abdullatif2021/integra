@@ -28,8 +28,8 @@
     text-align: center;
 }
 .calender-day-col {
-    flex: 0 0 14.28%;
-    width: 14.28%;
+    /*flex: 0 0 14.28%;*/
+    /*width: 14.28%;*/
     border-right: 1px solid #F3F3F3;
 }
 .day-row {
@@ -72,13 +72,21 @@
     margin: auto 3px;
     flex: 1;
     text-align: left;
+    max-width: 60%;
+    word-break: break-all;
 }
 
 .odd.bg-green {
     background: #35781b;
 }
+.even {
+    background: #dfdfdf;
+}
 .even.bg-green {
     background: #429223;
+}
+.odd {
+    background: #f1f1f1;
 }
 .odd.bg-red {
     background: #ce464c;
@@ -180,4 +188,14 @@
 }
 .show-more-statuses-count {
     cursor: pointer;
+}
+.font-size-12px{
+    font-size: 12px !important;
+}
+.more-button {
+    cursor: pointer;
+}
+.show-more-body {
+    height: 70vh;
+    overflow-y: scroll;
 }

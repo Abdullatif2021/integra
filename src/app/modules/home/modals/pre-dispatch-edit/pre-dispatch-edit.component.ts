@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ModalComponent} from '../modal.component';
-import {ActionsService} from '../../../../service/actions.service';
+import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 
 @Component({
   selector: 'app-pre-dispach-edit',
@@ -9,7 +9,7 @@ import {ActionsService} from '../../../../service/actions.service';
 })
 export class PreDispatchEditComponent extends ModalComponent implements OnInit {
 
-  constructor(private actionsService: ActionsService) {
+  constructor(private preDispatchActionsService: PreDispatchActionsService) {
       super();
   }
 
@@ -37,7 +37,7 @@ export class PreDispatchEditComponent extends ModalComponent implements OnInit {
       if ( !this.name || this.name === '') { return this.error = 1 ; }
       if ( this.name.length < 3 ) { return this.error = 2 ; }
 
-      this.actionsService.editPreDispatch(this.name, this.data.id) ;
+      this.preDispatchActionsService.editPreDispatch(this.name, this.data.id) ;
       modal.close();
   }
 }

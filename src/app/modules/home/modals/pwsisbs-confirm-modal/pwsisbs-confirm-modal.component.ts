@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ModalComponent} from '../modal.component';
-import {ActionsService} from '../../../../service/actions.service';
 import {ProductsService} from '../../../../service/products.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {Subject} from 'rxjs';
+import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 
 @Component({
   selector: 'app-pwsisbs-confirm-modal',
@@ -13,7 +13,7 @@ import {Subject} from 'rxjs';
 export class PwsisbsConfirmModalComponent extends ModalComponent implements OnInit, OnDestroy {
 
   constructor(
-      private actionsService: ActionsService,
+      private preDispatchActionsService: PreDispatchActionsService,
       protected productsService: ProductsService
   ) {
       super();
@@ -31,7 +31,7 @@ export class PwsisbsConfirmModalComponent extends ModalComponent implements OnIn
 
   runContinue(modal) {
       modal.close();
-      this.actionsService.createNewPreDispatch(this.data.defaultData, this.data.name, (error) => {
+      this.preDispatchActionsService.createNewPreDispatch(this.data.defaultData, this.data.name, (error) => {
       }, true) ;
   }
 
@@ -55,11 +55,5 @@ export class PwsisbsConfirmModalComponent extends ModalComponent implements OnIn
       this.unsubscribe.next();
       this.unsubscribe.complete();
   }
-
-  // addThenContinue(modal) {
-  //     modal.close();
-  //     this.actionsService.createNewPreDispatch(this.data.defaultData, this.data.name, (error) => {
-  //     }, true, this.data.data) ;
-  // }
 
 }

@@ -28,6 +28,7 @@ import {PwsisbsConfirmModalComponent} from '../../modals/pwsisbs-confirm-modal/p
 import {PsbatpdwsiConfirmModalComponent} from '../../modals/psbatpdwsi-confirm-modal/psbatpdwsi-confirm-modal.component';
 import {StreetsLocatingService} from '../../../../service/locating/streets-locating.service';
 import {SnotifyService} from 'ng-snotify';
+import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 
 @Component({
   selector: 'app-to-deliver',
@@ -103,6 +104,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private paginationService: PaginationService,
       private filtersService: FiltersService,
       private actionsService: ActionsService,
+      private preDispatchActionsService: PreDispatchActionsService,
       protected recipientsService: RecipientsService,
       private activatedRoute: ActivatedRoute,
       private preDispatchService: PreDispatchService,
@@ -171,7 +173,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
           this._citiesTable.reload();
       });
       this.actionsService.setActions(this.actions);
-      this.actionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
+      this.preDispatchActionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
           this.loadProducts(false) ;
           this._citiesTable.reload(true);
           this._streetsTable.reload(true);

@@ -33,9 +33,11 @@ export class PreDispatchService {
     confirmPlanningAddProductsModalGotUserResponse = new EventEmitter();
     // used when an Integraa modal is opened to perform an action on a specific pre-Dispatch {
     private activePredispatch = null ;
+
     getActivePreDispatch() {
         return this.activePredispatch ;
     }
+
     setActivePreDispatch(preDispatch) {
         this.activePredispatch = preDispatch;
     }
@@ -45,9 +47,11 @@ export class PreDispatchService {
     clickResultsMoveToButton(to) {
         this.resultsMoveToButtonClicked.emit(to);
     }
+
     preDispatchStatusChanged(status) {
         this.preDispatchStatusChanges.emit(status);
     }
+
     setCanPlan(can_plan) {
         this.can_plan = can_plan ;
         this.canPlanChanges.emit(can_plan);
@@ -127,7 +131,7 @@ export class PreDispatchService {
             product_ids: products,
             byFilter: 0,
             confirm: confirm,
-        }
+        };
         if (pre_dispatch_id) {
             options.pre_dispatch_id = pre_dispatch_id ;
         }
@@ -152,7 +156,7 @@ export class PreDispatchService {
             product_ids: products,
             confirm: true,
             byFilter: false,
-        }
+        };
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.preDispatchAddProducts, options).pipe(
             catchError(this.handleError)
         );
@@ -164,7 +168,7 @@ export class PreDispatchService {
             confirm: true,
             filters: this.filtersService.getFiltersObject(),
             byFilter: '1',
-        }
+        };
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.preDispatchAddProducts, options).pipe(
             catchError(this.handleError)
         );
@@ -174,7 +178,7 @@ export class PreDispatchService {
         const options = {
             id: id,
             name: name
-        }
+        };
         return this.http.put<ApiResponseInterface>(AppConfig.endpoints.preDispatchEdit, options).pipe(
             catchError(this.handleError)
         );
@@ -211,7 +215,6 @@ export class PreDispatchService {
         );
     }
 
-
     showConfirmPlanningModal(preDispatch, force = false) {
         this.showConfirmPlanningModalCalls.emit(true);
         return new Promise((resolve, reject) => {
@@ -242,7 +245,7 @@ export class PreDispatchService {
         const options = {
             name: name,
             pre_dispatch_ids: items,
-        }
+        };
         return this.http.post<any>(AppConfig.endpoints.mergePreDispatches, options).pipe(
             catchError(this.handleError)
         );

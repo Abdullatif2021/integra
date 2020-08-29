@@ -26,7 +26,11 @@ import {
     faCaretLeft,
     faCaretRight
 } from '@fortawesome/free-solid-svg-icons';
-import {faBackward} from '@fortawesome/free-solid-svg-icons/faBackward';
+import {PreDispatchActionsService} from './service/pre-dispatch-actions.service';
+import {DispatchActionsService} from './service/dispatch-actions.service';
+import {DispatchDeleteComponent} from './modals/dispatch-delete/dispatch-delete.component';
+import { DispatchPrepareComponent } from './modals/dispatch-prepare/dispatch-prepare.component';
+import {CalenderService} from './service/calender.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -53,12 +57,19 @@ import {faBackward} from '@fortawesome/free-solid-svg-icons/faBackward';
       PreDispatchAddDirectComponent,
       PwsisbsConfirmModalComponent,
       PsbatpdwsiConfirmModalComponent,
+      DispatchDeleteComponent,
+      DispatchPrepareComponent,
   ],
   exports: [
       HomeComponent,
       HomeRoutingModule,
   ],
   bootstrap: [HomeComponent],
+  providers: [
+      PreDispatchActionsService,
+      DispatchActionsService,
+      CalenderService
+  ],
   entryComponents: [
       PreDispatchAddComponent,
       PreDispatchAddDirectComponent,
@@ -68,7 +79,9 @@ import {faBackward} from '@fortawesome/free-solid-svg-icons/faBackward';
       PreDispatchEditComponent,
       PreDispatchDeleteComponent,
       PwsisbsConfirmModalComponent,
-      PsbatpdwsiConfirmModalComponent
+      PsbatpdwsiConfirmModalComponent,
+      DispatchDeleteComponent,
+      DispatchPrepareComponent
   ],
 
 })
