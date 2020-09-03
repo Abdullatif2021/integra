@@ -195,6 +195,12 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
                   data.data.productsByAddresses = Object.keys(data.data.productsByAddresses).map(
                       (key) => ({key: key, value: data.data.productsByAddresses[key]})
                   );
+                  data.data.notDeliveredProducts.groups = Object.keys(data.data.notDeliveredProducts.groups).map (
+                      (key) => ({key: key, value: data.data.notDeliveredProducts.groups[key] })
+                  );
+                  data.data.deliveredProducts.groups = Object.keys(data.data.deliveredProducts.groups).map (
+                      (key) => ({key: key, value: data.data.deliveredProducts.groups[key] })
+                  );
                   this.details = data.data;
               }
           );

@@ -137,19 +137,24 @@
                     <div class="postman-info-row2">
                         <div class="postman-info-label">Specifica Consegna</div>
                         <div class="postman-info-value">
-                            <div><span class="show-more-statuses-count" (click)="current_day_info.delivered_expanded = !current_day_info.delivered_expanded"><fa-icon [icon]="['fa', !current_day_info.delivered_expanded ? 'chevron-right' : 'chevron-down']"></fa-icon></span> {{details.deliveredProducts}} Consegnati</div>
-                            <!--<div class="statuses-counts-collabse pl-4" *ngIf="current_day_info.delivered_expanded">-->
-                                <!--<div>Raccomendate: 5</div>-->
-                                <!--<div>Notiche: 11</div>-->
-                                <!--<div>Posta: 4</div>-->
-                            <!--</div>-->
-                            <div><span class="show-more-statuses-count" (click)="current_day_info.not_delivered_expanded = !current_day_info.not_delivered_expanded"><fa-icon [icon]="['fa', !current_day_info.not_delivered_expanded ? 'chevron-right' : 'chevron-down']"></fa-icon></span> {{details.notDeliveredProducts}} Non Consegnati</div>
-                            <!--<div class="statuses-counts-collabse pl-4" *ngIf="current_day_info.not_delivered_expanded">-->
-                                <!--<div>Raccomendate: 30</div>-->
-                                <!--<div>Notiche: 40</div>-->
-                                <!--<div>Posta: 24</div>-->
-                                <!--<div>Massiva: 86</div>-->
-                            <!--</div>-->
+                            <div>
+                                <span class="show-more-statuses-count" *ngIf="details.deliveredProducts.groups.length"  (click)="current_day_info.delivered_expanded = !current_day_info.delivered_expanded">
+                                    <fa-icon [icon]="['fa', !current_day_info.delivered_expanded ? 'chevron-right' : 'chevron-down']"></fa-icon>
+                                </span>
+                                {{details.deliveredProducts.count}} Consegnati
+                            </div>
+                            <div class="statuses-counts-collabse pl-4" *ngIf="current_day_info.delivered_expanded">
+                                <div *ngFor="let group of details.deliveredProducts.groups">{{group.key}}: {{group.value}}</div>
+                            </div>
+                            <div>
+                                <span class="show-more-statuses-count"  *ngIf=" details.notDeliveredProducts.groups.length"  (click)="current_day_info.not_delivered_expanded = !current_day_info.not_delivered_expanded">
+                                    <fa-icon [icon]="['fa', !current_day_info.not_delivered_expanded ? 'chevron-right' : 'chevron-down']"></fa-icon>
+                                </span>
+                                {{details.notDeliveredProducts.count}} Non Consegnati
+                            </div>
+                            <div class="statuses-counts-collabse pl-4" *ngIf="current_day_info.not_delivered_expanded">
+                                <div *ngFor="let group of details.notDeliveredProducts.groups">{{group.key}}: {{group.value}}</div>
+                            </div>
                         </div>
                     </div>
                     <div class="postman-info-row2">

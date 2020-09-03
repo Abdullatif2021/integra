@@ -16,8 +16,6 @@ import {TuttocittaGeocodeService} from './service/locating/tuttocitta.geocode.se
 import {MapBoxGeocodeService} from './service/locating/map-box.geocode.service';
 import {PlanningService} from './service/planning/planning.service';
 import {GoogleDirectionsService} from './service/planning/google-directions.service';
-import {AgenciesService} from './service/agencies.service';
-import {CustomersService} from './service/customers.service';
 import {StreetsLocatingService} from './service/locating/streets-locating.service';
 
 @NgModule({
