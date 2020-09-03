@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DateFormatter} from '@angular/common/src/pipes/deprecated/intl';
 import {FileSystemFileEntry} from 'ngx-file-drop';
+import {AppConfig} from '../../../config/app.config';
 
 @Component({
   selector: 'app-postmen-calendar',
@@ -45,7 +46,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
   loadMorePage = 1;
   @Input() loadMoreMethods = null ;
   loadMoreSave = null;
-
+  AppConfig = AppConfig;
   constructor(private modalService: NgbModal) { }
 
   ngOnInit() {
@@ -148,7 +149,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
 
   saveDayAttachment() {
       if (this.selected_file) {
-          this.activeday.attachment = this.selected_file.relativePath;
+          this.activeday.file = this.selected_file.relativePath;
           const fileEntry = this.selected_file.fileEntry as FileSystemFileEntry;
           fileEntry.file((file: File) => {
               this.dayAttachmentSelected.emit({day: this.activeday.dayDate, file: file});

@@ -195,7 +195,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     }
 
-    updateDayAttachment(event) {
+    async updateDayAttachment(event) {
         this.dispatchActionsService.uploadDayAttachment(event.day, event.file);
     }
 

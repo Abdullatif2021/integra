@@ -23,7 +23,7 @@
                     <div class="day-name day-row">{{day.dayName}}</div>
                     <div class="day-number day-row">{{day.dayNumber}}</div>
                     <div class="day-note day-row d-flex"><div class="note-text">{{day.note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(day, idx)"><fa-icon [icon]="['fa','pen']"></fa-icon></div></div>
-                    <div class="day-attachment day-row d-flex"><a class="note-text text-truncate" href="#">{{day.attachment}}</a><div (click)="openEditDayAttachmentModal(day, idx)" class="edit-icon"><fa-icon [icon]="['fa','pen']"></fa-icon></div></div>
+                    <div class="day-attachment day-row d-flex"><a class="note-text text-truncate" href="{{AppConfig.api_url + day.file}}" target="_blank">{{day.file}}</a><div (click)="openEditDayAttachmentModal(day, idx)" class="edit-icon"><fa-icon [icon]="['fa','pen']"></fa-icon></div></div>
                     <div class="day-part revisers-part">
                         <div class="occupied-revisers-sub-part day-sub-part">
                             <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.availablePostmen,day: day,klass:'bg-green', title: 'Postman disponibili', more: 'availablePostmen'}"></ng-container>
@@ -59,7 +59,7 @@
                 <div class="single-day-date-switch-right" (click)="changeCurrentDay(1)" [ngClass]="{'disabled-day-change': current_day === data.length - 1}"><fa-icon [icon]="['fa', 'chevron-right']"></fa-icon></div>
             </div>
             <div class="single-day-note-text">{{data[current_day].note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(data[current_day], current_day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
-            <div class="single-day-attachment"><img src="/assets/images/file_icon.svg"></div>
+            <a href="{{AppConfig.api_url + data[current_day].file}}" target="_blank" class="single-day-attachment" *ngIf="data[current_day].file"><img src="/assets/images/file_icon.svg"></a>
         </div>
         <div class="single-day-header" *ngIf="data[current_day].skeleton">
             <div class="rect-loading-skeleton w-100 h-30"></div>
