@@ -206,9 +206,36 @@ export const TablesConfig = {
                     ]},
                 {title: 'POSTMAN', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
                 {title: 'Dispatch list', field: 'pre_dispatch_code', actions: []},
-                {title: 'STATE / RESULT', field: 'status', actions: []},
+                {title: 'STATE / RESULT', field: 'status', actions: [
+                        {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
+                            _class: ['float-right', 'mt-0', 'mr-2']}
+                    ]},
                 {title: 'Q.TY', field: 'quantity', actions: []},
-                {title: 'DATE', field: 'started_at', actions: []},
+                {title: 'START DATE', field: 'started_at', actions: []},
+                {title: 'CREATE DATE', field: 'created_at', actions: []},
+                {title: 'OPERATION', actions: [
+                        { action: 'progress',  field: 'percent',},
+                    ]},
+            ]
+        },
+        // dispatchTable used in dispatch.component
+        deliveringTable : {
+            cols: [
+                {title: ' ', field: false, actions: [
+                        {action: 'edit', click: (elm) => { console.log('export . '); }},
+                        {action: 'print', click: (elm) => { console.log('print . '); }},
+                        {action: 'excel_export', click: (elm) => {console.log('export . '); }},
+                        {action: 'view', click: (elm) => {console.log('call back working 1 . '); }},
+                    ]},
+                {title: 'POSTMAN', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
+                {title: 'Dispatch list', field: 'pre_dispatch_code', actions: []},
+                {title: 'STATE / RESULT', field: 'status', actions: [
+                        {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
+                            _class: ['float-right', 'mt-0', 'mr-2']}
+                    ]},
+                {title: 'Q.TY', field: 'quantity', actions: []},
+                {title: 'START DATE', field: 'started_at', actions: []},
+                {title: 'CREATE DATE', field: 'created_at', actions: []},
                 {title: 'OPERATION', actions: [
                         { action: 'progress',  field: 'percent',},
                     ]},

@@ -2,7 +2,7 @@
     background-color: #fff;
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
-    height: calc( 100vh - 100px ) ;
+    height: calc( 100vh - 265px );
     position: relative;
     overflow: hidden;
     border-bottom-left-radius: 5px;
@@ -10,7 +10,7 @@
     padding-bottom: 10px;
 }
 .table-container-mid-height {
-    height: calc( 50vh - 50px ) ;
+    height: calc( 50vh - 132px ) ;
 }
 .search-section{
     padding: 10px 10px;
@@ -38,6 +38,7 @@
 .table-body{
     padding: 0px 5px;
     overflow-y: scroll;
+    overflow-x: hidden;
     font-size: 11px;
     font-weight: 500;
     color: #333;

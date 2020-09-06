@@ -1,11 +1,8 @@
-<div class="d-flex tables-area full-width">
-    <div class="small-table v-wide-col">
-        <app-simple-table [items]="[]" [table]="citiesTable"></app-simple-table>
+<div class="d-flex tables-area full-width" *ngIf="viewType === 'table'">
+    <div class="medium-table v-wide-col">
+        <app-simple-table #postmenTable (changed)="changePostman($event)" [getMethod]="postmenGetMethod" [table]="postmenTableConfig"></app-simple-table>
     </div>
-    <div class="small-table v-wide-col">
-        <app-simple-table [items]="[]" [table]="streetsTable"></app-simple-table>
-    </div>
-    <div class="large-table v-wide-col">
-        <app-table [items]="[]" [table]="productsTable"></app-table>
+    <div class="v-large-table v-wide-col">
+        <app-table #dispatchTable [items]="dispatchList" [table]="dispatchTableConfig" (orderChange)="orderChanged($event)" (selected)="selectedItemsChanged($event)" [parent]="this"></app-table>
     </div>
 </div>

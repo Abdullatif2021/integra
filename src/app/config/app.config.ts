@@ -97,7 +97,11 @@ export const AppConfig = {
         dispatchPrepare: `${api_url}/api/set/changeToPrepared`,
         getWeeklyCalender: `${api_url}/api/calender/weeklyCalender`,
         getCalenderWeeklySets: `${api_url}/api/calender/weeklySets`,
+        // getCalenderDailySets: `${api_url}/api/calender/weeklySets`,
+        getCalenderDailySets: `${api_url}/api/calender/dailySets`,
         getCalenderWeeklyPostmen: `${api_url}/api/calender/weeklyPostmen`,
+        // getCalenderDailyPostmen: `${api_url}/api/calender/weeklyPostmen`,
+        getCalenderDailyPostmen: `${api_url}/api/calender/dailyPostmen`,
         getSetDetails: (id) => `${api_url}/api/calender/set/${id}/get`,
         getAvailableUsers: (id) => `${api_url}/api/set/${id}/availableUser`,
         assignToUser: `${api_url}/api/set/assign`,
@@ -105,6 +109,7 @@ export const AppConfig = {
         updatePostmanDayNote: `${api_url}/api/calender/savePostmanDayNote`,
         saveNoteToSet: (id) => `${api_url}/api/calender/set/${id}/saveNote`,
         getCalenderAvailablePostmen: `${api_url}/api/calender/getAvailablePostmen`,
+        getDispatchLog: (id) => `${api_url}/api/set/${id}/logs`,
     },
 
 };

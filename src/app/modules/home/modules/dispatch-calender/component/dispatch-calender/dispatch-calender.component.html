@@ -1,0 +1,24 @@
+<div class="d-flex tables-area full-width">
+  <div class="calender-view-container">
+
+    <div class="small-table v-wide-col">
+      <app-simple-table #calenderPostmenTable [table]="customPostmenTableConfig" [mid_height]="true" [getMethod]="calenderPostmenGetMethod" (changed)="changeCalenderPostman($event)"></app-simple-table>
+      <app-simple-table #calenderReviserTable [table]="reviserTableConfig" [mid_height]="true" [getMethod]="calenderPostmenGetMethod"></app-simple-table>
+    </div>
+    <div class="small-table v-wide-col">
+      <app-simple-table #calenderDispatchTable [single_select_clearable]="true" [multi]="false" [table]="simpleDispatchTableConfig" [getMethod]="dispatchGetMethod" (changed)="changeCalenderDispatches($event)"></app-simple-table>
+    </div>
+
+    <div class="large-table v-wide-col">
+      <app-postmen-calendar #calender
+              [data]="calendar_data" [view]="subViewType" [detailsGetMethod]="getSetDetailsMethod"
+              [availableUsersGetMethod]="availableUsersGetMethod" (setAssigned)="assignSetToUser($event)"
+              (dayAttachmentSelected)="updateDayAttachment($event)" (dayNoteUpdated)="updateDayNote($event)"
+              (postmanDayNoteUpdated)="updatePostmanDayNote($event)" [setNoteUpdateMethod]="addNoteToSet"
+              (dayChanged)="changeCalenderDay($event)" [detailsStatuses]="detailsStatuses" (postmanDisplayed)="postmanDisplayed($event)"
+              [loadMoreMethods]="loadMoreMethods" (weekIndexChanged)="changeCalenderWeekIndex($event)"
+      ></app-postmen-calendar>
+    </div>
+
+  </div>
+</div>

@@ -91,12 +91,78 @@ export const FilterConfig = {
         grouping: false,
     },
     dispatch: {
-        search: (container, sp) => [],
-        filters: (container, sp) => [],
+        search: (container, sp) => [
+            {type: 'text    ', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'ng-select', label: 'Agenzia', key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name'},
+            {type: 'text', label: 'Nome Prodotto:', key: 'productTypeName', value: ''},
+            {type: 'text', label: 'Nominativo Destinatario', key: 'recipientName'},
+
+        ],
+        filters: (container, sp) => [
+            {type: 'auto-complete', label: 'Cliente', key: 'customerId',
+                getMethod: (term) => container.customersService.getCustomersByName(term),
+                items:  sp.filters_data.customers, labelVal: 'name', value: '', _class: 'auto-complete'},
+            {type: 'auto-complete', label: 'Agenzia', getMethod: (term) => container.agenciesService.getAgenciesByName(term),
+                key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name', value: '', _class: 'auto-complete'},
+            {type: 'simpleText', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'simpleText', label: 'Note Per La Distinta', key: 'setNote'},
+            {type: 'simpleText', label: 'Note Per Il Postion', key: 'postmanNote'},
+            {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
+                    {name: 'Not Assigned', id: 'no_assigned'},
+                    {name: 'Not Prepare', id: 'not_prepare'},
+                    {name: 'Prepared', id: 'prepared'},
+                ], labelVal: 'name'},
+            {type: ['date', 'date'], label: 'Start Data Distinta:', group: true, key: ['startedFrom', 'startedTo']},
+            {type: ['date', 'date'], label: 'Data Distinta:', group: true, key: ['createFrom', 'createTo']},
+            {type: 'tag', label: 'Codice Barre', key: 'barcode'},
+            {type: 'simpleText', label: 'Codice Atto', key: 'actCode', value: ''},
+            {type: 'simpleText', label: 'Set Code', key: 'setCode', value: ''},
+            {type: 'ng-select', label: 'Prodotto', key: 'category',
+                items: sp.filters_data.products_type, labelVal: 'type'},
+            {type: 'text', label: 'Nominativo Destinatario', key: 'recipientName'},
+            {type: 'auto-complete', label: 'CAP Destinatario:', key: 'recipientCap', items: sp.filters_data.caps_group,
+                labelVal: 'name', getMethod: (term) => container.recipientsService.getCapCity(term), _class: 'auto-complete'},
+            {type: 'simpleText', label: 'Indirizzo Destinatario:', key: 'destination'},
+        ],
         grouping: false,
-        changeViewButton: {icon: '/assets/images/calendar.png', value: 'calendar'}
+        changeViewButton: {icon: '/assets/images/calendar.png', route: ['/dispatch/calender']}
+    },
+    delivering: {
+        search: (container, sp) => [
+            {type: 'text    ', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'ng-select', label: 'Agenzia', key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name'},
+            {type: 'text', label: 'Nome Prodotto:', key: 'productTypeName', value: ''},
+            {type: 'text', label: 'Nominativo Destinatario', key: 'recipientName'},
 
-    }
-
+        ],
+        filters: (container, sp) => [
+            {type: 'auto-complete', label: 'Cliente', key: 'customerId',
+                getMethod: (term) => container.customersService.getCustomersByName(term),
+                items:  sp.filters_data.customers, labelVal: 'name', value: '', _class: 'auto-complete'},
+            {type: 'auto-complete', label: 'Agenzia', getMethod: (term) => container.agenciesService.getAgenciesByName(term),
+                key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name', value: '', _class: 'auto-complete'},
+            {type: 'simpleText', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'simpleText', label: 'Note Per La Distinta', key: 'setNote'},
+            {type: 'simpleText', label: 'Note Per Il Postion', key: 'postmanNote'},
+            {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
+                    {name: 'Not Assigned', id: 'no_assigned'},
+                    {name: 'Not Prepare', id: 'not_prepare'},
+                    {name: 'Prepared', id: 'prepared'},
+                ], labelVal: 'name'},
+            {type: ['date', 'date'], label: 'Start Data Distinta:', group: true, key: ['startedFrom', 'startedTo']},
+            {type: ['date', 'date'], label: 'Data Distinta:', group: true, key: ['createFrom', 'createTo']},
+            {type: 'tag', label: 'Codice Barre', key: 'barcode'},
+            {type: 'simpleText', label: 'Codice Atto', key: 'actCode', value: ''},
+            {type: 'simpleText', label: 'Set Code', key: 'setCode', value: ''},
+            {type: 'ng-select', label: 'Prodotto', key: 'category',
+                items: sp.filters_data.products_type, labelVal: 'type'},
+            {type: 'text', label: 'Nominativo Destinatario', key: 'recipientName'},
+            {type: 'auto-complete', label: 'CAP Destinatario:', key: 'recipientCap', items: sp.filters_data.caps_group,
+                labelVal: 'name', getMethod: (term) => container.recipientsService.getCapCity(term), _class: 'auto-complete'},
+            {type: 'simpleText', label: 'Indirizzo Destinatario:', key: 'destination'},
+        ],
+        grouping: false,
+        changeViewButton: {icon: '/assets/images/calendar.png', route: ['/delivering/calender']}
+    },
 
 };

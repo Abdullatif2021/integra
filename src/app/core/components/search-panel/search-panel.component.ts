@@ -5,6 +5,7 @@ import {RecipientsService} from '../../../service/recipients.service';
 import {ActionsService} from '../../../service/actions.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../shared/directives/modal.directive';
+import {FilterConfig} from '../../../config/filters.config';
 
 @Component({
   selector: 'app-search-panel',
@@ -245,6 +246,7 @@ export class SearchPanelComponent implements OnInit {
   }
 
   clickHelperButton(tab) {
+      if (this.fieldsData.fields.changeViewTabs.lock) {return ;}
       this.fieldsData.fields.changeViewTabs.tabs.forEach((_tab) => _tab.active = false);
       tab.active = true ;
       this.filtersService.changeViewTabsChanged(tab.value);

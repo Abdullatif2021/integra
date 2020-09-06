@@ -1,7 +1,8 @@
 .table-container{
     background-color: #fff !important;
     /*height: 518px;*/
-    height: calc( 100vh - 180px);
+    /*height: calc( 100vh - 180px);*/
+    height: calc( 100vh - 340px);
     overflow-y: scroll;
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
@@ -155,7 +156,7 @@
 /* } actions styles */
 
 .table-skeleton-loading{
-    height: 592px;
+    height: calc( 100vh - 265px);
     background-color: #fff;
 }
 .table-skeleton-container{

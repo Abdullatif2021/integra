@@ -32,6 +32,7 @@ import { PostmenCalendarComponent } from './components/postmen-calendar/postmen-
 import {NgxFileDropModule} from 'ngx-file-drop';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { CommentsComponent } from './components/comments/comments.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -42,8 +43,8 @@ import { CommentsComponent } from './components/comments/comments.component';
     InfiniteScrollModule,
     RouterModule,
     GooglePlaceModule,
-    NgxFileDropModule
-
+    NgxFileDropModule,
+    FormsModule
   ],
   declarations: [
       SearchBoxComponent,

@@ -367,7 +367,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       elm.fromNotFixed = true ;
       elm._hint = 'not_fixed' ;
       elm.parent = target;
-      target.quantity++;
+      target.quantity += elm.productsCount;
       target.children.splice(index, 0, elm);
       this.updateItemsMarkers(target);
       this.backProcessingService.blockExit('Some Items was not saved, are you sure you want to exit');
@@ -394,7 +394,6 @@ export class ResultComponent implements OnInit, OnDestroy {
           this.movedNotFixedStorage = this.movedNotFixedStorage.concat(save);
           this.snotifyService.error('Qualcosa è andato storto spostando il prodotto', { showProgressBar: false, timeout: 1500 });
       } else {
-          console.log('saved succesffuly', this.dragAndDropService.readyToShowMap)
           if (this.dragAndDropService.readyToShowMap) {
               this.scheduleService.showRightSideMap();
           }
@@ -461,7 +460,7 @@ export class ResultComponent implements OnInit, OnDestroy {
               data => { this.updateItemsMarkers(target); }
           );
       } else {
-          this.resultsService.orderTreeNode(result.item.addressId, index).subscribe(
+          this.resultsService.orderTreeNode(result.item.addressId, index, target.id).subscribe(
               data => {
                   this.updateItemsMarkers(target);
                   this.loadPath(this.selected_set, true);

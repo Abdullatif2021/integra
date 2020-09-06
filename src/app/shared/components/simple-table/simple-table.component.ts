@@ -22,6 +22,7 @@ import {SnotifyService} from 'ng-snotify';
       };
       @Input() items;
       @Input() mid_height = false;
+      @Input() single_select_clearable = false;
       @Output() onAction = new EventEmitter();
       @Input() getMethod;
       @Input() multi = true;
@@ -227,6 +228,10 @@ import {SnotifyService} from 'ng-snotify';
               }
           }
           if (!this.multi) { // if the table was single element select.
+              if (this.selected[item.id] && this.single_select_clearable) {
+                  this.selected = {};
+                  return this.changed.emit(null);
+              }
               this.selected = {};
               this.selected[item.id] = item;
               return this.changed.emit(item);

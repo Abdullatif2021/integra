@@ -9,7 +9,7 @@
   <div class="comments-list">
     <div class="comment mt-2" *ngFor="let comment of comments">
       <div class="comment-header">
-        <div class="comment-user">{{comment.user ? comment.user : 'Nome Operatore'}}:</div>
+        <div class="comment-user">{{comment.user ? comment.user.full_name : 'Nome Operatore'}}:</div>
         <div class="comment-date">{{comment.created_at}}</div>
       </div>
       <div class="comment-text">{{comment.note}}</div>

@@ -121,8 +121,8 @@
 .change-view-button {
     border: 0px;
     background: transparent;
-    margin: auto 10px;
-    width: 35px;
+    width: 22px;
+    margin: 4px 10px;
 }
 .change-view-button img {
     width: 100%;
@@ -141,4 +141,9 @@
 }
 .change-view-tab:hover, .active-view-tab {
     border-bottom: 2px solid #fcda4b;
+}
+.disabled-view-tab {
+    opacity: 0.5;
+    cursor: auto;
+    pointer-events: none;
 }

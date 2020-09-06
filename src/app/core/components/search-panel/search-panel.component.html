@@ -53,12 +53,12 @@
         <ng-template #collapseArrowUp><fa-icon [icon]="['fa','chevron-up']"></fa-icon></ng-template>
       </button>
 
-      <button *ngIf="fieldsData && fieldsData.fields.changeViewButton" type="button" class="change-view-button float-right" (click)="changeViewButtonClicked(fieldsData.fields.changeViewButton.value)">
+      <a [routerLink]="fieldsData.fields.changeViewButton.route" *ngIf="fieldsData && fieldsData.fields.changeViewButton" type="button" class="change-view-button float-right" (click)="changeViewButtonClicked(fieldsData.fields.changeViewButton.route)">
         <img src="{{fieldsData.fields.changeViewButton.icon}}">
-      </button>
+      </a>
 
       <div class="change-view-tabs-container" *ngIf="fieldsData && fieldsData.fields.changeViewTabs">
-        <div class="change-view-tab" *ngFor="let tab of fieldsData.fields.changeViewTabs.tabs" (click)="clickHelperButton(tab)" [ngClass]="{'active-view-tab': tab.active}" >
+        <div class="change-view-tab" *ngFor="let tab of fieldsData.fields.changeViewTabs.tabs" (click)="clickHelperButton(tab)" [ngClass]="{'active-view-tab': tab.active, 'disabled-view-tab': fieldsData.fields.changeViewTabs.lock}" >
           <fa-icon *ngIf="tab.icon" [icon]="tab.icon"></fa-icon>
           {{tab.text}}
         </div>

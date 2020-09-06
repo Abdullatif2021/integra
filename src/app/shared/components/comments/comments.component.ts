@@ -18,11 +18,11 @@ export class CommentsComponent implements OnInit {
 
   addComment(commentInput) {
     if ( !commentInput.value.trim() ) { return ; }
-    this.comments.push({
-        user: 'Nome Operatore',
-        created_at: '20/08/2020 - 17:00',
-        note: commentInput.value.trim()
-    });
+    // this.comments.push({
+    //     user: 'Nome Operatore',
+    //     created_at: '20/08/2020 - 17:00',
+    //     note: commentInput.value.trim()
+    // });
     this.commentAdded.emit(commentInput.value.trim());
     commentInput.value = '';
   }

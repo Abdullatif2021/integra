@@ -15,17 +15,23 @@ export class CalenderService {
     }
 
 
-    getWeeklyCalender(sets = null, postmen = null): Observable<any> {
+    getWeeklyCalender(week = 1, sets = null, postmen = null, date = null, state = 'NOT_PREAPERED'): Observable<any> {
         const options = {params: new HttpParams(), headers: new HttpHeaders()};
-        if (sets) {
-            options.params = options.params.set('sets', sets);
-        }
-        if (postmen) {
-            options.params = options.params.set('postmen', postmen);
-        }
+        options.params = options.params.set('dateIndex', `${week}`);
+        if (sets) { options.params = options.params.set('sets', sets); }
+        if (postmen) { options.params = options.params.set('postmen', postmen); }
+        if (date) { options.params = options.params.set('date', date); }
+        if (state) { options.params =  options.params.set('state', state); }
+
         return this.http.get<any>(AppConfig.endpoints.getWeeklyCalender, options).pipe(
             catchError(this.handleError)
         );
+    }
+
+    getDate(strDate, step) {
+        const date = new Date(strDate.split('/').reverse().join('-'));
+        date.setDate(date.getDate() + step);
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     }
 
     handleError(error: HttpErrorResponse) {

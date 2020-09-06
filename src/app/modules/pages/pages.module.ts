@@ -9,6 +9,7 @@ import { PreDispatchLogComponent } from './components/pre-dispatch-log/pre-dispa
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faChevronRight, faChevronUp} from '@fortawesome/free-solid-svg-icons';
+import { DispatchLogComponent } from './components/dispatch-log/dispatch-log.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import {faChevronRight, faChevronUp} from '@fortawesome/free-solid-svg-icons';
   declarations: [
       PagesComponent,
       PreDispatchProductsComponent,
-      PreDispatchLogComponent
+      PreDispatchLogComponent,
+      DispatchLogComponent
   ],
   exports: [
       PagesRoutingModule,

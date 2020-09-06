@@ -33,6 +33,7 @@ export class PaginationComponent implements OnInit {
     });
     this.paginationService.loadingStateChanges.subscribe((state: boolean) => {
       this.loading = state ;
+      console.log(this.loading);
       this.current_page = this.paginationService.current_page ;
     });
     this.paginationService.currentPageChanges.subscribe((page: number) => {

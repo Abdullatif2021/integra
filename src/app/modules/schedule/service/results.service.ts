@@ -155,9 +155,10 @@ export class ResultsService implements OnDestroy {
         return this.http.post<any>(AppConfig.endpoints.assignToSet(setId), data);
     }
 
-    orderTreeNode(groupId, level) {
+    orderTreeNode(groupId, level, set) {
         const data = {
-            newPriority: level
+            newPriority: level,
+            set: set
         };
         return this.http.post<any>(AppConfig.endpoints.shiftGroupPriority(groupId), data);
     }

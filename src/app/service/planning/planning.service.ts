@@ -192,16 +192,15 @@ export class PlanningService {
                     path = path.concat(temp.path);
                     temp.order.forEach(item => {
                         item.priority += lp;
+                        item.set = sets[i].id;
                         order.push(item);
                     });
                     lp += order.length;
                     const priority = await this.setMapPriority(order).toPromise();
-                } else { console.log('something went wrong, was not able to fund a part of the path'); }
+                } else { console.log('something went wrong, was not able to find a part of the path'); }
                 page ++ ;
             } while ( !waypoints.data.last_page );
-            // this.test.emit(path.path);
             const save = await this.savePath(sets[i].id, path).toPromise() ;
-            // handle.emit({progress: ( (i + 1) / sets.length) * 100 });
             if (!this.backProcessingService.isRunning('planning-' + preDispatch.id)) {
                 return false ;
             }
