@@ -38,7 +38,8 @@ import { NotMatchesTreeComponent } from './parts-components/not-matches-tree/not
 import {DndModule} from 'ngx-drag-drop';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { NotFixedTreeComponent } from './parts-components/not-fixed-tree/not-fixed-tree.component';
-import {GoogleMapsConfig} from './service/google-maps-config';
+import {IntegraaLazyMapApiLoaderService} from '../../shared/service/integraa-lazy-map-api-loader.service';
+import {MapsAPILoader} from '@agm/core/services/maps-api-loader/maps-api-loader';
 
 @NgModule({
   imports: [
@@ -77,7 +78,7 @@ import {GoogleMapsConfig} from './service/google-maps-config';
       ResultsService,
       ResultesResolver,
       ScheduleService,
-      {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig}
+      {provide: MapsAPILoader, useClass: IntegraaLazyMapApiLoaderService}
 
   ],
   entryComponents: [
