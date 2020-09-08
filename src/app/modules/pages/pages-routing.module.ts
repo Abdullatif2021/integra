@@ -1,16 +1,26 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {PagesComponent} from './pages.component';
-import {PreDispatchProductsComponent} from './components/pre-dispatch-products/pre-dispatch-products.component';
-import {PreDispatchLogComponent} from './components/pre-dispatch-log/pre-dispatch-log.component';
-import {DispatchLogComponent} from './components/dispatch-log/dispatch-log.component';
 
 const routes: Routes = [
     {path: '', component: PagesComponent, children: [
-            {path: 'pre-dispatch/:id/products', component: PreDispatchProductsComponent},
-            {path: 'pre-dispatch/:id/log', component: PreDispatchLogComponent},
-            {path: 'dispatch/:id/log', component: DispatchLogComponent},
-        ]}
+        {
+            path: 'pre-dispatch/:id/products',
+            loadChildren: './modules/pre-dispatch-products/pre-dispatch-products.module#PreDispatchProductsModule'
+        },
+        {
+            path: 'pre-dispatch/:id/log',
+            loadChildren: './modules/pre-dispatch-log/pre-dispatch-log.module#PreDispatchLogModule'
+        },
+        {
+            path: 'dispatch/:id/log',
+            loadChildren: './modules/dispatch-log/dispatch-log.module#DispatchLogModule'
+        },
+        {
+            path: 'dispatch/view/:id',
+            loadChildren: './modules/dispatch-view/dispatch-view.module#DispatchViewModule'
+        },
+    ]}
 ];
 
 @NgModule({

@@ -6,7 +6,7 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {Observable} from 'rxjs';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
 import {SnotifyService} from 'ng-snotify';
-import {MarkersService} from './markers.service';
+import {MarkersService} from '../../../service/markers.service';
 
 @Injectable()
 export class ListTreeService implements OnDestroy {

@@ -36,7 +36,7 @@
       <!-- } easy search submit -->
     </ng-container>
     <!-- } easy search  -->
-    <div class="col-lg-10" *ngIf="isCollapsed && _has_active_filters">
+    <div class="col-lg-9" *ngIf="isCollapsed && _has_active_filters">
       <div class="search-inputs-container row">
         <ng-container *ngFor="let field of filtersFields; let idx = index;">
           <ng-container *ngIf="_active_filters[field.key]" [ngTemplateOutlet]="searchItem" [ngTemplateOutletContext]="{input: field, idx: idx}"></ng-container>

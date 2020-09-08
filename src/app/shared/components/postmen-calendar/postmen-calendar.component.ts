@@ -96,7 +96,8 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
           `.trim();
   }
 
-  openEditPostmanNoteModal(postman, day) {
+  openEditPostmanNoteModal(event, postman, day) {
+      event.stopPropagation();
       this.activepostman = postman ;
       this.activeday = day;
       this.modalService.open(this.editPostmanNoteModal);
@@ -184,7 +185,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
       this.setAssigned.emit({sets: [this.details.id], user: event.id});
   }
 
-  detailsStatusCahnged(event) {
+  detailsStatusChanged(event) {
       if (typeof event.handler === 'function') {
           event.handler(this.details);
       }
@@ -201,13 +202,18 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
       this.details.internalNotes = [note.data, ...this.details.internalNotes];
   }
 
-  async displayedPostman(postman) {
+  async displayedPostman(postman, day, emit = true) {
       if (!postman) {
           this.displayed_postman = null;
           return this.postmanDisplayed.emit(null);
       }
       this.displayed_postman = postman;
-      this.postmanDisplayed.emit(postman);
+      if (day) {
+          this.setDay(day);
+      }
+      if (emit) {
+          this.postmanDisplayed.emit({postman: postman, day: day});
+      }
       this.details = null ;
       if (typeof this.detailsGetMethod !== 'function' || typeof this.availableUsersGetMethod !== 'function') {
           return ;
@@ -228,7 +234,6 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
           if (this.details.status) {
               this.details.status = this.detailsStatuses.find(state => state.id === this.details.status);
           }
-          console.log('displaying', this.displayed_postman, this.current_day);
       });
   }
 

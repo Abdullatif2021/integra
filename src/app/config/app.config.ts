@@ -110,6 +110,7 @@ export const AppConfig = {
         saveNoteToSet: (id) => `${api_url}/api/calender/set/${id}/saveNote`,
         getCalenderAvailablePostmen: `${api_url}/api/calender/getAvailablePostmen`,
         getDispatchLog: (id) => `${api_url}/api/set/${id}/logs`,
+        getSetProductsAndPath: (id) => `${api_url}/api/set/${id}/products`,
     },
 
 };

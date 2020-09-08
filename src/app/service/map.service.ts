@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {MapMarker} from '../../../core/models/map-marker.interface';
+import {MapMarker} from '../core/models/map-marker.interface';
 import {MarkersService} from './markers.service';
 import {SymbolPath} from '@agm/core/services/google-maps-types';
 

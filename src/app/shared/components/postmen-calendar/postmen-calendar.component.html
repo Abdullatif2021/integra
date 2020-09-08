@@ -182,7 +182,7 @@
                     </div>
                     <div class="postman-info-row2">
                         <div class="postman-info-label">Esito preparazione borsa</div>
-                        <ng-select class="integraa-select" [bindLabel]="'name'" [items]="detailsStatuses" [(ngModel)]="details.status" [clearable]="false" (change)="detailsStatusCahnged($event)"></ng-select>
+                        <ng-select class="integraa-select" [bindLabel]="'name'" [items]="detailsStatuses" [(ngModel)]="details.status" [clearable]="false" (change)="detailsStatusChanged($event)"></ng-select>
                     </div>
                     <div class="notes postman-info-row2 mt-3">
                         <app-comments title="Note interne" [comments]="details.internalNotes" (commentAdded)="addSetInternalNote($event)"></app-comments>
@@ -204,11 +204,11 @@
         <div class="data-set-body">
             <ng-container *ngFor="let row of data; let idx = index">
                 <div *ngIf="row.skeleton"><div class="rect-loading-skeleton mt-2 w-90 h-30"></div></div>
-                <div *ngIf="!row.skeleton" class="data-set-row {{klass}}" (click)="displayedPostman(row.set_id_for_this_day)" [ngClass]="{'odd': idx%2, 'even': !(idx%2), 'clickable-item': row.set_id_for_this_day}">
+                <div *ngIf="!row.skeleton" class="data-set-row {{klass}}" (click)="displayedPostman(row.set_id_for_this_day, day.dayDate)" [ngClass]="{'odd': idx%2, 'even': !(idx%2), 'clickable-item': row.set_id_for_this_day, 'selected-item': row.set_id_for_this_day && displayed_postman === row.set_id_for_this_day}">
                     <div class="d-flex">
                         <div class="postman-icon"><img src="/assets/images/postman-icon.png"></div>
                         <div class="postman-name">{{row.full_name}}</div>
-                        <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal(row, day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
+                        <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
                     </div>
                     <div class="postman-note">{{row.note}}</div>
                 </div>
@@ -296,7 +296,7 @@
                         <div class="d-flex">
                             <div class="postman-icon"><img src="/assets/images/postman-icon.png"></div>
                             <div class="postman-name">{{row.full_name}}</div>
-                            <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal(row, day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
+                            <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
                         </div>
                         <div class="postman-note">{{row.note}}</div>
                     </div>

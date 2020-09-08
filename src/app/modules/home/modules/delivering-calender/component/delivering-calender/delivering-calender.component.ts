@@ -10,6 +10,10 @@ import {ActionsService} from '../../../../../../service/actions.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {FiltersService} from '../../../../../../service/filters.service';
+import {CategoriesService} from '../../../../../../service/categories.service';
+import {AgenciesService} from '../../../../../../service/agencies.service';
+import {RecipientsService} from '../../../../../../service/recipients.service';
+import {CustomersService} from '../../../../../../service/customers.service';
 
 @Component({
   selector: 'app-delivering-calender',
@@ -43,8 +47,41 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     subViewType = 'week';
 
     filter_config = {
-        search: (container, sp) => [],
-        filters: (container, sp) => [],
+        search: (container, sp) => [
+            {type: 'text    ', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'ng-select', label: 'Agenzia', key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name'},
+            {type: 'text', label: 'Nome Prodotto:', key: 'productTypeName', value: ''},
+            {type: 'text', label: 'Nominativo Destinatario', key: 'recipientName'},
+
+        ],
+        filters: (container, sp) => [
+            {type: 'auto-complete', label: 'Cliente', key: 'customerId',
+                getMethod: (term) => container.customersService.getCustomersByName(term),
+                items:  sp.filters_data.customers, labelVal: 'name', value: '', _class: 'auto-complete'},
+            {type: 'auto-complete', label: 'Agenzia', getMethod: (term) => container.agenciesService.getAgenciesByName(term),
+                key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name', value: '', _class: 'auto-complete'},
+            {type: 'simpleText', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'simpleText', label: 'Note Per La Distinta', key: 'setNote'},
+            {type: 'simpleText', label: 'Note Per Il Postion', key: 'postmanNote'},
+            {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
+                    {name: 'Not Assigned', id: 'no_assigned'},
+                    {name: 'Not Prepare', id: 'not_prepare'},
+                    {name: 'Prepared', id: 'prepared'},
+                ], labelVal: 'name'},
+            {type: ['date', 'date'], label: 'Start Data Distinta:', group: true, key: ['startedFrom', 'startedTo']},
+            {type: ['date', 'date'], label: 'Data Distinta:', group: true, key: ['createFrom', 'createTo']},
+            {type: 'tag', label: 'Codice Barre', key: 'barcode'},
+            {type: 'simpleText', label: 'Codice Atto', key: 'actCode', value: ''},
+            {type: 'simpleText', label: 'Set Code', key: 'setCode', value: ''},
+            {type: 'ng-select', label: 'Prodotto', key: 'productTypeNameId  ',
+                items: sp.filters_data.products_type, labelVal: 'type'},
+            {type: 'auto-complete', label: 'Categoria', key: 'category', items: sp.filters_data.categories,
+                labelVal: 'name', value: '', getMethod: (term) => container.getCategoriesByName(term), _class: 'auto-complete'},
+            {type: 'simpleText', label: 'Nominativo Destinatario', key: 'recipientName'},
+            {type: 'auto-complete', label: 'CAP Destinatario:', key: 'recipientCap', items: sp.filters_data.caps_group,
+                labelVal: 'name', getMethod: (term) => container.recipientsService.getCapCity(term), _class: 'auto-complete'},
+            {type: 'simpleText', label: 'Indirizzo Destinatario:', key: 'destination'},
+        ],
         grouping: false,
         changeViewButton: {icon: '/assets/images/table.png', route: ['/delivering']},
         changeViewTabs: {
@@ -113,7 +150,11 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
         private actionsService: ActionsService,
         private paginationService: PaginationService,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private categoriesService: CategoriesService,
+        protected customersService: CustomersService,
+        protected agenciesService: AgenciesService,
+        protected recipientsService: RecipientsService,
     ) {
     }
 
@@ -128,6 +169,11 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
                 this.subViewChanged(data);
             }
         );
+        this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filters) => {
+            this.loadCalenderItems(true);
+            this._calenderDispatchTable.reload();
+            this._calenderPostmenTable.reload();
+        });
         this.doTheFirstLoad();
     }
 
@@ -173,7 +219,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     subViewChanged(data, day = null, dispatch = null) {
         // in case change happened from inner component
         this.filter_config.changeViewTabs.tabs.map(tab => tab.value === data ? tab.active = true : tab.active = false);
-        if (dispatch) { this._calender.displayedPostman(dispatch); }
+        if (dispatch) { this._calender.displayedPostman(dispatch, null, false); }
         if (day) {
             this._calender.setDay(day.substr(0, 10));
             this.calender_current_day = day.substr(0, 10);
@@ -277,11 +323,21 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
         );
     }
 
-    postmanDisplayed(postmen) {
+    postmanDisplayed(data) {
+        if (data) {
+            this._calenderDispatchTable.forceSelect({id: data.postman});
+            this.subViewType = 'day';
+            this.filter_config.changeViewTabs.tabs.map(tab => tab.value === 'day' ? tab.active = true : tab.active = false);
+        } else {
+            this._calenderDispatchTable.forceSelect(null);
+        }
         this.updateRouteParams();
     }
     // loads weekly calender data.
-    loadCalenderItems() {
+    loadCalenderItems(keep_day = false) {
+        if (keep_day) {
+            this._calender.save_day_index = this._calender.current_day;
+        }
         this.calendar_data = null;
         this.filter_config.changeViewTabs.lock = true ;
         this.calenderService.getWeeklyCalender(
@@ -294,7 +350,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
             data => {
                 this.filter_config.changeViewTabs.lock = false ;
                 this.calendar_data = <any>(data).data;
-                if (data.data.length) {
+                if (data.data.length && !keep_day) {
                     this.calender_current_day = data.data[0].dayDate;
                 }
                 this.paginationService.updateLoadingState(false);
@@ -303,6 +359,10 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
                 this.updateRouteParams();
             }
         );
+    }
+
+    getCategoriesByName(name) {
+        return this.categoriesService.getCategoriesByName(name);
     }
 
     ngOnDestroy() {

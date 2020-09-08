@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {TreeNodeInterface, TreeNodeMarker} from '../../../core/models/tree-node.interface';
+import {TreeNodeInterface, TreeNodeMarker} from '../core/models/tree-node.interface';
 
 @Injectable()
 export class MarkersService {

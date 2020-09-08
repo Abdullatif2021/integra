@@ -10,7 +10,7 @@ import {AddressesActionsService} from '../../service/addresses.actions.service';
 import {SnotifyService} from 'ng-snotify';
 import {ACAddress} from '../../../../core/models/address.interface';
 import {PlanningService} from '../../../../service/planning/planning.service';
-import {MapService} from '../../service/map.service';
+import {MapService} from '../../../../service/map.service';
 import {ScheduleService} from '../../service/schedule.service';
 import {BackProcessingService} from '../../../../service/back-processing.service';
 import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-global-actions.service';

@@ -15,6 +15,7 @@ import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 import {CustomersService} from '../../../../service/customers.service';
 import {AgenciesService} from '../../../../service/agencies.service';
 import {RecipientsService} from '../../../../service/recipients.service';
+import {CategoriesService} from '../../../../service/categories.service';
 
 @Component({
     selector: 'app-dispatch',
@@ -56,6 +57,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
         protected customersService: CustomersService,
         protected agenciesService: AgenciesService,
         protected recipientsService: RecipientsService,
+        private categoriesService: CategoriesService
     ) {
     }
 
@@ -121,6 +123,15 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
     showLogModal(elm) {
         this.integraaModalService.open(`/pages/dispatch/${elm.id}/log`,
             {width: 1000, height: 600, title: `Log: ${elm.pre_dispatch_code}`}, {});
+    }
+
+    showDispatchModal(elm) {
+        this.integraaModalService.open(`/pages/dispatch/view/${elm.id}`,
+            {width: 1420, height: 710, title: `Show: ${elm.pre_dispatch_code}`}, {});
+    }
+
+    getCategoriesByName(name) {
+        return this.categoriesService.getCategoriesByName(name);
     }
 
     ngOnDestroy() {

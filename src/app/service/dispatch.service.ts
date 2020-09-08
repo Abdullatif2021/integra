@@ -78,6 +78,7 @@ export class DispatchService {
         options.params = options.params.set('page', page) ;
         options.params = options.params.set('dateIndex', `${week}`) ;
         options.params = options.params.set('pageSize', rpp) ;
+        options.params = this.filtersService.getHttpParams(options.params) ;
         if (date) { options.params = options.params.set('date', date) ; }
         if (name) { options.params = options.params.set('name', name) ; }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderWeeklyPostmen, options).pipe(
@@ -90,6 +91,7 @@ export class DispatchService {
         options.params = options.params.set('page', page) ;
         options.params = options.params.set('day', day.split('/').reverse().join('-')) ;
         options.params = options.params.set('pageSize', rpp) ;
+        options.params = this.filtersService.getHttpParams(options.params) ;
         if (date) { options.params = options.params.set('date', date) ; }
         if (name) { options.params = options.params.set('name', name) ; }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderDailyPostmen, options).pipe(

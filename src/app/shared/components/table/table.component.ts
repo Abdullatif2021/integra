@@ -23,6 +23,7 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
     @ViewChild('tableRow') tableRowElement;
     @Input() table: any = {} ;
     @Input() items: any = [] ;
+    @Input() klass = '' ;
     @Input() parent: any ;
     isLoading = true ;
     @Output() selected = new EventEmitter() ;

@@ -5,7 +5,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {BuildingLocationInterface} from '../../core/models/building.interface';
 import {PlanningService} from '../../service/planning/planning.service';
-import {MapService} from './service/map.service';
+import {MapService} from '../../service/map.service';
 import {MapMarker} from '../../core/models/map-marker.interface';
 import {SnotifyService} from 'ng-snotify';
 import {BackProcessingService} from '../../service/back-processing.service';
@@ -230,7 +230,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             that.latitude = map.center.lat();
             that.longitude = map.center.lng();
             that.zoom = map.zoom;
-            console.log(that.latitude, that.longitude);
         });
         map.addListener('zoom_changed', function () {
             that.mapService.move( map.center.lat(), map.center.lng(), map.zoom) ;

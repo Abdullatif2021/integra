@@ -31,13 +31,11 @@ import {AddressesActionsService} from './service/addresses.actions.service';
 import {PreDispatchDataResolver} from './resolvers/pre-dispatch-data.resolver';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MapService} from './service/map.service';
 import {ResultsService} from './service/results.service';
 import {ResultesResolver} from './resolvers/resultes.resolver';
 import {ScheduleService} from './service/schedule.service';
 import { NotMatchesTreeComponent } from './parts-components/not-matches-tree/not-matches-tree.component';
 import {DndModule} from 'ngx-drag-drop';
-import {MarkersService} from './service/markers.service';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { NotFixedTreeComponent } from './parts-components/not-fixed-tree/not-fixed-tree.component';
 import {GoogleMapsConfig} from './service/google-maps-config';
@@ -76,11 +74,9 @@ import {GoogleMapsConfig} from './service/google-maps-config';
       ContextMenuService,
       AddressesActionsService,
       PreDispatchDataResolver,
-      MapService,
       ResultsService,
       ResultesResolver,
       ScheduleService,
-      MarkersService,
       {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig}
 
   ],

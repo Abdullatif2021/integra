@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import {TreeNodeInterface, TreeNodeResponseInterface} from '../../../core/models/tree-node.interface';
 import {takeUntil} from 'rxjs/internal/operators';
 import {SetClientTreeNodeInterface, SetTreeNodeInterface} from '../../../core/models/set-tree-node.interface';
-import {MarkersService} from './markers.service';
+import {MarkersService} from '../../../service/markers.service';
 
 @Injectable()
 export class ResultsService implements OnDestroy {

@@ -290,4 +290,11 @@ import {SnotifyService} from 'ng-snotify';
           this.searchValue = value;
       }
 
+      forceSelect(item) {
+          this.selected = {};
+          if (item) {
+              this.selected[item.id] = item;
+          }
+      }
+
 }

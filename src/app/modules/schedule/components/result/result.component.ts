@@ -8,7 +8,7 @@ import {NotMatchesTreeComponent} from '../../parts-components/not-matches-tree/n
 import {DragAndDropService} from '../../../../service/drag-and-drop.service';
 import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {ListTreeService} from '../../service/list-tree.service';
-import {MapService} from '../../service/map.service';
+import {MapService} from '../../../../service/map.service';
 import {MapMarker} from '../../../../core/models/map-marker.interface';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';

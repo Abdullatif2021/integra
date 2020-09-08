@@ -207,3 +207,6 @@
 .clickable-item {
     cursor: pointer;
 }
+.selected-item {
+    background-color: #FFCC99 !important;
+}

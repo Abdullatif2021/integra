@@ -13,6 +13,7 @@ import {ActionsService} from '../../../../service/actions.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {FiltersService} from '../../../../service/filters.service';
+import {CategoriesService} from '../../../../service/categories.service';
 
 @Component({
   selector: 'app-delivering',
@@ -51,6 +52,7 @@ export class DeliveringComponent implements OnInit, OnDestroy, AfterViewInit {
         protected customersService: CustomersService,
         protected agenciesService: AgenciesService,
         protected recipientsService: RecipientsService,
+        private categoriesService: CategoriesService
     ) {
     }
 
@@ -122,6 +124,14 @@ export class DeliveringComponent implements OnInit, OnDestroy, AfterViewInit {
     showLogModal(elm) {
         this.integraaModalService.open(`/pages/dispatch/${elm.id}/log`,
             {width: 1000, height: 600, title: `Log: ${elm.pre_dispatch_code}`}, {});
+    }
+    showDispatchModal(elm) {
+        this.integraaModalService.open(`/pages/dispatch/view/${elm.id}`,
+            {width: 1420, height: 710, title: `Show: ${elm.pre_dispatch_code}`}, {});
+    }
+
+    getCategoriesByName(name) {
+        return this.categoriesService.getCategoriesByName(name);
     }
 
     ngOnDestroy() {

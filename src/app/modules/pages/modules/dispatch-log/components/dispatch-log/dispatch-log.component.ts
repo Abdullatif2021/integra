@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
-import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 import {ActivatedRoute} from '@angular/router';
-import {DispatchService} from '../../../../service/dispatch.service';
+import {DispatchService} from '../../../../../../service/dispatch.service';
+import {IntegraaModalService} from '../../../../../../service/integraa-modal.service';
 
 @Component({
   selector: 'app-dispatch-log',

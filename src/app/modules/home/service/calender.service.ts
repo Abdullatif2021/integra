@@ -3,6 +3,7 @@ import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/c
 import {AppConfig} from '../../../config/app.config';
 import {catchError} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
+import {FiltersService} from '../../../service/filters.service';
 
 @Injectable({
     providedIn: 'root'
@@ -11,6 +12,7 @@ export class CalenderService {
 
     constructor(
         private http: HttpClient,
+        private filtersService: FiltersService
     ) {
     }
 
@@ -22,7 +24,7 @@ export class CalenderService {
         if (postmen) { options.params = options.params.set('postmen', postmen); }
         if (date) { options.params = options.params.set('date', date); }
         if (state) { options.params =  options.params.set('state', state); }
-
+        options.params = this.filtersService.getHttpParams(options.params) ;
         return this.http.get<any>(AppConfig.endpoints.getWeeklyCalender, options).pipe(
             catchError(this.handleError)
         );

@@ -7,7 +7,7 @@ import {GoogleDirectionsService} from './google-directions.service';
 import {BackProcessingService} from '../back-processing.service';
 import {AppConfig} from '../../config/app.config';
 import {ApiResponseInterface} from '../../core/models/api-response.interface';
-import {MapService} from '../../modules/schedule/service/map.service';
+import {MapService} from '../map.service';
 
 @Injectable({
     providedIn: 'root'

@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {Subject} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {IntegraaModalService} from '../../../../service/integraa-modal.service';
+import {PreDispatchService} from '../../../../../../service/pre-dispatch.service';
+import {IntegraaModalService} from '../../../../../../service/integraa-modal.service';
 
 @Component({
   selector: 'app-pre-dispatch-log',
