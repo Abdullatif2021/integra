@@ -37,11 +37,8 @@ export class DispatchViewComponent implements OnInit {
     loadPath() {
         this.dispatchViewService.getSetPath(this.dispatch).subscribe(
             path => {
-                this.paths = JSON.parse(path.data.path);
-                this.latitude = parseFloat(path.data.markers[Math.floor(path.data.markers.length / 2)].lat);
-                this.longitude = parseFloat(path.data.markers[Math.floor(path.data.markers.length / 2)].long);
-                this.zoom = 14;
-                path.data.markers.forEach((elm) => {
+                this.paths = [JSON.parse(path.data.path)];
+                path.data.coordinates.forEach((elm) => {
                     const priority = (elm.groups ? elm.groups[0].map_priority : elm.priority) + 1 + '';
                     const icon = `https://mt.google.com/vt/icon/text=${priority}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000` +
                         `&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`;
@@ -79,6 +76,41 @@ export class DispatchViewComponent implements OnInit {
                         }
                     });
                 });
+                // add start and end points.
+                if (path.data.start_point.lat === path.data.endPoint.lat &&
+                    path.data.start_point.long === path.data.endPoint.long ) {
+                    this.markers.push({
+                        lat: path.data.start_point.lat,
+                        lng: path.data.start_point.long,
+                        label: 'Start/End',
+                        title: path.data.start_point.text,
+                        id: 'start+end+point',
+                        icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
+                        infoWindow: false,
+                        onClick: () => {}
+                    });
+                } else {
+                    this.markers.push({
+                        lat: path.data.start_point.lat,
+                        lng: path.data.start_point.long,
+                        label: 'Start',
+                        title: path.data.start_point.text,
+                        id: 'start+point',
+                        icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
+                        infoWindow: false,
+                        onClick: () => {}
+                    });
+                    this.markers.push({
+                        lat: path.data.endPoint.lat,
+                        lng: path.data.endPoint.long,
+                        label: 'End',
+                        title: path.data.endPoint.text,
+                        id: 'end+point',
+                        icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
+                        infoWindow: false,
+                        onClick: () => {}
+                    });
+                }
             }
         );
     }
@@ -129,6 +161,7 @@ export class DispatchViewComponent implements OnInit {
             that.latitude = map.center.lat();
             that.longitude = map.center.lng();
             that.zoom = map.zoom;
+            console.log(that.latitude, that.longitude);
         });
         map.addListener('zoom_changed', function () {
             that.mapService.move( map.center.lat(), map.center.lng(), map.zoom) ;

@@ -326,8 +326,13 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     postmanDisplayed(data) {
         if (data) {
             this._calenderDispatchTable.forceSelect({id: data.postman});
-            this.subViewType = 'day';
-            this.filter_config.changeViewTabs.tabs.map(tab => tab.value === 'day' ? tab.active = true : tab.active = false);
+            this.calender_current_day = data.day;
+            if (this.subViewType !== 'day') {
+                this.subViewType = 'day';
+                this.filter_config.changeViewTabs.tabs.map(tab => tab.value === 'day' ? tab.active = true : tab.active = false);
+                this._calenderDispatchTable.reload(true);
+                this._calenderPostmenTable.reload();
+            }
         } else {
             this._calenderDispatchTable.forceSelect(null);
         }
