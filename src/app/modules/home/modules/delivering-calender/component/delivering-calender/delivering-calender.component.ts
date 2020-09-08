@@ -202,7 +202,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
                 this._calender.current_day = parseInt(this.route.snapshot.queryParams.day, 10);
             }
             if (this.route.snapshot.queryParams.dispatch) {
-                this._calender.displayedPostman(parseInt(this.route.snapshot.queryParams.dispatch, 10));
+                this._calender.displayedPostman(parseInt(this.route.snapshot.queryParams.dispatch, 10), null, false);
             }
             if (this.route.snapshot.queryParams.view) {
                 this.subViewType = this.route.snapshot.queryParams.view;

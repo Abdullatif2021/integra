@@ -200,12 +200,13 @@ export class DispatchCalenderComponent implements OnInit, OnDestroy {
                 this._calender.current_day = parseInt(this.route.snapshot.queryParams.day, 10);
             }
             if (this.route.snapshot.queryParams.dispatch) {
-                this._calender.displayedPostman(parseInt(this.route.snapshot.queryParams.dispatch, 10));
+                this._calender.displayedPostman(parseInt(this.route.snapshot.queryParams.dispatch, 10), null, false);
             }
             if (this.route.snapshot.queryParams.view) {
                 this.subViewType = this.route.snapshot.queryParams.view;
                 this.filter_config.changeViewTabs.tabs.map(tab => tab.value === this.subViewType ? tab.active = true : tab.active = false);
                 if (this.subViewType === 'day') {
+                    console.log(this.calender_current_day);
                     this._calenderDispatchTable.reload();
                     this._calenderPostmenTable.reload();
                 }
