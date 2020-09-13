@@ -83,7 +83,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
             {type: 'simpleText', label: 'Nominativo Destinatario', key: 'recipientName'},
             {type: 'auto-complete', label: 'CAP Destinatario:', key: 'recipientCap', items: sp.filters_data.caps_group,
                 labelVal: 'name', getMethod: (term) => container.recipientsService.getCapCity(term), _class: 'auto-complete'},
-            {type: 'simpleText', label: 'Indirizzo Destinatario:', key: 'destination'},
+            {type: 'simpleText', label: 'Indirizzo Destinatario:', key: 'recipientAddress'},
         ],
         grouping: false,
         changeViewButton: {icon: '/assets/images/table.png', route: ['/delivering']},
