@@ -79,7 +79,6 @@ import {MapsAPILoader} from '@agm/core/services/maps-api-loader/maps-api-loader'
       ResultesResolver,
       ScheduleService,
       {provide: MapsAPILoader, useClass: IntegraaLazyMapApiLoaderService}
-
   ],
   entryComponents: [
       NotMatchesTreeComponent,

@@ -61,7 +61,7 @@
     <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
   </ng-container>
   <ng-container *ngIf="!item.skeleton">
-    <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2), 'selected-postman': item.id == selected_set.id}" class="{{getLvlClass(next)}} {{getStatusClass(item)}} postman-tree-node position-relative" (click)="selectPostman(item)">
+    <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2), 'selected-postman': item.id == selected_set.id, 'with-error': errors.sets[item.id]}" class="{{getLvlClass(next)}} {{getStatusClass(item)}} postman-tree-node position-relative" (click)="selectPostman(item)">
       <span class="dispatch-created-check-icon" *ngIf="item.is_distenta_created" ><fa-icon [icon]="['fa','check']"></fa-icon></span>
       <div class="item-row">
         <div class="d-flex">
@@ -77,9 +77,11 @@
             </div>
           </div>
           <div class="col-5 wide-col">
-            <div class="postman-name d-flex h-100">
+            <div class="postman-name h-100" >
               <ng-select *ngIf="!item.is_distenta_created" class="integraa-select postman-select" [items]="postmen[parent.day]" [placeholder]="'Not Assigned'" (change)="assignPostman($event, item, parent)" [clearable]="false" [bindLabel]="'full_name'" [(ngModel)]="selectedPostmen[parent.day][item.id]"></ng-select>
               <span class="mt-auto mb-auto" *ngIf="item.is_distenta_created" >{{selectedPostmen[parent.day][item.id].full_name}}</span>
+              <input type="text" (change)="changeDispatchName($event, item)" *ngIf="scheduleResultsDisplayedTab === 'assigned'" [disabled]="item.is_distenta_created" class="dispatch-name-input" value="{{item.name}}" placeholder="Dispatch Name"/>
+              <span class="error-msg" *ngIf="errors.sets[item.id] === 1">Campo obbligatorio</span>
             </div>
           </div>
           <div class="col-3 v-wide-col"> <div class="count mt-1">{{item.quantity}} Consegne</div> </div>
@@ -104,48 +106,6 @@
 
 </ng-template>
 
-<!--<ng-template let-item="item" let-idx="idx" let-next="next" #simpleItem>-->
-  <!--<ng-container *ngIf="item.skeleton;">-->
-    <!--<div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>-->
-  <!--</ng-container>-->
-  <!--<ng-container *ngIf="!item.skeleton">-->
-    <!--<div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !(idx%2)}" class="{{getLvlClass(next)}} {{getStatusClass(item)}}">-->
-      <!--<div class="item-row">-->
-        <!--<div class="d-flex">-->
-          <!--<div class="v-wide-col" [ngClass]="{'col-1-half': item.marker, 'col-half': !item.marker}">-->
-            <!--<div class="more" *ngIf="item.children" (click)="expand(item)">-->
-              <!--<fa-icon *ngIf="!item.expanded" [icon]="['fa','chevron-down']"></fa-icon>-->
-              <!--<fa-icon *ngIf="item.expanded" [icon]="['fa','chevron-up']"></fa-icon>-->
-            <!--</div>-->
-            <!--&lt;!&ndash;<div class="marker-container" *ngIf="item.marker">&ndash;&gt;-->
-              <!--&lt;!&ndash;<div class="marker {{item.marker.color}}" [style.background]="item.marker.color" *ngIf="item.marker">{{item.marker.text}}</div>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-          <!--</div>-->
-          <!--<div [ngClass]="{'col-2-half': item.marker, 'col-3 wide-col': !item.marker}"> <div class="item-name mt-1">{{item.text}}</div> </div>-->
-          <!--<div class="col-3"> <div class="count mt-1">{{item.qta}} Consegne</div> </div>-->
-          <!--<div class="col-3"> <div class="time mt-1">{{item.time}}</div> </div>-->
-          <!--<div class="col-2"> <div class="distance mt-1">{{item.distance}}</div> </div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-    <!--<ng-container *ngIf="item.expanded">-->
-        <!--<ng-container  *ngIf="getLvl(next) <  5" >-->
-          <!--<div dndDropzone (dndDrop)="onDrop($event, item)" infiniteScroll [infiniteScrollContainer]="itemContainer" (scrolled)="loadMore(item)" [dndDisableDropIf]="dragging && dragging.parent.type !== item.type" [scrollWindow]="true" infiniteScrollDistance="30" [ngClass]="{'drop-location': dragging && dragging.parent.type === item.type}">-->
-            <!--<div dndPlaceholderRef class="dndPlaceholder"></div>-->
-            <!--<div *ngFor="let child of item.children; let i = index"  [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"-->
-                 <!--(dndStart)="onDragStart($event, child)">-->
-              <!--<ng-container [ngTemplateOutlet]="simpleItem" [ngTemplateOutletContext]="{idx: idx+i+1, item:child, next: next+':'+i}"></ng-container>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</ng-container>-->
-        <!--<ng-container *ngIf="getLvl(next) ==  5">-->
-          <!--<ng-container [ngTemplateOutlet]="streetItems" [ngTemplateOutletContext]="{idx: idx, item: item, next: next+':'+i}"></ng-container>-->
-        <!--</ng-container>-->
-    <!--</ng-container>-->
-  <!--</ng-container>-->
-
-<!--</ng-template>-->
-
 <ng-template let-idx="idx" let-next="next" let-item="item" #streetItems>
   <div class="street-items-header" *ngIf="item.children">
     <div class="d-flex">
@@ -165,11 +125,11 @@
         <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
       </ng-container>
       <ng-container  *ngIf="!child.skeleton;">
-        <div class="street-item" [ngClass]="{'danger-bg': child.fromNotFixed, 'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" [dndDraggable]="{item: 1}" [dndDisableIf]="child.fromNotFixed" [dndEffectAllowed]="'move'"
+        <div class="street-item" [ngClass]="{'danger-bg': child.fromNotFixed, 'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" [dndDraggable]="{item: 1}" [dndDisableIf]="child.fromNotFixed || child.parent.status !== 'not_assigned'" [dndEffectAllowed]="'move'"
              (dndStart)="onDragStart($event, child)" class="{{getStatusClass(child)}}">
           <div class="d-flex">
             <div class="col-1 wide-col d-flex">
-              <div dndHandle class="drag-handle" *ngIf="!child.fromNotFixed">☰</div>
+              <div dndHandle class="drag-handle" *ngIf="!child.fromNotFixed && child.parent.status === 'not_assigned'">☰</div>
               <div class="more" *ngIf="child.products" (click)="child.expanded = !child.expanded">
                 <fa-icon *ngIf="!child.expanded" [icon]="['fa','chevron-down']"></fa-icon>
                 <fa-icon *ngIf="child.expanded" [icon]="['fa','chevron-up']"></fa-icon>

@@ -8,6 +8,12 @@ import {SharedModule} from '../../../../shared/shared.module';
 import {DispatchViewService} from './service/dispatch-view.service';
 import {IntegraaLazyMapApiLoaderService} from '../../../../shared/service/integraa-lazy-map-api-loader.service';
 import {MapsAPILoader} from '@agm/core/services/maps-api-loader/maps-api-loader';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {faChevronUp} from '@fortawesome/free-solid-svg-icons/faChevronUp';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {faChevronDown} from '@fortawesome/free-solid-svg-icons/faChevronDown';
+import {faCheck} from '@fortawesome/free-solid-svg-icons/faCheck';
+import {DndModule} from 'ngx-drag-drop';
 
 const routes: Routes = [
     {path: '', component: DispatchViewComponent}
@@ -19,7 +25,9 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     AgmCoreModule.forRoot(),
     InfiniteScrollModule,
-    SharedModule
+    FontAwesomeModule,
+    SharedModule,
+    DndModule
   ],
   declarations: [DispatchViewComponent],
   providers: [
@@ -27,4 +35,10 @@ const routes: Routes = [
       {provide: MapsAPILoader, useClass: IntegraaLazyMapApiLoaderService}
   ]
 })
-export class DispatchViewModule { }
+export class DispatchViewModule {
+    constructor() {
+        library.add(faChevronUp);
+        library.add(faChevronDown);
+        library.add(faCheck);
+    }
+}

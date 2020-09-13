@@ -49,11 +49,11 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit, 
     if (this.filtersService.specials.streets && !this.filtersService.specials.streets.all) { this.filtersCount++; }
 
     // get total filtered products counts and subscribe to the count changes.
-      this.filteredProductsCount = this.paginationService.resultsCount ;
-      this.paginationService.resultsCountChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
-        data => {
-          this.filteredProductsCount = data;
-        }
+    this.filteredProductsCount = this.paginationService.resultsCount ;
+    this.paginationService.resultsCountChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
+      data => {
+        this.filteredProductsCount = data;
+      }
     );
 
   }

@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {PlacesAutocompleteService} from '../../service/places.autocomplete.service';
 import {ACAddress} from '../../../core/models/address.interface';
+import {MapsAPILoader} from '@agm/core';
 
 @Component({
     selector: 'app-address-input',
@@ -11,8 +12,10 @@ import {ACAddress} from '../../../core/models/address.interface';
 export class AddressInputComponent implements OnInit, OnChanges {
 
     constructor(
-        private googlePlacesService: PlacesAutocompleteService
-    ) {
+        private googlePlacesService: PlacesAutocompleteService,
+        private mapsAPILoader: MapsAPILoader
+
+        ) {
     }
 
     address: ACAddress;
@@ -24,8 +27,12 @@ export class AddressInputComponent implements OnInit, OnChanges {
     @Input() disabled = false ;
     inputValue = '';
     appendId: number;
+    loaded = false;
 
     ngOnInit() {
+        this.mapsAPILoader.load().then(() => {
+            this.loaded = true;
+        });
     }
 
     // outside changes

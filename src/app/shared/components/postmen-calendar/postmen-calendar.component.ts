@@ -33,6 +33,8 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
 
   @ViewChild('editPostmanNoteModal') editPostmanNoteModal ;
   @ViewChild('showMoreAvailablePostmenModal') showMoreAvailablePostmenModal ;
+  @ViewChild('confirmAssignModal') confirmAssignModal ;
+  @ViewChild('confirmStatusChangeModal') confirmStatusChangeModal ;
   @ViewChild('editDayNoteModal') editDayNoteModal ;
   @ViewChild('editDayAttachmentModal') editDayAttachmentModal ;
   activepostman = null ;
@@ -46,7 +48,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
   ];
   details = null ;
   moreData = [] ;
-
+  saved_event = null;
   current_day_info = {delivered_expanded: false, not_delivered_expanded: false};
 
   loadMorePage = 1;
@@ -104,7 +106,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
   }
 
   showMore(day, type, modal = true) {
-      if (this.loading_more) { return ;}
+      if (this.loading_more) { return ; }
       if (!this.loadMoreMethods || !this.loadMoreMethods[type] || typeof this.loadMoreMethods[type] !== 'function') {
           return ;
       }
@@ -180,15 +182,27 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
       }
   }
 
-  assignToUser(event) {
+  assignToUser(event, confirm = false) {
       if (!event) { return ; }
-      this.setAssigned.emit({sets: [this.details.id], user: event.id});
+      if (!confirm) {
+          this.saved_event = event;
+          return this.modalService.open(this.confirmAssignModal);
+      }
+      this.setAssigned.emit({sets: [this.details.id], user: this.saved_event.id});
   }
 
-  detailsStatusChanged(event) {
-      if (typeof event.handler === 'function') {
-          event.handler(this.details);
+  detailsStatusChanged(event, confirm = false) {
+      if (!confirm) {
+          this.saved_event = event;
+          return this.modalService.open(this.confirmStatusChangeModal);
       }
+      if (typeof this.saved_event.handler === 'function') {
+          this.saved_event.handler(this.details);
+      }
+  }
+
+  resetStatusSelect() {
+      this.details.status = null;
   }
 
   async addSetInternalNote(event) {
@@ -227,9 +241,11 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
       // get the details.
       this.detailsGetMethod(postman).subscribe( data => {
           this.details = data.data;
+          if (this.details.user && !this.availableUsers.find((item) => item.id === this.details.user.id)) {
+              this.availableUsers.push(this.details.user);
+          }
           if (this.details.user) {
               this.details.user = {name: this.details.user.full_name, id: this.details.user.id};
-              this.availableUsers.push(this.details.user);
           }
           if (this.details.status) {
               this.details.status = this.detailsStatuses.find(state => state.id === this.details.status);

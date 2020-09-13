@@ -3,7 +3,7 @@
 
     <div class="small-table v-wide-col">
       <app-simple-table #calenderPostmenTable [table]="customPostmenTableConfig" [mid_height]="true" [getMethod]="calenderPostmenGetMethod" (changed)="changeCalenderPostman($event)"></app-simple-table>
-      <app-simple-table #calenderReviserTable [table]="reviserTableConfig" [mid_height]="true" [getMethod]="calenderPostmenGetMethod"></app-simple-table>
+      <app-simple-table #calenderReviserTable [table]="reviserTableConfig" [mid_height]="true" [getMethod]="calenderRevisorGetMethod" (changed)="changeCalenderRevisor($event)"></app-simple-table>
     </div>
     <div class="small-table v-wide-col">
       <app-simple-table #calenderDispatchTable [single_select_clearable]="true" [multi]="false" [table]="simpleDispatchTableConfig" [getMethod]="dispatchGetMethod" (changed)="changeCalenderDispatches($event)"></app-simple-table>

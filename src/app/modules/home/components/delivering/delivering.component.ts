@@ -14,6 +14,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {FiltersService} from '../../../../service/filters.service';
 import {CategoriesService} from '../../../../service/categories.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-delivering',
@@ -36,8 +37,7 @@ export class DeliveringComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('postmenTable') _postmenTable;
 
     filtersConfig = null;
-    actions = [
-    ];
+    actions = [];
 
 
     postmenGetMethod = (page, rpp, name, order) => this.dispatchService.getAssignedPostmen(page, rpp, name, order, 'PREPARED');
@@ -52,7 +52,8 @@ export class DeliveringComponent implements OnInit, OnDestroy, AfterViewInit {
         protected customersService: CustomersService,
         protected agenciesService: AgenciesService,
         protected recipientsService: RecipientsService,
-        private categoriesService: CategoriesService
+        private categoriesService: CategoriesService,
+        private router: Router
     ) {
     }
 
@@ -132,6 +133,13 @@ export class DeliveringComponent implements OnInit, OnDestroy, AfterViewInit {
 
     getCategoriesByName(name) {
         return this.categoriesService.getCategoriesByName(name);
+    }
+
+    goToCalender(elm) {
+        this.router.navigate(['/delivering/calender'],
+            {queryParams : {
+                    view: 'day', locate_day: 1, dispatch: elm.id, date: elm.started_at.substr(0, 10).split('/').reverse().join('-')}
+            });
     }
 
     ngOnDestroy() {

@@ -41,7 +41,7 @@
     font-size: 12px;
     overflow: scroll;
 }
-.product-items-header {
+.product-items-header, .street-items-header {
     background: #222222;
     color: #fcda4b;
 }
@@ -59,4 +59,26 @@
     border-bottom: 1px dashed black;
     padding-bottom: 2px;
     margin-bottom: 2px;
+}
+.more {
+    cursor: pointer;
+    margin: auto;
+}
+
+.dndDragging {
+    opacity: 0.4;
+}
+.dndDragover.drop-location {
+    transition: all ease .3s;
+    border: 2px dotted green;
+}
+.dndPlaceholder {
+    height: 42px;
+    background-color: #c6edb6;
+}
+.drag-handle{
+    cursor: grab;
+    font-size: 17px;
+    margin: auto 5px auto 4px;
+    color: #212121;
 }

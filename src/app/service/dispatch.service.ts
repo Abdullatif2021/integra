@@ -43,7 +43,7 @@ export class DispatchService {
         );
     }
 
-    getCalenderWeeklyDispatches(page, rpp, postmen, name, order, week = 0, state = 'NOT_PREAPERED', date = null) {
+    getCalenderWeeklyDispatches(page, rpp, postmen, revisors, name, order, week = 0, state = 'NOT_PREAPERED', date = null) {
         const options = { params: new HttpParams(), headers: new HttpHeaders()};
         options.params = options.params.set('state', state) ;
         options.params = options.params.set('dateIndex', `${week}`) ;
@@ -51,13 +51,14 @@ export class DispatchService {
         options.params = options.params.set('pageSize', rpp) ;
         options.params = this.filtersService.getHttpParams(options.params) ;
         if (postmen) { options.params = options.params.set('postmen', postmen) ; }
+        if (revisors) { options.params = options.params.set('revisors', revisors) ; }
         if (name) { options.params = options.params.set('code', name) ; }
         if (date) { options.params = options.params.set('date', date) ; }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderWeeklySets, options).pipe(
             catchError(this.handleError)
         );
     }
-    getCalenderDailyDispatches(page, rpp, postmen, name, order, day, state = 'NOT_PREAPERED', date = null) {
+    getCalenderDailyDispatches(page, rpp, postmen, revisors, name, order, day, state = 'NOT_PREAPERED', date = null) {
         const options = { params: new HttpParams(), headers: new HttpHeaders()};
         options.params = options.params.set('state', state) ;
         options.params = options.params.set('day', `${day.split('/').reverse().join('-')}`) ;
@@ -66,13 +67,14 @@ export class DispatchService {
         options.params = this.filtersService.getHttpParams(options.params) ;
         if (date) { options.params = options.params.set('date', date) ; }
         if (postmen) { options.params = options.params.set('postmen', postmen) ; }
+        if (revisors) { options.params = options.params.set('revisors', revisors) ; }
         if (name) { options.params = options.params.set('code', name) ; }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderDailySets, options).pipe(
             catchError(this.handleError)
         );
     }
 
-    getCalenderWeeklyPostmen(page, rpp, name, order, week = 0, state = 'NOT_PREAPERED', date = null) {
+    getCalenderWeeklyPostmen(page, rpp, name, order, week = 0, state = 'NOT_PREAPERED', date = null, type = null) {
         const options = { params: new HttpParams(), headers: new HttpHeaders()};
         options.params = options.params.set('state', state) ;
         options.params = options.params.set('page', page) ;
@@ -81,11 +83,12 @@ export class DispatchService {
         options.params = this.filtersService.getHttpParams(options.params) ;
         if (date) { options.params = options.params.set('date', date) ; }
         if (name) { options.params = options.params.set('name', name) ; }
+        if (type) { options.params = options.params.set('type', type) ; }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderWeeklyPostmen, options).pipe(
             catchError(this.handleError)
         );
     }
-    getCalenderDailyPostmen(page, rpp, name, order, day, state = 'NOT_PREAPERED', date = null) {
+    getCalenderDailyPostmen(page, rpp, name, order, day, state = 'NOT_PREAPERED', date = null, type = null) {
         const options = { params: new HttpParams(), headers: new HttpHeaders()};
         options.params = options.params.set('state', state) ;
         options.params = options.params.set('page', page) ;
@@ -94,6 +97,7 @@ export class DispatchService {
         options.params = this.filtersService.getHttpParams(options.params) ;
         if (date) { options.params = options.params.set('date', date) ; }
         if (name) { options.params = options.params.set('name', name) ; }
+        if (type) { options.params = options.params.set('type', type) ; }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderDailyPostmen, options).pipe(
             catchError(this.handleError)
         );
@@ -119,17 +123,18 @@ export class DispatchService {
         );
     }
 
-    getAvailableUsers(set) {
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getAvailableUsers(set), {}).pipe(
+    getAvailableUsers() {
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getAvailableUsers, {}).pipe(
             catchError(this.handleError)
         );
     }
 
-    getCalenderAvailablePostmen(day, page = 1) {
+    getCalenderAvailablePostmen(day, page = 1, type = null) {
         const options = { params: new HttpParams(), headers: new HttpHeaders()};
         options.params = options.params.set('page', page + '') ;
         options.params = options.params.set('pageSize', '15') ;
         options.params = options.params.set('day', day.split('/').reverse().join('-'));
+        if (type) { options.params = options.params.set('type', type) ; }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderAvailablePostmen, options).pipe(
             catchError(this.handleError)
         );
@@ -155,12 +160,43 @@ export class DispatchService {
         );
     }
 
+    assignToUserByFilters(user) {
+        const data = {
+            byFilter: 1,
+            filters: this.filtersService.getFiltersObject(),
+            user: user
+        };
+        const options = { params: new HttpParams(), headers: new HttpHeaders()};
+        options.params = this.filtersService.getHttpParams(options.params) ;
+        if (this.filtersService.specials.postmen && this.filtersService.specials.postmen.items.length) {
+            options.params = options.params.set('postmen', this.filtersService.specials.postmen.items);
+        }
+        return this.http.post<any>(AppConfig.endpoints.assignToUser, data, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
     prepare(ids, confirm = false) {
         const data = {
             sets: ids,
             confirm: confirm
         };
         return this.http.post<any>(AppConfig.endpoints.dispatchPrepare, data).pipe(
+            catchError(this.handleError)
+        );
+    }
+    prepareWithFilters(confirm) {
+        const data = {
+            byFilter: 1,
+            filters: this.filtersService.getFiltersObject(),
+            confirm: confirm
+        };
+        const options = { params: new HttpParams(), headers: new HttpHeaders()};
+        options.params = this.filtersService.getHttpParams(options.params) ;
+        if (this.filtersService.specials.postmen && this.filtersService.specials.postmen.items.length) {
+            options.params = options.params.set('postmen', this.filtersService.specials.postmen.items);
+        }
+        return this.http.post<any>(AppConfig.endpoints.dispatchPrepare, data, options).pipe(
             catchError(this.handleError)
         );
     }

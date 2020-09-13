@@ -92,7 +92,7 @@ export const FilterConfig = {
     },
     dispatch: {
         search: (container, sp) => [
-            {type: 'text    ', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'text    ', label: 'Nominativo Distinta', key: 'setName'},
             {type: 'ng-select', label: 'Agenzia', key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name'},
             {type: 'text', label: 'Nome Prodotto:', key: 'productTypeName', value: ''},
             {type: 'text', label: 'Nominativo Destinatario', key: 'recipientName'},
@@ -104,8 +104,10 @@ export const FilterConfig = {
                 items:  sp.filters_data.customers, labelVal: 'name', value: '', _class: 'auto-complete'},
             {type: 'auto-complete', label: 'Agenzia', getMethod: (term) => container.agenciesService.getAgenciesByName(term),
                 key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name', value: '', _class: 'auto-complete'},
-            {type: 'simpleText', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'simpleText', label: 'Nominativo Distinta', key: 'setName'},
+            {type: 'simpleText', label: 'Nota giorno', key: 'dayNote'},
             {type: 'simpleText', label: 'Note Per La Distinta', key: 'setNote'},
+            {type: 'simpleText', label: 'Nome allegato', key: 'docName'},
             {type: 'simpleText', label: 'Note Per Il Postion', key: 'postmanNote'},
             {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
                     {name: 'Not Assigned', id: 'no_assigned'},
@@ -117,7 +119,7 @@ export const FilterConfig = {
             {type: 'tag', label: 'Codice Barre', key: 'barcode'},
             {type: 'simpleText', label: 'Codice Atto', key: 'actCode', value: ''},
             {type: 'simpleText', label: 'Set Code', key: 'setCode', value: ''},
-            {type: 'ng-select', label: 'Prodotto', key: 'productTypeNameId  ',
+            {type: 'ng-select', label: 'Prodotto', key: 'productTypeNameId',
                 items: sp.filters_data.products_type, labelVal: 'type'},
             {type: 'auto-complete', label: 'Categoria', key: 'category', items: sp.filters_data.categories,
                 labelVal: 'name', value: '', getMethod: (term) => container.getCategoriesByName(term), _class: 'auto-complete'},
@@ -144,7 +146,9 @@ export const FilterConfig = {
             {type: 'auto-complete', label: 'Agenzia', getMethod: (term) => container.agenciesService.getAgenciesByName(term),
                 key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name', value: '', _class: 'auto-complete'},
             {type: 'simpleText', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'simpleText', label: 'Nota giorno', key: 'dayNote'},
             {type: 'simpleText', label: 'Note Per La Distinta', key: 'setNote'},
+            {type: 'simpleText', label: 'Nome allegato', key: 'docName'},
             {type: 'simpleText', label: 'Note Per Il Postion', key: 'postmanNote'},
             {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
                     {name: 'Not Assigned', id: 'no_assigned'},

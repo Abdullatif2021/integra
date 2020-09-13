@@ -203,6 +203,7 @@ export const TablesConfig = {
                         {action: 'print', click: (elm) => { console.log('print . '); }},
                         {action: 'excel_export', click: (elm) => {console.log('export . '); }},
                         {action: 'view', click: (elm, container) => { container.showDispatchModal(elm); }},
+                        {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm)}}
                     ]},
                 {title: 'POSTMAN', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
                 {title: 'Dispatch list', field: 'pre_dispatch_code', actions: []},
@@ -226,6 +227,7 @@ export const TablesConfig = {
                         {action: 'print', click: (elm) => { console.log('print . '); }},
                         {action: 'excel_export', click: (elm) => {console.log('export . '); }},
                         {action: 'view', click: (elm, container) => { container.showDispatchModal(elm); }},
+                        {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm)}}
                     ]},
                 {title: 'POSTMAN', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
                 {title: 'Dispatch list', field: 'pre_dispatch_code', actions: []},

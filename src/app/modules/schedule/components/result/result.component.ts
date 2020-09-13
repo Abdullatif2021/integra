@@ -68,7 +68,7 @@ export class ResultComponent implements OnInit, OnDestroy {
   notFixedCount = [];
   movedNotFixedStorage = [];
   selected_sets = [];
-
+  errors = {sets: {}};
   async ngOnInit() {
       this.loadPostmen();
       const results = await this.listTreeService.listNode(this.preDispatch,
@@ -195,14 +195,28 @@ export class ResultComponent implements OnInit, OnDestroy {
   collectSelectedSets() {
       const sets = [] ;
       this.selected.forEach(item => {
-          if ( item._type === 'set' && !item.is_distenta_created) { sets.push(item.id); }
+          if ( item._type === 'set' && !item.is_distenta_created) { sets.push({id: item.id, name: item.name}); }
       });
       return sets ;
   }
 
   makeDispatchesVisible() {
+
+      this.selected_sets = this.collectSelectedSets();
+
       if (!this.selected_sets.length) {
           return this.snotifyService.warning('Nessuna distinta selezionata', { showProgressBar: false, timeout: 1500 });
+      }
+
+      this.errors.sets = {}
+      this.selected_sets.forEach(set => {
+          if (!set.name) {
+              this.errors.sets[set.id] = 1;
+          }
+      });
+
+      if (Object.keys(this.errors.sets).length) {
+          return this.snotifyService.warning('Some sets does not have name', {showProgressBar: false});
       }
       this.resultsService.makeDispatchesVisible(this.preDispatch, this.selected_sets).subscribe(
           data => {
@@ -609,6 +623,12 @@ export class ResultComponent implements OnInit, OnDestroy {
       return this.snotifyService.success('Dati spostati correttamente', { showProgressBar: false, timeout: 1500 });
   }
 
+  changeDispatchName(event, item) {
+      item.name = event.target.value.trim();
+      if (item.name) {
+          this.errors.sets[item.id] = false;
+      }
+  }
 
   ngOnDestroy() {
       this.unsubscribe.next();

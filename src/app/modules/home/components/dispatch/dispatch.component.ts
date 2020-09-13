@@ -16,6 +16,8 @@ import {CustomersService} from '../../../../service/customers.service';
 import {AgenciesService} from '../../../../service/agencies.service';
 import {RecipientsService} from '../../../../service/recipients.service';
 import {CategoriesService} from '../../../../service/categories.service';
+import {DispatchAssignComponent} from '../../modals/dispatch-assign/dispatch-assign.component';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-dispatch',
@@ -40,7 +42,20 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     filtersConfig = null;
     actions = [
-        {name: 'Prepare', modal: DispatchPrepareComponent},
+        {name: 'Borsa preparata', fields: [
+                { type: 'select', field: 'method', options: [
+                        {name: 'Selezionati', value: 'selected'},
+                        {name: 'Secondo i filtri applicati', value: 'filters'}
+                    ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                }
+            ], modal: DispatchPrepareComponent},
+        {name: 'Operatore che prepara la borsa', fields: [
+            { type: 'select', field: 'method', options: [
+                    {name: 'Selezionati', value: 'selected'},
+                    {name: 'Secondo i filtri applicati', value: 'filters'}
+                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+            }
+        ], modal: DispatchAssignComponent},
         {name: 'Elimina', modal: DispatchDeleteComponent},
     ];
 
@@ -57,7 +72,8 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
         protected customersService: CustomersService,
         protected agenciesService: AgenciesService,
         protected recipientsService: RecipientsService,
-        private categoriesService: CategoriesService
+        private categoriesService: CategoriesService,
+        private router: Router
     ) {
     }
 
@@ -73,6 +89,8 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
         this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filters) => {
             this.loadItems(true) ;
             this._postmenTable.reload();
+            this.selected_postmen = null;
+            this.filtersService.setSpecialFilter('postmen', null);
         });
         this.paginationService.rppValueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((rpp: number) => {
             this.loadItems(false) ;
@@ -87,8 +105,9 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // when the user select a postman to filter. <table view>
-    changePostman(event) {
+    postmanChanged(event) {
         this.selected_postmen = event;
+        this.filtersService.setSpecialFilter('postmen', event);
         this.loadItems(true);
     }
 
@@ -132,6 +151,13 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     getCategoriesByName(name) {
         return this.categoriesService.getCategoriesByName(name);
+    }
+
+    goToCalender(elm) {
+        this.router.navigate(['/dispatch/calender'],
+            {queryParams : {
+                view: 'day', locate_day: 1, dispatch: elm.id, date: elm.started_at.substr(0, 10).split('/').reverse().join('-')}
+            });
     }
 
     ngOnDestroy() {

@@ -3,6 +3,7 @@ import {MapService} from '../../../../../../service/map.service';
 import {MapMarker} from '../../../../../../core/models/map-marker.interface';
 import {ActivatedRoute} from '@angular/router';
 import {DispatchViewService} from '../../service/dispatch-view.service';
+import {MapsAPILoader} from '@agm/core';
 
 @Component({
     selector: 'app-dispatch-view',
@@ -20,18 +21,21 @@ export class DispatchViewComponent implements OnInit {
     page = 0;
     loading = false;
     dispatch: number;
-
+    dragging = null ;
     constructor(
         private mapService: MapService,
         private route: ActivatedRoute,
-        private dispatchViewService: DispatchViewService
+        private dispatchViewService: DispatchViewService,
+        private mapsAPILoader: MapsAPILoader
     ) {
         this.dispatch = route.snapshot.params.id;
     }
 
     ngOnInit() {
         this.loadData();
-        this.loadPath();
+        this.mapsAPILoader.load().then(() => {
+            this.loadPath();
+        });
     }
 
     loadPath() {
@@ -115,26 +119,37 @@ export class DispatchViewComponent implements OnInit {
         );
     }
 
-
-
-    loadData() {
+    async loadData() {
         if (this.loading) { return ; }
         this.page += 1;
+        this.loading = true;
         this.data = this.data.concat([{skeleton: true}, {skeleton: true}, {skeleton: true}]);
-        this.loading = true ;
-        this.dispatchViewService.getDispatchData(this.dispatch, this.page).subscribe(
+        const data = await this.dispatchViewService.getDispatchGroups(this.dispatch, this.page).catch(e => {});
+        this.data.splice(-3);
+        if (!data || !data.length) { return ; }
+        this.loading = false;
+        this.data = this.data.concat(data);
+    }
+
+    onDragStart(event, item) {
+        this.dragging = item;
+    }
+
+    onDrop(event) {
+        this.dispatchViewService.orderTreeNode(this.dragging.id, event.index, this.dispatch).subscribe(
             data => {
-                if (data.data && data.data.length) {
-                    this.loading = false;
-                }
-                this.data.splice(-3);
-                this.data = this.data.concat(data.data);
-            },
-            error => {
-                this.loading = false;
-                this.data.splice(-3);
+                this.loadPath();
             }
         );
+    }
+
+    onDragEnd() {
+        console.log('drag ended');
+        this.dragging = null ;
+    }
+
+    select(item, type, event) {
+        item.seleted = !item.selected ;
     }
 
     trackMarkers(marker) {

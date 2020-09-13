@@ -1,37 +1,46 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ModalComponent} from '../modal.component';
-import {DispatchActionsService} from '../../service/dispatch-actions.service';
-import {DispatchService} from '../../../../service/dispatch.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {FiltersService} from '../../../../service/filters.service';
 import {PaginationService} from '../../../../service/pagination.service';
 import {Subject} from 'rxjs';
+import {DispatchService} from '../../../../service/dispatch.service';
+import {SnotifyService} from 'ng-snotify';
+import {DispatchActionsService} from '../../service/dispatch-actions.service';
 
 @Component({
-    selector: 'app-dispatch-prepare',
-    templateUrl: './dispatch-prepare.component.html',
-    styleUrls: ['./dispatch-prepare.component.css']
+    selector: 'app-dispatch-assign',
+    templateUrl: './dispatch-assign.component.html',
+    styleUrls: ['./dispatch-assign.component.css']
 })
-export class DispatchPrepareComponent extends ModalComponent implements OnInit, OnDestroy {
+export class DispatchAssignComponent extends ModalComponent implements OnInit, OnDestroy {
 
-    items = [];
-    confirmed = false ;
-    data: any ;
     filtersCount = 0;
-    filteredProductsCount = 0 ;
+    filteredProductsCount = 0;
+    items;
     unsubscribe: Subject<void> = new Subject();
+    users = [] ;
+    selected = null ;
+    error = null ;
+    confirmed = false;
 
     constructor(
-        private dispatchService: DispatchService,
-        private dispatchActionsService: DispatchActionsService,
         private filtersService: FiltersService,
-        private paginationService: PaginationService
+        private paginationService: PaginationService,
+        private dispatchService: DispatchService,
+        private snotifyService: SnotifyService,
+        private dispatchActionsService: DispatchActionsService
     ) {
         super();
     }
 
     ngOnInit() {
         this.items = this.dispatchService.selectedDispatches;
+        this.dispatchService.getAvailableUsers().subscribe(
+            data => {
+                this.users = data.data ;
+            }
+        )
         this.filtersCount = Object.keys(this.filtersService.filters).length;
 
         // if a street or a city is selected change the filters count.
@@ -48,10 +57,19 @@ export class DispatchPrepareComponent extends ModalComponent implements OnInit, 
         );
     }
 
-    async run(modal) {
-        modal.close();
-        await this.dispatchActionsService.prepareDispatch(this.data.method, this.items ? this.items.map(item => item.id) : null);
+    selectChanged(event) {
+        if (event) { this.error = null ; }
+        this.selected = event;
     }
+
+    run(modal) {
+        if (!this.selected) {
+            return this.error = 1;
+        }
+        this.dispatchActionsService.assignToUser(this.data.method, this.selected.id, this.items ? this.items.map(item => item.id) : null);
+        modal.close();
+    }
+
 
     ngOnDestroy() {
         this.unsubscribe.next();

@@ -1,6 +1,6 @@
 <div class="d-flex tables-area full-width" *ngIf="viewType === 'table'">
   <div class="medium-table v-wide-col">
-    <app-simple-table #postmenTable (changed)="changePostman($event)" [getMethod]="postmenGetMethod" [table]="postmenTableConfig"></app-simple-table>
+    <app-simple-table #postmenTable (changed)="postmanChanged($event)" [getMethod]="postmenGetMethod" [table]="postmenTableConfig"></app-simple-table>
   </div>
   <div class="v-large-table v-wide-col">
     <app-table #dispatchTable [items]="dispatchList" [table]="dispatchTableConfig" (orderChange)="orderChanged($event)" (selected)="selectedItemsChanged($event)" [parent]="this"></app-table>

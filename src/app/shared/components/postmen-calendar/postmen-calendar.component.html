@@ -13,7 +13,7 @@
                     <div class="day-name day-row"><div class="rect-loading-skeleton w-90 h-30"></div></div>
                     <div class="day-number day-row"><div class="rect-loading-skeleton w-90 h-30"></div></div>
                     <div class="day-note day-row d-flex"><div class="note-text"><div class="rect-loading-skeleton w-90 h-30"></div></div></div>
-                    <div class="day-attachment day-row d-flex"><a class="note-text text-truncate" href="#"><div class="rect-loading-skeleton w-90 h-30"></div></a></div>
+                    <div class="day-attachment day-row d-flex"><a class="note-text" href="#"><div class="rect-loading-skeleton w-90 h-30"></div></a></div>
                     <div class="day-part revisers-part">
                         <div class="occupied-revisers-sub-part day-sub-part">
                             <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[{skeleton: true},{skeleton: true}],klass:'bg-green', title: 'Postman disponibili'}"></ng-container>
@@ -26,8 +26,8 @@
                 <div class="calender-day-col" *ngIf="!day.skeleton">
                     <div class="day-name day-row">{{day.dayName}}</div>
                     <div class="day-number day-row">{{day.dayNumber}}</div>
-                    <div class="day-note day-row d-flex"><div *ngIf="day.note" class="note-text">{{day.note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(day, idx)"><fa-icon [icon]="['fa','pen']"></fa-icon></div></div>
-                    <div class="day-attachment day-row d-flex"><a *ngIf="day.file && day.file.path" class="note-text text-truncate" href="{{AppConfig.api_url + day.file.path}}" target="_blank">{{day.file.name}}</a><div (click)="openEditDayAttachmentModal(day, idx)" class="edit-icon"><fa-icon [icon]="['fa','pen']"></fa-icon></div></div>
+                    <div class="day-note day-row d-flex"><div *ngIf="day.note" class="note-text">{{day.note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(day, idx)"><fa-icon ngbTooltip="Nota giorno" [icon]="['fa','pen']"></fa-icon></div></div>
+                    <div class="day-attachment day-row d-flex"><a *ngIf="day.file && day.file.path" class="note-text text-truncate" href="{{AppConfig.api_url + day.file.path}}" target="_blank">{{day.file.name}}</a><div (click)="openEditDayAttachmentModal(day, idx)" class="edit-icon"><fa-icon  ngbTooltip="Carica file" [icon]="['fa','upload']"></fa-icon></div></div>
                     <div class="day-part revisers-part">
                         <div class="occupied-revisers-sub-part day-sub-part">
                             <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.availablePostmen,day: day,klass:'bg-green', title: 'Postman disponibili', more: 'availablePostmen'}"></ng-container>
@@ -37,14 +37,14 @@
                         </div>
                     </div>
 
-                    <!--<div class="day-part postmen-part mt-4">-->
-                        <!--<div class="occupied-postmen-sub-part day-sub-part">-->
-                            <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[],day: day,klass:'bg-green', title: 'Revisori disponibili'}"></ng-container>-->
-                        <!--</div>-->
+                    <div class="day-part postmen-part mt-4">
+                        <div class="occupied-postmen-sub-part day-sub-part">
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.availableRevisore, day: day,klass:'bg-green', title: 'Revisori disponibili', more: 'availableRevisors'}"></ng-container>
+                        </div>
                         <!--<div class="available-postmen-sub-part day-sub-part">-->
                             <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[],day: dayklass:'bg-red', title: 'Revisori occupati'}"></ng-container>-->
                         <!--</div>-->
-                    <!--</div>-->
+                    </div>
                 </div>
             </ng-container>
         </div>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="single-day-date-switch-right" (click)="changeCurrentDay(1)"><fa-icon [icon]="['fa', 'chevron-right']"></fa-icon></div>
             </div>
-            <div class="single-day-note-text">{{data[current_day].note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(data[current_day], current_day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
+            <div class="single-day-note-text">{{data[current_day].note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(data[current_day], current_day)"><fa-icon ngbTooltip="Nota giorno" [icon]="['fa','pen']"></fa-icon></div>
             <a *ngIf="data[current_day].file && data[current_day].file.path" href="{{AppConfig.api_url + data[current_day].file.path}}" target="_blank" class="single-day-attachment" ><img title="{{data[current_day].file.name}}" src="/assets/images/file_icon.svg"></a>
         </div>
         <div class="single-day-header" *ngIf="data[current_day].skeleton">
@@ -208,7 +208,7 @@
                     <div class="d-flex">
                         <div class="postman-icon"><img src="/assets/images/postman-icon.png"></div>
                         <div class="postman-name">{{row.full_name}}</div>
-                        <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
+                        <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, day)"><fa-icon ngbTooltip="Nota distinta" [icon]="['fa','pen']"></fa-icon></div>
                     </div>
                     <div class="postman-note">{{row.note}}</div>
                 </div>
@@ -227,7 +227,7 @@
     <div class="modal-container nFoundItemModal">
         <div class="modal-body">
             <h6 class="text-center">
-                <fa-icon [icon]="['fa','pen']"></fa-icon> Set Postman ({{activepostman.name}}) Note
+                <fa-icon [icon]="['fa','pen']"></fa-icon> Set Postman Note
             </h6>
             <textarea #postmanNoteInput class="form-control mt-4" placeholder="Note">{{activepostman.note}}</textarea>
             <div class="btns-container mt-3">
@@ -261,7 +261,7 @@
     <div class="modal-container nFoundItemModal">
         <div class="modal-body">
             <h6 class="text-center">
-                <fa-icon [icon]="['fa','pen']"></fa-icon> Set Day {{activeday._idx}} ({{days[activeday._idx]}}) Attachment
+                <fa-icon [icon]="['fa','upload']"></fa-icon> Set Day {{activeday._idx}} ({{days[activeday._idx]}}) Attachment
             </h6>
             <ngx-file-drop dropZoneLabel="Drop files here" [dropZoneClassName]="'drop-file-area'" (onFileDrop)="fileSelected($event)">
                 <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
@@ -283,7 +283,6 @@
 
 </ng-template>
 <ng-template #showMoreAvailablePostmenModal let-modal>
-
     <div class="modal-container nFoundItemModal">
         <div class="modal-body">
             <h6 class="text-center">
@@ -292,11 +291,11 @@
             <div class="data-set-body show-more-body" infiniteScroll (scrolled)="showEvenMore()" [scrollWindow]="false">
                 <ng-container *ngFor="let row of moreData; let idx = index">
                     <div *ngIf="row.skeleton"><div class="rect-loading-skeleton mt-2 w-90 h-30 ml-auto mr-auto d-block"></div></div>
-                    <div *ngIf="!row.skeleton" class="data-set-row" (click)="displayedPostman(row.set_id_for_this_day)" [ngClass]="{'odd': idx%2, 'even': !(idx%2)}">
+                    <div *ngIf="!row.skeleton" class="data-set-row" [ngClass]="{'odd': idx%2, 'even': !(idx%2)}">
                         <div class="d-flex">
                             <div class="postman-icon"><img src="/assets/images/postman-icon.png"></div>
                             <div class="postman-name">{{row.full_name}}</div>
-                            <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, day)"><fa-icon [icon]="['fa','pen']"></fa-icon></div>
+                            <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, loadMoreSave.day)"><fa-icon ngbTooltip="Nota distinta" [icon]="['fa','pen']"></fa-icon></div>
                         </div>
                         <div class="postman-note">{{row.note}}</div>
                     </div>
@@ -308,5 +307,32 @@
             </div>
         </div>
     </div>
-
+</ng-template>
+<ng-template #confirmStatusChangeModal let-modal>
+    <div class="modal-container nFoundItemModal">
+        <div class="modal-body">
+            <h6 class="text-center">
+                Sei sicuro che le borse sono pronte?
+            </h6>
+            <div class="btns-container mt-3">
+                <button type="button" (click)="detailsStatusChanged(null, true);modal.close()" class="integraa-btn ml-2 float-right" >Esegui</button>
+                <button type="button" (click)="modal.close();resetStatusSelect()" class="integraa-btn bg-light ml-2 float-right" >Annulla</button>
+                <div class="clear-both"></div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #confirmAssignModal let-modal>
+    <div class="modal-container nFoundItemModal">
+        <div class="modal-body">
+            <h6 class="text-center">
+                Sei sicuro di voler assegnare la/e distinta/e a questo operatore?
+            </h6>
+            <div class="btns-container mt-3">
+                <button type="button" (click)="assignToUser(1, true);modal.close()" class="integraa-btn ml-2 float-right" >Esegui</button>
+                <button type="button" (click)="modal.close();" class="integraa-btn bg-light ml-2 float-right" >Annulla</button>
+                <div class="clear-both"></div>
+            </div>
+        </div>
+    </div>
 </ng-template>

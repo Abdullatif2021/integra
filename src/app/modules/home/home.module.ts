@@ -31,6 +31,7 @@ import {DispatchActionsService} from './service/dispatch-actions.service';
 import {DispatchDeleteComponent} from './modals/dispatch-delete/dispatch-delete.component';
 import { DispatchPrepareComponent } from './modals/dispatch-prepare/dispatch-prepare.component';
 import {CalenderService} from './service/calender.service';
+import { DispatchAssignComponent } from './modals/dispatch-assign/dispatch-assign.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -59,6 +60,7 @@ import {CalenderService} from './service/calender.service';
       PsbatpdwsiConfirmModalComponent,
       DispatchDeleteComponent,
       DispatchPrepareComponent,
+      DispatchAssignComponent,
   ],
   exports: [
       HomeComponent,
@@ -81,7 +83,8 @@ import {CalenderService} from './service/calender.service';
       PwsisbsConfirmModalComponent,
       PsbatpdwsiConfirmModalComponent,
       DispatchDeleteComponent,
-      DispatchPrepareComponent
+      DispatchPrepareComponent,
+      DispatchAssignComponent
   ],
 
 })

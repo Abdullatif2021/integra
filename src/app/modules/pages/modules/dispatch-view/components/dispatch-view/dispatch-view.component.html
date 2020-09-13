@@ -2,26 +2,67 @@
   <div class="row full-height">
     <div class="col-xl-4 col-lg-5 col-md-12 v-wide-col mt-md-20px left-col">
       <div class="products-container" (scroll)="loadData()" infinite-scroll>
-        <div class="product-items-header">
-          <div class="d-flex">
-            <div class="col-4 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Codice a Barre</div></div><div class="m-auto">Codice Atto</div></div>
-            <div class="col-3 d-flex m-auto text-center product-items-header-col">Prodotto</div>
-            <div class="col-5 d-flex m-auto text-center product-items-header-col">Destinatario</div>
-          </div>
-        </div>
         <div class="product-items-body" *ngIf="data">
-          <ng-container *ngFor="let product of data; let idx = index">
-            <div [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !((idx)%2)}" *ngIf="!product.skeleton" class="d-flex">
-              <div class="col-4 wide-col d-flex text-center product-items-col"><div class="with-black-dashed-bottom-border"><div class="m-auto">{{product.barcode}}</div></div><div class="m-auto"> {{product.act_code}}</div></div>
-              <div class="col-3 wide-col d-flex text-center product-items-col">
-                {{product.product_category}}
-              </div>
-              <div class="col-5 wide-col d-flex text-center product-items-col">
-                <b>{{product.recipient_name}}</b> {{product.recipient_street}} - {{product.recipient_house_number}} - {{product.recipient_cap}}, {{product.recipient_province}}
-              </div>
+          <div class="street-items-header">
+            <div class="d-flex">
+              <div class="col-1"></div>
+              <div class="col-1"></div>
+              <div class="col-4 wide-col"><div class="street-items-header-cell">Indirizzo</div></div>
+              <div class="col-3 text-center"><div class="street-items-header-cell">Consegne</div></div>
+              <div class="col-3 wide-col pl-1"><div class="street-items-header-cell">Ora d’arrivo</div></div>
             </div>
-            <div *ngIf="product.skeleton" class="mt-1 rect-loading-skeleton w-100 h-30"></div>
-          </ng-container>
+          </div>
+          <div class="street-items" dndDropzone [dndHorizontal]="false" (dndDrop)="onDrop($event)" [ngClass]="{'drop-location': dragging && dragging.type === 'building'}" infiniteScrollDistance="30">
+            <div dndPlaceholderRef class="dndPlaceholder"></div>
+            <div *ngFor="let group of data; let idx = index">
+              <ng-container *ngIf="group.skeleton;">
+                <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
+              </ng-container>
+              <ng-container  *ngIf="!group.skeleton;">
+                <div class="street-item" [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !((idx)%2)}" [dndDraggable]="{item: 1}" [dndDisableIf]="group.state !== 'not_assigned'" [dndEffectAllowed]="'move'"
+                     (dndStart)="onDragStart($event, group)">
+                  <div class="d-flex">
+                    <div class="col-1 wide-col d-flex">
+                      <div dndHandle class="drag-handle" *ngIf="group.state === 'not_assigned'">☰</div>
+                      <div class="more" *ngIf="group.products" (click)="group.expanded = !group.expanded">
+                        <fa-icon *ngIf="!group.expanded" [icon]="['fa','chevron-down']"></fa-icon>
+                        <fa-icon *ngIf="group.expanded" [icon]="['fa','chevron-up']"></fa-icon>
+                      </div>
+                    </div>
+                    <div class="col-1 wide-col d-flex">
+                      <div class="m-auto select-container" (click)="select(group, 'group', $event)">
+                        <div class="selected" *ngIf="group.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                        <div class="ml-1 priority-container" *ngIf="!group.selected "><span>{{group._marker}}</span></div>
+                      </div>
+                    </div>
+                    <div class="col-4 wide-col pl-3"> <div class="text">{{group.address}}</div> </div>
+                    <div class="col-3 text-center"> <div class="count">{{group.productsCount}}</div> </div>
+                    <div class="col-3 wide-col pl-1"> <div class="count">{{group.time}}</div> </div>
+                  </div>
+                </div>
+
+                <!-- Products -->
+                <ng-container *ngIf="group.expanded">
+                  <div class="product-items-header" *ngIf="data">
+                    <div class="d-flex">
+                      <div class="col-1 d-flex"><div class="m-auto"></div></div>
+                      <div class="col-6 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Destinatario</div></div><div class="m-auto">Prodotto</div></div>
+                      <div class="col-5 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Codice a Barre</div></div><div class="m-auto">Codice Atto</div></div>
+                    </div>
+                  </div>
+                  <div class="product-items-body">
+                    <ng-container *ngFor="let product of group.products; let i = index">
+                      <div [ngClass]="{'odd-bg': (idx + i)%2, 'even-bg': !((idx + i)%2)}" class="d-flex">
+                        <div class="col-6 d-flex text-center product-items-col"><div class="with-black-dashed-bottom-border"><div class="m-auto">{{product.recipient.name}}</div></div><div class="m-auto">{{product.integra_name.name}}</div></div>
+                        <div class="col-6 d-flex text-center product-items-col"><div class="with-black-dashed-bottom-border"><div class="m-auto">{{product.barcode}}</div></div><div class="m-auto"> {{product.act_code}}</div></div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -55,5 +96,9 @@
   </div>
 </div>
 
+
+<ng-template let-idx="idx" let-next="next" let-item="item" #streetItems>
+
+</ng-template>
 
 

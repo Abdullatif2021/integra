@@ -37,7 +37,7 @@ export class ResultsService implements OnDestroy {
                                id: set.id, parent: day, type: 'set', _type: 'set', children: [], text: '', postman: set.postman,
                                quantity: set.quantity, page: 1, expanded: false, setId: set.id, loaded: false, addressId: set.addressId,
                                is_distenta_created: set.is_distenta_created, have_not_fixed_products: set.have_not_fixed_products,
-                               is_missed: set.is_missed
+                               is_missed: set.is_missed, name: set.name, status: set.status
                            });
                         });
                         res.push(day);

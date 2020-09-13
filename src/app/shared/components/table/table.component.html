@@ -114,6 +114,7 @@
                                 <ng-container *ngIf="action.action=='excel_export'" [ngTemplateOutlet]="excel_export" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                                 <ng-container *ngIf="action.action=='edit'" [ngTemplateOutlet]="edit" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                                 <ng-container *ngIf="action.action=='more'" [ngTemplateOutlet]="more" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='calender_view'" [ngTemplateOutlet]="calender_view" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
                             </ng-container>
                         </td>
                         <!-- } item cell  -->
@@ -167,6 +168,7 @@
 <ng-template #print><div class="action-icon-container"><img src="assets/images/printer.svg" class="action-icon" placement="bottom" ngbTooltip="Stampa"></div></ng-template>
 <ng-template #excel_export let-action="action" let-item="item"><div class="action-icon-container"><img (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/excel.svg" class="action-icon" placement="bottom" ngbTooltip="Esporta"></div></ng-template>
 <ng-template #edit let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/edit.svg" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="Modifica"></div></ng-template>
+<ng-template #calender_view let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/calender.png" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="Calender"></div></ng-template>
 <ng-template #pPlay let-action="action" let-item="item">
     <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/play.svg" placement="bottom" ngbTooltip="Riprendi" class="action-icon play-pause-icon"></div>
 </ng-template>

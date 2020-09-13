@@ -30,6 +30,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
 
     selected_postmen = null;
     selected_dispatches = null;
+    selected_revisors = null;
     loadDate = null ;
     calender_current_week = 0;
     calender_current_day = null ;
@@ -61,7 +62,9 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
             {type: 'auto-complete', label: 'Agenzia', getMethod: (term) => container.agenciesService.getAgenciesByName(term),
                 key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name', value: '', _class: 'auto-complete'},
             {type: 'simpleText', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'simpleText', label: 'Nota giorno', key: 'dayNote'},
             {type: 'simpleText', label: 'Note Per La Distinta', key: 'setNote'},
+            {type: 'simpleText', label: 'Nome allegato', key: 'docName'},
             {type: 'simpleText', label: 'Note Per Il Postion', key: 'postmanNote'},
             {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
                     {name: 'Not Assigned', id: 'no_assigned'},
@@ -96,12 +99,13 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     detailsStatuses = [
         {
             id: 'prepared', name: 'Borsa Pronta alla consegna',
-            handler: async (item) => await this.dispatchActionsService.prepareDispatch([item.id])
+            handler: async (item) => await this.dispatchActionsService.prepareDispatch('selected', [item.id])
         }
     ];
 
     loadMoreMethods = {
         availablePostmen: (day, page) => this.dispatchService.getCalenderAvailablePostmen(day, page),
+        availableRevisors: (day, page) => this.dispatchService.getCalenderAvailablePostmen(day, page, 'revisore'),
     };
 
     actions = [];
@@ -117,18 +121,30 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
             );
     }
 
+    calenderRevisorGetMethod = (page, rpp, name, order) => {
+        return this.subViewType === 'week' ?
+            this.dispatchService.getCalenderWeeklyPostmen(
+                page, rpp, name, order, this.calender_current_week, 'NOT_PREAPERED', this.loadDate, 'revisore'
+            ) :
+            this.dispatchService.getCalenderDailyPostmen(
+                page, rpp, name, order, this.calender_current_day, 'NOT_PREAPERED', this.loadDate, 'revisore'
+            );
+    }
+
     dispatchGetMethod = (page, rpp, name, order) => {
         return this.subViewType === 'week' ?
             this.dispatchService.getCalenderWeeklyDispatches(
-                page, rpp, this.selected_postmen, name, order, this.calender_current_week, 'PREAPERED', this.loadDate
+                page, rpp, this.selected_postmen, this.selected_revisors,
+                name, order, this.calender_current_week, 'PREAPERED', this.loadDate
             ) :
             this.dispatchService.getCalenderDailyDispatches(
-                page, rpp, this.selected_postmen, name, order, this.calender_current_day, 'PREAPERED', this.loadDate
+                page, rpp, this.selected_postmen, this.selected_revisors,
+                name, order, this.calender_current_day, 'PREAPERED', this.loadDate
             );
     }
 
     getSetDetailsMethod = (set) => this.dispatchService.getSetDetails(set);
-    availableUsersGetMethod = (set) => this.dispatchService.getAvailableUsers(set);
+    availableUsersGetMethod = (set) => this.dispatchService.getAvailableUsers();
     // when the user writes a comment on a set. <calender view>
     addNoteToSet = (note, type, set) => {
         const result = this.dispatchService.addNoteToSet(set, note, type).toPromise().catch(e => {});
@@ -201,6 +217,13 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
                 this.calender_current_day = this.calendar_data[parseInt(this.route.snapshot.queryParams.day, 10)].dayDate;
                 this._calender.current_day = parseInt(this.route.snapshot.queryParams.day, 10);
             }
+            if (this.route.snapshot.queryParams.locate_day) {
+                this.calender_current_day = this.route.snapshot.queryParams.date;
+                const first_day = new Date(this.calendar_data[0].dayDate.split('/').reverse().join('-'));
+                const dispatch_day = new Date(this.route.snapshot.queryParams.date);
+                const diff: number = Math.abs(first_day.getTime() - dispatch_day.getTime())  / (1000 * 60 * 60 * 24);
+                this._calender.current_day = diff;
+            }
             if (this.route.snapshot.queryParams.dispatch) {
                 this._calender.displayedPostman(parseInt(this.route.snapshot.queryParams.dispatch, 10), null, false);
             }
@@ -248,6 +271,16 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     // when the user select postmen to filter. <calender view>
     changeCalenderPostman(event) {
         this.selected_postmen = event.items;
+        this.selected_dispatches = null;
+        if (this._calenderDispatchTable) {
+            this._calenderDispatchTable.reload();
+        }
+        this.loadCalenderItems();
+    }
+
+    // when the user select revisor to filter. <calender view>
+    changeCalenderRevisor(event) {
+        this.selected_revisors = event.items;
         this.selected_dispatches = null;
         if (this._calenderDispatchTable) {
             this._calenderDispatchTable.reload();
