@@ -125,6 +125,12 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
           }
       );
       if (modal) {
+          // const _day = this.data.find(d => d.dayDate === day);
+          console.log(type);
+
+          if (day[type]) {
+              this.moreData = [...day[type], ...this.moreData];
+          }
           this.modalService.open(this.showMoreAvailablePostmenModal, {backdrop: 'static', keyboard: false});
       }
   }

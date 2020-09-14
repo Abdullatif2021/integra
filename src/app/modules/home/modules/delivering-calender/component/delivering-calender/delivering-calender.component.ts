@@ -105,7 +105,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
 
     loadMoreMethods = {
         availablePostmen: (day, page) => this.dispatchService.getCalenderAvailablePostmen(day, page),
-        availableRevisors: (day, page) => this.dispatchService.getCalenderAvailablePostmen(day, page, 'revisore'),
+        availableRevisore: (day, page) => this.dispatchService.getCalenderAvailablePostmen(day, page, 'revisore'),
     };
 
     actions = [];
@@ -200,6 +200,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
             this.calender_current_week,
             this.selected_dispatches,
             this.selected_postmen,
+            this.selected_revisors,
             this.route.snapshot.queryParams.date,
             'PREPARED'
         ).toPromise().catch(e => {});
@@ -382,6 +383,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
             this.calender_current_week,
             this.selected_dispatches,
             this.selected_postmen,
+            this.selected_revisors,
             this.loadDate,
             'PREPARED'
         ).pipe(takeUntil(this.unsubscribe)).subscribe(

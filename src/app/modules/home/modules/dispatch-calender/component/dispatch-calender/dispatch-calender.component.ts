@@ -104,7 +104,7 @@ export class DispatchCalenderComponent implements OnInit, OnDestroy {
 
     loadMoreMethods = {
         availablePostmen: (day, page) => this.dispatchService.getCalenderAvailablePostmen(day, page),
-        availableRevisors: (day, page) => this.dispatchService.getCalenderAvailablePostmen(day, page, 'revisore'),
+        availableRevisore: (day, page) => this.dispatchService.getCalenderAvailablePostmen(day, page, 'revisore'),
     };
 
     actions = [];
@@ -380,7 +380,8 @@ export class DispatchCalenderComponent implements OnInit, OnDestroy {
             this.calender_current_week,
             this.selected_dispatches,
             this.selected_postmen,
-            this.loadDate
+            this.selectect_revisor,
+            this.loadDate,
         ).pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
                 this.filter_config.changeViewTabs.lock = false ;

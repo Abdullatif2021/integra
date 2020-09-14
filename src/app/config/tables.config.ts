@@ -205,15 +205,16 @@ export const TablesConfig = {
                         {action: 'view', click: (elm, container) => { container.showDispatchModal(elm); }},
                         {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm)}}
                     ]},
-                {title: 'POSTMAN', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
+                {title: 'Nome', field: 'name', actions: []},
+                {title: 'Postino', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
                 {title: 'Dispatch list', field: 'pre_dispatch_code', actions: []},
-                {title: 'STATE / RESULT', field: 'status', actions: [
+                {title: 'STATE / RESULT', field: 'Stato distinta', actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ]},
-                {title: 'Q.TY', field: 'quantity', actions: []},
-                {title: 'START DATE', field: 'started_at', actions: []},
-                {title: 'CREATE DATE', field: 'created_at', actions: []},
+                {title: 'Q.tà', field: 'quantity', actions: []},
+                {title: 'Data inizio consegna', field: 'started_at', actions: []},
+                {title: ' Data creazione', field: 'created_at', actions: []},
                 {title: 'OPERATION', actions: [
                         { action: 'progress',  field: 'percent',},
                     ]},
@@ -227,17 +228,18 @@ export const TablesConfig = {
                         {action: 'print', click: (elm) => { console.log('print . '); }},
                         {action: 'excel_export', click: (elm) => {console.log('export . '); }},
                         {action: 'view', click: (elm, container) => { container.showDispatchModal(elm); }},
-                        {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm)}}
+                        {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm); }}
                     ]},
-                {title: 'POSTMAN', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
+                {title: 'Nome', field: 'name', actions: []},
+                {title: 'Postino', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
                 {title: 'Dispatch list', field: 'pre_dispatch_code', actions: []},
-                {title: 'STATE / RESULT', field: 'status', actions: [
+                {title: 'STATE / RESULT', field: 'Stato distinta', actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ]},
-                {title: 'Q.TY', field: 'quantity', actions: []},
-                {title: 'START DATE', field: 'started_at', actions: []},
-                {title: 'CREATE DATE', field: 'created_at', actions: []},
+                {title: 'Q.tà', field: 'quantity', actions: []},
+                {title: 'Data inizio consegna', field: 'started_at', actions: []},
+                {title: 'Data creazione', field: 'created_at', actions: []},
                 {title: 'OPERATION', actions: [
                         { action: 'progress',  field: 'percent',},
                     ]},
