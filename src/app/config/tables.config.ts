@@ -206,6 +206,7 @@ export const TablesConfig = {
                         {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm)}}
                     ]},
                 {title: 'Nome', field: 'name', actions: []},
+                {title: 'Operatore', field: [(elm) => elm.user ? elm.user.full_name : '' ], actions: []},
                 {title: 'Postino', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
                 {title: 'Dispatch list', field: 'pre_dispatch_code', actions: []},
                 {title: 'STATE / RESULT', field: 'Stato distinta', actions: [
@@ -215,9 +216,10 @@ export const TablesConfig = {
                 {title: 'Q.tà', field: 'quantity', actions: []},
                 {title: 'Data inizio consegna', field: 'started_at', actions: []},
                 {title: ' Data creazione', field: 'created_at', actions: []},
-                {title: 'OPERATION', actions: [
-                        { action: 'progress',  field: 'percent',},
-                    ]},
+                {title: 'Nota', field: 'note', actions: []},
+                // {title: 'OPERATION', actions: [
+                //         { action: 'progress',  field: 'percent',},
+                //     ]},
             ]
         },
         // dispatchTable used in dispatch.component
@@ -232,6 +234,7 @@ export const TablesConfig = {
                     ]},
                 {title: 'Nome', field: 'name', actions: []},
                 {title: 'Postino', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
+                {title: 'Operatore', field: [(elm) => elm.user ? elm.user.full_name : '' ], actions: []},
                 {title: 'Dispatch list', field: 'pre_dispatch_code', actions: []},
                 {title: 'STATE / RESULT', field: 'Stato distinta', actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
@@ -240,9 +243,10 @@ export const TablesConfig = {
                 {title: 'Q.tà', field: 'quantity', actions: []},
                 {title: 'Data inizio consegna', field: 'started_at', actions: []},
                 {title: 'Data creazione', field: 'created_at', actions: []},
-                {title: 'OPERATION', actions: [
-                        { action: 'progress',  field: 'percent',},
-                    ]},
+                // {title: 'OPERATION', actions: [
+                //         { action: 'progress',  field: 'percent',},
+                //     ]},
+                {title: 'Nota', field: 'note', actions: []},
             ]
         },
     }
