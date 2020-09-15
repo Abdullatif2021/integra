@@ -205,17 +205,17 @@ export const TablesConfig = {
                         {action: 'view', click: (elm, container) => { container.showDispatchModal(elm); }},
                         {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm)}}
                     ]},
-                {title: 'Nome', field: 'name', actions: []},
+                {title: 'Nome', field: 'name', actions: [], order: '1'},
                 {title: 'Operatore', field: [(elm) => elm.user ? elm.user.full_name : '' ], actions: []},
                 {title: 'Postino', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
-                {title: 'Dispatch list', field: 'pre_dispatch_code', actions: []},
+                {title: 'Dispatch list', field: 'pre_dispatch_code', actions: [], order: '2'},
                 {title: 'STATE / RESULT', field: 'Stato distinta', actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ]},
                 {title: 'Q.tà', field: 'quantity', actions: []},
-                {title: 'Data inizio consegna', field: 'started_at', actions: []},
-                {title: ' Data creazione', field: 'created_at', actions: []},
+                {title: 'Data inizio consegna', field: 'started_at', actions: [], order: '3'},
+                {title: ' Data creazione', field: 'created_at', actions: [], order: '4'},
                 {title: 'Nota', field: 'note', actions: []},
                 // {title: 'OPERATION', actions: [
                 //         { action: 'progress',  field: 'percent',},
@@ -232,17 +232,17 @@ export const TablesConfig = {
                         {action: 'view', click: (elm, container) => { container.showDispatchModal(elm); }},
                         {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm); }}
                     ]},
-                {title: 'Nome', field: 'name', actions: []},
+                {title: 'Nome', field: 'name', actions: [], order: '1'},
                 {title: 'Postino', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
                 {title: 'Operatore', field: [(elm) => elm.user ? elm.user.full_name : '' ], actions: []},
-                {title: 'Dispatch list', field: 'pre_dispatch_code', actions: []},
+                {title: 'Dispatch list', field: 'pre_dispatch_code', actions: [], order: '2'},
                 {title: 'STATE / RESULT', field: 'Stato distinta', actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ]},
                 {title: 'Q.tà', field: 'quantity', actions: []},
-                {title: 'Data inizio consegna', field: 'started_at', actions: []},
-                {title: 'Data creazione', field: 'created_at', actions: []},
+                {title: 'Data inizio consegna', field: 'started_at', actions: [], order: '3'},
+                {title: 'Data creazione', field: 'created_at', actions: [], order: '4'},
                 // {title: 'OPERATION', actions: [
                 //         { action: 'progress',  field: 'percent',},
                 //     ]},

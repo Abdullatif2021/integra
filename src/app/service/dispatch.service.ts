@@ -28,8 +28,8 @@ export class DispatchService {
         options.params = options.params.set('pageSize', this.paginationService.rpp) ;
         options.params = this.filtersService.getHttpParams(options.params) ;
         if (order_field) {
-            options.params = options.params.set('key', order_field) ;
-            options.params = options.params.set('order_method', order_method) ;
+            options.params = options.params.set('sortKey', order_field) ;
+            options.params = options.params.set('orderMethod', order_method) ;
         }
         if (postmen && postmen.items.length) {
             if (postmen.all) {

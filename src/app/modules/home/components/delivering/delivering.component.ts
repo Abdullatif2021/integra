@@ -116,7 +116,11 @@ export class DeliveringComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
-    orderChanged(order) {}
+    orderChanged(event) {
+        this.order_field = event.field;
+        this.order_method = event.order === 'DESC' ? '1' : '2';
+        this.loadItems(false);
+    }
 
     selectedItemsChanged(items) {
         this.dispatchService.selectedDispatches = items;
