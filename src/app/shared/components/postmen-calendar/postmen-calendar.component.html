@@ -41,9 +41,9 @@
                         <div class="occupied-postmen-sub-part day-sub-part">
                             <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.availableRevisore, day: day,klass:'bg-green', title: 'Revisori disponibili', more: 'availableRevisore'}"></ng-container>
                         </div>
-                        <!--<div class="available-postmen-sub-part day-sub-part">-->
-                            <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[],day: dayklass:'bg-red', title: 'Revisori occupati'}"></ng-container>-->
-                        <!--</div>-->
+                        <div class="available-postmen-sub-part day-sub-part">
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.revisore ? day.revisore : [], day: day, dayklass:'bg-red', title: 'Revisori occupati'}"></ng-container>
+                        </div>
                     </div>
                 </div>
             </ng-container>
@@ -79,14 +79,14 @@
                             <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].postmen,day: data[current_day], klass:'bg-red', title: 'Postman occupati'}"></ng-container>
                         </div>
                     </div>
-                    <!--<div class="day-part postmen-part mt-4">-->
-                    <!--<div class="occupied-postmen-sub-part day-sub-part">-->
-                    <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].revisers.available,day: data[current_day], klass:'bg-green', title: 'Revisori disponibili'}"></ng-container>-->
-                    <!--</div>-->
-                    <!--<div class="available-postmen-sub-part day-sub-part">-->
-                    <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].revisers.occupied,day: data[current_day], klass:'bg-red', title: 'Revisori occupati'}"></ng-container>-->
-                    <!--</div>-->
-                    <!--</div>-->
+                    <div class="day-part postmen-part mt-4">
+                        <div class="occupied-postmen-sub-part day-sub-part">
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].availableRevisore,day: data[current_day], klass:'bg-green', title: 'Revisori disponibili'}"></ng-container>
+                        </div>
+                        <div class="available-postmen-sub-part day-sub-part">
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].revisore ? data[current_day].revisore : [],day: data[current_day], klass:'bg-red', title: 'Revisori occupati'}"></ng-container>
+                        </div>
+                    </div>
                 </div>
                 <div class="single-day-col" *ngIf="data[current_day].skeleton">
                     <div class="day-part revisers-part">
