@@ -68,8 +68,6 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
             {type: 'simpleText', label: 'Nome allegato', key: 'docName'},
             {type: 'simpleText', label: 'Note Per Il Postion', key: 'postmanNote'},
             {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
-                    {name: 'Not Assigned', id: 'no_assigned'},
-                    {name: 'Not Prepare', id: 'not_prepare'},
                     {name: 'Prepared', id: 'prepared'},
                 ], labelVal: 'name'},
             {type: ['date', 'date'], label: 'Start Data Distinta:', group: true, key: ['startedFrom', 'startedTo']},
@@ -336,7 +334,8 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
 
     // when the user changes the day attachment. <calender view>
     async updateDayAttachment(event) {
-        this.dispatchActionsService.uploadDayAttachment(event.day, event.file);
+        const result = await this.dispatchActionsService.uploadDayAttachment(event.day, event.file);
+        event.dayObj.file = {path: result.data.file, name: result.data.original_file_name};
     }
 
     // when the user changes the day note. <calender view>

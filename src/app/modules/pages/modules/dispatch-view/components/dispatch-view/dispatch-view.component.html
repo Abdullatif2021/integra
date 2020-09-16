@@ -19,11 +19,11 @@
                 <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
               </ng-container>
               <ng-container  *ngIf="!group.skeleton;">
-                <div class="street-item" [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !((idx)%2)}" [dndDraggable]="{item: 1}" [dndDisableIf]="group.state !== 'not_assigned'" [dndEffectAllowed]="'move'"
+                <div class="street-item" [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !((idx)%2)}" [dndDraggable]="{item: 1}" [dndDisableIf]="group.state !== 'not_assigned' && group.state !== 'not_prepared'" [dndEffectAllowed]="'move'"
                      (dndStart)="onDragStart($event, group)">
                   <div class="d-flex">
                     <div class="col-1 wide-col d-flex">
-                      <div dndHandle class="drag-handle" *ngIf="group.state === 'not_assigned'">☰</div>
+                      <div dndHandle class="drag-handle" *ngIf="group.state === 'not_assigned' || group.state === 'not_prepared'">☰</div>
                       <div class="more" *ngIf="group.products" (click)="group.expanded = !group.expanded">
                         <fa-icon *ngIf="!group.expanded" [icon]="['fa','chevron-down']"></fa-icon>
                         <fa-icon *ngIf="group.expanded" [icon]="['fa','chevron-up']"></fa-icon>

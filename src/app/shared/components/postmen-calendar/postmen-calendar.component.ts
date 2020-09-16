@@ -179,10 +179,9 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
 
   saveDayAttachment() {
       if (this.selected_file) {
-          this.activeday.file = this.selected_file.relativePath;
           const fileEntry = this.selected_file.fileEntry as FileSystemFileEntry;
           fileEntry.file((file: File) => {
-              this.dayAttachmentSelected.emit({day: this.activeday.dayDate, file: file});
+              this.dayAttachmentSelected.emit({day: this.activeday.dayDate, file: file, dayObj: this.activeday});
               this.selected_file = null ;
           });
       }

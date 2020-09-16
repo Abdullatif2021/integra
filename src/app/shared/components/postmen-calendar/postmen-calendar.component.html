@@ -42,7 +42,7 @@
                             <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.availableRevisore, day: day,klass:'bg-green', title: 'Revisori disponibili', more: 'availableRevisore'}"></ng-container>
                         </div>
                         <div class="available-postmen-sub-part day-sub-part">
-                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.revisore ? day.revisore : [], day: day, dayklass:'bg-red', title: 'Revisori occupati'}"></ng-container>
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:day.revisore ? day.revisore : [], day: day, klass:'bg-red', title: 'Revisori occupati'}"></ng-container>
                         </div>
                     </div>
                 </div>
