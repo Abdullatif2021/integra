@@ -65,7 +65,7 @@ export class DispatchCalenderComponent implements OnInit, OnDestroy {
             {type: 'simpleText', label: 'Nota giorno', key: 'dayNote'},
             {type: 'simpleText', label: 'Note interne', key: 'setNote'},
             {type: 'simpleText', label: 'Notifiche postino', key: 'postmanNote'},
-            {type: 'simpleText', label: 'Note Postion', key: 'postmanDayNote'},
+            {type: 'simpleText', label: 'Note distinta', key: 'postmanDayNote'},
             {type: 'simpleText', label: 'Nome allegato', key: 'docName'},
             {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
                     {name: 'Not Assigned', id: 'not_assigned'},
