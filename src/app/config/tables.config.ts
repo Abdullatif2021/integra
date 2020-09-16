@@ -220,7 +220,7 @@ export const TablesConfig = {
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ]},
-                {title: 'Q.tà', field: 'quantity', actions: []},
+                {title: 'Q.tà', field: 'quantity', actions: [], order: '5'},
                 {title: 'Data inizio consegna', field: 'started_at', actions: [], order: '3'},
                 {title: ' Data creazione', field: 'created_at', actions: [], order: '4'},
                 {title: 'Nota', field: 'note', actions: []},
@@ -254,7 +254,7 @@ export const TablesConfig = {
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ]},
-                {title: 'Q.tà', field: 'quantity', actions: []},
+                {title: 'Q.tà', field: 'quantity', actions: [], order: '5'},
                 {title: 'Data inizio consegna', field: 'started_at', actions: [], order: '3'},
                 {title: 'Data creazione', field: 'created_at', actions: [], order: '4'},
                 // {title: 'OPERATION', actions: [
