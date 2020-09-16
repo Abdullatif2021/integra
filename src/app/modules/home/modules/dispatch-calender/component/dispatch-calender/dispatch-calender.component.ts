@@ -201,6 +201,7 @@ export class DispatchCalenderComponent implements OnInit, OnDestroy {
             this.calender_current_week,
             this.selected_dispatches,
             this.selected_postmen,
+            this.selectect_revisor,
             this.route.snapshot.queryParams.date
         ).toPromise().catch(e => {});
         if (!data) {
