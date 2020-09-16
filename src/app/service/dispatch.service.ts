@@ -50,8 +50,8 @@ export class DispatchService {
         options.params = options.params.set('page', page) ;
         options.params = options.params.set('pageSize', rpp) ;
         options.params = this.filtersService.getHttpParams(options.params) ;
-        if (postmen) { options.params = options.params.set('postmen', postmen) ; }
-        if (revisors) { options.params = options.params.set('revisors', revisors) ; }
+        if (postmen || revisors) { options.params = options.params.set('postmen',
+            postmen ? postmen.concat(revisors ? revisors : []) : revisors) ; }
         if (name) { options.params = options.params.set('code', name) ; }
         if (date) { options.params = options.params.set('date', date) ; }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderWeeklySets, options).pipe(
@@ -66,8 +66,8 @@ export class DispatchService {
         options.params = options.params.set('pageSize', rpp) ;
         options.params = this.filtersService.getHttpParams(options.params) ;
         if (date) { options.params = options.params.set('date', date) ; }
-        if (postmen) { options.params = options.params.set('postmen', postmen) ; }
-        if (revisors) { options.params = options.params.set('revisors', revisors) ; }
+        if (postmen || revisors) { options.params = options.params.set('postmen',
+            postmen ? postmen.concat(revisors ? revisors : []) : revisors) ; }
         if (name) { options.params = options.params.set('code', name) ; }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderDailySets, options).pipe(
             catchError(this.handleError)

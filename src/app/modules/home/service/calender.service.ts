@@ -21,10 +21,10 @@ export class CalenderService {
         const options = {params: new HttpParams(), headers: new HttpHeaders()};
         options.params = options.params.set('dateIndex', `${week}`);
         if (sets) { options.params = options.params.set('sets', sets); }
-        if (postmen) { options.params = options.params.set('postmen', postmen); }
+        if (postmen || revisors) { options.params = options.params.set('postmen',
+            postmen ? postmen.concat(revisors ? revisors : []) : revisors) ; }
         if (date) { options.params = options.params.set('date', date); }
         if (state) { options.params =  options.params.set('state', state); }
-        if (revisors) { options.params =  options.params.set('revisors', revisors); }
         options.params = this.filtersService.getHttpParams(options.params) ;
         return this.http.get<any>(AppConfig.endpoints.getWeeklyCalender, options).pipe(
             catchError(this.handleError)

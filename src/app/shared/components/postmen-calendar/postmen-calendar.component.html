@@ -98,14 +98,14 @@
                         </div>
                     </div>
 
-                    <!--<div class="day-part postmen-part mt-4">-->
-                    <!--<div class="occupied-postmen-sub-part day-sub-part">-->
-                    <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[{skeleton: true}, {skeleton: true}],klass:'bg-green', title: 'Revisori disponibili'}"></ng-container>-->
-                    <!--</div>-->
-                    <!--<div class="available-postmen-sub-part day-sub-part">-->
-                    <!--<ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[{skeleton: true}, {skeleton: true}],klass:'bg-red', title: 'Revisori occupati'}"></ng-container>-->
-                    <!--</div>-->
-                    <!--</div>-->
+                    <div class="day-part postmen-part mt-4">
+                        <div class="occupied-postmen-sub-part day-sub-part">
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[{skeleton: true}, {skeleton: true}],klass:'bg-green', title: 'Revisori disponibili'}"></ng-container>
+                        </div>
+                        <div class="available-postmen-sub-part day-sub-part">
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:[{skeleton: true}, {skeleton: true}],klass:'bg-red', title: 'Revisori occupati'}"></ng-container>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div *ngIf="displayed_postman" class="postman-info-table mt-2">
@@ -185,10 +185,10 @@
                         <ng-select class="integraa-select" [bindLabel]="'name'" [items]="detailsStatuses" [(ngModel)]="details.status" [clearable]="false" (change)="detailsStatusChanged($event)"></ng-select>
                     </div>
                     <div class="notes postman-info-row2 mt-3">
-                        <app-comments title="Note interne" [comments]="details.internalNotes" (commentAdded)="addSetInternalNote($event)"></app-comments>
+                        <app-comments title="Note interne" [comments]="details.internalNotes" (commentAdded)="addSetNote($event, 'internal_note')"></app-comments>
                     </div>
                     <div class="postman-notifications postman-info-row2 mt-3">
-                        <app-comments title="Notifica per postino" [comments]="details.postmanNotes"></app-comments>
+                        <app-comments title="Notifica per postino" [comments]="details.postmanNotes" (commentAdded)="addSetNote($event, 'postman_note')"></app-comments>
                     </div>
                 </div>
             </div>

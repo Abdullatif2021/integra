@@ -211,15 +211,19 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
       this.details.status = null;
   }
 
-  async addSetInternalNote(event) {
+  async addSetNote(event, type) {
       if (!this.displayed_postman || typeof this.setNoteUpdateMethod !== 'function') {
           return ;
       }
-      const note = await this.setNoteUpdateMethod(event, 'internal_note', this.displayed_postman);
+      const note = await this.setNoteUpdateMethod(event, type, this.displayed_postman);
       if (!note) {
           return ;
       }
-      this.details.internalNotes = [note.data, ...this.details.internalNotes];
+      if (type === 'internal_note') {
+          this.details.internalNotes = [note.data, ...this.details.internalNotes];
+      } else if (type === 'postman_note') {
+          this.details.postmanNotes = [note.data, ...this.details.postmanNotes];
+      }
   }
 
   async displayedPostman(postman, day, emit = true) {

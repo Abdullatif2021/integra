@@ -38,6 +38,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     // the dispatches table component, presented in calender view.
     @ViewChild('calenderDispatchTable') _calenderDispatchTable;
     @ViewChild('calenderPostmenTable') _calenderPostmenTable;
+    @ViewChild('calenderReviserTable') _calenderReviserTable;
     @ViewChild('calender') set postmanCalenderContent(elemnt: ElementRef) {
         if (elemnt) {
             this._calender = elemnt;
@@ -189,6 +190,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
             this.loadCalenderItems(true);
             this._calenderDispatchTable.reload();
             this._calenderPostmenTable.reload();
+            this._calenderReviserTable.reload();
         });
         this.doTheFirstLoad();
     }
@@ -234,6 +236,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
                 if (this.subViewType === 'day') {
                     this._calenderDispatchTable.reload();
                     this._calenderPostmenTable.reload();
+                    this._calenderReviserTable.reload();
                 }
             }
         });
@@ -252,6 +255,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
             this.subViewType = data;
             this._calenderDispatchTable.reload(dispatch ? true : false);
             this._calenderPostmenTable.reload();
+            this._calenderReviserTable.reload();
         } else { this.subViewType = data; }
         this.updateRouteParams();
     }
@@ -304,6 +308,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
         this.calender_current_week = event;
         this._calenderDispatchTable.reload();
         this._calenderPostmenTable.reload();
+        this._calenderReviserTable.reload();
         this.loadCalenderItems();
     }
 
@@ -312,6 +317,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
         if (event.reload) {
             this._calenderDispatchTable.reload();
             this._calenderPostmenTable.reload();
+            this._calenderReviserTable.reload();
         }
         this.updateRouteParams();
     }
@@ -366,6 +372,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
                 this.filter_config.changeViewTabs.tabs.map(tab => tab.value === 'day' ? tab.active = true : tab.active = false);
                 this._calenderDispatchTable.reload(true);
                 this._calenderPostmenTable.reload();
+                this._calenderReviserTable.reload();
             }
         } else {
             this._calenderDispatchTable.forceSelect(null);
