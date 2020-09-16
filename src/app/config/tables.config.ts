@@ -209,7 +209,14 @@ export const TablesConfig = {
                 {title: 'Operatore', field: [(elm) => elm.user ? elm.user.full_name : '' ], actions: []},
                 {title: 'Postino', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
                 {title: 'Dispatch list', field: 'pre_dispatch_code', actions: [], order: '2'},
-                {title: 'Stato distinta', field: 'status', actions: [
+                {title: 'Stato distinta', field: (elm) => {
+                        switch (elm.status) {
+                            case 'not_prepare': return 'Borsa non preparata';
+                            case 'not_assigned': return 'Non assegnato ';
+                            case 'prepared': return 'Borsa preparata';
+                            default: return elm.status;
+                        }
+                    }, actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ]},
@@ -236,7 +243,14 @@ export const TablesConfig = {
                 {title: 'Postino', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
                 {title: 'Operatore', field: [(elm) => elm.user ? elm.user.full_name : '' ], actions: []},
                 {title: 'Dispatch list', field: 'pre_dispatch_code', actions: [], order: '2'},
-                {title: 'STATE / RESULT', field: 'Stato distinta', actions: [
+                {title: 'Stato distinta', field: (elm) => {
+                        switch (elm.status) {
+                            case 'not_prepare': return 'Borsa non preparata';
+                            case 'not_assigned': return 'Non assegnato ';
+                            case 'prepared': return 'Borsa preparata';
+                            default: return elm.status;
+                        }
+                    }, actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ]},
