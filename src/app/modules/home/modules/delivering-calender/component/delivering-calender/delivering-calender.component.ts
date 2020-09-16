@@ -64,9 +64,10 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
                 key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name', value: '', _class: 'auto-complete'},
             {type: 'simpleText', label: 'Nominativo Distinta', key: 'name'},
             {type: 'simpleText', label: 'Nota giorno', key: 'dayNote'},
-            {type: 'simpleText', label: 'Note Per La Distinta', key: 'setNote'},
+            {type: 'simpleText', label: 'Note interne', key: 'setNote'},
+            {type: 'simpleText', label: 'Notifiche postino', key: 'postmanNote'},
+            {type: 'simpleText', label: 'Note Postion', key: 'postmanDayNote'},
             {type: 'simpleText', label: 'Nome allegato', key: 'docName'},
-            {type: 'simpleText', label: 'Note Per Il Postion', key: 'postmanNote'},
             {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
                     {name: 'Prepared', id: 'prepared'},
                 ], labelVal: 'name'},
