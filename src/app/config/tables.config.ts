@@ -206,23 +206,23 @@ export const TablesConfig = {
                         {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm)}}
                     ]},
                 {title: 'Nome', field: 'name', actions: [], order: '1'},
-                {title: 'Operatore', field: [(elm) => elm.user ? elm.user.full_name : '' ], actions: []},
-                {title: 'Postino', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
-                {title: 'Dispatch list', field: 'pre_dispatch_code', actions: [], order: '2'},
-                {title: 'Stato distinta', field: (elm) => {
+                {title: '', field: [], actions: []},
+                {title: ['Postino', 'CSPI'], field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned',
+                        (elm) => elm.user ? elm.user.full_name : ''  ], separator: true, value_separator: 'dashed', actions: []},
+                {title: ['Distinta', 'Stato distinta'], field: [(elm) => {
                         switch (elm.status) {
                             case 'not_prepare': return 'Borsa non preparata';
                             case 'not_assigned': return 'Non assegnato ';
                             case 'prepared': return 'Borsa preparata';
                             default: return elm.status;
                         }
-                    }, actions: [
+                    }, 'pre_dispatch_code'], actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
-                    ]},
+                    ], order: '2', separator: true, value_separator: 'dashed',},
                 {title: 'Q.tà', field: 'quantity', actions: [], order: '5'},
-                {title: 'Data inizio consegna', field: 'started_at', actions: [], order: '3'},
-                {title: ' Data creazione', field: 'created_at', actions: [], order: '4'},
+                {title: ['Data inizio consegna', 'Data creazione'], field: ['started_at', 'created_at'], actions: [],
+                    order: '3', separator: true, value_separator: 'dashed'},
                 {title: 'Nota', field: 'note', actions: []},
                 // {title: 'OPERATION', actions: [
                 //         { action: 'progress',  field: 'percent',},
@@ -241,7 +241,7 @@ export const TablesConfig = {
                     ]},
                 {title: 'Nome', field: 'name', actions: [], order: '1'},
                 {title: 'Postino', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
-                {title: 'Operatore', field: [(elm) => elm.user ? elm.user.full_name : '' ], actions: []},
+                {title: 'CSPI', field: [(elm) => elm.user ? elm.user.full_name : '' ], actions: []},
                 {title: 'Dispatch list', field: 'pre_dispatch_code', actions: [], order: '2'},
                 {title: 'Stato distinta', field: (elm) => {
                         switch (elm.status) {
