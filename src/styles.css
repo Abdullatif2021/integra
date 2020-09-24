@@ -410,3 +410,13 @@ a:hover {
 .drop-file-area .drop-file-label{
     color: #111111;
 }
+
+.ng-select-similar {
+    margin: 5px 0px;
+    border: 0px;
+    background: transparent;
+    border-bottom: 2px solid #dcdcdc;
+    padding: 2px;
+    color: #99999c;
+    width: 100%;
+}

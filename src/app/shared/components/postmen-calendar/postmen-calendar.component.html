@@ -188,7 +188,7 @@
                         <app-comments title="Note interne" [comments]="details.internalNotes" (commentAdded)="addSetNote($event, 'internal_note')"></app-comments>
                     </div>
                     <div class="postman-notifications postman-info-row2 mt-3">
-                        <app-comments title="Notifica per postino" [comments]="details.postmanNotes" (commentAdded)="addSetNote($event, 'postman_note')"></app-comments>
+                        <app-comments title="Notifica per postino" [file]="true" [comments]="details.postmanNotes" (commentAdded)="addSetNote($event, 'postman_note')"></app-comments>
                     </div>
                 </div>
             </div>

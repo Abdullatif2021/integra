@@ -208,7 +208,8 @@ export const TablesConfig = {
                 {title: 'Nome', field: 'name', actions: [], order: '1'},
                 {title: '', field: [], actions: []},
                 {title: ['Postino', 'CSPI'], field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned',
-                        (elm) => elm.user ? elm.user.full_name : ''  ], separator: true, value_separator: 'dashed', actions: []},
+                        (elm) => elm.user ? elm.user.full_name : ''  ], separator: true, value_separator: 'dashed',
+                        actions: [], order: ['6', '7']},
                 {title: ['Distinta', 'Stato distinta'], field: [(elm) => {
                         switch (elm.status) {
                             case 'not_prepare': return 'Borsa non preparata';
@@ -219,11 +220,11 @@ export const TablesConfig = {
                     }, 'pre_dispatch_code'], actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
-                    ], order: '2', separator: true, value_separator: 'dashed',},
+                    ], order: ['2', '8'], separator: true, value_separator: 'dashed',},
                 {title: 'Q.tà', field: 'quantity', actions: [], order: '5'},
                 {title: ['Data inizio consegna', 'Data creazione'], field: ['started_at', 'created_at'], actions: [],
-                    order: '3', separator: true, value_separator: 'dashed'},
-                {title: 'Nota', field: 'note', actions: []},
+                    order: ['3'], separator: true, value_separator: 'dashed'},
+                {title: 'Nota', field: 'note', actions: [], order: '9'},
                 // {title: 'OPERATION', actions: [
                 //         { action: 'progress',  field: 'percent',},
                 //     ]},

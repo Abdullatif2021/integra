@@ -226,12 +226,14 @@ export class DispatchService {
         return this.http.post(AppConfig.endpoints.updatePostmanDayNote, data);
     }
 
-    addNoteToSet(set, note, type) {
-        const data = {
-            note: note,
-            type: type
-        };
-        return this.http.post(AppConfig.endpoints.saveNoteToSet(set), data);
+    addNoteToSet(set, note, type, file = null) {
+        const formData = new FormData();
+        formData.append('note', note);
+        formData.append('type', type);
+        if (file) {
+            formData.append('file', file);
+        }
+        return this.http.post(AppConfig.endpoints.saveNoteToSet(set), formData);
     }
 
     getLog(dispatch) {

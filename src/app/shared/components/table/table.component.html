@@ -28,14 +28,17 @@
                 <!-- if the col contains more than one field, print every one of them -->
                 <th scope="col" class="table-head-item border-left-white" [ngStyle]="{width: cells_size[idx+1] + 'px'}" *ngIf="typeof(col.title) === 'object'">
                     <ng-container *ngFor="let title of col.title; let idx = index">
-                        <!-- print col separator if needed -->
-                        <div class="separator" *ngIf="idx && col.separator"></div>
-                        <div>{{title}}</div>
+                        <div class="position-relative">
+                            <!-- print col separator if needed -->
+                            <div class="separator" *ngIf="idx && col.separator"></div>
+                            <div>{{title}}</div>
+                            <div class="order-container multiple-order" *ngIf="col.order && col.order[idx]">
+                                <div (click)="changeOrder(col.order[idx],'ASC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-desc order-btn"></div>
+                                <div (click)="changeOrder(col.order[idx],'DESC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-asc order-btn"></div>
+                            </div>
+                        </div>
                     </ng-container>
-                    <div class="order-container" *ngIf="col.order">
-                        <div (click)="changeOrder(col.order,'ASC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-desc order-btn"></div>
-                        <div (click)="changeOrder(col.order,'DESC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-asc order-btn"></div>
-                    </div>
+
                 </th>
             </ng-container>
             <!-- } table cols loop -->

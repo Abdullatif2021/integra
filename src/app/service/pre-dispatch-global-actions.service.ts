@@ -35,28 +35,28 @@ export class PreDispatchGlobalActionsService {
         this.modalHandleMessages.emit(message);
     }
 
-    startPreDispatchAction(preDispatchData, data = {}) {
+    startPreDispatchAction(preDispatchData, data: any = <any>{}) {
         const action = this.backProcessingService.getPreDispatchAction(preDispatchData.status);
         if (this.backProcessingService.isRunning(`${action}-${preDispatchData.id}`)) {
             return ;
         }
         preDispatchData.localize_status = 'play';
         this.backProcessingService.run(`${action}-${preDispatchData.id}`, async(handle) => {
-            if (action === 'locating') {
+            if (action === 'locating' || data.force_run === 'locating') {
                 await this.runLocating(preDispatchData, handle) ;
-            } else if (action === 'planning') {
+            } else if (action === 'planning' || data.force_run === 'planning') {
                 await this.runPlanning(preDispatchData, handle, data) ;
             }
             this.handles[preDispatchData.id] = handle ;
             this.handleCreated.emit(handle);
-        }, action, preDispatchData.id);
+        }, data.force_run ? data.force_run : action, preDispatchData.id);
     }
 
     isPreDispatchInRunStatus(preDispatchData): boolean {
         return ['in_grouping', 'in_localize', 'in_divide', 'drawing_paths'].find((elm) => elm === preDispatchData.status) ? true : false;
     }
 
-    async runPlanning(preDispatchData, handle, data: any = {}) {
+    async runPlanning(preDispatchData, handle, data: any = {}, force = false) {
 
         const planningService =  Object.assign(
             Object.create( Object.getPrototypeOf(this.planningService)), this.planningService
@@ -66,7 +66,7 @@ export class PreDispatchGlobalActionsService {
         if (data.ignoreDivide || preDispatchData.status === 'drawing_paths') {
             sets = await planningService.getSetsWithoutPaths(preDispatchData.id).toPromise();
         } else {
-            sets = await planningService.divideToDistenta(preDispatchData.id).toPromise().catch(e => {
+            sets = await planningService.divideToDistenta(preDispatchData.id, force).toPromise().catch(e => {
                 this.backProcessingService.ultimatePause(preDispatchData.id);
                 this.snotifyService.error('Qualcosa è andato storto, controlla le impostazioni...', {showProgressBar: false, });
                 this.planningErrors.emit('error');
@@ -83,7 +83,8 @@ export class PreDispatchGlobalActionsService {
             }
             let checkAddProductsResult: any = false ;
             if (sets.statusCode === 510) {
-                checkAddProductsResult = await this.preDispatchService.showConfirmPlanningAddProductsModal(preDispatchData.id, sets.data);
+                checkAddProductsResult = await this.preDispatchService
+                    .showConfirmPlanningAddProductsModal(preDispatchData.id, sets.data);
                 if (!checkAddProductsResult) {
                     this.backProcessingService.ultimatePause(preDispatchData.id);
                     return this.snotifyService.error('Process Aborted', {showProgressBar: false, });

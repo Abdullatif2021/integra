@@ -92,6 +92,9 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   async assignPostman(event, set, day) {
+      if (this.notFixedProductsTableShown) {
+          return ;
+      }
       this.resultsService.assignPostman(event.id, set.id).subscribe(
           data => {
               if (
@@ -229,7 +232,14 @@ export class ResultComponent implements OnInit, OnDestroy {
                   this.selected_sets = [];
                   this.all_selected = false ;
               } else {
-                  this.snotifyService.error(data.message,  { showProgressBar: false, timeout: 1500 });
+                  if (data.statusCode === 510) {
+                      window.parent.postMessage({runPreDispatch: this.preDispatchData, data: {
+                          ignoreDivide: false,
+                          force_run: 'planning'
+                      }}, '*');
+                  } else {
+                      this.snotifyService.error(data.message,  { showProgressBar: false, timeout: 1500 });
+                  }
               }
           }, error => {
               this.snotifyService.error('Qualcosa è andato storto!!',  { showProgressBar: false, timeout: 1500 });
@@ -409,6 +419,7 @@ export class ResultComponent implements OnInit, OnDestroy {
           this.snotifyService.error('Qualcosa è andato storto spostando il prodotto', { showProgressBar: false, timeout: 1500 });
       } else {
           if (this.dragAndDropService.readyToShowMap) {
+              this.notFixedProductsTableShown = false ;
               this.scheduleService.showRightSideMap();
           }
           this.backProcessingService.unblockExit();

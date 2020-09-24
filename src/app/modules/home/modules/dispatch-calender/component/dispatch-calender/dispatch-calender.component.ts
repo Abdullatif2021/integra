@@ -146,8 +146,8 @@ export class DispatchCalenderComponent implements OnInit, OnDestroy {
     getSetDetailsMethod = (set) => this.dispatchService.getSetDetails(set);
     availableUsersGetMethod = (set) => this.dispatchService.getAvailableUsers();
     // when the user writes a comment on a set. <calender view>
-    addNoteToSet = (note, type, set) => {
-        const result = this.dispatchService.addNoteToSet(set, note, type).toPromise().catch(e => {});
+    addNoteToSet = (note, type, set, file = null) => {
+        const result = this.dispatchService.addNoteToSet(set, note, type, file).toPromise().catch(e => {});
         if (result) {
             this.snotifyService.success('Node Added Successfuly', {showProgressBar: false});
         } else {

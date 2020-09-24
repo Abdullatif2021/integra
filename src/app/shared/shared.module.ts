@@ -33,6 +33,7 @@ import {NgxFileDropModule} from 'ngx-file-drop';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { CommentsComponent } from './components/comments/comments.component';
 import {FormsModule} from '@angular/forms';
+import {faDownload} from '@fortawesome/free-solid-svg-icons/faDownload';
 
 @NgModule({
   imports: [
@@ -93,6 +94,7 @@ export class SharedModule {
         library.add(faSortDown);
         library.add(faPen);
         library.add(faUpload);
+        library.add(faDownload);
     }
 
 }

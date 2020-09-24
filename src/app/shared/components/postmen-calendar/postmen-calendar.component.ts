@@ -214,7 +214,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
       if (!this.displayed_postman || typeof this.setNoteUpdateMethod !== 'function') {
           return ;
       }
-      const note = await this.setNoteUpdateMethod(event, type, this.displayed_postman);
+      const note = await this.setNoteUpdateMethod(event.text, type, this.displayed_postman, event.file);
       if (!note) {
           return ;
       }
