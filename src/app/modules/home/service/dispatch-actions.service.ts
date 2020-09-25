@@ -61,9 +61,9 @@ export class DispatchActionsService {
     uploadDayAttachment(day, attachment) {
         return new Promise<any>((resolve, reject) => {
             const method = this.dispatchService.uploadDayAttachment(day, attachment);
-            this.actionsService.run(method, 'Uploading Attachment', (result) => {
+            this.actionsService.run(method, 'Caricamento allegato', (result) => {
                 resolve(result);
-                return 'Attachment added successfully';
+                return 'L\'allegato è stato caricato con successo';
             }, (error) => {
                 reject(error);
                 return error.error ? error.error.message : (error.message ? error.message : 'Error');
@@ -79,10 +79,10 @@ export class DispatchActionsService {
             } else {
                 method = this.dispatchService.assignToUserByFilters(user);
             }
-            this.actionsService.run(method, 'Assigning sets', (result) => {
+            this.actionsService.run(method, 'Assegnazione di Distinta', (result) => {
                 this.reloadData.emit(true);
                 resolve(result);
-                return 'Set Assigned successfully';
+                return 'Distinta assegnata con successo';
             }, (error) => {
                 reject(error);
                 return error.error ? error.error.message : (error.message ? error.message : 'Error');

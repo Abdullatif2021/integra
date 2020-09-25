@@ -86,7 +86,7 @@
             </div>
           </div>
           <div class="col-3 v-wide-col"> <div class="count mt-1">{{item.quantity}} Consegne</div> </div>
-          <div class="col-2 v-wide-col"> <div class="mt-1" *ngIf="item.is_missed">Missed</div><div *ngIf="!item.is_missed" class="mt-1">Not missed</div></div>
+          <div class="col-2 v-wide-col"> <div class="mt-1" *ngIf="item.is_missed">Trovato</div><div *ngIf="!item.is_missed" class="mt-1">Non trovato</div></div>
         </div>
         <div class="d-flex">
           <div class="col-2 "> <div class="time mt-1">{{item.time}}</div> </div>

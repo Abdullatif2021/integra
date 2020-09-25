@@ -274,8 +274,8 @@ export class ResultComponent implements OnInit, OnDestroy {
          const icon = `https://mt.google.com/vt/icon/text=${priority}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000` +
          `&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1` ;
          let infoWindowText = `<table class="table"><thead><tr><th class="text-center">Order</th>
-                                    <th scope="col" class="text-center">Recipient</th><th class="text-center">Act code</th>
-                                    <th class="text-center">Product</th><th class="text-center">Barcode</th></tr></thead><tbody>`;
+                                    <th scope="col" class="text-center">Destinatario</th><th class="text-center">Codice Atto</th>
+                                    <th class="text-center">Prodotto</th><th class="text-center">Codice a Barre</th></tr>`;
          elm.groups.forEach(group => {
              group.products.forEach(product => {
                  infoWindowText += `<tr><th class="text-center">${product.priority + 1}</th>
@@ -485,6 +485,7 @@ export class ResultComponent implements OnInit, OnDestroy {
               data => { this.updateItemsMarkers(target); }
           );
       } else {
+          console.log('here we go');
           this.resultsService.orderTreeNode(result.item.addressId, index, target.id).subscribe(
               data => {
                   this.updateItemsMarkers(target);

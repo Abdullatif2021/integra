@@ -57,6 +57,8 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
   AppConfig = AppConfig;
   current_week_index = 0 ;
   loading_more = false ;
+  data_sizes = <any>{};
+  week_range = [0, 1, 2, 3, 4, 5, 6]
   constructor(
       private modalService: NgbModal,
       private calenderService: CalenderService,
@@ -67,6 +69,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+      console.log('changes')
       if (changes.data) {
           this.handleDataChanges(changes);
       }
@@ -86,7 +89,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
               {skeleton: true}, {skeleton: true}, {skeleton: true}, {skeleton: true}, {skeleton: true},
               {skeleton: true}, {skeleton: true}
           ];
-          return;
+          return this.data_sizes = {postmen: [0], revisore: [0], availablePostmen: [0], availableRevisore: [0]};
       }
       if (!this.data.length) {
           return this.data = null ;
@@ -96,6 +99,17 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
             ${this.data[0].dayNumber} - ${this.data[this.data.length - 1].dayNumber}
              ${this.monthes[date.getMonth()]} ${date.getFullYear()}
           `.trim();
+
+      this.data_sizes = {postmen: 0, revisore: 0, availablePostmen: 0, availableRevisore: 0}
+      this.data.forEach( day => {
+          Object.keys(this.data_sizes).forEach(key => {
+              this.data_sizes[key] = Math.max(day[key] ? day[key].length : 1, this.data_sizes[key]);
+          });
+      });
+      Object.keys(this.data_sizes).forEach(key => {
+          this.data_sizes[key] = new Array(this.data_sizes[key]).fill(0, 0, this.data_sizes[key]);
+      });
+      console.log(this.data);
   }
 
   openEditPostmanNoteModal(event, postman, day) {

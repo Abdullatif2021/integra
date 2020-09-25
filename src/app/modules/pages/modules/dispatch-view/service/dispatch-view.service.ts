@@ -81,4 +81,8 @@ export class DispatchViewService {
     getSetPath(setId): Observable<any> {
         return this.http.get<any>(AppConfig.endpoints.getSetPath(setId));
     }
+
+    getSetMarkers(setId): Observable<any> {
+        return this.http.get<any>(AppConfig.endpoints.getSetMarkers(setId));
+    }
 }

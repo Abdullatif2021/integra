@@ -323,10 +323,10 @@ export class DispatchCalenderComponent implements OnInit, OnDestroy {
     assignSetToUser(event) {
         this.dispatchService.assignToUser(event.sets, event.user).pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
-                this.snotifyService.success('Set Assigned Successfully', {showProgressBar: false});
+                this.snotifyService.success('Distinta assegnata con successo', {showProgressBar: false});
             },
             error => {
-                this.snotifyService.error('Something went wrong', {showProgressBar: false});
+                this.snotifyService.error('Errore', {showProgressBar: false});
             }
         );
     }
@@ -341,10 +341,10 @@ export class DispatchCalenderComponent implements OnInit, OnDestroy {
     updateDayNote(event) {
         this.dispatchService.updateDayNote(event.day, event.note).subscribe(
             data => {
-                this.snotifyService.success('Note Updated Successfuly', {showProgressBar: false});
+                this.snotifyService.success('Nota Modificata con successo', {showProgressBar: false});
             },
             error => {
-                this.snotifyService.error('Something went wrong', {showProgressBar: false});
+                this.snotifyService.error('Errore', {showProgressBar: false});
             }
         );
     }
@@ -353,10 +353,10 @@ export class DispatchCalenderComponent implements OnInit, OnDestroy {
     updatePostmanDayNote(event) {
         this.dispatchService.updatePostmanDayNote(event.postman, event.day, event.note).subscribe(
             data => {
-                this.snotifyService.success('Postman Note Updated Successfuly', {showProgressBar: false});
+                this.snotifyService.success('Postman Nota Modificata con successo', {showProgressBar: false});
             },
             error => {
-                this.snotifyService.error('Something went wrong', {showProgressBar: false});
+                this.snotifyService.error('Errore', {showProgressBar: false});
             }
         );
     }

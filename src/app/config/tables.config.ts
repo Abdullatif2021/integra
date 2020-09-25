@@ -210,7 +210,7 @@ export const TablesConfig = {
                 {title: ['Postino', 'CSPI'], field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned',
                         (elm) => elm.user ? elm.user.full_name : ''  ], separator: true, value_separator: 'dashed',
                         actions: [], order: ['6', '7']},
-                {title: ['Distinta', 'Stato distinta'], field: [(elm) => {
+                {title: ['Stato distinta', 'Distinta'], field: [(elm) => {
                         switch (elm.status) {
                             case 'not_prepare': return 'Borsa non preparata';
                             case 'not_assigned': return 'Non assegnato ';

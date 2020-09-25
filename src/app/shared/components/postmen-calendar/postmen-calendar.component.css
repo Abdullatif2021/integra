@@ -31,15 +31,9 @@
     display: flex;
 }
 .calender-table {
-    display: flex;
     width: 100%;
     border: 1px solid #F3F3F3;
     text-align: center;
-}
-.calender-day-col {
-    flex: 0 0 14.28%;
-    width: 14.28%;
-    border-right: 1px solid #F3F3F3;
 }
 .day-row {
     padding: 7px 0px;
@@ -76,6 +70,7 @@
     text-align: left;
     font-size: 12px;
     line-height: 16px;
+    word-break: break-all;
 }
 .postman-name {
     margin: auto 3px;
@@ -209,4 +204,21 @@
 }
 .selected-item {
     background-color: #FFCC99 !important;
+}
+
+
+
+.calender-row {
+    display: flex;
+    width: 100%;
+}
+.calender-col {
+    flex: 0 0 14.28%;
+    width: 14.28%;
+    border-right: 1px solid #F3F3F3;
+    padding: 5px;
+}
+.day-name, .day-number, .day-note, .day-attachment {
+    border-bottom: 1px solid #F3F3F3;
+    padding: 5px;
 }

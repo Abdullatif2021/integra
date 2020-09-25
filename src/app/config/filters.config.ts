@@ -65,7 +65,7 @@ export const FilterConfig = {
     },
     pre_dispatch: {
         search: (container, sp) => [
-            {type: 'ng-select', label: 'Status', key: 'status', items:  [
+            {type: 'ng-select', label: 'Stato', key: 'status', items:  [
                     {name: 'In Planning', id: 'inPlanning'},
                     {name: 'Not Planning', id: 'notPlanned'},
                     {name: 'Planned', id: 'planned'},
@@ -73,11 +73,11 @@ export const FilterConfig = {
                 ], labelVal: 'name'},
             {type: 'text    ', label: 'Nominativo', key: 'name'},
             {type: 'text', label: 'Distinita Postale', key: 'code'},
-            {type: 'number', label: 'Quantity', key: 'quantity'},
+            {type: 'number', label: 'Q.tà', key: 'quantity'},
 
         ],
         filters: (container, sp) => [
-            {type: 'ng-select', label: 'Status', key: 'status', items:  [
+            {type: 'ng-select', label: 'Stato', key: 'status', items:  [
                     {name: 'In Planning', id: 'inPlanning'},
                     {name: 'Not Planning', id: 'notPlanned'},
                     {name: 'Planned', id: 'planned'},
@@ -85,14 +85,14 @@ export const FilterConfig = {
                 ], labelVal: 'name'},
             {type: 'simpleText', label: 'Nominativo', key: 'name'},
             {type: 'simpleText', label: 'Distinita Postale', key: 'code'},
-            {type: 'number', label: 'Quantity', key: 'quantity'},
+            {type: 'number', label: 'Q.tà', key: 'quantity'},
             {type: ['date', 'date'], label: 'Data :', group: true, key: ['formDate', 'toDate']},
         ],
         grouping: false,
     },
     dispatch: {
         search: (container, sp) => [
-            {type: 'text    ', label: 'Nominativo Distinta', key: 'setName'},
+            {type: 'text', label: 'Nominativo Distinta', key: 'setName'},
             {type: 'ng-select', label: 'Agenzia', key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name'},
             {type: 'text', label: 'Nome Prodotto:', key: 'productTypeName', value: ''},
             {type: 'text', label: 'Nominativo Destinatario', key: 'recipientName'},
@@ -113,8 +113,8 @@ export const FilterConfig = {
 
             {type: 'simpleText', label: 'Nome allegato', key: 'docName'},
             {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
-                    {name: 'Not Assigned', id: 'not_assigned'},
-                    {name: 'Not Prepare', id: 'not_prepare'},
+                    {name: 'Non assegnato', id: 'not_assigned'},
+                    {name: 'Borsa non preparata', id: 'not_prepare'},
                 ], labelVal: 'name'},
             {type: ['date', 'date'], label: 'Start Data Distinta:', group: true, key: ['startedFrom', 'startedTo']},
             {type: ['date', 'date'], label: 'Data Distinta:', group: true, key: ['createFrom', 'createTo']},
@@ -137,7 +137,7 @@ export const FilterConfig = {
         search: (container, sp) => [
             {type: 'text    ', label: 'Nominativo Distinta', key: 'name'},
             {type: 'ng-select', label: 'Agenzia', key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name'},
-            {type: 'text', label: 'Nome Prodotto:', key: 'productTypeName', value: ''},
+            {type: 'text', label: 'Nome Prodotto', key: 'productTypeName', value: ''},
             {type: 'text', label: 'Nominativo Destinatario', key: 'recipientName'},
 
         ],
@@ -154,7 +154,7 @@ export const FilterConfig = {
             {type: 'simpleText', label: 'Note distinta', key: 'postmanDayNote'},
             {type: 'simpleText', label: 'Nome allegato', key: 'docName'},
             {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
-                    {name: 'Prepared', id: 'prepared'},
+                    {name: 'Borsa preparata', id: 'prepared'},
                 ], labelVal: 'name'},
             {type: ['date', 'date'], label: 'Start Data Distinta:', group: true, key: ['startedFrom', 'startedTo']},
             {type: ['date', 'date'], label: 'Data Distinta:', group: true, key: ['createFrom', 'createTo']},
