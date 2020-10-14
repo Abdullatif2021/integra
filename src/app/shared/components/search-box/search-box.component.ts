@@ -12,12 +12,17 @@ export class SearchBoxComponent implements OnInit {
   @Input() placeholder = 'Search';
   @Input() style = 'normal';
   @Input() value = '';
+  @Output() keydown = new EventEmitter<any>();
   @Output() changed = new EventEmitter<string>();
   ngOnInit() {
   }
 
   change(event) {
     this.changed.emit(event.target.value);
+  }
+
+  handleKeyDown(event) {
+    this.keydown.emit(event);
   }
 
   setValue(value) {

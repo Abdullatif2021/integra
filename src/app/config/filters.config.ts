@@ -71,7 +71,7 @@ export const FilterConfig = {
                     {name: 'Planned', id: 'planned'},
                     {name: 'Paused', id: 'paused'}
                 ], labelVal: 'name'},
-            {type: 'text    ', label: 'Nominativo', key: 'name'},
+            {type: 'text', label: 'Nominativo', key: 'name'},
             {type: 'text', label: 'Distinita Postale', key: 'code'},
             {type: 'number', label: 'Q.tà', key: 'quantity'},
 

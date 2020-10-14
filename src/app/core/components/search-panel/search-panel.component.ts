@@ -241,7 +241,13 @@ export class SearchPanelComponent implements OnInit {
 
   checkFilterSubmit(event) {
       if (event.code === 'Enter') {
-          setTimeout(()=>this.filter())
+          setTimeout(() => this.filter());
+      }
+  }
+
+  checkSearchSubmit(event) {
+      if (event.code === 'Enter') {
+          setTimeout(() => this.search());
       }
   }
 

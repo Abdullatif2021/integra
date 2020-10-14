@@ -9,17 +9,17 @@
         <app-search-box *ngIf="!_search" [placeholder]="'Cerca'" [style]="'thin'" [value]="search_value" ></app-search-box>
         <ng-container *ngFor="let field of searchFields">
           <ng-container *ngIf="field.type === 'text'">
-            <app-search-box (changed)="search_value = $event" *ngIf="_search && _search.key == field.key" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
+            <app-search-box (keydown)="checkSearchSubmit($event)" (changed)="search_value = $event" *ngIf="_search && _search.key == field.key" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
           </ng-container>
           <ng-container *ngIf="field.type === 'number'">
-            <input type="number" class="search-number-input" *ngIf="_search && _search.key == field.key" [(ngModel)]="search_value" [placeholder]="'Cerca'">
+            <input (keydown)="checkSearchSubmit($event)" type="number" class="search-number-input" *ngIf="_search && _search.key == field.key" [(ngModel)]="search_value" [placeholder]="'Cerca'">
           </ng-container>
           <ng-container *ngIf="field.type === 'ng-select' && _search && _search.key == field.key">
-            <ng-select [bindValue]="'id'" [clearable]="false" [loading]="_search.loadingState" (search)="getFieldRemoteData($event,_search)" [(ngModel)]="search_value" *ngIf="field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
-            <ng-select [bindValue]="'id'" [clearable]="false" [(ngModel)]="search_value" *ngIf="!field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
+            <ng-select (keydown)="checkSearchSubmit($event)" [bindValue]="'id'" [clearable]="false" [loading]="_search.loadingState" (search)="getFieldRemoteData($event,_search)" [(ngModel)]="search_value" *ngIf="field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
+            <ng-select (keydown)="checkSearchSubmit($event)" [bindValue]="'id'" [clearable]="false" [(ngModel)]="search_value" *ngIf="!field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
           </ng-container>
           <ng-container *ngIf="field.type === 'date'">
-            <input [(ngModel)]="search_value" *ngIf="_search && _search.key == field.key" #searchDateInput type="date" class="date-select">
+            <input (keydown)="checkSearchSubmit($event)" [(ngModel)]="search_value" *ngIf="_search && _search.key == field.key" #searchDateInput type="date" class="date-select">
           </ng-container>
         </ng-container>
       </div>
