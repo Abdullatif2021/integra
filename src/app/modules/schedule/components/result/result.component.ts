@@ -383,21 +383,25 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   async dropNotFixed(event, target, index) {
-      this.dragAndDropService.drop(index, target);
-      const elm = this.dragAndDropService.drag_elm ;
-      if (elm.parent) {
-          elm.parent.children = elm.parent.children.filter( ix => ix.id !== elm.id );
-      }
-      elm.fromNotFixed = true ;
-      elm._hint = 'not_fixed' ;
-      elm.parent = target;
-      target.quantity += elm.productsCount;
-      target.children.splice(index, 0, elm);
-      this.updateItemsMarkers(target);
-      this.backProcessingService.blockExit('Some Items was not saved, are you sure you want to exit');
-      this.movedNotFixedStorage = this.movedNotFixedStorage.filter(ix => ix.id !== elm.id);
-      this.movedNotFixedStorage.push({id: elm.id, set: target.id, index: index});
-  }
+        this.dragAndDropService.drop(index, target);
+        const elmements = this.dragAndDropService.drag_elm ;
+        elmements.forEach(single => {
+            if (single.parent) {
+                console.log('here we go');
+                single.parent.children = single.parent.children.filter( ix => ix.id !== single.id );
+            }
+            single.selected = false ;
+            single.fromNotFixed = true ;
+            single._hint = 'not_fixed' ;
+            single.parent = target;
+            target.quantity += single.productsCount;
+            target.children.splice(index, 0, single);
+            this.movedNotFixedStorage = this.movedNotFixedStorage.filter(ix => ix.id !== single.id);
+            this.movedNotFixedStorage.push({id: single.id, set: target.id, index: index});
+        })
+        this.updateItemsMarkers(target);
+        this.backProcessingService.blockExit('Some Items was not saved, are you sure you want to exit');
+    }
 
   updateItemsMarkers(set) {
       let marker = 0 ;

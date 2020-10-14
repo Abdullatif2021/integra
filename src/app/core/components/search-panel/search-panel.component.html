@@ -143,14 +143,14 @@
         <app-search-box [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" class="{{input._class}}" (changed)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
       </ng-container>
       <ng-container *ngIf="input.type === 'simpleText'">
-        <input value="{{input.value}}" [(ngModel)]="filters[input.key]" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
+        <input (keydown)="checkFilterSubmit($event)" value="{{input.value}}" [(ngModel)]="filters[input.key]" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
       </ng-container>
       <ng-container *ngIf="input.type === 'number'">
-        <input value="{{input.value}}" [(ngModel)]="filters[input.key]"  type="number" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
+        <input (keydown)="checkFilterSubmit($event)" value="{{input.value}}" [(ngModel)]="filters[input.key]"  type="number" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
       </ng-container>
       <ng-container *ngIf="input.type === 'ng-select'">
-        <ng-select  [(ngModel)]="filters[input.key]" [bindValue]="'id'" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" [loading]="input.loadingState" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
-        <ng-select  [(ngModel)]="filters[input.key]" [bindValue]="'id'" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+        <ng-select (keydown)="checkFilterSubmit($event)" [(ngModel)]="filters[input.key]" [bindValue]="'id'" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" [loading]="input.loadingState" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+        <ng-select (keydown)="checkFilterSubmit($event)" [(ngModel)]="filters[input.key]" [bindValue]="'id'" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
       </ng-container>
       <ng-container *ngIf="input.type === 'auto-complete'">
         <ng-autocomplete
@@ -166,14 +166,15 @@
                 [notFoundTemplate]="notFoundTemplate"
                 [minQueryLength]="3"
                 [placeHolder]="'Cerca'"
+                (keydown)="checkFilterSubmit($event)"
         >
         </ng-autocomplete>
       </ng-container>
       <ng-container *ngIf="input.type === 'tag'">
-        <ng-select [(ngModel)]="filters[input.key]" [addTag]="'any'" [multiple]="true" notFoundText="Add Item" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" class="filters-select-input {{input._class}}" [items]="input.items" placeholder="Cerca"></ng-select>
+        <ng-select (keydown)="checkFilterSubmit($event)"  [(ngModel)]="filters[input.key]" [addTag]="'any'" [multiple]="true" notFoundText="Add Item" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" class="filters-select-input {{input._class}}" [items]="input.items" placeholder="Cerca"></ng-select>
       </ng-container>
       <ng-container *ngIf="input.type === 'date'">
-        <input [(ngModel)]="filters[input.key]" (ngModelChange)="filters[input.key] = $event" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" type="date" class="date-select {{input._class}}">
+        <input (keydown)="checkFilterSubmit($event)" [(ngModel)]="filters[input.key]" (ngModelChange)="filters[input.key] = $event" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" type="date" class="date-select {{input._class}}">
       </ng-container>
     </div>
   </ng-container>
@@ -186,7 +187,7 @@
         <ng-container *ngFor="let subInputType of input.type; let subIdx = index ,first as isFirst">
           <!-- TODO handle all types -->
           <div class="search-input col-6 wide-col" [ngClass]="{'pl-1':!isFirst}">
-            <input [(ngModel)]="filters[input.key[subIdx]]"  value="{{  input.value ? input.value[input.key[subIdx]] : ''}}" [ngClass]="{'active-filter':_active_filters[input.key[subIdx]], 'filled-filter':_changed_filters[input.key[subIdx]]}" (change)="changeFiltersValue($event, input.key[subIdx], subInputType, idx)" type="date" class="form-control date-select">
+            <input (keydown)="checkFilterSubmit($event)" [(ngModel)]="filters[input.key[subIdx]]"  value="{{  input.value ? input.value[input.key[subIdx]] : ''}}" [ngClass]="{'active-filter':_active_filters[input.key[subIdx]], 'filled-filter':_changed_filters[input.key[subIdx]]}" (change)="changeFiltersValue($event, input.key[subIdx], subInputType, idx)" type="date" class="form-control date-select">
           </div>
         </ng-container>
       </div>

@@ -111,31 +111,29 @@ export class SearchPanelComponent implements OnInit {
   }
 
   changeFiltersValue(event, key, type, idx) {
-    setTimeout(() => {
-        // if filters has action that needs to run on change, run it.
-        if (typeof this.filtersFields[idx].change === 'function') {
-            return this.filtersFields[idx].change(event) ;
-        }
+      // if filters has action that needs to run on change, run it.
+      if (typeof this.filtersFields[idx].change === 'function') {
+          return this.filtersFields[idx].change(event) ;
+      }
 
-        // remove the active filter
-        delete this._active_filters[key];
-        this._changed_filters[key] = 1;
+      // remove the active filter
+      delete this._active_filters[key];
+      this._changed_filters[key] = 1;
 
-        if (this.filters[key] && typeof this.filters[key] === 'object' ?
-            (Array.isArray(this.filters[key]) ? !this.filters[key].length : false) : !this.filters[key]) {
-            delete this.filters[key];
-        }
+      if (this.filters[key] && typeof this.filters[key] === 'object' ?
+          (Array.isArray(this.filters[key]) ? !this.filters[key].length : false) : !this.filters[key]) {
+          delete this.filters[key];
+      }
 
-        // changes the filterField value, required in some filters, (the once with remote data loading.).
-        if (typeof this.filtersFields[idx].key === 'string') {
-            this.filtersFields[idx].value = this.filters[key] ;
-        } else {
-            if (!this.filtersFields[idx].value) {
-                this.filtersFields[idx].value = {} ;
-            }
-            this.filtersFields[idx].value[key] = this.filters[key] ;
-        }
-    });
+      // changes the filterField value, required in some filters, (the once with remote data loading.).
+      if (typeof this.filtersFields[idx].key === 'string') {
+          this.filtersFields[idx].value = this.filters[key] ;
+      } else {
+          if (!this.filtersFields[idx].value) {
+              this.filtersFields[idx].value = {} ;
+          }
+          this.filtersFields[idx].value[key] = this.filters[key] ;
+      }
   }
 
   filter() {
@@ -238,6 +236,12 @@ export class SearchPanelComponent implements OnInit {
   checkActionSubmit(event) {
       if (event.code === 'Enter' && typeof this.active_action.submit === 'function') {
           this.active_action.submit(this.active_action, event);
+      }
+  }
+
+  checkFilterSubmit(event) {
+      if (event.code === 'Enter') {
+          setTimeout(()=>this.filter())
       }
   }
 

@@ -28,6 +28,7 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
   loading = false ;
   page = 1;
   unsubscribe = new EventEmitter();
+  selected = [];
 
 
   async ngOnInit() {
@@ -42,8 +43,11 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
     }
     this.dragAndDropService.dropped.pipe(takeUntil(this.unsubscribe)).subscribe(
         (_d: any) => {
+            console.log('here', _d);
             if (!_d.fromNotFixed) { return ; }
-            this.list = this.list.filter( i => i.id !== _d.item.id);
+            this.list = this.list.filter(i => !_d.item.map(j => j.id).includes(i.id));
+            this.selected = this.selected.filter(i => !_d.item.map(j => j.id).includes(i.id));
+            console.log(this.list.length, _d.item, this.list);
             this.dragAndDropService.setReadyToShowMap(this.list.length ? false : true);
             if (this.list.length < 20 && !this.allLoaded) {
               this.loadMore();
@@ -52,12 +56,27 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
      );
   }
 
+
+  selectAll() {
+      if (this.selected.length === this.list.length) {
+          this.selected = [];
+          this.list.forEach(item => item.selected = false );
+      } else {
+          this.selected = [...this.list];
+          this.list.forEach(item => item.selected = true );
+      }
+  }
+
   onDrop(event, item) {
     console.log('dropped');
   }
 
   onDragStart(event, item) {
-      this.dragAndDropService.drag(item, true, DragAndDropService.DRAGGED_TYPE_NOT_FIXED);
+      if (this.selected.filter(i => i.id === item.id).length) {
+          this.dragAndDropService.drag(this.selected, true, DragAndDropService.DRAGGED_TYPE_NOT_FIXED);
+      } else {
+          this.dragAndDropService.drag([item], true, DragAndDropService.DRAGGED_TYPE_NOT_FIXED);
+      }
   }
 
   async loadMore() {
@@ -77,6 +96,15 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
       }
   }
 
+  select(item) {
+      item.selected = !item.selected ;
+      if (item.selected) {
+          this.selected.push(item) ;
+      } else {
+          this.selected = this.selected.filter(i => i.id !== item.id);
+      }
+      console.log(this.selected);
+  }
 
   // Life Cycle OnDestroy
 

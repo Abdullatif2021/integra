@@ -95,14 +95,15 @@ export const TablesConfig = {
         // products listing table, used in delivering.component, in-stock.component, not-delivered.component, to-deliver.component
         productsTable : {
             cols: [
-                {title: ' ', field: false, actions: [
+                {title: 'Azioni', field: false, actions: [
                         {action: 'view'},
                         {action: 'book'},
                     ]},
                 {title: 'BARCODE', field : 'barcode', order: '2'},
                 {title: 'ATTO', field : 'act_code', order: '1'},
-                {title: ['PRODOTTO', 'DISTINTA'], field: ['product_category', 'dispatch_code'], separator: true, value_separator: 'dashed'},
-                {title: 'STATO', field: 'product_status'},
+                {title: ['PRODOTTO', 'DISTINTA'], field: ['product_category', 'dispatch_code'], separator: true, value_separator: 'dashed',
+                    order: ['7', '3']},
+                {title: 'STATO', field: 'product_status', order: '8'},
                 {title: ['DATA/ORA', 'Q.TA', 'TENTATIVI'], field: [
                         'date',
                         (elm: ProductInterface) => (elm.count === '') || !elm.count ? '1' : elm.count,
@@ -111,7 +112,7 @@ export const TablesConfig = {
                     classes: {
                         '1': 'text-center d-block',
                         'attempt': 'text-center d-block'
-                    }},
+                    }, order: ['4', '5', '6']},
                 {title: ['CLIENTE', 'MITTENTE', 'DESTINARIO'], field: [
                     'customer_name',
                     'sender_name',
@@ -121,13 +122,13 @@ export const TablesConfig = {
                     value_separator: 'line', classes: {
                         'sender_name': 'text-gray',
                         '2': 'marked'
-                    }}
+                    }, order: ['9', '10', '11']}
             ]
         },
         // preDispatchTable used in preDispatch.component
         preDispatchTable : {
             cols: [
-                {title: ' ', field: false, actions: [
+                {title: 'Azioni', field: false, actions: [
                         {action: 'more'},
                         {action: 'edit', click: (elm, container) => {
                             container.openModal(PreDispatchEditComponent, elm) ;
@@ -198,7 +199,7 @@ export const TablesConfig = {
         // dispatchTable used in dispatch.component
         dispatchTable : {
             cols: [
-                {title: ' ', field: false, actions: [
+                {title: 'Azioni', field: false, actions: [
                         {action: 'edit', click: (elm) => { console.log('export . '); }},
                         {action: 'print', click: (elm) => { console.log('print . '); }},
                         {action: 'excel_export', click: (elm) => {console.log('export . '); }},
@@ -233,35 +234,36 @@ export const TablesConfig = {
         // dispatchTable used in dispatch.component
         deliveringTable : {
             cols: [
-                {title: ' ', field: false, actions: [
+                {title: 'Azioni', field: false, actions: [
                         {action: 'edit', click: (elm) => { console.log('export . '); }},
                         {action: 'print', click: (elm) => { console.log('print . '); }},
                         {action: 'excel_export', click: (elm) => {console.log('export . '); }},
                         {action: 'view', click: (elm, container) => { container.showDispatchModal(elm); }},
-                        {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm); }}
+                        {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm)}}
                     ]},
                 {title: 'Nome', field: 'name', actions: [], order: '1'},
-                {title: 'Postino', field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned' ], actions: []},
-                {title: 'CSPI', field: [(elm) => elm.user ? elm.user.full_name : '' ], actions: []},
-                {title: 'Dispatch list', field: 'pre_dispatch_code', actions: [], order: '2'},
-                {title: 'Stato distinta', field: (elm) => {
+                {title: '', field: [], actions: []},
+                {title: ['Postino', 'CSPI'], field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned',
+                        (elm) => elm.user ? elm.user.full_name : ''  ], separator: true, value_separator: 'dashed',
+                    actions: [], order: ['6', '7']},
+                {title: ['Stato distinta', 'Distinta'], field: [(elm) => {
                         switch (elm.status) {
                             case 'not_prepare': return 'Borsa non preparata';
                             case 'not_assigned': return 'Non assegnato ';
                             case 'prepared': return 'Borsa preparata';
                             default: return elm.status;
                         }
-                    }, actions: [
+                    }, 'pre_dispatch_code'], actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
-                    ]},
+                    ], order: ['2', '8'], separator: true, value_separator: 'dashed',},
                 {title: 'Q.tà', field: 'quantity', actions: [], order: '5'},
-                {title: 'Data inizio consegna', field: 'started_at', actions: [], order: '3'},
-                {title: 'Data creazione', field: 'created_at', actions: [], order: '4'},
+                {title: ['Data inizio consegna', 'Data creazione'], field: ['started_at', 'created_at'], actions: [],
+                    order: ['3'], separator: true, value_separator: 'dashed'},
+                {title: 'Nota', field: 'note', actions: [], order: '9'},
                 // {title: 'OPERATION', actions: [
                 //         { action: 'progress',  field: 'percent',},
                 //     ]},
-                {title: 'Nota', field: 'note', actions: []},
             ]
         },
     }

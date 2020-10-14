@@ -107,7 +107,7 @@ export const FilterConfig = {
             {type: 'simpleText', label: 'Nominativo Distinta', key: 'setName'},
 
             {type: 'simpleText', label: 'Nota giorno', key: 'dayNote'},
-            {type: 'simpleText', label: 'Note interne', key: 'setNote'},
+            {type: 'simpleText', label: 'Note interne per operatori', key: 'setNote'},
             {type: 'simpleText', label: 'Notifiche postino', key: 'postmanNote'},
             {type: 'simpleText', label: 'Note distinta', key: 'postmanDayNote'},
 
@@ -149,7 +149,7 @@ export const FilterConfig = {
                 key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name', value: '', _class: 'auto-complete'},
             {type: 'simpleText', label: 'Nominativo Distinta', key: 'name'},
             {type: 'simpleText', label: 'Nota giorno', key: 'dayNote'},
-            {type: 'simpleText', label: 'Note interne', key: 'setNote'},
+            {type: 'simpleText', label: 'Note interne per operatori', key: 'setNote'},
             {type: 'simpleText', label: 'Notifiche postino', key: 'postmanNote'},
             {type: 'simpleText', label: 'Note distinta', key: 'postmanDayNote'},
             {type: 'simpleText', label: 'Nome allegato', key: 'docName'},
