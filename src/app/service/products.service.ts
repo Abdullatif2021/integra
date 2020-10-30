@@ -103,6 +103,23 @@ export class ProductsService {
       return this.http.post<ApiResponseInterface>(AppConfig.endpoints.getProductByCategory, options);
   }
 
+  updateProductsStatusByProducts(products, status) {
+      const options = {
+          status: status,
+          product_ids: products,
+      }
+      return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, options);
+  }
+
+  updateProductsStatusByFilters(status) {
+      const data = {
+          status: status,
+      }
+      const options = { params: new HttpParams()};
+      options.params = this.filtersService.getHttpParams(options.params) ;
+      return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, data, options);
+  }
+
   handleError(error: HttpErrorResponse) {
       if (error.error instanceof ErrorEvent) {
           console.error('An error occurred:', error.error.message);

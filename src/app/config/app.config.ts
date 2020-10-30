@@ -109,6 +109,11 @@ export const AppConfig = {
         getCalenderAvailablePostmen: `${api_url}/api/calender/getAvailablePostmen`,
         getDispatchLog: (id) => `${api_url}/api/set/${id}/logs`,
         getSetProductsAndPath: (id) => `${api_url}/api/set/${id}/products`,
+        getActivities: `${api_url}/api/activity/get`,
+        getActivitiesPostmen: `${api_url}/api/activity/postmen/get`,
+        getActivitiesOperators: `${api_url}/api/activity/operators/get`,
+        getAvailableStatuses: `${api_url}/api/products/getAvailableStatus`,
+        changeProductStatus: `${api_url}/api/products/changeStatus`,
     },
 
 };

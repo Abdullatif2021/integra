@@ -229,7 +229,7 @@ export class SearchPanelComponent implements OnInit {
             this.active_action.modalOptions ? this.active_action.modalOptions : {} );
         this.modalService.open(instance.modalRef, modalOptions) ;
     } else if ( this.active_action && typeof this.active_action.run === 'function' ) {
-        this.active_action.run() ;
+        this.active_action.run(this.active_action) ;
     }
   }
 
@@ -263,6 +263,9 @@ export class SearchPanelComponent implements OnInit {
   }
 
   initFields() {
+      if (!this.fieldsData || !this.fieldsData.fields) {
+          return ;
+      }
       this.filtersFields = this.fieldsData.fields.filters( this.fieldsData.container, this);
       this.searchFields = this.fieldsData.fields.search( this.fieldsData.container, this);
   }

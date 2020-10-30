@@ -16,7 +16,7 @@ import {FilterConfig} from '../../../../config/filters.config';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {RecipientsService} from '../../../../service/recipients.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {PreDispatchAddDirectComponent} from '../../modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {AgenciesService} from '../../../../service/agencies.service';
@@ -55,6 +55,16 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
 
   actions = [
     {
+        name: 'Crea nuova attivita', fields: [
+            { type: 'select', field: 'method', options: [
+                    {name: 'Selezionati', value: 'selected'},
+                    {name: 'Secondo i filtri applicati', value: 'filters'}
+                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+            }
+        ],
+        run: (event) => this.createActivity(event)
+    },
+    {
         name: 'Crea nuova Pre-Distinta', fields: [
             { type: 'select', field: 'method', options: [
                     {name: 'Selezionati', value: 'selected'},
@@ -63,6 +73,10 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
             }
         ],
         modal: PreDispatchNewComponent
+    },
+    {
+        name: 'Mosta attivita in corso',
+        run: (event) => {this.router.navigate(['to-deliver/activities'])}
     },
     {
         name: 'Aggiungi a Pre-Distinta esistente', fields: [
@@ -113,7 +127,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       protected categoriesService: CategoriesService,
       private componentFactoryResolver: ComponentFactoryResolver,
       private modalService: NgbModal,
-      private snotifyService: SnotifyService
+      private snotifyService: SnotifyService,
+      private router: Router
   ) {
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
@@ -269,6 +284,16 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
           this.snotifyService.async('Re-localizza', promise, { showProgressBar: true, timeout: 4000 });
           return ;
       }
+  }
+
+  createActivity(event) {
+      if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
+          return this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+      } else if (event.method === 'filters' && !Object.keys(this.filtersService.filters).length
+          && !Object.keys(this.filtersService.specials).length) {
+          return this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
+      }
+      this.router.navigate(['to-deliver/activities']);
   }
 
   ngOnDestroy() {

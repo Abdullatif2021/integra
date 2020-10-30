@@ -1,104 +1,122 @@
 <div class="container-fluid page-container">
-  <div class="row full-height">
-    <div class="col-xl-4 col-lg-5 col-md-12 v-wide-col mt-md-20px left-col">
-      <div class="products-container" (scroll)="loadData()" infinite-scroll>
-        <div class="product-items-body" *ngIf="data">
-          <div class="street-items-header">
-            <div class="d-flex">
-              <div class="col-1"></div>
-              <div class="col-1"></div>
-              <div class="col-4 wide-col"><div class="street-items-header-cell">Indirizzo</div></div>
-              <div class="col-3 text-center"><div class="street-items-header-cell">Consegne</div></div>
-              <div class="col-3 wide-col pl-1"><div class="street-items-header-cell">Ora d’arrivo</div></div>
-            </div>
-          </div>
-          <div class="street-items" dndDropzone [dndHorizontal]="false" (dndDrop)="onDrop($event)" [ngClass]="{'drop-location': dragging && dragging.type === 'building'}" infiniteScrollDistance="30">
-            <div dndPlaceholderRef class="dndPlaceholder"></div>
-            <div *ngFor="let group of data; let idx = index">
-              <ng-container *ngIf="group.skeleton;">
-                <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
-              </ng-container>
-              <ng-container  *ngIf="!group.skeleton;">
-                <div class="street-item" [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !((idx)%2)}" [dndDraggable]="{item: 1}" [dndDisableIf]="group.state !== 'not_assigned' && group.state !== 'not_prepare'" [dndEffectAllowed]="'move'"
-                     (dndStart)="onDragStart($event, group)">
+  <div class="row">
+    <div class="col-12 v-wide-col">
+      <app-search-panel></app-search-panel>
+    </div>
+    <div class="full-width mt-2">
+      <div class="container-fluid page-container">
+        <div class="row full-height">
+          <div class="col-xl-4 col-lg-5 col-md-12 v-wide-col mt-md-20px left-col">
+            <div class="products-container" (scroll)="loadData()" infinite-scroll>
+              <div class="product-items-body" *ngIf="data">
+                <div class="street-items-header">
                   <div class="d-flex">
-                    <div class="col-1 wide-col d-flex">
-                      <div dndHandle class="drag-handle" *ngIf="group.state === 'not_assigned' || group.state === 'not_prepare'">☰</div>
-                      <div class="more" *ngIf="group.products" (click)="group.expanded = !group.expanded">
-                        <fa-icon *ngIf="!group.expanded" [icon]="['fa','chevron-down']"></fa-icon>
-                        <fa-icon *ngIf="group.expanded" [icon]="['fa','chevron-up']"></fa-icon>
+                    <div class="col-1"></div>
+                    <div class="col-1"></div>
+                    <div class="col-4 wide-col"><div class="street-items-header-cell">Indirizzo</div></div>
+                    <div class="col-3 text-center"><div class="street-items-header-cell">Consegne</div></div>
+                    <div class="col-3 wide-col pl-1"><div class="street-items-header-cell">Ora d’arrivo</div></div>
+                  </div>
+                </div>
+                <div class="street-items" dndDropzone [dndHorizontal]="false" (dndDrop)="onDrop($event)" [ngClass]="{'drop-location': dragging && dragging.type === 'building'}" infiniteScrollDistance="30">
+                  <div dndPlaceholderRef class="dndPlaceholder"></div>
+                  <div *ngFor="let group of data; let idx = index">
+                    <ng-container *ngIf="group.skeleton;">
+                      <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
+                    </ng-container>
+                    <ng-container  *ngIf="!group.skeleton;">
+                      <div class="street-item" [ngClass]="{'odd-bg': (idx)%2, 'even-bg': !((idx)%2)}" [dndDraggable]="{item: 1}" [dndDisableIf]="group.state !== 'not_assigned' && group.state !== 'not_prepare'" [dndEffectAllowed]="'move'"
+                           (dndStart)="onDragStart($event, group)">
+                        <div class="d-flex">
+                          <div class="col-1 wide-col d-flex">
+                            <div dndHandle class="drag-handle" *ngIf="group.state === 'not_assigned' || group.state === 'not_prepare'">☰</div>
+                            <div class="more" *ngIf="group.products" (click)="group.expanded = !group.expanded">
+                              <fa-icon *ngIf="!group.expanded" [icon]="['fa','chevron-down']"></fa-icon>
+                              <fa-icon *ngIf="group.expanded" [icon]="['fa','chevron-up']"></fa-icon>
+                            </div>
+                          </div>
+                          <div class="col-1 wide-col d-flex">
+
+                            <div class="select-container" (click)="select(group, 'address')">
+                              <div class="selected" *ngIf="group.selected === 1"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                              <div class="selected" *ngIf="group.selected === 2"><fa-icon [icon]="['fa','minus']"></fa-icon></div>
+                              <div class="not-selected" *ngIf="group.selected === 0 || !group.selected "><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                            </div>
+                          </div>
+                          <div class="col-4 wide-col pl-3"> <div class="text">{{group.address}}</div> </div>
+                          <div class="col-3 text-center"> <div class="count">{{group.productsCount}}</div> </div>
+                          <div class="col-3 wide-col pl-1"> <div class="count">{{group.time}}</div> </div>
+                        </div>
                       </div>
-                    </div>
-                    <div class="col-1 wide-col d-flex">
-                      <div class="m-auto select-container" (click)="select(group, 'group', $event)">
-                        <div class="selected" *ngIf="group.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
-                        <div class="ml-1 priority-container" *ngIf="!group.selected "><span>{{group._marker}}</span></div>
-                      </div>
-                    </div>
-                    <div class="col-4 wide-col pl-3"> <div class="text">{{group.address}}</div> </div>
-                    <div class="col-3 text-center"> <div class="count">{{group.productsCount}}</div> </div>
-                    <div class="col-3 wide-col pl-1"> <div class="count">{{group.time}}</div> </div>
+
+                      <!-- Products -->
+                      <ng-container *ngIf="group.expanded">
+                        <div class="product-items-header" *ngIf="data">
+                          <div class="d-flex">
+                            <div class="col-1 d-flex"><div class="m-auto"></div></div>
+                            <div class="col-6 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Destinatario</div></div><div class="m-auto">Prodotto</div></div>
+                            <div class="col-5 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Codice a Barre</div></div><div class="m-auto">Codice Atto</div></div>
+                          </div>
+                        </div>
+                        <div class="product-items-body">
+                          <ng-container *ngFor="let product of group.products; let i = index">
+                            <div [ngClass]="{'odd-bg': (idx + i)%2, 'even-bg': !((idx + i)%2)}" class="d-flex">
+                              <div class="col-1 d-flex v-wide-col">
+                                  <div class="select-container" (click)="select(product, 'product')">
+                                    <div class="selected" *ngIf="product.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                                    <div class="not-selected" *ngIf="!product.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                                  </div>
+                              </div>
+                              <div class="col-6 d-flex text-center product-items-col"><div class="with-black-dashed-bottom-border"><div class="m-auto">{{product.recipient.name}}</div></div><div class="m-auto">{{product.integra_name.name}}</div></div>
+                              <div class="col-5 d-flex text-center product-items-col"><div class="with-black-dashed-bottom-border"><div class="m-auto">{{product.barcode}}</div></div><div class="m-auto"> {{product.act_code}}</div></div>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                    </ng-container>
                   </div>
                 </div>
 
-                <!-- Products -->
-                <ng-container *ngIf="group.expanded">
-                  <div class="product-items-header" *ngIf="data">
-                    <div class="d-flex">
-                      <div class="col-1 d-flex"><div class="m-auto"></div></div>
-                      <div class="col-6 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Destinatario</div></div><div class="m-auto">Prodotto</div></div>
-                      <div class="col-5 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Codice a Barre</div></div><div class="m-auto">Codice Atto</div></div>
-                    </div>
-                  </div>
-                  <div class="product-items-body">
-                    <ng-container *ngFor="let product of group.products; let i = index">
-                      <div [ngClass]="{'odd-bg': (idx + i)%2, 'even-bg': !((idx + i)%2)}" class="d-flex">
-                        <div class="col-6 d-flex text-center product-items-col"><div class="with-black-dashed-bottom-border"><div class="m-auto">{{product.recipient.name}}</div></div><div class="m-auto">{{product.integra_name.name}}</div></div>
-                        <div class="col-6 d-flex text-center product-items-col"><div class="with-black-dashed-bottom-border"><div class="m-auto">{{product.barcode}}</div></div><div class="m-auto"> {{product.act_code}}</div></div>
-                      </div>
-                    </ng-container>
-                  </div>
-                </ng-container>
-              </ng-container>
+              </div>
             </div>
           </div>
-
-        </div>
-      </div>
-    </div>
-    <div class="col-xl-8 col-lg-7 col-md-12 v-wide-col right-col">
-      <div class="map-upper-container">
-        <div class="map-container">
-          <div class="map-search">
-            <app-address-input (changed)="navigateMap($event)" [_class]="'bg-white'"></app-address-input>
+          <div class="col-xl-8 col-lg-7 col-md-12 v-wide-col right-col">
+            <div class="map-upper-container">
+              <div class="map-container">
+                <div class="map-search">
+                  <app-address-input (changed)="navigateMap($event)" [_class]="'bg-white'"></app-address-input>
+                </div>
+                <agm-map class="map" (mapClick)="mapClick($event)" (mapReady)="mapReady($event)" [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+                  <ng-container *ngFor="let marker of markers; trackBy: trackMarkers ">
+                    <agm-marker [zIndex]="1" [latitude]="marker.lat" (markerClick)="marker.onClick($event)" [markerClickable]="marker.cluster" (dragEnd)="marker.onDrag($event, marker)" [iconUrl]="marker.icon" [markerDraggable]="marker.draggable" [longitude]="marker.lng" [label]="marker.label">
+                      <agm-info-window *ngIf="marker.infoWindow" [isOpen]="marker.infoWindow.isOpen" [disableAutoPan]="true">
+                        <div [innerHTML]="marker.infoWindow.text"></div>
+                      </agm-info-window>
+                    </agm-marker>
+                    <agm-marker [zIndex]="2" *ngIf="marker.count"  [latitude]="marker.lat" [iconUrl]="marker.count_marker" [longitude]="marker.lng" [label]="marker.count"></agm-marker>
+                  </ng-container>
+                  <ng-container *ngFor="let path of paths">
+                    <agm-polyline [strokeColor]="'#4CAF50'">
+                      <agm-icon-sequence [path]="'FORWARD_OPEN_ARROW'" [scale]="'2.4'" [repeat]="'120px'"></agm-icon-sequence>
+                      <ng-container *ngFor="let point of path">
+                        <agm-polyline-point *ngIf="!point.arrow" [latitude]="point.lat" [longitude]="point.lng"></agm-polyline-point>
+                      </ng-container>
+                    </agm-polyline>
+                  </ng-container>
+                </agm-map>
+              </div>
+            </div>
           </div>
-          <agm-map class="map" (mapClick)="mapClick($event)" (mapReady)="mapReady($event)" [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
-            <ng-container *ngFor="let marker of markers; trackBy: trackMarkers ">
-              <agm-marker [zIndex]="1" [latitude]="marker.lat" (markerClick)="marker.onClick($event)" [markerClickable]="marker.cluster" (dragEnd)="marker.onDrag($event, marker)" [iconUrl]="marker.icon" [markerDraggable]="marker.draggable" [longitude]="marker.lng" [label]="marker.label">
-                <agm-info-window *ngIf="marker.infoWindow" [isOpen]="marker.infoWindow.isOpen" [disableAutoPan]="true">
-                  <div [innerHTML]="marker.infoWindow.text"></div>
-                </agm-info-window>
-              </agm-marker>
-              <agm-marker [zIndex]="2" *ngIf="marker.count"  [latitude]="marker.lat" [iconUrl]="marker.count_marker" [longitude]="marker.lng" [label]="marker.count"></agm-marker>
-            </ng-container>
-            <ng-container *ngFor="let path of paths">
-              <agm-polyline [strokeColor]="'#4CAF50'">
-                <agm-icon-sequence [path]="'FORWARD_OPEN_ARROW'" [scale]="'2.4'" [repeat]="'120px'"></agm-icon-sequence>
-                <ng-container *ngFor="let point of path">
-                  <agm-polyline-point *ngIf="!point.arrow" [latitude]="point.lat" [longitude]="point.lng"></agm-polyline-point>
-                </ng-container>
-              </agm-polyline>
-            </ng-container>
-          </agm-map>
         </div>
       </div>
+
+
+      <ng-template let-idx="idx" let-next="next" let-item="item" #streetItems>
+
+      </ng-template>
     </div>
   </div>
 </div>
 
-
-<ng-template let-idx="idx" let-next="next" let-item="item" #streetItems>
-
-</ng-template>
 
 

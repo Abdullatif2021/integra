@@ -4,6 +4,9 @@ import {MapMarker} from '../../../../../../core/models/map-marker.interface';
 import {ActivatedRoute} from '@angular/router';
 import {DispatchViewService} from '../../service/dispatch-view.service';
 import {MapsAPILoader} from '@agm/core';
+import {SetStatusModalComponent} from '../../modals/set-status-modal/set-status-modal.component';
+import {ActionsService} from '../../../../../../service/actions.service';
+import {PaginationService} from '../../../../../../service/pagination.service';
 
 @Component({
     selector: 'app-dispatch-view',
@@ -25,16 +28,22 @@ export class DispatchViewComponent implements OnInit {
     pathSubscription: any = null ;
     startPoint;
     endPoint;
+
     constructor(
         private mapService: MapService,
         private route: ActivatedRoute,
         private dispatchViewService: DispatchViewService,
-        private mapsAPILoader: MapsAPILoader
+        private mapsAPILoader: MapsAPILoader,
+        private actionsService: ActionsService,
+        private paginationService: PaginationService
     ) {
         this.dispatch = route.snapshot.params.id;
     }
 
     ngOnInit() {
+        this.paginationService.updateLoadingState(false);
+        this.paginationService.updateCurrentPage(-1);
+        this.paginationService.updateResultsCount(-1);
         this.loadData();
         this.mapsAPILoader.load().then(() => {
             this.loadPath();
@@ -142,6 +151,25 @@ export class DispatchViewComponent implements OnInit {
         if (!data || !data.length) { return ; }
         this.loading = false;
         this.data = this.data.concat(data);
+        if (data && data.length && data[0].state === 'prepared') {
+            this.handleActions(true);
+        }
+    }
+
+    handleActions(isPrepared) {
+        if (!isPrepared) { return ;}
+        this.actionsService.setActions([
+            {
+                name: 'Change status', fields: [
+                    { type: 'select', field: 'method', options: [
+                            {name: 'Selezionati', value: 'selected'},
+                            {name: 'Secondo i filtri applicati', value: 'filters'}
+                        ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                    }
+                ],
+                modal: SetStatusModalComponent
+            },
+        ]);
     }
 
     onDragStart(event, item) {
@@ -169,10 +197,6 @@ export class DispatchViewComponent implements OnInit {
         this.dragging = null ;
     }
 
-    select(item, type, event) {
-        item.seleted = !item.selected ;
-    }
-
     trackMarkers(marker) {
         return marker.id + '-' + marker.type;
     }
@@ -190,6 +214,29 @@ export class DispatchViewComponent implements OnInit {
         this.mapService.mapClicked(event);
     }
 
+    select(item, level) {
+        if (level === 'product') {
+            item.selected = !item.selected ;
+            if (item.selected) {
+                item.parent.selected = item.parent.products.find((i) => !i.selected) ? 2 : 1;
+                this.dispatchViewService.selectedProducts.push(item.id);
+            } else {
+                item.parent.selected = item.parent.products.find((i) => i.selected) ? 2 : 0;
+                this.dispatchViewService.selectedProducts = this.dispatchViewService.selectedProducts.filter( i => i.id === item.id);
+            }
+        }
+
+        if (level === 'address') {
+            item.selected = !item.selected ? 1 : 0 ;
+            item.products.map(p => p.selected = item.selected);
+            if (item.selected) {
+                this.dispatchViewService.selectedProducts = this.dispatchViewService.selectedProducts.concat(item.products.map(p => p.id));
+            } else {
+                this.dispatchViewService.selectedProducts =
+                    this.dispatchViewService.selectedProducts.filter( i => !item.products.find(j => j.id === i));
+            }
+        }
+    }
     mapReady(map) {
         const that = this;
         map.addListener('dragend', function () {
@@ -197,7 +244,6 @@ export class DispatchViewComponent implements OnInit {
             that.latitude = map.center.lat();
             that.longitude = map.center.lng();
             that.zoom = map.zoom;
-            console.log(that.latitude, that.longitude);
         });
         map.addListener('zoom_changed', function () {
             that.mapService.move( map.center.lat(), map.center.lng(), map.zoom) ;

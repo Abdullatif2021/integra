@@ -5,9 +5,7 @@ import {catchError} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {FiltersService} from '../../../service/filters.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class CalenderService {
 
     constructor(

@@ -14,6 +14,10 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {faChevronDown} from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import {faCheck} from '@fortawesome/free-solid-svg-icons/faCheck';
 import {DndModule} from 'ngx-drag-drop';
+import {CoreModule} from '../../../../core/core.module';
+import { SetStatusModalComponent } from './modals/set-status-modal/set-status-modal.component';
+import {NgSelectModule} from '@ng-select/ng-select';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 const routes: Routes = [
     {path: '', component: DispatchViewComponent}
@@ -22,17 +26,23 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
     RouterModule.forChild(routes),
     AgmCoreModule.forRoot(),
     InfiniteScrollModule,
     FontAwesomeModule,
     SharedModule,
-    DndModule
+    DndModule,
+    NgSelectModule,
+    FormsModule
   ],
-  declarations: [DispatchViewComponent],
+  declarations: [DispatchViewComponent, SetStatusModalComponent],
   providers: [
       DispatchViewService,
       {provide: MapsAPILoader, useClass: IntegraaLazyMapApiLoaderService}
+  ],
+  entryComponents: [
+      SetStatusModalComponent
   ]
 })
 export class DispatchViewModule {

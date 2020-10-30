@@ -248,3 +248,18 @@
 .multiple-order {
     top: 3%;
 }
+.integraa-select-a-like {
+    width: 100%;
+    border: 0px;
+    border-bottom: 2px solid gainsboro;
+    background: transparent;
+    padding: 5px;
+    font-size: 12px;
+}
+.integraa-select-div-a-like {
+    padding: 1px;
+    margin-top: 13px;
+}
+.gray-white .odd-bg {
+    background-color: white;
+}
