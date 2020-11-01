@@ -17,10 +17,11 @@ import {DndModule} from 'ngx-drag-drop';
 import {CoreModule} from '../../../../core/core.module';
 import { SetStatusModalComponent } from './modals/set-status-modal/set-status-modal.component';
 import {NgSelectModule} from '@ng-select/ng-select';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormsModule} from '@angular/forms';
+import {GoogleScriptResolver} from '../../../../shared/resolver/google-script.resolver';
 
 const routes: Routes = [
-    {path: '', component: DispatchViewComponent}
+    {path: '', component: DispatchViewComponent, resolve: {map: GoogleScriptResolver}}
 ];
 
 @NgModule({

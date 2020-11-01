@@ -21,6 +21,7 @@ export class PaginationService {
   }
 
   updateLoadingState(state: boolean) {
+    console.log('here we go');
     this.loadingStateChanges.emit(state);
   }
 

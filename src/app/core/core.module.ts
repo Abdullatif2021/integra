@@ -28,31 +28,33 @@ import {faCalendarDay} from '@fortawesome/free-solid-svg-icons/faCalendarDay';
 
 @NgModule({
   imports: [
-    CommonModule,
-    FontAwesomeModule,
-    NgbCollapseModule,
-    NgbModule,
-    NgSelectModule,
-    FormsModule,
-    SharedModule,
-    RouterModule,
-    AngularDraggableModule,
-    AutocompleteLibModule
+      CommonModule,
+      SharedModule,
+      FontAwesomeModule,
+      NgbCollapseModule,
+      NgbModule,
+      NgSelectModule,
+      FormsModule,
+      SharedModule,
+      RouterModule,
+      AngularDraggableModule,
+      AutocompleteLibModule
   ],
   declarations: [
       UserNavComponent,
       MainNavComponent,
       SearchPanelComponent,
       IntegraaModalComponent,
-      GlobalModalsComponent
+      GlobalModalsComponent,
   ],
   exports: [
-    UserNavComponent,
-    MainNavComponent,
-    SearchPanelComponent,
-    IntegraaModalComponent,
-    GlobalModalsComponent
+      UserNavComponent,
+      MainNavComponent,
+      SearchPanelComponent,
+      IntegraaModalComponent,
+      GlobalModalsComponent,
   ],
+
 })
 export class CoreModule {
     constructor() {

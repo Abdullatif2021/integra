@@ -9,7 +9,7 @@ import {PreDispatchDataResolver} from './resolvers/pre-dispatch-data.resolver';
 import {ResultesResolver} from './resolvers/resultes.resolver';
 
 const routes: Routes = [
-    {path: '', component: ScheduleComponent, resolve: { data: PreDispatchDataResolver}, children: [
+    {path: '', component: ScheduleComponent, resolve: { data: PreDispatchDataResolver }, children: [
             {path: '', component: AddressesComponent},
             {path: 'parameters', component: ParametersComponent},
             {path: 'result', component: ResultComponent, resolve: { data: ResultesResolver}},

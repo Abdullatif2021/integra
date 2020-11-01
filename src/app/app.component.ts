@@ -22,9 +22,8 @@ export class AppComponent {
         private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
         private googleApiService: GoogleApiService,
         private preDispatchService: PreDispatchService
-    ) {
-        this.googleApiService.loadApiScripts();
-    }
+    ) {}
+
     @HostListener('window:beforeunload', ['$event'])
     beforeunload(event: Event) {
         event.preventDefault();

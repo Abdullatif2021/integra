@@ -23,7 +23,7 @@ export const FilterConfig = {
             {type: 'text', label: 'Note', key: 'note'}
         ],
         filters: (container, sp) => [
-            {type: 'simpleText', label: 'Nominativo Cliente', key: 'customerName', value: ''},
+            // {type: 'simpleText', label: 'Nominativo Cliente', key: 'customerName', value: ''},
             {type: 'auto-complete', label: 'Cliente', key: 'customerId',
                 getMethod: (term) => container.customersService.getCustomersByName(term),
                 items:  sp.filters_data.customers, labelVal: 'name', value: '', _class: 'auto-complete'},
@@ -37,7 +37,7 @@ export const FilterConfig = {
                 items: sp.filters_data.products_type, labelVal: 'type'},
             {type: 'auto-complete', label: 'Categoria', key: 'categoryId', items: sp.filters_data.categories,
                 labelVal: 'name', value: '', getMethod: (term) => container.getCategoriesByName(term), _class: 'auto-complete'},
-            {type: 'simpleText', label: 'Nominativo Destinatario', key: 'recipientName', value: ''},
+            // {type: 'simpleText', label: 'Nominativo Destinatario', key: 'recipientName', value: ''},
             {type: 'auto-complete', label: 'Destinatario', key: 'recipientId', labelVal: 'name',
                 getMethod: (term) => container.recipientsService.getRecipientsByName(term),
                 items: sp.filters_data.recipient, _class: 'auto-complete'},

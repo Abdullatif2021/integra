@@ -82,7 +82,6 @@ export class SearchPanelComponent implements OnInit {
       });
       this.filtersService.fields.subscribe((data) => {
           this.fieldsData = data ;
-          console.log(this.fieldsData);
           this.filters = Object.assign({}, data.fields.default_filters);
           this._active_filters = Object.assign({}, data.fields.default_filters);
           if ( this.loaded ) {
@@ -137,7 +136,6 @@ export class SearchPanelComponent implements OnInit {
   }
 
   filter() {
-      // filtersData,
       const placeholders = {};
       if (this.filters_data && this.filters_data.caps_group && this.filters.recipientCap) {
           if (typeof this.filters['recipientCap'] === 'object') {
@@ -146,6 +144,13 @@ export class SearchPanelComponent implements OnInit {
               placeholders['recipientCap'] = this.filters['recipientCap'];
           }
       }
+
+      Object.keys(this.filters).forEach(filter => {
+           const field = this.filtersFields.find(f => f.key === filter);
+           if (field.type === 'auto-complete') {
+               this.filters[filter] = this.filters[filter][field.labelVal];
+           }
+      });
 
       this.filtersService.updateFilters(this.filters, placeholders) ;
       this._active_filters = Object.assign({}, this.filters) ;

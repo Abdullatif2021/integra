@@ -41,9 +41,6 @@ export class DispatchViewComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.paginationService.updateLoadingState(false);
-        this.paginationService.updateCurrentPage(-1);
-        this.paginationService.updateResultsCount(-1);
         this.loadData();
         this.mapsAPILoader.load().then(() => {
             this.loadPath();
@@ -154,6 +151,9 @@ export class DispatchViewComponent implements OnInit {
         if (data && data.length && data[0].state === 'prepared') {
             this.handleActions(true);
         }
+        this.paginationService.updateLoadingState(false);
+        this.paginationService.updateCurrentPage(-1);
+        this.paginationService.updateResultsCount(-1);
     }
 
     handleActions(isPrepared) {

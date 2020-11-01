@@ -34,6 +34,7 @@ import {faChevronLeft} from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { CommentsComponent } from './components/comments/comments.component';
 import {FormsModule} from '@angular/forms';
 import {faDownload} from '@fortawesome/free-solid-svg-icons/faDownload';
+import {GoogleScriptResolver} from './resolver/google-script.resolver';
 
 @NgModule({
   imports: [
@@ -74,7 +75,8 @@ import {faDownload} from '@fortawesome/free-solid-svg-icons/faDownload';
   ],
   providers: [
       PlacesAutocompleteService,
-      GoogleApiService
+      GoogleApiService,
+      GoogleScriptResolver
   ],
 })
 export class SharedModule {
