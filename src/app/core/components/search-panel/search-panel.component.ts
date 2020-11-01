@@ -146,8 +146,8 @@ export class SearchPanelComponent implements OnInit {
       }
 
       Object.keys(this.filters).forEach(filter => {
-           const field = this.filtersFields.find(f => f.key === filter);
-           if (field.type === 'auto-complete') {
+           const field = this.filtersFields.find(f => typeof f.key === 'object' ? f.key[0] === filter : f.key === filter );
+           if (field && field.type === 'auto-complete') {
                this.filters[filter] = this.filters[filter][field.labelVal];
            }
       });
