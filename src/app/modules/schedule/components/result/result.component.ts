@@ -8,12 +8,13 @@ import {NotMatchesTreeComponent} from '../../parts-components/not-matches-tree/n
 import {DragAndDropService} from '../../../../service/drag-and-drop.service';
 import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {ListTreeService} from '../../service/list-tree.service';
-import {MapService} from '../../service/map.service';
+import {MapService} from '../../../../service/map.service';
 import {MapMarker} from '../../../../core/models/map-marker.interface';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {NotFixedTreeComponent} from '../../parts-components/not-fixed-tree/not-fixed-tree.component';
 import {BackProcessingService} from '../../../../service/back-processing.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-result',
@@ -32,8 +33,10 @@ export class ResultComponent implements OnInit, OnDestroy {
       private mapService: MapService,
       protected preDispatchService: PreDispatchService,
       private modalService: NgbModal,
-      private backProcessingService: BackProcessingService
-  ) {
+      private backProcessingService: BackProcessingService,
+      private translate: TranslateService,
+      ) {
+          translate.setDefaultLang('itly');
       this.preDispatchData = this.route.snapshot.parent.data.data ;
       this.preDispatch = this.route.snapshot.parent.params.id;
       this.scheduleResults = this.route.snapshot.data.data.scheduleResults;
@@ -68,7 +71,7 @@ export class ResultComponent implements OnInit, OnDestroy {
   notFixedCount = [];
   movedNotFixedStorage = [];
   selected_sets = [];
-
+  errors = {sets: {}};
   async ngOnInit() {
       this.loadPostmen();
       const results = await this.listTreeService.listNode(this.preDispatch,
@@ -92,6 +95,9 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   async assignPostman(event, set, day) {
+      if (this.notFixedProductsTableShown) {
+          return ;
+      }
       this.resultsService.assignPostman(event.id, set.id).subscribe(
           data => {
               if (
@@ -195,14 +201,28 @@ export class ResultComponent implements OnInit, OnDestroy {
   collectSelectedSets() {
       const sets = [] ;
       this.selected.forEach(item => {
-          if ( item._type === 'set' && !item.is_distenta_created) { sets.push(item.id); }
+          if ( item._type === 'set' && !item.is_distenta_created) { sets.push({id: item.id, name: item.name}); }
       });
       return sets ;
   }
 
   makeDispatchesVisible() {
+
+      this.selected_sets = this.collectSelectedSets();
+
       if (!this.selected_sets.length) {
           return this.snotifyService.warning('Nessuna distinta selezionata', { showProgressBar: false, timeout: 1500 });
+      }
+
+      this.errors.sets = {}
+      this.selected_sets.forEach(set => {
+          if (!set.name) {
+              this.errors.sets[set.id] = 1;
+          }
+      });
+
+      if (Object.keys(this.errors.sets).length) {
+          return this.snotifyService.warning('Some sets does not have name', {showProgressBar: false});
       }
       this.resultsService.makeDispatchesVisible(this.preDispatch, this.selected_sets).subscribe(
           data => {
@@ -215,7 +235,14 @@ export class ResultComponent implements OnInit, OnDestroy {
                   this.selected_sets = [];
                   this.all_selected = false ;
               } else {
-                  this.snotifyService.error(data.message,  { showProgressBar: false, timeout: 1500 });
+                  if (data.statusCode === 510) {
+                      window.parent.postMessage({runPreDispatch: this.preDispatchData, data: {
+                          ignoreDivide: false,
+                          force_run: 'planning'
+                      }}, '*');
+                  } else {
+                      this.snotifyService.error(data.message,  { showProgressBar: false, timeout: 1500 });
+                  }
               }
           }, error => {
               this.snotifyService.error('Qualcosa è andato storto!!',  { showProgressBar: false, timeout: 1500 });
@@ -250,8 +277,8 @@ export class ResultComponent implements OnInit, OnDestroy {
          const icon = `https://mt.google.com/vt/icon/text=${priority}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000` +
          `&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1` ;
          let infoWindowText = `<table class="table"><thead><tr><th class="text-center">Order</th>
-                                    <th scope="col" class="text-center">Recipient</th><th class="text-center">Act code</th>
-                                    <th class="text-center">Product</th><th class="text-center">Barcode</th></tr></thead><tbody>`;
+                                    <th scope="col" class="text-center">Destinatario</th><th class="text-center">Codice Atto</th>
+                                    <th class="text-center">Prodotto</th><th class="text-center">Codice a Barre</th></tr>`;
          elm.groups.forEach(group => {
              group.products.forEach(product => {
                  infoWindowText += `<tr><th class="text-center">${product.priority + 1}</th>
@@ -359,21 +386,25 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   async dropNotFixed(event, target, index) {
-      this.dragAndDropService.drop(index, target);
-      const elm = this.dragAndDropService.drag_elm ;
-      if (elm.parent) {
-          elm.parent.children = elm.parent.children.filter( ix => ix.id !== elm.id );
-      }
-      elm.fromNotFixed = true ;
-      elm._hint = 'not_fixed' ;
-      elm.parent = target;
-      target.quantity++;
-      target.children.splice(index, 0, elm);
-      this.updateItemsMarkers(target);
-      this.backProcessingService.blockExit('Some Items was not saved, are you sure you want to exit');
-      this.movedNotFixedStorage = this.movedNotFixedStorage.filter(ix => ix.id !== elm.id);
-      this.movedNotFixedStorage.push({id: elm.id, set: target.id, index: index});
-  }
+        this.dragAndDropService.drop(index, target);
+        const elmements = this.dragAndDropService.drag_elm ;
+        elmements.forEach(single => {
+            if (single.parent) {
+                console.log('here we go');
+                single.parent.children = single.parent.children.filter( ix => ix.id !== single.id );
+            }
+            single.selected = false ;
+            single.fromNotFixed = true ;
+            single._hint = 'not_fixed' ;
+            single.parent = target;
+            target.quantity += single.productsCount;
+            target.children.splice(index, 0, single);
+            this.movedNotFixedStorage = this.movedNotFixedStorage.filter(ix => ix.id !== single.id);
+            this.movedNotFixedStorage.push({id: single.id, set: target.id, index: index});
+        })
+        this.updateItemsMarkers(target);
+        this.backProcessingService.blockExit('Some Items was not saved, are you sure you want to exit');
+    }
 
   updateItemsMarkers(set) {
       let marker = 0 ;
@@ -394,8 +425,8 @@ export class ResultComponent implements OnInit, OnDestroy {
           this.movedNotFixedStorage = this.movedNotFixedStorage.concat(save);
           this.snotifyService.error('Qualcosa è andato storto spostando il prodotto', { showProgressBar: false, timeout: 1500 });
       } else {
-          console.log('saved succesffuly', this.dragAndDropService.readyToShowMap)
           if (this.dragAndDropService.readyToShowMap) {
+              this.notFixedProductsTableShown = false ;
               this.scheduleService.showRightSideMap();
           }
           this.backProcessingService.unblockExit();
@@ -461,7 +492,8 @@ export class ResultComponent implements OnInit, OnDestroy {
               data => { this.updateItemsMarkers(target); }
           );
       } else {
-          this.resultsService.orderTreeNode(result.item.addressId, index).subscribe(
+          console.log('here we go');
+          this.resultsService.orderTreeNode(result.item.addressId, index, target.id).subscribe(
               data => {
                   this.updateItemsMarkers(target);
                   this.loadPath(this.selected_set, true);
@@ -610,6 +642,12 @@ export class ResultComponent implements OnInit, OnDestroy {
       return this.snotifyService.success('Dati spostati correttamente', { showProgressBar: false, timeout: 1500 });
   }
 
+  changeDispatchName(event, item) {
+      item.name = event.target.value.trim();
+      if (item.name) {
+          this.errors.sets[item.id] = false;
+      }
+  }
 
   ngOnDestroy() {
       this.unsubscribe.next();

@@ -32,3 +32,41 @@
     margin: auto 5px auto 4px;
     color: #212121;
 }
+
+
+.select-container {
+    cursor: pointer;
+    display: flex;
+}
+.selected{
+    width: 21px;
+    height: 21px;
+    border-radius: 20px;
+    margin: auto 5px;
+    font-size: 13px;
+    text-align: center;
+    padding: 0px 0px;
+    background-color: #fcda4b;
+    border: 1px solid #fcda4b ;
+    color: #000000;
+}
+.not-selected{
+    width: 21px;
+    height: 21px;
+    border-radius: 20px;
+    margin: auto 5px;
+    font-size: 13px;
+    text-align: center;
+    padding: 0px 0px;
+    background-color: #fff;
+    border: 1px solid #444 ;
+    color: #fff;
+}
+.select-all-container {
+    margin: 0px 2px;
+}
+.select-all-container .selected, .select-all-container .not-selected {
+    width: 17px;
+    height: 17px;
+    font-size: 12px;
+}

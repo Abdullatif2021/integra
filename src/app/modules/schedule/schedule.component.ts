@@ -5,7 +5,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {BuildingLocationInterface} from '../../core/models/building.interface';
 import {PlanningService} from '../../service/planning/planning.service';
-import {MapService} from './service/map.service';
+import {MapService} from '../../service/map.service';
 import {MapMarker} from '../../core/models/map-marker.interface';
 import {SnotifyService} from 'ng-snotify';
 import {BackProcessingService} from '../../service/back-processing.service';
@@ -16,6 +16,7 @@ import {ScheduleService} from './service/schedule.service';
 import {PageDirective} from '../../shared/directives/page.directive';
 import {PreDispatchGlobalActionsService} from '../../service/pre-dispatch-global-actions.service';
 import {AppConfig} from '../../config/app.config';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-schedules',
@@ -56,7 +57,9 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private scheduleService: ScheduleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
-    ) {
+        private translate: TranslateService,
+        ) {
+            translate.setDefaultLang('itly');
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data;
         this.exportResultsLink = AppConfig.endpoints.exportPreDispatchResults(this.preDispatchData.id);
@@ -230,7 +233,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             that.latitude = map.center.lat();
             that.longitude = map.center.lng();
             that.zoom = map.zoom;
-            console.log(that.latitude, that.longitude);
         });
         map.addListener('zoom_changed', function () {
             that.mapService.move( map.center.lat(), map.center.lng(), map.zoom) ;

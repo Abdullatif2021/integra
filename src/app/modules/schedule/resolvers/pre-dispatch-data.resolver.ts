@@ -3,14 +3,12 @@ import { Resolve, RouterStateSnapshot } from '@angular/router';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import {PreDispatchService} from '../../../service/pre-dispatch.service';
-import {PlacesAutocompleteService} from '../../../shared/service/places.autocomplete.service';
 
 @Injectable()
 export class PreDispatchDataResolver implements Resolve<any> {
 
     constructor(
         private preDispatchService: PreDispatchService,
-        // private placesAutocompleteService: PlacesAutocompleteService
     ) {
     }
 

@@ -19,7 +19,7 @@ import {BackProcessingService} from '../../../../service/back-processing.service
 import {LocatingService} from '../../../../service/locating/locating.service';
 import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-global-actions.service';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
-
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-pre-dispatch',
   templateUrl: './pre-dispatch.component.html',
@@ -53,7 +53,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       private modalService: NgbModal,
       public router: Router,
       public backProcessingService: BackProcessingService,
-      public preDispatchGlobalActionsService: PreDispatchGlobalActionsService
+      public preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
   ) { }
 
 

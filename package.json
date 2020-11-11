@@ -29,6 +29,8 @@
     "@ng-bootstrap/ng-bootstrap": "^3",
     "@ng-select/ng-select": "^2.15.1",
     "@ngx-loading-bar/http-client": "^2.2.0",
+    "@ngx-translate/core": "^10.0.2",
+    "@ngx-translate/http-loader": "^3.0.1",
     "ajv": "^6.10.0",
     "angular-ng-autocomplete": "^2.0.1",
     "angular2-draggable": "^2.3.2",

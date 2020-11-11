@@ -1,6 +1,9 @@
 <div class="comments-container">
   <div class="new-comment">
     <div class="comments-title">{{title}}</div>
+    <ng-container *ngIf="file">
+        <input type="file" class="mb-2 mt-2" (change)="setFile($event)">
+    </ng-container>
     <textarea class="form-control comment-input" #commentInput></textarea>
     <button class="integraa-btn new-comment-button" (click)="addComment(commentInput)">Salva</button>
     <div class="clear-both"></div>
@@ -9,10 +12,18 @@
   <div class="comments-list">
     <div class="comment mt-2" *ngFor="let comment of comments">
       <div class="comment-header">
-        <div class="comment-user">{{comment.user ? comment.user : 'Nome Operatore'}}:</div>
+        <div class="comment-user">{{comment.user ? comment.user.full_name : 'Nome Operatore'}}:</div>
         <div class="comment-date">{{comment.created_at}}</div>
       </div>
-      <div class="comment-text">{{comment.note}}</div>
+      <div class="comment-body">
+        <div class="comment-text">{{comment.note}}</div>
+        <div class="comment-file text-truncate" *ngIf="comment.file">
+          <a href="{{AppConfig.api_url + comment.file}}" target="_blank">
+            <fa-icon [icon]="['fa','download']"></fa-icon>
+            {{comment.original_file_name}}
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

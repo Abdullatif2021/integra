@@ -2,6 +2,7 @@ import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {LoadingService} from '../../../service/loading.service';
 import {LoadingStateInterface} from '../../../core/models/loading-state.interface';
 import {takeUntil} from 'rxjs/internal/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-loading',
@@ -15,8 +16,11 @@ export class LoadingComponent implements OnInit, OnDestroy {
   unsubscribe = new EventEmitter();
 
   constructor(
-      private loadingService: LoadingService
-  ) { }
+      private loadingService: LoadingService,
+      private translate: TranslateService
+      ) {
+          translate.setDefaultLang('itly');
+      }
 
   ngOnInit() {
     this.loadingService.loadingState.pipe(takeUntil(this.unsubscribe)).subscribe(

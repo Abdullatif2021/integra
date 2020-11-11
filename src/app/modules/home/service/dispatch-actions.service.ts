@@ -34,9 +34,14 @@ export class DispatchActionsService {
         });
     }
 
-    prepareDispatch(ids, confirm = false): Promise<any> {
+    prepareDispatch(way, ids, confirm = false): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            const method = this.dispatchService.prepare(ids, confirm);
+            let method = null ;
+            if (way === 'selected') {
+                method = this.dispatchService.prepare(ids, confirm);
+            } else {
+                method = this.dispatchService.prepareWithFilters(confirm);
+            }
             this.actionsService.run(method, 'Prepare in corso', (result) => {
                 setTimeout(() => {
                     this.reloadData.emit(true);
@@ -45,9 +50,9 @@ export class DispatchActionsService {
                 return 'Distinte Prepared successfully';
             }, (error) => {
                 reject(error);
-                setTimeout(() => {
-                    this.reloadData.emit(true);
-                }, 500);
+                if (error.statusCode === 421) {
+                    return 'La borsa non è preparata deve prima essere abbinata ad un operatore';
+                }
                 return error.error ? error.error.message : (error.message ? error.message : 'Error');
             });
         });
@@ -56,14 +61,33 @@ export class DispatchActionsService {
     uploadDayAttachment(day, attachment) {
         return new Promise<any>((resolve, reject) => {
             const method = this.dispatchService.uploadDayAttachment(day, attachment);
-            this.actionsService.run(method, 'Uploading Attachment', (result) => {
+            this.actionsService.run(method, 'Caricamento allegato', (result) => {
                 resolve(result);
-                return 'Attachment added successfully';
+                return 'L\'allegato è stato caricato con successo';
             }, (error) => {
                 reject(error);
                 return error.error ? error.error.message : (error.message ? error.message : 'Error');
             });
         });
+    }
+
+    assignToUser(way, user, items = null) {
+        return new Promise<any>((resolve, reject) => {
+            let method = null;
+            if (way === 'selected') {
+                method = this.dispatchService.assignToUser(items, user);
+            } else {
+                method = this.dispatchService.assignToUserByFilters(user);
+            }
+            this.actionsService.run(method, 'Assegnazione di Distinta', (result) => {
+                this.reloadData.emit(true);
+                resolve(result);
+                return 'Distinta assegnata con successo';
+            }, (error) => {
+                reject(error);
+                return error.error ? error.error.message : (error.message ? error.message : 'Error');
+            });
+        })
     }
 
 }

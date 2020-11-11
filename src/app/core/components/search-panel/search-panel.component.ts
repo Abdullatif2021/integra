@@ -5,6 +5,7 @@ import {RecipientsService} from '../../../service/recipients.service';
 import {ActionsService} from '../../../service/actions.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../shared/directives/modal.directive';
+import { TranslateService , TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-search-panel',
@@ -19,8 +20,11 @@ export class SearchPanelComponent implements OnInit {
       private recipientsService: RecipientsService,
       private actionsService: ActionsService,
       private componentFactoryResolver: ComponentFactoryResolver,
-      private modalService: NgbModal
-  ) {}
+      private modalService: NgbModal,
+      private translate: TranslateService
+  ) {
+    translate.setDefaultLang('itly');
+  }
 
   isCollapsed = true ;
   _search: any ;

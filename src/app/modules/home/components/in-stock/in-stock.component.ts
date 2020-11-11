@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TablesConfig } from '../../../../config/tables.config';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-in-stock',
@@ -8,7 +9,14 @@ import { TablesConfig } from '../../../../config/tables.config';
 })
 export class InStockComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+
+        private translate: TranslateService,
+
+    ) {
+        translate.setDefaultLang('itly');
+        const browserLang = translate.getBrowserLang();
+      }
 
   productsTable = TablesConfig.table.productsTable ;
   citiesTable = TablesConfig.simpleTable.citiesTable ;

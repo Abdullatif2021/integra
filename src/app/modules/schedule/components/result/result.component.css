@@ -276,3 +276,9 @@
     font-size: 12px;
     margin-top: 3px;
 }
+.with-error {
+    border: 1px solid red;
+}
+.error-msg {
+    color: #F44336;
+}

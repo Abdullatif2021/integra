@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule , HttpClient} from '@angular/common/http';
 import { UserNavComponent } from './components/user-nav/user-nav.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -25,6 +26,8 @@ import {AngularDraggableModule} from 'angular2-draggable';
 import { GlobalModalsComponent } from './components/global-modals/global-modals.component';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {faCalendarDay} from '@fortawesome/free-solid-svg-icons/faCalendarDay';
+import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 @NgModule({
   imports: [
@@ -37,7 +40,17 @@ import {faCalendarDay} from '@fortawesome/free-solid-svg-icons/faCalendarDay';
     SharedModule,
     RouterModule,
     AngularDraggableModule,
-    AutocompleteLibModule
+    AutocompleteLibModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+      provide: TranslateLoader,
+      useFactory: (http: HttpClient) => {
+      return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+      },
+      deps: [HttpClient],
+      },
+      })
   ],
   declarations: [
       UserNavComponent,
@@ -51,7 +64,8 @@ import {faCalendarDay} from '@fortawesome/free-solid-svg-icons/faCalendarDay';
     MainNavComponent,
     SearchPanelComponent,
     IntegraaModalComponent,
-    GlobalModalsComponent
+    GlobalModalsComponent,
+    TranslateModule
   ],
 })
 export class CoreModule {
@@ -71,3 +85,4 @@ export class CoreModule {
         library.add(faCalendarWeek);
     }
 }
+

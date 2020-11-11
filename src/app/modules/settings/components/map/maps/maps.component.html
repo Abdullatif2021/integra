@@ -20,15 +20,15 @@
   <div class="container-fluid">
     <div class="row setting-row">
       <div class="col-5 wide-col">
-        <label for="setting-key-{{setting.id}}">API key</label>
+        <label for="setting-key-{{setting.id}}">{{'settings.maps.api_key'|translate}}</label>
         <input (change)="edit($event, 'name', setting)" id="setting-key-{{setting.id}}" value="{{setting.name}}" type="text" class="api-key-input">
       </div>
       <div class="col-3 wide-col">
-        <label for="setting-daily-limit-{{setting.id}}">Limite giornaliero</label>
+        <label for="setting-daily-limit-{{setting.id}}">{{'settings.maps.daily_limit'|translate}}</label>
         <input (change)="edit($event, 'limit_day', setting)" id="setting-daily-limit-{{setting.id}}" value="{{setting.limit_day}}" type="number" class="api-daily-limit-input">
       </div>
       <div class="col-3 wide-col">
-        <label for="setting-monthly-limit-{{setting.id}}">Limite mensile</label>
+        <label for="setting-monthly-limit-{{setting.id}}">{{'settings.maps.monthly_limit'|translate}}</label>
         <input (change)="edit($event, 'limit_month', setting)" id="setting-monthly-limit-{{setting.id}}" value="{{setting.limit_month}}" type="number" class="api-monthly-limit-input">
       </div>
       <div class="col-1 wide-col">

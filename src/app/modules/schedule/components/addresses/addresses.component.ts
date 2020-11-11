@@ -10,10 +10,11 @@ import {AddressesActionsService} from '../../service/addresses.actions.service';
 import {SnotifyService} from 'ng-snotify';
 import {ACAddress} from '../../../../core/models/address.interface';
 import {PlanningService} from '../../../../service/planning/planning.service';
-import {MapService} from '../../service/map.service';
+import {MapService} from '../../../../service/map.service';
 import {ScheduleService} from '../../service/schedule.service';
 import {BackProcessingService} from '../../../../service/back-processing.service';
 import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-global-actions.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-addresses',
@@ -34,8 +35,11 @@ export class AddressesComponent implements OnInit, OnDestroy {
         private mapService: MapService,
         private scheduleService: ScheduleService,
         private backProcessingService: BackProcessingService,
-        private preDispatchGlobalActionsService: PreDispatchGlobalActionsService
+        private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
+        private translate: TranslateService,
     ) {
+        translate.setDefaultLang('itly');
+        const browserLang = translate.getBrowserLang();
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data ;
     }

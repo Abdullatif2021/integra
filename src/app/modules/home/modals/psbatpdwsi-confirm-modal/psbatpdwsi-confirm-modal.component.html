@@ -2,11 +2,11 @@
   <div class="modal-container">
     <div class="modal-body">
       <div class="no-filters-warning-message">
-        Esiste una Pre-distinta {{data.data[0].name}} [{{data.data[0].code}}]  che ha dei prodotti della stessa categoria e stessa strada, i prodotti saranno aggiunti a quella pre-distinta.
+        {{'homew.modals.psbatpdwsi.tit1' | translate}} {{data.data[0].name}} [{{data.data[0].code}}]  {{'homew.modals.psbatpdwsi.tit2' | translate}}
       </div>
       <div class="btns-container mt-3">
-        <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="addToPreDispatch(modal)">Continua</button>
-        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Annulla</button>
+        <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="addToPreDispatch(modal)">{{'homew.modals.psbatpdwsi.value1' | translate}}</button>
+        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'homew.modals.psbatpdwsi.value2' | translate}}</button>
         <div class="clear-both"></div>
       </div>
     </div>

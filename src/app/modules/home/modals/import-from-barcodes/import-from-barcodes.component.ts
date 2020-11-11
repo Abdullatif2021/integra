@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ModalComponent} from '../modal.component';
 import {ProductsService} from '../../../../service/products.service';
 import {FiltersService} from '../../../../service/filters.service';
-
+import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'app-import-from-barcodes',
   templateUrl: './import-from-barcodes.component.html',
@@ -14,9 +14,12 @@ export class ImportFromBarcodesComponent extends ModalComponent implements OnIni
 
   constructor(
       private productsService: ProductsService,
-      private filtersService: FiltersService
+      private filtersService: FiltersService,
+      private translate: TranslateService,
   ) {
     super() ;
+    translate.setDefaultLang('itly');
+    const browserLang = translate.getBrowserLang();
   }
 
   ngOnInit() {

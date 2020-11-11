@@ -4,7 +4,7 @@ import {ProductsService} from '../../../../service/products.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {Subject} from 'rxjs';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
-
+import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'app-pwsisbs-confirm-modal',
   templateUrl: './pwsisbs-confirm-modal.component.html',
@@ -14,9 +14,12 @@ export class PwsisbsConfirmModalComponent extends ModalComponent implements OnIn
 
   constructor(
       private preDispatchActionsService: PreDispatchActionsService,
-      protected productsService: ProductsService
+      protected productsService: ProductsService,
+      private translate: TranslateService,
   ) {
-      super();
+    super();
+    translate.setDefaultLang('itly');
+    const browserLang = translate.getBrowserLang();
   }
 
   unsubscribe: Subject<void> = new Subject();

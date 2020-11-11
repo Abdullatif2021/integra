@@ -1,5 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {PaginationService} from '../../../service/pagination.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-pagination',
@@ -24,7 +25,10 @@ export class PaginationComponent implements OnInit {
       {key: 'Tutto', value: 9000000},
   ]
 
-  constructor(private paginationService: PaginationService) { }
+  constructor(private paginationService: PaginationService , private translate: TranslateService
+    ) {
+        translate.setDefaultLang('itly');
+    }
 
   ngOnInit() {
     this.paginationService.resultsCountChanges.subscribe((results: number) => {
@@ -33,6 +37,7 @@ export class PaginationComponent implements OnInit {
     });
     this.paginationService.loadingStateChanges.subscribe((state: boolean) => {
       this.loading = state ;
+      console.log(this.loading);
       this.current_page = this.paginationService.current_page ;
     });
     this.paginationService.currentPageChanges.subscribe((page: number) => {

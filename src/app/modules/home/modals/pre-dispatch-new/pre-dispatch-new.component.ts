@@ -8,7 +8,8 @@ import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
-
+import {OwnTranslateService} from './../../../../service/translate.service';
+import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'app-pre-dispatch-new',
   templateUrl: './pre-dispatch-new.component.html',
@@ -23,8 +24,12 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit, 
       public paginationService: PaginationService,
       private modalService: NgbModal,
       private preDispatchService: PreDispatchService,
-  ) {
-      super();
+      private translate: TranslateService,
+  )
+  {
+    super();
+    translate.setDefaultLang('itly');
+    const browserLang = translate.getBrowserLang();
   }
 
   name = '' ; // the new pre-dispatch name
@@ -49,11 +54,11 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit, 
     if (this.filtersService.specials.streets && !this.filtersService.specials.streets.all) { this.filtersCount++; }
 
     // get total filtered products counts and subscribe to the count changes.
-      this.filteredProductsCount = this.paginationService.resultsCount ;
-      this.paginationService.resultsCountChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
-        data => {
-          this.filteredProductsCount = data;
-        }
+    this.filteredProductsCount = this.paginationService.resultsCount ;
+    this.paginationService.resultsCountChanges.pipe(takeUntil(this.unsubscribe)).subscribe(
+      data => {
+        this.filteredProductsCount = data;
+      }
     );
 
   }

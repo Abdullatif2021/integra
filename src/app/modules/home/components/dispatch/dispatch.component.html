@@ -1,32 +1,8 @@
 <div class="d-flex tables-area full-width" *ngIf="viewType === 'table'">
   <div class="medium-table v-wide-col">
-    <app-simple-table #postmenTable (changed)="changePostman($event)" [getMethod]="postmenGetMethod" [table]="postmenTableConfig"></app-simple-table>
+    <app-simple-table #postmenTable (changed)="postmanChanged($event)" [getMethod]="postmenGetMethod" [table]="postmenTableConfig"></app-simple-table>
   </div>
   <div class="v-large-table v-wide-col">
     <app-table #dispatchTable [items]="dispatchList" [table]="dispatchTableConfig" (orderChange)="orderChanged($event)" (selected)="selectedItemsChanged($event)" [parent]="this"></app-table>
-  </div>
-</div>
-
-<div class="d-flex tables-area full-width" *ngIf="viewType === 'calendar'">
-  <div class="calender-view-container">
-
-    <div class="small-table v-wide-col">
-        <app-simple-table #calenderPostmenTable [table]="customPostmenTableConfig" [mid_height]="true" [getMethod]="calenderPostmenGetMethod" (changed)="changeCalenderPostman($event)"></app-simple-table>
-        <app-simple-table #calenderReviserTable [table]="reviserTableConfig" [mid_height]="true" [getMethod]="calenderPostmenGetMethod"></app-simple-table>
-    </div>
-    <div class="small-table v-wide-col">
-        <app-simple-table #calenderDispatchTable [multi]="false" [table]="simpleDispatchTableConfig" [getMethod]="dispatchGetMethod" (changed)="changeCalenderDispatches($event)"></app-simple-table>
-    </div>
-
-    <div class="large-table v-wide-col">
-        <app-postmen-calendar
-                [data]="calendar_data" [view]="subViewType" [detailsGetMethod]="getSetDetailsMethod"
-                [availableUsersGetMethod]="availableUsersGetMethod" (setAssigned)="assignSetToUser($event)"
-                (dayAttachmentSelected)="updateDayAttachment($event)" (dayNoteUpdated)="updateDayNote($event)"
-                (postmanDayNoteUpdated)="updatePostmanDayNote($event)" (setNoteAdded)="addNoteToSet($event)"
-                [loadMoreMethods]="loadMoreMethods"
-        ></app-postmen-calendar>
-    </div>
-
   </div>
 </div>

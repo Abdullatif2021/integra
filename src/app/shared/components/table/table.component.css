@@ -1,12 +1,16 @@
 .table-container{
     background-color: #fff !important;
     /*height: 518px;*/
-    height: calc( 100vh - 180px);
+    /*height: calc( 100vh - 180px);*/
+    height: calc( 100vh - 340px);
     overflow-y: scroll;
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
     position: relative;
     scrollbar-width: thin;
+}
+.height-higher {
+    height: calc( 100vh - 240px);
 }
 .table-container::-webkit-scrollbar-thumb {
     background-color: #C1BEBC;
@@ -155,7 +159,7 @@
 /* } actions styles */
 
 .table-skeleton-loading{
-    height: 592px;
+    height: calc( 100vh - 265px);
     background-color: #fff;
 }
 .table-skeleton-container{
@@ -240,4 +244,22 @@
 .progress-error{
     background-color: #f44336;
     color: #fff;
+}
+.multiple-order {
+    top: 3%;
+}
+.integraa-select-a-like {
+    width: 100%;
+    border: 0px;
+    border-bottom: 2px solid gainsboro;
+    background: transparent;
+    padding: 5px;
+    font-size: 12px;
+}
+.integraa-select-div-a-like {
+    padding: 1px;
+    margin-top: 13px;
+}
+.gray-white .odd-bg {
+    background-color: white;
 }

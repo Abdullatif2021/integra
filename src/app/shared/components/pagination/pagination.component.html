@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-end" [ngClass]="{'dark-theme':theme=='dark'}" *ngIf="!loading;else skeleton">
-  <ng-container *ngIf="!hide">
+  <ng-container *ngIf="results_count > -1">
     <!-- Results per page {  -->
-    <div class="d-inline-flex rpp-label"><label class="rpg-label">Risultati per pagina</label></div>
+    <div class="d-inline-flex rpp-label"><label class="rpg-label">{{'shared.pagination.result_per_page'| translate}}</label></div>
     <div class="d-inline-flex rpp-select"><ng-select placeholder="{{rpp}}" bindLabel="key" [clearable]="false" (change)="rppChanged($event)" [items]="pages_list" class="integraa-select results-per-page"></ng-select></div>
     <div *ngIf="results_count" class="results-count">
       <span class="ml-1">
@@ -49,8 +49,6 @@
     <!-- } Page select -->
   </ng-container>
 </div>
-
-
 <ng-template #skeleton>
   <div class="d-flex justify-content-end">
     <div class="rect-loading-skeleton mt-2 pagination-loading"></div>

@@ -3,32 +3,31 @@
     <div class="modal-body">
       <ng-container *ngIf="data.method === 'filters' &&  !filtersCount && !confirmed; else ActualModal" >
         <div class="no-filters-warning-message">
-          ATTENZIONE! ci sono dei filtri non applicati. Per continuare e necessario applicarli, vuoi pracedere
+            {{'home.modals.pre_merge.filter_applied' | translate}}
         </div>
         <div class="btns-container mt-3">
-          <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="confirm()">Esegui</button>
-          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
+          <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="confirm()">{{'home.modals.pre_merge.run' | translate}}</button>
+          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'home.modals.pre_merge.go_out' | translate}}</button>
           <div class="clear-both"></div>
         </div>
       </ng-container>
       <ng-template #ActualModal>
-        <h6>Pre-Distinte Uniti</h6>
+        <h6>{{'home.modals.pre_merge.united' | translate}}</h6>
         <div class="selected-count-confirm">
-          ATTENZIONE! Stai per processare <b>{{preDispatchService.selectedPreDispatches.length}}</b> righe. Assicurati che la quantità sia corretta,
-          altrimenti riprova o contatta l'assistenz. Premi su Conferma se non hai dubbi sull'operazione.
+          {{'home.modals.pre_merge.about_try' | translate}} <b>{{preDispatchService.selectedPreDispatches.length}}</b> {{'home.modals.pre_merge.correct_quantity' | translate}}
         </div>
         <div class="row mt-4">
-          <div class="col-12 text-danger mb-2" *ngIf="error===1">Il nome è obbligatorio</div>
-          <div class="col-12 text-danger mb-2" *ngIf="error===2">Il nome deve essere più di 3 caratteri</div>
+          <div class="col-12 text-danger mb-2" *ngIf="error===1">{{'home.modals.pre_merge.req_name' | translate}}</div>
+          <div class="col-12 text-danger mb-2" *ngIf="error===2">{{'home.modals.pre_merge.name_lenth1' | translate}}</div>
           <div class="col-8 align-self-center">
-            <label>Nserisci Nome Pre-Distinta</label>
-            <input (change)="changeName($event)" type="text" class="form-control name-input" placeholder="Nome">
+            <label>{{'home.modals.pre_merge.ins_name' | translate}}</label>
+            <input (change)="changeName($event)" type="text" class="form-control name-input" placeholder="{{'home.modals.pre_merge.place_holder' | translate}}">
           </div>
         </div>
 
         <div class="btns-container mt-3">
-          <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">Esegui</button>
-          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
+          <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">{{'home.modals.pre_merge.run' | translate}}</button>
+          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'home.modals.pre_merge.go_out' | translate}}</button>
           <div class="clear-both"></div>
         </div>
       </ng-template>

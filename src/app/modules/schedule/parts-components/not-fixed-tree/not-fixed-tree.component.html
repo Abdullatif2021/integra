@@ -3,9 +3,14 @@
     <div class="items">
       <div class="street-items-header">
         <div class="d-flex">
-          <div class="col-1"></div>
-          <div class="col-1"></div>
-          <div class="col-4 wide-col"><div class="street-items-header-cell">Indirizzo</div></div>
+          <div class="col-2 wide-col">
+            <div class="select-container select-all-container" (click)="selectAll()">
+              <div class="selected" *ngIf="selected.length && selected.length === list.length"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+              <div class="selected" *ngIf="selected.length && selected.length !== list.length"><fa-icon [icon]="['fa','minus']"></fa-icon></div>
+              <div class="not-selected" *ngIf="!selected.length"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+            </div>
+          </div>
+          <div class="col-4"><div class="street-items-header-cell">Indirizzo</div></div>
           <div class="col-3 text-center"><div class="street-items-header-cell">Consegne</div></div>
           <div class="col-3 wide-col pl-1"><div class="street-items-header-cell">Ora d’arrivo</div></div>
         </div>
@@ -27,14 +32,13 @@
   <ng-container  *ngIf="!item.skeleton;">
     <div class="street-item" [ngClass]="{'odd-bg': idx%2, 'even-bg': !(idx%2)}" [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"
          (dndStart)="onDragStart($event, item)">
-      <div class="d-flex"s>
-        <div class="col-1 wide-col d-flex">
-          <div dndHandle class="drag-handle">☰</div>
-        </div>
-        <div class="col-1 wide-col d-flex">
-          <div class="m-auto select-container">
-            <div class="ml-1 priority-container" *ngIf="!item.selected "><span></span></div>
+      <div class="d-flex">
+        <div class="col-2 wide-col d-flex">
+          <div class="select-container" (click)="select(item)">
+            <div class="selected" *ngIf="item.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+            <div class="not-selected" *ngIf="!item.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
           </div>
+          <div dndHandle class="drag-handle">☰</div>
         </div>
         <div class="col-4 wide-col pl-3"> <div class="text">{{item.address}}</div> </div>
         <div class="col-3 text-center"> <div class="count">{{item.productsCount}}</div> </div>

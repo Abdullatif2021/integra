@@ -4,7 +4,7 @@ import {FiltersService} from '../../../../service/filters.service';
 import {ProductsService} from '../../../../service/products.service';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
-
+import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'app-pre-dispatch-add-direct',
   templateUrl: './pre-dispatch-add-direct.component.html',
@@ -15,9 +15,11 @@ export class PreDispatchAddDirectComponent extends ModalComponent implements OnI
         private preDispatchActionsService: PreDispatchActionsService,
         public productsService: ProductsService,
         public filtersService: FiltersService,
-        private preDispatchService: PreDispatchService
+        private preDispatchService: PreDispatchService,
+        private translate: TranslateService,
     ) {
-        super();
+      super();
+      translate.setDefaultLang('itly');
     }
 
     name = '' ;

@@ -20,18 +20,18 @@
     <div class="container-fluid">
         <div class="row setting-row">
             <div class="col-5 wide-col">
-                <label for="setting-product-{{setting.id}}">Prodotto : </label>
+                <label for="setting-product-{{setting.id}}">{{'settings.serivce_time.product' |translate}} : </label>
                 <input id="setting-product-{{setting.id}}" value="{{setting.type}}" type="text" class="status-type-input" disabled>
             </div>
             <div class="col-3-half wide-col">
-                <label for="setting-single-service-time-{{setting.id}}">Tempo di servizio singolo</label>
+                <label for="setting-single-service-time-{{setting.id}}">{{'settings.serivce_time.s_service_time' |translate}}</label>
                 <input id="setting-single-service-time-{{setting.id}}" (change)="edit($event, 'single_time', setting)" value="{{setting.single_time}}" type="number" class="single-service-time-input">
-                <span> Min.</span>
+                <span> {{'settings.serivce_time.min' |translate}}.</span>
             </div>
             <div class="col-3-half wide-col">
-                <label for="setting-multiple-service-time-{{setting.id}}">Tempo di servizio singolo</label>
+                <label for="setting-multiple-service-time-{{setting.id}}">{{'settings.serivce_time.s_service_time2' |translate}}</label>
                 <input id="setting-multiple-service-time-{{setting.id}}" (change)="edit($event, 'multiple_time', setting)" value="{{setting.multiple_time}}" type="number" class="multiple-service-time-input">
-                <span> Min.</span>
+                <span> {{'settings.serivce_time.min2' |translate}}.</span>
             </div>
         </div>
     </div>

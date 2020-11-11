@@ -31,16 +31,18 @@ import {AddressesActionsService} from './service/addresses.actions.service';
 import {PreDispatchDataResolver} from './resolvers/pre-dispatch-data.resolver';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MapService} from './service/map.service';
 import {ResultsService} from './service/results.service';
 import {ResultesResolver} from './resolvers/resultes.resolver';
 import {ScheduleService} from './service/schedule.service';
 import { NotMatchesTreeComponent } from './parts-components/not-matches-tree/not-matches-tree.component';
 import {DndModule} from 'ngx-drag-drop';
-import {MarkersService} from './service/markers.service';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { NotFixedTreeComponent } from './parts-components/not-fixed-tree/not-fixed-tree.component';
-import {GoogleMapsConfig} from './service/google-maps-config';
+import {IntegraaLazyMapApiLoaderService} from '../../shared/service/integraa-lazy-map-api-loader.service';
+import {MapsAPILoader} from '@agm/core/services/maps-api-loader/maps-api-loader';
+import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { HttpClientModule , HttpClient} from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -58,6 +60,15 @@ import {GoogleMapsConfig} from './service/google-maps-config';
     FormsModule,
     ReactiveFormsModule,
     NgxMaterialTimepickerModule,
+    TranslateModule.forRoot({
+        loader: {
+        provide: TranslateLoader,
+        useFactory: (http: HttpClient) => {
+        return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+        },
+        deps: [HttpClient],
+        },
+        })
   ],
   declarations: [
       ScheduleComponent,
@@ -76,13 +87,10 @@ import {GoogleMapsConfig} from './service/google-maps-config';
       ContextMenuService,
       AddressesActionsService,
       PreDispatchDataResolver,
-      MapService,
       ResultsService,
       ResultesResolver,
       ScheduleService,
-      MarkersService,
-      {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig}
-
+      {provide: MapsAPILoader, useClass: IntegraaLazyMapApiLoaderService}
   ],
   entryComponents: [
       NotMatchesTreeComponent,

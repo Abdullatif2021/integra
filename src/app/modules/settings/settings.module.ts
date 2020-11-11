@@ -9,6 +9,9 @@ import { SettingsHeaderComponent } from './components/_shared/settings-header/se
 import {NgSelectModule} from '@ng-select/ng-select';
 import { MapsComponent } from './components/map/maps/maps.component';
 import { PaginationOptionsComponent } from './components/general/pagination-options/pagination-options.component';
+import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { HttpClientModule , HttpClient} from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -16,7 +19,16 @@ import { PaginationOptionsComponent } from './components/general/pagination-opti
     SharedModule,
     CoreModule,
     SettingsRoutingModule,
-    NgSelectModule
+    NgSelectModule,
+    TranslateModule.forRoot({
+      loader: {
+      provide: TranslateLoader,
+      useFactory: (http: HttpClient) => {
+      return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+      },
+      deps: [HttpClient],
+      },
+      })
   ],
   declarations: [
       SettingsComponent,

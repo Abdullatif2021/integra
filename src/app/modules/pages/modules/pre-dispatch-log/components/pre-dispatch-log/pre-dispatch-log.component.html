@@ -1,0 +1,38 @@
+<div class="log-container">
+  <div class="log-header">
+    <div class="log-header-element log-more-col"></div>
+    <div class="log-header-element log-date-col">{{'pages.dispatch_log.data' | translate}}</div>
+    <div class="log-header-element log-operator-col">{{'pages.dispatch_log.addess' | translate}}</div>
+    <div class="log-header-element log-state-col">{{'pages.dispatch_log.status' | translate}}</div>
+  </div>
+  <div class="log-data-container">
+    <ng-container *ngFor="let item of log; let idx = index"  [ngTemplateOutlet]="log_row" [ngTemplateOutletContext]="{item:item, idx:idx}"></ng-container>
+  </div>
+</div>
+
+<ng-template #log_row let-item="item" let-idx="idx">
+  <div [ngClass]="{'odd-bg': idx%2, 'even-bg': !(idx%2)}" class="log-row">
+    <div class="log-col log-more-col">
+      <div class="more-button" *ngIf="item.data && item.data.length" (click)="expand(item)">
+        <fa-icon *ngIf="!item.expanded && item.data" [icon]="['fa','chevron-right']" placement="bottom" ngbTooltip="Di Più"></fa-icon>
+        <fa-icon *ngIf="item.expanded && item.data" [icon]="['fa','chevron-up']"  placement="bottom" ngbTooltip="Di meno"></fa-icon>
+      </div>
+    </div>
+    <div class="log-col log-date-col">{{item.date}}</div>
+    <div class="log-col log-operator-col">{{item.user.full_name}}</div>
+    <div class="log-col log-state-col">
+      {{item.logMessage}}
+    </div>
+  </div>
+  <ng-container *ngIf="item.expanded && item.data">
+    <div class="log-row" *ngFor="let subitem of item.data; let subIdx = index" [ngClass]="{'odd-bg': (idx+subIdx+1)%2, 'even-bg': !((idx+subIdx+1)%2)}">
+      <div class="log-col log-more-col"></div>
+      <div class="log-col log-date-col">{{item.date}}</div>
+      <div class="log-col log-operator-col">{{item.user.full_name}}</div>
+      <div class="log-col log-state-col">
+        {{subitem.code}}
+        <img (click)="showLog(subitem.id)" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="Visualizza">
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

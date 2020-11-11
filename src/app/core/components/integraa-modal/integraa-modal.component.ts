@@ -1,6 +1,8 @@
 import {Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {IntegraaModalService} from '../../../service/integraa-modal.service';
 import {BackProcessingService} from '../../../service/back-processing.service';
+import {TranslateService} from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-integraa-modal',
@@ -13,8 +15,12 @@ export class IntegraaModalComponent implements OnInit {
   constructor(
       private componentFactoryResolver: ComponentFactoryResolver,
       private integraaModalService: IntegraaModalService,
-      private backProcessingService: BackProcessingService
-  ) { }
+      private backProcessingService: BackProcessingService,
+      private translate: TranslateService,
+    ) {
+        translate.setDefaultLang('itly');
+
+    }
 
   @ViewChild('modal') modal ;
   @ViewChild('modalsContainer') modalsContainer ;

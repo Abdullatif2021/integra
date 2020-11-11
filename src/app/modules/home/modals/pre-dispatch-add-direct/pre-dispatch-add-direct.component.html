@@ -3,26 +3,25 @@
     <div class="modal-body">
       <ng-container *ngIf="data.method === 'filters' &&  !filtersCount && !confirmed; else ActualModal" >
         <div class="no-filters-warning-message">
-          ATTENZIONE! Non è stato applicato nessun filtro, sei sicuro di voler eseguire?
+          {{'home.modals.pre_direct.filter_applied' | translate}}
         </div>
         <div class="btns-container mt-3">
-          <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="run()">Esegui</button>
-          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
+          <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="run()">{{'home.modals.pre_direct.run' | translate}}</button>
+          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'home.modals.pre_direct.go_out' | translate}}</button>
           <div class="clear-both"></div>
         </div>
       </ng-container>
       <ng-template #ActualModal>
-        <h6>Crea nuova Pre-Distinta</h6>
+        <h6>{{'home.modals.pre_direct.create_one' | translate}}</h6>
         <div *ngIf="data.method != 'filters'" class="selected-count-confirm">
-          ATTENZIONE! Stai per processare <b>{{selectedCount}}</b> righe. Assicurati che la quantità sia corretta,
-          altrimenti riprova o contatta l'assistenz. Premi su Conferma se non hai dubbi sull'operazione.
+          {{'home.modals.pre_direct.about_try' | translate}} <b>{{selectedCount}}</b>{{'home.modals.pre_direct.correct_quantity' | translate}}
         </div>
 
-        <div class="" *ngIf="data.method === 'filters'">Confirm Operation !</div>
+        <div class="" *ngIf="data.method === 'filters'">{{'home.modals.pre_direct.Confirm' | translate}} </div>
 
         <div class="btns-container mt-3">
-          <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">Esegui</button>
-          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
+          <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">{{'home.modals.pre_direct.run' | translate}}</button>
+          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'home.modals.pre_direct.go_out' | translate}}</button>
           <div class="clear-both"></div>
         </div>
       </ng-template>

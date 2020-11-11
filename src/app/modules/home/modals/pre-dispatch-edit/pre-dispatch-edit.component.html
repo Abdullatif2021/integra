@@ -4,31 +4,31 @@
 
       <!-- Actual body -->
       <ng-container *ngIf="!showConfirm; else ConfrimDialog">
-        <h6>Modifica pre-distinta</h6>
+        <h6>{{'home.modals.pre_edit.modifi' | translate}}</h6>
         <div class="row mt-4">
-          <div class="col-12 text-danger mb-2" *ngIf="error===1">Il nome è obbligatorio</div>
-          <div class="col-12 text-danger mb-2" *ngIf="error===2">Il nome deve essere più di 3 caratteri</div>
+          <div class="col-12 text-danger mb-2" *ngIf="error===1">{{'home.modals.pre_edit.req_name' | translate}}</div>
+          <div class="col-12 text-danger mb-2" *ngIf="error===2">{{'home.modals.pre_edit.name_lenth1' | translate}}</div>
           <div class="col-8 align-self-center">
-            <label>Inserisci Nome Pre-Distinta</label>
-            <input (change)="changeName($event)" value="{{name}}" type="text" class="form-control name-input" placeholder="Nome">
+            <label>{{'home.modals.pre_edit.enter_name' | translate}}</label>
+            <input (change)="changeName($event)" value="{{name}}" type="text" class="form-control name-input" placeholder="{{'home.modals.pre_edit.place_holder' | translate}}">
           </div>
         </div>
         <div class="btns-container mt-3">
-          <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">Salva</button>
-          <button type="button" class="integraa-btn bg-light float-right" (click)="confirmClose(modal)">Esci</button>
+          <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">{{'home.modals.pre_edit.save' | translate}}</button>
+          <button type="button" class="integraa-btn bg-light float-right" (click)="confirmClose(modal)">{{'home.modals.pre_edit.go_out' | translate}}</button>
           <div class="clear-both"></div>
         </div>
       </ng-container>
 
       <!-- Confirm Dialog -->
       <ng-template #ConfrimDialog>
-        <h6 class="text-warning ">Esci</h6>
+        <h6 class="text-warning ">{{'home.modals.pre_edit.go_out' | translate}}</h6>
         <div class="row mt-4">
-          <h6 class="col-12 mb-2" >Sei sicuro di voler uscire?</h6>
+          <h6 class="col-12 mb-2" >{{'home.modals.pre_edit.quit' | translate}}</h6>
         </div>
         <div class="btns-container mt-3">
-          <button type="button" class="integraa-btn bg-warning ml-2 float-right" (click)="confirmClose(modal)">Si</button>
-          <button type="button" class="integraa-btn bg-light float-right" (click)="showConfirm = false">No</button>
+          <button type="button" class="integraa-btn bg-warning ml-2 float-right" (click)="confirmClose(modal)">{{'home.modals.pre_edit.yes' | translate}}</button>
+          <button type="button" class="integraa-btn bg-light float-right" (click)="showConfirm = false">{{'home.modals.pre_edit.no' | translate}}</button>
           <div class="clear-both"></div>
         </div>
       </ng-template>

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule , HttpClient} from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
@@ -17,6 +17,12 @@ import {MapBoxGeocodeService} from './service/locating/map-box.geocode.service';
 import {PlanningService} from './service/planning/planning.service';
 import {GoogleDirectionsService} from './service/planning/google-directions.service';
 import {StreetsLocatingService} from './service/locating/streets-locating.service';
+import {MapService} from './service/map.service';
+import {MarkersService} from './service/markers.service';
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+
+
 
 @NgModule({
   declarations: [
@@ -31,6 +37,16 @@ import {StreetsLocatingService} from './service/locating/streets-locating.servic
     SharedModule,
     LoadingBarHttpClientModule,
     SnotifyModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+      provide: TranslateLoader,
+      useFactory: (http: HttpClient) => {
+      return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+      },
+      deps: [HttpClient],
+      },
+      })
   ],
   providers: [
       { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
@@ -43,7 +59,9 @@ import {StreetsLocatingService} from './service/locating/streets-locating.servic
       LocatingService,
       PlanningService,
       GoogleDirectionsService,
-      StreetsLocatingService
+      StreetsLocatingService,
+      MapService,
+      MarkersService,
   ],
   bootstrap: [AppComponent]
 })

@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ApiResponseInterface} from '../../../../../core/models/api-response.interface';
 import {SettingsService} from '../../../../../service/settings.service';
 import {first, withLatestFrom} from 'rxjs/internal/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-maps',
@@ -13,8 +14,11 @@ export class MapsComponent implements OnInit {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private settingsService: SettingsService
-    ) { }
+        private settingsService: SettingsService,
+        private translate: TranslateService
+        ) {
+            translate.setDefaultLang('itly');
+        }
     settings = [];
     provider: number ;
     loading = true ;

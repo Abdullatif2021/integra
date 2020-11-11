@@ -13,6 +13,7 @@ import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-
 import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {Tree} from '@angular/router/src/utils/tree';
 import {ListTreeService} from '../../service/list-tree.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-parameter',
@@ -33,8 +34,9 @@ export class ParametersComponent implements OnInit, OnDestroy {
         private backProcessingService: BackProcessingService,
         private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
         private listTreeService: ListTreeService,
-
+        private translate: TranslateService,
     ) {
+        translate.setDefaultLang('itly');
         this.preDispatch = this.route.snapshot.parent.params.id;
         this.preDispatchData = this.route.snapshot.parent.data.data ;
 
@@ -97,6 +99,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
         departure_date: null,
         departure_time: null
     };
+    nowDate = Date.now();
     // modals
 
     @ViewChild('verylowmatchesModal') verylowmatchesModal: NgbModalRef ;
@@ -346,11 +349,19 @@ export class ParametersComponent implements OnInit, OnDestroy {
     validateAll() {
         let valid = true ;
         if (!this.data.departure_date ||
-            (typeof this.data.departure_date !== 'object' && !this.data.departure_date.match(/^\d{2}[./-]\d{2}[./-]\d{4}$/))) {
+            (typeof this.data.departure_date !== 'object' && !this.data.departure_date.match(/^\d{2}[./-]\d{2}[./-]\d{4}$/))
+        ) {
             valid = false;
-            this.errors['departure_date'] = true;
+            this.errors['departure_date'] = 1;
+        } else {
+            const dbd = this.data.departure_date ;
+            const date = `${dbd.year}-${dbd.month}-${(parseInt(dbd.day, 10) + 1)}`;
+            if ((new Date(date)).getTime() < (new Date()).getTime() ) {
+                this.errors['departure_date'] = 2;
+                valid = false;
+            }
         }
-        if (!this.data.departure_time) {
+        if (!this.data.departure_time || parseInt(this.data.departure_time.split(':')[0], 10) > 23) {
             valid = false ;
             this.errors['departure_time'] = true;
         }
@@ -394,7 +405,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
                         ]
                     }
                 );
-                return 'Data Saved !';
+                return 'Successo';
             }
             if (!this.can_plan) {
                 this.snotifyService.error('Nessun oggetto da pianificare!', {
@@ -402,10 +413,10 @@ export class ParametersComponent implements OnInit, OnDestroy {
                     timeout: 6000,
                     showProgressBar: false,
                 });
-                return 'Data Saved !';
+                return 'Successo';
             }
             this.startPlanning();
-            return 'Data Saved !' ;
+            return 'Successo' ;
         }, (e) => {
             if (this.data.departure_time && !this.data.departure_date) {
                 this.errors['departure_date'] = 1;

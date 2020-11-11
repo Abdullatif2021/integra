@@ -9,6 +9,7 @@ import {
     Output,
     SimpleChanges, OnChanges, OnDestroy
 } from '@angular/core';
+import { TranslateService , TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-table',
@@ -17,12 +18,16 @@ import {
 })
 export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDestroy {
 
-    constructor(private cdr: ChangeDetectorRef) {}
+    constructor(private cdr: ChangeDetectorRef , private translate: TranslateService)
+    {
+      translate.setDefaultLang('itly');
+    }
 
     cells_size = [] ;
     @ViewChild('tableRow') tableRowElement;
     @Input() table: any = {} ;
     @Input() items: any = [] ;
+    @Input() klass = '' ;
     @Input() parent: any ;
     isLoading = true ;
     @Output() selected = new EventEmitter() ;
@@ -32,11 +37,12 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
     isCollapsed = {} ;
     itemsProgressSubscriptions = {} ;
     itemsProgressWarning = {} ;
-
+    selectable = true;
     // the refresh counter, used to check if there is a need to reset selected items.
     @Input() refresh: number ;
 
     ngOnInit() {
+        if (this.items && this.items.length) { this.loading(false); }
     }
 
     loading(state) {
@@ -65,27 +71,8 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
         return this.selectedProducts.find((elm) => elm.id === item.id ) ;
     }
 
-    // subToProgress(item, action) {
-    //     if (typeof action.progress !== 'undefined' && typeof this.itemsProgressSubscriptions[item.id] === 'undefined') {
-    //         const handle = action.progress(item, this.parent);
-    //         if (!handle) {
-    //            return '';
-    //         }
-    //         this.itemsProgressSubscriptions[item.id] = handle.subscribe(
-    //             state => {
-    //                 if (state.progress) {
-    //                     this.itemsProgress[item.id] = state.progress.toFixed(1) ;
-    //                 }
-    //                 if (state.warning) {
-    //                     this.itemsProgressWarning[item.id] = true ;
-    //                 }
-    //             }
-    //         ) ;
-    //     }
-    //     return '';
-    // }
-
     selectItem(item) {
+        if (!this.selectable) { return ; }
         if (this.selectedProducts.find((elm) => elm.id === item.id  ) !== undefined) {
             this.selectedProducts = this.selectedProducts.filter((elm) => {
                 return item.id !== elm.id ;
@@ -97,6 +84,7 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
     }
 
     selectAll() {
+        if (!this.selectable) { return; }
         if (this.selectedProducts && this.selectedProducts.length) {
             this.selectedProducts = [] ;
         } else {
@@ -111,8 +99,16 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        if (changes.items) {
+            if (this.items && this.items.length) {
+                this.loading(false);
+            }
+        }
         if (changes.items && !changes.refresh) {
             this.selectedProducts = [];
+        }
+        if (changes.table) {
+            this.selectable = typeof this.table.selectable !== 'undefined' ? this.table.selectable : true ;
         }
     }
 

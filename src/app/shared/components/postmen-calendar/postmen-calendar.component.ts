@@ -1,8 +1,9 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {DateFormatter} from '@angular/common/src/pipes/deprecated/intl';
 import {FileSystemFileEntry} from 'ngx-file-drop';
 import {AppConfig} from '../../../config/app.config';
+import {CalenderService} from '../../../modules/home/service/calender.service';
+import {SnotifyService} from 'ng-snotify';
 
 @Component({
   selector: 'app-postmen-calendar',
@@ -15,18 +16,31 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
   @Input() view = 'week';
   @Input() detailsGetMethod = null;
   @Input() availableUsersGetMethod = null;
+  @Input() detailsStatuses = [];
+  @Input() setNoteUpdateMethod = null;
   @Output() setAssigned = new EventEmitter();
   @Output() dayAttachmentSelected = new EventEmitter();
   @Output() dayNoteUpdated = new EventEmitter();
   @Output() postmanDayNoteUpdated = new EventEmitter();
-  @Output() setNoteAdded = new EventEmitter();
+  @Output() weekIndexChanged = new EventEmitter();
+  @Output() dayChanged = new EventEmitter();
+  @Output() postmanDisplayed = new EventEmitter();
 
   current_day = 0;
-  days = ['Lunedi', 'Martedi', 'Mercoledi', 'Giovedi', 'Venerdi', 'Sabato', 'Domenica'];
+  save_day_index = null;
+  days = [  'shared.postmen_calendar.monday',
+            'shared.postmen_calendar.tuesday',
+            'shared.postmen_calendar.wednesday',
+            'shared.postmen_calendar.thursday',
+            'shared.postmen_calendar.friday',
+            'shared.postmen_calendar.saturday',
+            'shared.postmen_calendar.sunday'];
   availableUsers = [];
 
   @ViewChild('editPostmanNoteModal') editPostmanNoteModal ;
   @ViewChild('showMoreAvailablePostmenModal') showMoreAvailablePostmenModal ;
+  @ViewChild('confirmAssignModal') confirmAssignModal ;
+  @ViewChild('confirmStatusChangeModal') confirmStatusChangeModal ;
   @ViewChild('editDayNoteModal') editDayNoteModal ;
   @ViewChild('editDayAttachmentModal') editDayAttachmentModal ;
   activepostman = null ;
@@ -40,26 +54,40 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
   ];
   details = null ;
   moreData = [] ;
-
+  saved_event = null;
   current_day_info = {delivered_expanded: false, not_delivered_expanded: false};
 
   loadMorePage = 1;
   @Input() loadMoreMethods = null ;
   loadMoreSave = null;
   AppConfig = AppConfig;
-  constructor(private modalService: NgbModal) { }
+  current_week_index = 0 ;
+  loading_more = false ;
+  data_sizes = <any>{};
+  week_range = [0, 1, 2, 3, 4, 5, 6];
+  constructor(
+      private modalService: NgbModal,
+      private calenderService: CalenderService,
+      private snotifyService: SnotifyService,
+  ) { }
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+      console.log('changes')
       if (changes.data) {
           this.handleDataChanges(changes);
       }
   }
 
   handleDataChanges(changes) {
-      this.current_day = 0;
+      if (this.save_day_index !== null && this.data) {
+          this.current_day = this.save_day_index ;
+          this.save_day_index = null;
+      } else {
+          this.current_day = 0;
+      }
       this.displayed_postman = null ;
       this.formatted_date = ``;
       if (!this.data) {
@@ -67,7 +95,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
               {skeleton: true}, {skeleton: true}, {skeleton: true}, {skeleton: true}, {skeleton: true},
               {skeleton: true}, {skeleton: true}
           ];
-          return;
+          return this.data_sizes = {postmen: [0], revisore: [0], availablePostmen: [0], availableRevisore: [0]};
       }
       if (!this.data.length) {
           return this.data = null ;
@@ -77,39 +105,61 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
             ${this.data[0].dayNumber} - ${this.data[this.data.length - 1].dayNumber}
              ${this.monthes[date.getMonth()]} ${date.getFullYear()}
           `.trim();
+
+      this.data_sizes = {postmen: 0, revisore: 0, availablePostmen: 0, availableRevisore: 0 };
+      this.data.forEach( day => {
+          Object.keys(this.data_sizes).forEach(key => {
+              this.data_sizes[key] = Math.max(day[key] ? day[key].length : 1, this.data_sizes[key]);
+          });
+      });
+      Object.keys(this.data_sizes).forEach(key => {
+          this.data_sizes[key] = new Array(this.data_sizes[key]).fill(0, 0, this.data_sizes[key]);
+      });
+      console.log(this.data);
   }
 
-  openEditPostmanNoteModal(postman, day) {
+  openEditPostmanNoteModal(event, postman, day) {
+      event.stopPropagation();
       this.activepostman = postman ;
       this.activeday = day;
       this.modalService.open(this.editPostmanNoteModal);
   }
 
-  showMore(day, type) {
+  showMore(day, type, modal = true) {
+      if (this.loading_more) { return ; }
       if (!this.loadMoreMethods || !this.loadMoreMethods[type] || typeof this.loadMoreMethods[type] !== 'function') {
           return ;
       }
       this.loadMoreSave = {
           day: day,
           type: type
-      }
+      };
       this.loadMorePage += 1;
       this.moreData = this.moreData.concat([{skeleton: true}, {skeleton: true}, {skeleton: true}, ]);
+      this.loading_more = true ;
       this.loadMoreMethods[type](day.dayDate, this.loadMorePage).subscribe(
           data => {
               for (let i = 0; i < 3; ++i) { this.moreData.pop(); }
               this.moreData = this.moreData.concat(data.data);
-              console.log(data, this.moreData);
+              this.loading_more = false;
           }
       );
-      this.modalService.open(this.showMoreAvailablePostmenModal, {backdrop: 'static', keyboard: false});
+      if (modal) {
+          // const _day = this.data.find(d => d.dayDate === day);
+          console.log(type);
+
+          if (day[type]) {
+              this.moreData = [...day[type], ...this.moreData];
+          }
+          this.modalService.open(this.showMoreAvailablePostmenModal, {backdrop: 'static', keyboard: false});
+      }
   }
 
   showEvenMore() {
       if (!this.loadMoreSave) {
           return ;
       }
-      this.showMore(this.loadMoreSave.day, this.loadMoreSave.type);
+      this.showMore(this.loadMoreSave.day, this.loadMoreSave.type, false);
   }
 
   closeShowMoreModal(modal) {
@@ -149,70 +199,127 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
 
   saveDayAttachment() {
       if (this.selected_file) {
-          this.activeday.file = this.selected_file.relativePath;
           const fileEntry = this.selected_file.fileEntry as FileSystemFileEntry;
           fileEntry.file((file: File) => {
-              this.dayAttachmentSelected.emit({day: this.activeday.dayDate, file: file});
+              this.dayAttachmentSelected.emit({day: this.activeday.dayDate, file: file, dayObj: this.activeday});
               this.selected_file = null ;
           });
       }
   }
 
-  assignToUser(event) {
-      this.setAssigned.emit({sets: [this.details.id], user: event.id});
+  assignToUser(event, confirm = false) {
+      if (!event) { return ; }
+      if (!confirm) {
+          this.saved_event = event;
+          return this.modalService.open(this.confirmAssignModal);
+      }
+      this.setAssigned.emit({sets: [this.details.id], user: this.saved_event.id});
   }
 
-  changeCurrentDay(step) {
-      if ((this.current_day === 0 && step < 0) || (this.current_day >= this.data.length - 1 && step > 0)) {
-          return ;
+  detailsStatusChanged(event, confirm = false) {
+      if (!confirm) {
+          this.saved_event = event;
+          return this.modalService.open(this.confirmStatusChangeModal);
       }
-      this.current_day += step;
+      if (typeof this.saved_event.handler === 'function') {
+          this.saved_event.handler(this.details);
+      }
   }
 
-  addSetNote($event, type) {
-      if (!this.displayed_postman || !this.displayed_postman.set_id_for_this_day) {
+  resetStatusSelect() {
+      this.details.status = null;
+  }
+
+  async addSetNote(event, type) {
+      if (!this.displayed_postman || typeof this.setNoteUpdateMethod !== 'function') {
           return ;
       }
-      this.setNoteAdded.emit({
-          note: $event,
-          type: type,
-          set: this.displayed_postman.set_id_for_this_day
+      const note = await this.setNoteUpdateMethod(event.text, type, this.displayed_postman, event.file);
+      if (!note) {
+          return ;
+      }
+      if (type === 'internal_note') {
+          this.details.internalNotes = [note.data, ...this.details.internalNotes];
+      } else if (type === 'postman_note') {
+          this.details.postmanNotes = [note.data, ...this.details.postmanNotes];
+      }
+  }
+
+  async displayedPostman(postman, day, emit = true) {
+      if (!postman) {
+          this.displayed_postman = null;
+          return this.postmanDisplayed.emit(null);
+      }
+      this.displayed_postman = postman;
+      if (day) {
+          this.setDay(day);
+      }
+      if (emit) {
+          this.postmanDisplayed.emit({postman: postman, day: day});
+      }
+      this.details = null ;
+      if (typeof this.detailsGetMethod !== 'function' || typeof this.availableUsersGetMethod !== 'function') {
+          return ;
+      }
+
+      // get the available postmen.
+      const ap = await this.availableUsersGetMethod(postman).toPromise().catch(e => {});
+      if (!ap) { return this.snotifyService.error('Something went wrong', {showProgressBar: false}); }
+      this.availableUsers = ap.data;
+
+      // get the details.
+      this.detailsGetMethod(postman).subscribe( data => {
+          this.details = data.data;
+          if (this.details.user && !this.availableUsers.find((item) => item.id === this.details.user.id)) {
+              this.availableUsers.push(this.details.user);
+          }
+          if (this.details.user) {
+              this.details.user = {name: this.details.user.full_name, id: this.details.user.id};
+          }
+          if (this.details.status) {
+              this.details.status = this.detailsStatuses.find(state => state.id === this.details.status);
+          }
       });
   }
 
-  displayedPostman(postman) {
-      if (!postman.set_id_for_this_day) {
-          this.displayed_postman = null ;
-          return this.details = null;
+  setDay(date) {
+      const idx = this.data.map(item => item.dayDate).indexOf(date) ;
+      if (idx > -1) {
+          this.current_day = idx;
       }
-      this.displayed_postman = postman;
-      this.details = null ;
-      if (typeof this.detailsGetMethod === 'function') {
-          this.detailsGetMethod(postman.set_id_for_this_day).subscribe(
-              data => {
-                  data.data.productsByCategories = Object.keys(data.data.productsByCategories).map(
-                      (key) => ({key: key, value: data.data.productsByCategories[key]})
-                  );
-                  data.data.productsByAddresses = Object.keys(data.data.productsByAddresses).map(
-                      (key) => ({key: key, value: data.data.productsByAddresses[key]})
-                  );
-                  data.data.notDeliveredProducts.groups = Object.keys(data.data.notDeliveredProducts.groups).map (
-                      (key) => ({key: key, value: data.data.notDeliveredProducts.groups[key] })
-                  );
-                  data.data.deliveredProducts.groups = Object.keys(data.data.deliveredProducts.groups).map (
-                      (key) => ({key: key, value: data.data.deliveredProducts.groups[key] })
-                  );
-                  this.details = data.data;
-              }
-          );
-          if (typeof this.availableUsersGetMethod === 'function') {
-              this.availableUsersGetMethod(postman.set_id_for_this_day).subscribe(
-                  data => {
-                      this.availableUsers = data.data;
-                  }
-              );
-          }
+  }
+
+  changeWeekIndex(direction) {
+      this.current_week_index += direction;
+      this.weekIndexChanged.emit(this.current_week_index);
+  }
+
+
+  /**
+   * when the user changes the current day.
+   * @param step
+   * emits an object { date: string, reload: boolean } to the dayChanged.
+   */
+  changeCurrentDay(step) {
+      // if the day exists at the prev week.
+      if ((this.current_day === 0 && step < 0)) {
+          this.save_day_index = 7 + step;
+          const date = this.calenderService.getDate(this.data[this.current_day].dayDate, -1) ;
+          this.dayChanged.emit({ date: date, reload: false});
+          return this.changeWeekIndex(-1);
       }
+      // if the day exists at the next week.
+      if (this.current_day >= this.data.length - 1 && step > 0) {
+          const date = this.calenderService.getDate(this.data[this.current_day].dayDate, 1);
+          this.dayChanged.emit({ date: date,  reload: false});
+          return this.changeWeekIndex(1);
+      }
+      // if the day exists at this week.
+      this.current_day += step;
+      this.dayChanged.emit({
+          date: this.data[this.current_day].dayDate,
+          reload: true
+      });
   }
 
   clearSelectedFile() {

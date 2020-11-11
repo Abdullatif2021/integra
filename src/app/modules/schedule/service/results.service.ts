@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import {TreeNodeInterface, TreeNodeResponseInterface} from '../../../core/models/tree-node.interface';
 import {takeUntil} from 'rxjs/internal/operators';
 import {SetClientTreeNodeInterface, SetTreeNodeInterface} from '../../../core/models/set-tree-node.interface';
-import {MarkersService} from './markers.service';
+import {MarkersService} from '../../../service/markers.service';
 
 @Injectable()
 export class ResultsService implements OnDestroy {
@@ -37,7 +37,7 @@ export class ResultsService implements OnDestroy {
                                id: set.id, parent: day, type: 'set', _type: 'set', children: [], text: '', postman: set.postman,
                                quantity: set.quantity, page: 1, expanded: false, setId: set.id, loaded: false, addressId: set.addressId,
                                is_distenta_created: set.is_distenta_created, have_not_fixed_products: set.have_not_fixed_products,
-                               is_missed: set.is_missed
+                               is_missed: set.is_missed, name: set.name, status: set.status
                            });
                         });
                         res.push(day);
@@ -155,9 +155,10 @@ export class ResultsService implements OnDestroy {
         return this.http.post<any>(AppConfig.endpoints.assignToSet(setId), data);
     }
 
-    orderTreeNode(groupId, level) {
+    orderTreeNode(groupId, level, set) {
         const data = {
-            newPriority: level
+            newPriority: level,
+            set: set
         };
         return this.http.post<any>(AppConfig.endpoints.shiftGroupPriority(groupId), data);
     }

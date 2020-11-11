@@ -9,6 +9,7 @@ import {FiltersService} from '../../../../service/filters.service';
 import {ActionsService} from '../../../../service/actions.service';
 import {FilterConfig} from '../../../../config/filters.config';
 import {RecipientsService} from '../../../../service/recipients.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-pre-dispatch-products',
@@ -23,9 +24,13 @@ export class PreDispatchProductsComponent implements OnInit, AfterViewChecked {
       private productsService: ProductsService,
       private filtersService: FiltersService,
       private actionsService: ActionsService,
-      private recipientsService: RecipientsService
-  ) {
-  }
+      private recipientsService: RecipientsService,
+      private translate: TranslateService,
+
+      ) {
+          translate.setDefaultLang('itly');
+          const browserLang = translate.getBrowserLang();
+        }
 
   id: number ;
   table = TablesConfig.table.productsTable ;

@@ -1,27 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../../shared/shared.module';
-import { CoreModule } from '../../core/core.module';
 import { PagesComponent } from './pages.component';
-import { PreDispatchProductsComponent } from './components/pre-dispatch-products/pre-dispatch-products.component';
 import {PagesRoutingModule} from './pages-routing.module';
-import { PreDispatchLogComponent } from './components/pre-dispatch-log/pre-dispatch-log.component';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faChevronRight, faChevronUp} from '@fortawesome/free-solid-svg-icons';
+import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { HttpClientModule , HttpClient} from '@angular/common/http';
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule,
-    CoreModule,
     PagesRoutingModule,
-    FontAwesomeModule
+    TranslateModule.forRoot({
+      loader: {
+      provide: TranslateLoader,
+      useFactory: (http: HttpClient) => {
+      return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+      },
+      deps: [HttpClient],
+      },
+      })
   ],
   declarations: [
       PagesComponent,
-      PreDispatchProductsComponent,
-      PreDispatchLogComponent
   ],
   exports: [
       PagesRoutingModule,

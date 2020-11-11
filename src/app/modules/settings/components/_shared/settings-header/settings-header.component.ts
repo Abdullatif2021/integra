@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings-header',
@@ -7,7 +8,10 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class SettingsHeaderComponent implements OnInit {
 
-  constructor() { }
+  constructor( private translate: TranslateService,
+    ) {
+        translate.setDefaultLang('itly');
+    }
 
   @Output() create = new EventEmitter();
   @Input() create_btn = true ;

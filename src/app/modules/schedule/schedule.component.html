@@ -5,10 +5,10 @@
     <div class="col-xl-4 col-lg-5 col-md-12 v-wide-col mt-md-20px left-col">
       <div class="mt-1">
         <div class="schedule-nav">
-          <button class="btn schedule-nav-btn schedule-nav-left-btn" [ngClass]="{'active': '/schedule/'+preDispatch === router.url}" routerLink="/schedule/{{preDispatch}}">Indirizzi</button>
-          <button class="btn schedule-nav-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/toPlan' === router.url}" routerLink="/schedule/{{preDispatch}}/toPlan">Da pianificare</button>
-          <button class="btn schedule-nav-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/parameters' === router.url}" routerLink="/schedule/{{preDispatch}}/parameters">Parametri</button>
-          <button class="btn schedule-nav-btn schedule-nav-right-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/result' === router.url}" routerLink="/schedule/{{preDispatch}}/result">Risultato</button>
+          <button class="btn schedule-nav-btn schedule-nav-left-btn" [ngClass]="{'active': '/schedule/'+preDispatch === router.url}" routerLink="/schedule/{{preDispatch}}">{{'schedule.schedule1.addresses' | translate}}</button>
+          <button class="btn schedule-nav-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/toPlan' === router.url}" routerLink="/schedule/{{preDispatch}}/toPlan">{{'schedule.schedule1.to_plan' | translate}}</button>
+          <button class="btn schedule-nav-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/parameters' === router.url}" routerLink="/schedule/{{preDispatch}}/parameters">{{'schedule.schedule1.parameters' | translate}}</button>
+          <button class="btn schedule-nav-btn schedule-nav-right-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/result' === router.url}" routerLink="/schedule/{{preDispatch}}/result">{{'schedule.schedule1.result' | translate}}</button>
         </div>
       </div>
       <div class="mt-2 router-container">
@@ -18,22 +18,22 @@
     <div class="col-xl-8 col-lg-7 col-md-12 v-wide-col right-col">
       <div class="mt-1">
         <div class="map-header">
-          <div class="locating-btn integraa-btn" *ngIf="nextAction === 'locating'" (click)="runNextAction()">Localizza</div>
-          <div class="move-to-in-plan-btn integraa-btn" *ngIf="'/schedule/'+preDispatch === router.url && nextAction !== 'locating'" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">Sposta in da pianificare</div>
-          <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url && nextAction !== 'locating'" (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">Sposta in indirizzi</div>
+          <div class="locating-btn integraa-btn" *ngIf="nextAction === 'locating'" (click)="runNextAction()">{{'schedule.schedule1.locate' | translate}}</div>
+          <div class="move-to-in-plan-btn integraa-btn" *ngIf="'/schedule/'+preDispatch === router.url && nextAction !== 'locating'" (click)="moveToInPlan(notFoundItemsWarnongModalRef, false)">{{'schedule.schedule1.move_to_plan' | translate}}  </div>
+          <div class="move-back-to-addresses-btn integraa-btn" *ngIf="'/schedule/'+preDispatch+'/toPlan' === router.url && nextAction !== 'locating'" (click)="moveBackToAddresses(notFoundItemsWarnongModalRef, false)">{{'schedule.schedule1.move_to_addresses' | translate}}</div>
           <!-- Export results {-->
 
           <div class="dropdown position-relative" id="results-move-to-drop-down" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" *ngIf="'/schedule/'+preDispatch+'/result' === router.url && preDispatchData.status === 'planned'">
             <a class="move-back-to-addresses-btn integraa-btn mr-1">
               <fa-icon [icon]="['fa','chevron-down']"></fa-icon>
-              <span class="ml-1">Sposta in</span>
+              <span class="ml-1">{{'schedule.schedule1.move_to' | translate}}</span>
             </a>
             <div class="dropdown-menu integraa-dropdown-menu" aria-labelledby="results-move-to-drop-down">
-              <a class="dropdown-item" (click)="resultsMoveTo('created')">Indirizzi</a>
-              <a class="dropdown-item" (click)="resultsMoveTo('to_planning')">Da pianificare</a>
+              <a class="dropdown-item" (click)="resultsMoveTo('created')">{{'schedule.schedule1.addresses2' | translate}}</a>
+              <a class="dropdown-item" (click)="resultsMoveTo('to_planning')">{{'schedule.schedule1.to_plan2' | translate}}</a>
             </div>
           </div>
-          <a class="move-back-to-addresses-btn integraa-btn ml-1" *ngIf="'/schedule/'+preDispatch+'/result' === router.url && preDispatchData.status === 'planned'" href="{{exportResultsLink}}" target="_blank">Esporta</a>
+          <a class="move-back-to-addresses-btn integraa-btn ml-1" *ngIf="'/schedule/'+preDispatch+'/result' === router.url && preDispatchData.status === 'planned'" href="{{exportResultsLink}}" target="_blank">{{'schedule.schedule1.export' | translate}}</a>
           <!-- } Export results -->
           <div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': false}" [ngStyle]="{width: preDispatchData.percent + '%'}">&nbsp;</div><div class="progress-action-text-value horiz">
             <span class="percent-value">{{preDispatchData.percent}} %</span>
@@ -43,7 +43,7 @@
           <img *ngIf="actionInRun && (preDispatchData.localize_status === 'play' || backProcessingService.isRunningAny(preDispatch))" (click)="stopAction()" src="assets/images/pause.svg" class="action-icon play-pause-icon">
           <img *ngIf="actionInRun && preDispatchData.localize_status !== 'play' && backProcessingService.isRunningAny(preDispatch) !== true" (click)="runNextAction()" src="assets/images/play.svg" class="action-icon play-pause-icon">
           <button class="continue-btn integraa-btn" [ngClass]="{'disabled': !can_plan}" [disabled]="!can_plan"  (click)="next()" *ngIf="'/schedule/'+preDispatch+'/parameters' === router.url">
-            Pianifica
+            {{'schedule.schedule1.plan' | translate}}
           </button>
           <div class="clear-both"></div>
         </div>
@@ -85,34 +85,33 @@
     <div class="modal-body">
       <h6 class="mb-3">
         <fa-icon class="text-warning" [icon]="['fa','exclamation-triangle']"></fa-icon>
-        Il sistema non è riuscito a localizzare gli indirizzo sotto indicati
-      </h6>
+        {{'schedule.schedule1.system_unable_to_locate' | translate}}</h6>
       <div *ngFor="let nFoundItem of nFoundItems" class="mt-2 pr-5 pl-5">
         <h6 class="mb-0"><span class="font-size-13">{{nFoundItem.street}}, {{nFoundItem.houseNumber}}, {{nFoundItem.cap}} {{nFoundItem.city}}</span></h6>
         <div>
           <div class="form-group">
-            <label>Modifica indirizzo</label>
+            <label>{{'schedule.schedule1.chang_adres' | translate}}</label>
             <app-address-input (changed)="notFoundAddressChanged($event, nFoundItem)" [disabled]="latLngInputState[nFoundItem.id]" [_class]="'full-size-ac'" ></app-address-input>
-            <div *ngIf="errors['invalid-building-'+nFoundItem.id] && !latLngInputState[nFoundItem.id]" class="error-msg">Invalid Building Address</div>
+            <div *ngIf="errors['invalid-building-'+nFoundItem.id] && !latLngInputState[nFoundItem.id]" class="error-msg">{{'schedule.schedule1.invalid_building_address' | translate}}</div>
           </div>
           <div class="form-group mb-1">
             <input id="lat-lng-input-activate" (change)="latLngInputActivate($event, nFoundItem, latInput, lngInput)" type="checkbox"> &nbsp;
-            <label for="lat-lng-input-activate">Inserisci Posizione</label>
+            <label for="lat-lng-input-activate">{{'schedule.schedule1.enter_loc' | translate}}</label>
           </div>
           <div class="row">
             <div class="col-6 col-xs-12">
-              <input #latInput (change)="notFoundCoordinatesChanged($event, 'lat', nFoundItem)" [disabled]="!latLngInputState[nFoundItem.id]" type="text" class="form-control" placeholder="Latitudine">
+              <input #latInput (change)="notFoundCoordinatesChanged($event, 'lat', nFoundItem)" [disabled]="!latLngInputState[nFoundItem.id]" type="text" class="form-control" placeholder="{{'schedule.schedule1.plhold_latitude' | translate}}">
             </div>
             <div class="col-6 col-xs-12">
-              <input #lngInput (change)="notFoundCoordinatesChanged($event, 'long', nFoundItem)" [disabled]="!latLngInputState[nFoundItem.id]" type="text" class="form-control" placeholder="Longitudine">
+              <input #lngInput (change)="notFoundCoordinatesChanged($event, 'long', nFoundItem)" [disabled]="!latLngInputState[nFoundItem.id]" type="text" class="form-control" placeholder="{{'schedule.schedule1.plhold_longitude' | translate}}">
             </div>
           </div>
         </div>
         <hr>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close();fixLocation()" class="integraa-btn ml-2 float-right" >Esegui</button>
-        <button type="button" (click)="modal.close();fixLocation(true)" class="integraa-btn integraa-btn-dark ml-2 float-right" >Salta</button>
+        <button type="button" (click)="modal.close();fixLocation()" class="integraa-btn ml-2 float-right" >{{'schedule.schedule1.run' | translate}}</button>
+        <button type="button" (click)="modal.close();fixLocation(true)" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.schedule1.skip' | translate}}</button>
         <div class="clear-both"></div>
       </div>
     </div>
@@ -124,10 +123,10 @@
       <h6 class="mb-3">
         <fa-icon class="text-warning notFoundItemsWarnongModalWarningIcon" [icon]="['fa','exclamation-triangle']"></fa-icon>
       </h6>
-      <h6 class="text-center">Ci sono alcuni indirizzo non trovati, Sicuro do voler procedere?</h6>
+      <h6 class="text-center">{{'schedule.schedule1.addresses_not_found' | translate}}</h6>
       <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close();moveToInPlan(notFoundItemsWarnongModalRef, true)" class="integraa-btn integraa-btn-danger ml-2 float-right" >Esegui</button>
-        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Close</button>
+        <button type="button" (click)="modal.close();moveToInPlan(notFoundItemsWarnongModalRef, true)" class="integraa-btn integraa-btn-danger ml-2 float-right" >{{'schedule.schedule1.run2' | translate}}</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.schedule1.close' | translate}}</button>
         <div class="clear-both"></div>
       </div>
     </div>

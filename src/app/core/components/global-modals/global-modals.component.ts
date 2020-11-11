@@ -5,6 +5,8 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
 import {ProductsService} from '../../../service/products.service';
 import {ModalDirective} from '../../../shared/directives/modal.directive';
+import {TranslateService} from '@ngx-translate/core';
+import {OwnTranslateService} from 'src/app/service/translate.service';
 
 @Component({
     selector: 'app-global-modals',
@@ -19,8 +21,11 @@ export class GlobalModalsComponent implements OnInit, OnDestroy {
     constructor(
         private preDispatchService: PreDispatchService,
         private modalService: NgbModal,
-        private productsService: ProductsService
+        private productsService: ProductsService,
+        private translate: TranslateService,
     ) {
+        translate.setDefaultLang('itly');
+
     }
 
     @ViewChild('confirmPlanningModalRef') planningConfirmModal;

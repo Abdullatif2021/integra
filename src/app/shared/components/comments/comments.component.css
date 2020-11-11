@@ -22,4 +22,11 @@
 }
 .comment-text {
     margin-top: 2px;
+    flex: 1;
+}
+.comment-body {
+    display: flex;
+}
+.comment-file {
+    max-width: 25%;
 }

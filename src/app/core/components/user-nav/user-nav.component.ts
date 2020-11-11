@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
+import {OwnTranslateService} from 'src/app/service/translate.service';
 
 @Component({
   selector: 'app-user-nav',
@@ -6,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-nav.component.css']
 })
 export class UserNavComponent implements OnInit {
-  constructor() { }
+
+  constructor(private translate: TranslateService) {
+      translate.setDefaultLang('itly');
+  }
+
   ngOnInit() {
 
   }

@@ -33,7 +33,7 @@
           <div class="text" #itemText>{{item.text}}</div>
           <div class="right-side">
             <div class="warning" *ngIf="item.warning">!</div>
-            <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
+            <div class="qta" *ngIf="item.qta">{{'schedule.to_plan.quint' | translate}} {{item.qta}}</div>
             <!--<div class="small-more" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>-->
             <!--<div class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown"></div>-->
           </div>
@@ -58,7 +58,7 @@
   <ng-template contextMenuItem  (execute)="reloadNode($event)">
     <div class="context-menu-item">
       <fa-icon class="text-warning" [icon]="['fa','sync']"></fa-icon>
-      <span> Reload </span>
+      <span> {{'schedule.to_plan.reload' | translate}} </span>
     </div>
   </ng-template>
 </context-menu>

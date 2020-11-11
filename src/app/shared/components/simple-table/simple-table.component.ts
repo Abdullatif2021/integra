@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
 import {SnotifyService} from 'ng-snotify';
+import { TranslateService , TranslatePipe } from '@ngx-translate/core';
 
   @Component({
       selector: 'app-simple-table',
@@ -9,8 +10,9 @@ import {SnotifyService} from 'ng-snotify';
   })
   export class SimpleTableComponent implements OnInit, OnChanges {
 
-      constructor(private snotifyService: SnotifyService) {
-      }
+      constructor(private snotifyService: SnotifyService, private translate: TranslateService) {
+          translate.setDefaultLang('itly');
+        }
 
       @Input() table: any = {
           title: '',
@@ -22,6 +24,7 @@ import {SnotifyService} from 'ng-snotify';
       };
       @Input() items;
       @Input() mid_height = false;
+      @Input() single_select_clearable = false;
       @Output() onAction = new EventEmitter();
       @Input() getMethod;
       @Input() multi = true;
@@ -163,7 +166,7 @@ import {SnotifyService} from 'ng-snotify';
       runAction(action, item) {
           if (action.action = 'rename') {
               item._on_action = 'rename' ;
-              return this.delayedAction = {action: action, item: item};;
+              return this.delayedAction = {action: action, item: item};
           }
           this.onAction.emit({action: action, item: item});
       }
@@ -176,7 +179,7 @@ import {SnotifyService} from 'ng-snotify';
       inputActionKeyDown(event) {
           if (event.key === 'Enter') {
               this.dispatchDelayedAction(event.target.value);
-          };
+          }
       }
 
       dispatchDelayedAction(value) {
@@ -227,6 +230,10 @@ import {SnotifyService} from 'ng-snotify';
               }
           }
           if (!this.multi) { // if the table was single element select.
+              if (this.selected[item.id] && this.single_select_clearable) {
+                  this.selected = {};
+                  return this.changed.emit(null);
+              }
               this.selected = {};
               this.selected[item.id] = item;
               return this.changed.emit(item);
@@ -283,6 +290,13 @@ import {SnotifyService} from 'ng-snotify';
       setSearchValue(value) {
           this.changeState = 'auto'; // value changed because of code change.
           this.searchValue = value;
+      }
+
+      forceSelect(item) {
+          this.selected = {};
+          if (item) {
+              this.selected[item.id] = item;
+          }
       }
 
 }

@@ -95,6 +95,10 @@ export class FiltersService {
               _filters['streets_ids'] = this.specials.streets.items;
           }
       }
+
+      if (this.specials.postmen && this.specials.postmen.items.length) {
+          _filters['postmen'] = this.specials.postmen.items;
+      }
       if (grouping !== 'by_cap') {
           _filters['by_clients_Filter'] = '1';
       }

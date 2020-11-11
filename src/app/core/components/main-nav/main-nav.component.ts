@@ -1,3 +1,4 @@
+import { TranslateService} from '@ngx-translate/core';
 import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
@@ -7,7 +8,10 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class MainNavComponent implements OnInit {
 
-  constructor() { }
+  constructor(private translate: TranslateService) {
+
+    translate.setDefaultLang('itly');
+  }
 
   @Input() active_tab = 'to-deliver';
 

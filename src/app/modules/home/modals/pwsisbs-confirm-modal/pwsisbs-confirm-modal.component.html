@@ -2,7 +2,7 @@
   <div class="modal-container">
     <div class="modal-body">
       <div class="no-filters-warning-message">
-        Ci sono {{data.data.products_count ? data.data.products_count : 'Null'}} prodotti nella lista da consegnare della stessa categoria e stessa strada che non sono aggiunti, i prodotti saranno aggiunti automaticamente.
+        {{'home.modals.pw_conf.tit1' | translate}} {{data.data.products_count ? data.data.products_count : 'Null'}} {{'home.modals.pw_conf.tit2' | translate}}
       </div>
       <div class="items-display-area">
         <div class="pagination-area">
@@ -12,10 +12,10 @@
         </div>
         <div class="items-area">
           <div class="to-add-item header-item">
-            <div class="to-add-item-category">Category</div>
-            <div class="to-add-item-barcode">Barcode</div>
-            <div class="to-add-item-recipient">Recipient</div>
-            <div class="to-add-item-address">Address</div>
+            <div class="to-add-item-category">{{'home.modals.pw_conf.cat' | translate}}</div>
+            <div class="to-add-item-barcode">{{'home.modals.pw_conf.bar' | translate}}</div>
+            <div class="to-add-item-recipient">{{'home.modals.pw_conf.recip' | translate}}</div>
+            <div class="to-add-item-address">{{'home.modals.pw_conf.ad' | translate}}</div>
           </div>
           <div class="to-add-item" *ngFor="let product of items; let idx = index"  [ngClass]="{'odd-bg':(idx%2),'even-bg':!(idx%2)}">
             <div class="to-add-item-category">{{product.category}}</div>
@@ -41,8 +41,8 @@
         </div>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="runContinue(modal)">Continua</button>
-        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Annulla</button>
+        <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="runContinue(modal)">{{'home.modals.pw_conf.value1' | translate}}</button>
+        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'home.modals.pw_conf.value2' | translate}}</button>
         <div class="clear-both"></div>
       </div>
     </div>

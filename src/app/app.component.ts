@@ -7,6 +7,8 @@ import {PreDispatchGlobalActionsService} from './service/pre-dispatch-global-act
 import {BuildingLocationInterface} from './core/models/building.interface';
 import {GoogleApiService} from './shared/service/google.api.service';
 import {PreDispatchService} from './service/pre-dispatch.service';
+import {itl} from '../assets/i18n/itl';
+
 
 @Component({
     selector: 'app-root',
@@ -15,7 +17,6 @@ import {PreDispatchService} from './service/pre-dispatch.service';
     providers: [{provide: NgbDateParserFormatter, useClass: NgbDateITParserFormatter}]
 })
 export class AppComponent {
-
     constructor(
         private backProcessingService: BackProcessingService,
         private locatingService: LocatingService,

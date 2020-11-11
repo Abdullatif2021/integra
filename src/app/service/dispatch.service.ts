@@ -20,17 +20,16 @@ export class DispatchService {
 
     selectedDispatches = [] ;
 
-    getDispatches(noProgress = false, postmen, order_field = null, order_method = '1') {
+    getDispatches(noProgress = false, postmen, order_field = null, order_method = '1', state = 'NOT_PREAPERED') {
         const options = { params: new HttpParams(), headers: new HttpHeaders()};
-        if (noProgress) {
-            options.headers = options.headers.append('ignoreLoadingBar', '');
-        }
+        if (noProgress) { options.headers = options.headers.append('ignoreLoadingBar', '');}
+        options.params = options.params.set('state', state) ;
         options.params = options.params.set('page', this.paginationService.current_page) ;
         options.params = options.params.set('pageSize', this.paginationService.rpp) ;
         options.params = this.filtersService.getHttpParams(options.params) ;
         if (order_field) {
-            options.params = options.params.set('key', order_field) ;
-            options.params = options.params.set('order_method', order_method) ;
+            options.params = options.params.set('sortKey', order_field) ;
+            options.params = options.params.set('orderMethod', order_method) ;
         }
         if (postmen && postmen.items.length) {
             if (postmen.all) {
@@ -44,40 +43,76 @@ export class DispatchService {
         );
     }
 
-    getCalenderWeeklyDispatches(page, rpp, postmen, name, order) {
+    getCalenderWeeklyDispatches(page, rpp, postmen, revisors, name, order, week = 0, state = 'NOT_PREAPERED', date = null) {
         const options = { params: new HttpParams(), headers: new HttpHeaders()};
+        options.params = options.params.set('state', state) ;
+        options.params = options.params.set('dateIndex', `${week}`) ;
         options.params = options.params.set('page', page) ;
         options.params = options.params.set('pageSize', rpp) ;
         options.params = this.filtersService.getHttpParams(options.params) ;
-        if (postmen) {
-            options.params = options.params.set('postmen', postmen) ;
-        }
-        if (name) {
-            options.params = options.params.set('code', name) ;
-        }
+        if (postmen || revisors) { options.params = options.params.set('postmen',
+            postmen ? postmen.concat(revisors ? revisors : []) : revisors) ; }
+        if (name) { options.params = options.params.set('code', name) ; }
+        if (date) { options.params = options.params.set('date', date) ; }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderWeeklySets, options).pipe(
             catchError(this.handleError)
         );
     }
-
-    getAssignedPostmen(page, rpp, name, order) {
+    getCalenderDailyDispatches(page, rpp, postmen, revisors, name, order, day, state = 'NOT_PREAPERED', date = null) {
         const options = { params: new HttpParams(), headers: new HttpHeaders()};
+        options.params = options.params.set('state', state) ;
+        options.params = options.params.set('day', `${day.split('/').reverse().join('-')}`) ;
         options.params = options.params.set('page', page) ;
         options.params = options.params.set('pageSize', rpp) ;
-        options.params = options.params.set('name', name) ;
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getAssignedPostmen, options).pipe(
+        options.params = this.filtersService.getHttpParams(options.params) ;
+        if (date) { options.params = options.params.set('date', date) ; }
+        if (postmen || revisors) { options.params = options.params.set('postmen',
+            postmen ? postmen.concat(revisors ? revisors : []) : revisors) ; }
+        if (name) { options.params = options.params.set('code', name) ; }
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderDailySets, options).pipe(
             catchError(this.handleError)
         );
     }
 
-    getCalenderWeeklyPostmen(page, rpp, name, order) {
+    getCalenderWeeklyPostmen(page, rpp, name, order, week = 0, state = 'NOT_PREAPERED', date = null, type = null) {
         const options = { params: new HttpParams(), headers: new HttpHeaders()};
+        options.params = options.params.set('state', state) ;
+        options.params = options.params.set('page', page) ;
+        options.params = options.params.set('dateIndex', `${week}`) ;
+        options.params = options.params.set('pageSize', rpp) ;
+        options.params = this.filtersService.getHttpParams(options.params) ;
+        if (date) { options.params = options.params.set('date', date) ; }
+        if (name) { options.params = options.params.set('name', name) ; }
+        if (type) { options.params = options.params.set('type', type) ; }
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderWeeklyPostmen, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+    getCalenderDailyPostmen(page, rpp, name, order, day, state = 'NOT_PREAPERED', date = null, type = null) {
+        const options = { params: new HttpParams(), headers: new HttpHeaders()};
+        options.params = options.params.set('state', state) ;
+        options.params = options.params.set('page', page) ;
+        options.params = options.params.set('day', day.split('/').reverse().join('-')) ;
+        options.params = options.params.set('pageSize', rpp) ;
+        options.params = this.filtersService.getHttpParams(options.params) ;
+        if (date) { options.params = options.params.set('date', date) ; }
+        if (name) { options.params = options.params.set('name', name) ; }
+        if (type) { options.params = options.params.set('type', type) ; }
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderDailyPostmen, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    getAssignedPostmen(page, rpp, name, order, state = 'NOT_PREAPERED') {
+        const options = { params: new HttpParams(), headers: new HttpHeaders()};
+        options.params = this.filtersService.getHttpParams(options.params) ;
         options.params = options.params.set('page', page) ;
         options.params = options.params.set('pageSize', rpp) ;
+        options.params = options.params.set('state', state) ;
         if (name) {
             options.params = options.params.set('name', name) ;
         }
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderWeeklyPostmen, options).pipe(
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getAssignedPostmen, options).pipe(
             catchError(this.handleError)
         );
     }
@@ -88,17 +123,18 @@ export class DispatchService {
         );
     }
 
-    getAvailableUsers(set) {
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getAvailableUsers(set), {}).pipe(
+    getAvailableUsers() {
+        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getAvailableUsers, {}).pipe(
             catchError(this.handleError)
         );
     }
 
-    getCalenderAvailablePostmen(day, page = 1) {
+    getCalenderAvailablePostmen(day, page = 1, type = null) {
         const options = { params: new HttpParams(), headers: new HttpHeaders()};
         options.params = options.params.set('page', page + '') ;
         options.params = options.params.set('pageSize', '15') ;
         options.params = options.params.set('day', day.split('/').reverse().join('-'));
+        if (type) { options.params = options.params.set('type', type) ; }
         return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCalenderAvailablePostmen, options).pipe(
             catchError(this.handleError)
         );
@@ -124,12 +160,43 @@ export class DispatchService {
         );
     }
 
+    assignToUserByFilters(user) {
+        const data = {
+            byFilter: 1,
+            filters: this.filtersService.getFiltersObject(),
+            user: user
+        };
+        const options = { params: new HttpParams(), headers: new HttpHeaders()};
+        options.params = this.filtersService.getHttpParams(options.params) ;
+        if (this.filtersService.specials.postmen && this.filtersService.specials.postmen.items.length) {
+            options.params = options.params.set('postmen', this.filtersService.specials.postmen.items);
+        }
+        return this.http.post<any>(AppConfig.endpoints.assignToUser, data, options).pipe(
+            catchError(this.handleError)
+        );
+    }
+
     prepare(ids, confirm = false) {
         const data = {
             sets: ids,
             confirm: confirm
         };
         return this.http.post<any>(AppConfig.endpoints.dispatchPrepare, data).pipe(
+            catchError(this.handleError)
+        );
+    }
+    prepareWithFilters(confirm) {
+        const data = {
+            byFilter: 1,
+            filters: this.filtersService.getFiltersObject(),
+            confirm: confirm
+        };
+        const options = { params: new HttpParams(), headers: new HttpHeaders()};
+        options.params = this.filtersService.getHttpParams(options.params) ;
+        if (this.filtersService.specials.postmen && this.filtersService.specials.postmen.items.length) {
+            options.params = options.params.set('postmen', this.filtersService.specials.postmen.items);
+        }
+        return this.http.post<any>(AppConfig.endpoints.dispatchPrepare, data, options).pipe(
             catchError(this.handleError)
         );
     }
@@ -159,12 +226,20 @@ export class DispatchService {
         return this.http.post(AppConfig.endpoints.updatePostmanDayNote, data);
     }
 
-    addNoteToSet(set, note, type) {
-        const data = {
-            note: note,
-            type: type
-        };
-        return this.http.post(AppConfig.endpoints.saveNoteToSet(set), data);
+    addNoteToSet(set, note, type, file = null) {
+        const formData = new FormData();
+        formData.append('note', note);
+        formData.append('type', type);
+        if (file) {
+            formData.append('file', file);
+        }
+        return this.http.post(AppConfig.endpoints.saveNoteToSet(set), formData);
+    }
+
+    getLog(dispatch) {
+        return this.http.get<any>(AppConfig.endpoints.getDispatchLog(dispatch)).pipe(
+            catchError(this.handleError)
+        );
     }
 
     handleError(error: HttpErrorResponse) {
