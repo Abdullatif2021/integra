@@ -4,6 +4,7 @@ import {FileSystemFileEntry} from 'ngx-file-drop';
 import {AppConfig} from '../../../config/app.config';
 import {CalenderService} from '../../../modules/home/service/calender.service';
 import {SnotifyService} from 'ng-snotify';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-postmen-calendar',
@@ -28,13 +29,13 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
 
   current_day = 0;
   save_day_index = null;
-  days = [  'shared.postmen_calendar.monday',
-            'shared.postmen_calendar.tuesday',
-            'shared.postmen_calendar.wednesday',
-            'shared.postmen_calendar.thursday',
-            'shared.postmen_calendar.friday',
-            'shared.postmen_calendar.saturday',
-            'shared.postmen_calendar.sunday'];
+  days = [  'shared.postmen_calendar.days.monday',
+            'shared.postmen_calendar.days.tuesday',
+            'shared.postmen_calendar.days.wednesday',
+            'shared.postmen_calendar.days.thursday',
+            'shared.postmen_calendar.days.friday',
+            'shared.postmen_calendar.days.saturday',
+            'shared.postmen_calendar.days.sunday'];
   availableUsers = [];
 
   @ViewChild('editPostmanNoteModal') editPostmanNoteModal ;
@@ -49,8 +50,18 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
   displayed_postman = null ;
   formatted_date = '' ;
   monthes = [
-      'Gennaio', 'febbraio', 'marzo', 'Aprile', 'Maggio', 'Giugno',
-      'Luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'
+        'shared.postmen_calendar.months.january',
+        'shared.postmen_calendar.months.february',
+        'shared.postmen_calendar.months.march',
+        'shared.postmen_calendar.months.april',
+        'shared.postmen_calendar.months.may',
+        'shared.postmen_calendar.months.june',
+        'shared.postmen_calendar.months.july',
+        'shared.postmen_calendar.months.august',
+        'shared.postmen_calendar.months.september',
+        'shared.postmen_calendar.months.october',
+        'shared.postmen_calendar.months.november',
+        'shared.postmen_calendar.months.december'
   ];
   details = null ;
   moreData = [] ;
@@ -69,13 +80,16 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
       private modalService: NgbModal,
       private calenderService: CalenderService,
       private snotifyService: SnotifyService,
-  ) { }
+      private translate: TranslateService
+    ) {
+        translate.setDefaultLang('itly');
+    }
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-      console.log('changes')
+      console.log('changes');
       if (changes.data) {
           this.handleDataChanges(changes);
       }
@@ -101,10 +115,20 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
           return this.data = null ;
       }
       const date = new Date(this.data[0].dayDate.split('/').reverse().join('-'));
-      this.formatted_date = `
+      
+
+
+    let currentMonth = this.monthes[date.getMonth()];
+    this.translate.get(`${currentMonth}`).subscribe(( data: any ) =>  {
+        this.formatted_date = `
             ${this.data[0].dayNumber} - ${this.data[this.data.length - 1].dayNumber}
-             ${this.monthes[date.getMonth()]} ${date.getFullYear()}
+             ${data} ${date.getFullYear()}
           `.trim();
+    });
+
+    // this.translate.get('menu').subscribe((data:any)=> {        console.log(data);       });
+      
+
 
       this.data_sizes = {postmen: 0, revisore: 0, availablePostmen: 0, availableRevisore: 0 };
       this.data.forEach( day => {

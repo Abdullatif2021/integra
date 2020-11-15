@@ -335,7 +335,7 @@
         "back": "Indietro",
         "add_new_key": "Aggiungi nuova chiave"
       },
-      "pagination": {
+      "pagination": { 
         "streets_layout": "Impaginazione strade",
         "tree_layout": "Impaginazione albero",
         "result_per_page": "Risultati per pagina"
@@ -396,13 +396,29 @@
         "busy_postman_title": "Postman occupati",
         "postman_available_title": "Postman disponibili",
         "busy_evisers_title": "Revisori occupati",
-        "monday": "Lunedi",
-        "tuesday": "Martedi",
-        "wednesday": "Mercoledi",
-        "thursday": "Giovedi",
-        "friday": "Venerdi",
-        "saturday": "Sabato",
-        "sunday": "Domenica"  
+        "days": {
+          "monday": "Lunedi",
+          "tuesday": "Martedi",
+          "wednesday": "Mercoledi",
+          "thursday": "Giovedi",
+          "friday": "Venerdi",
+          "saturday": "Sabato",
+          "sunday": "Domenica"
+                  },
+        "months": {
+          "january": "Gennaio",
+          "february": "febbraio",
+          "march": "marzo",
+          "april": "Aprile",
+          "may": "Maggio",
+          "june": "Giugno",
+          "july": "Luglio",
+          "august": "agosto",
+          "september": "settembre",
+          "october": "ottobre",
+          "november": "novembre",
+          "december": "dicembre"
+        }
                 },
       "table": {
         "ngbTooltip": {
@@ -567,7 +583,7 @@
   "table_config": {
     "simpletable": {
       "cities_table": {
-        "value": "Padfdfdfdfese",
+        "value": "Paese",
         "plhold": "Cerca Paese"
       },
       "streets_table": {

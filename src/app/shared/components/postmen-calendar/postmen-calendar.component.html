@@ -3,7 +3,7 @@
 
         <div class="date-value">
             <div class="single-day-date-switch-left" (click)="changeWeekIndex(-1)"><fa-icon [icon]="['fa', 'chevron-left']"></fa-icon></div>
-            <div class="m-auto">{{formatted_date}}</div>
+            <div class="m-auto">{{formatted_date | translate}}</div>
             <div class="single-day-date-switch-right" (click)="changeWeekIndex(1)"><fa-icon [icon]="['fa', 'chevron-right']"></fa-icon></div>
         </div>
 
@@ -110,7 +110,7 @@
                 <div class="single-day-date-switch-left" (click)="changeCurrentDay(-1)"><fa-icon [icon]="['fa', 'chevron-left']"></fa-icon></div>
                 <div class="single-day-date-switch-cinter">
                     <div class="single-day-date-value">{{data[current_day].dayDate}}</div>
-                    <div>{{data[current_day].dayName}}</div>
+                    <div>{{data[current_day].dayName | translate}}</div>
                 </div>
                 <div class="single-day-date-switch-right" (click)="changeCurrentDay(1)"><fa-icon [icon]="['fa', 'chevron-right']"></fa-icon></div>
             </div>
@@ -175,7 +175,7 @@
                     <!--</div>-->
                     <div class="postman-info-row">
                         <div class="postman-info-label">{{'shared.postmen_calendar.create_data'|translate}}</div>
-                        <div class="postman-info-value">{{details.createdAt}}</div>
+                        <div class="postman-info-value">{{details.createdAt | translate}}</div>
                     </div>
                     <div class="postman-info-row">
                         <div class="postman-info-label">{{'shared.postmen_calendar.processing_date'|translate}}</div>
@@ -298,10 +298,10 @@
             <h6 class="text-center">
                 <fa-icon [icon]="['fa','pen']"></fa-icon> {{'shared.postmen_calendar.set_day'|translate}} {{activeday._idx}} ({{days[activeday._idx] | translate}}) {{'shared.postmen_calendar.note'|translate}}
             </h6>
-            <textarea #dayNoteInput class="form-control mt-4" placeholder="Note">{{activeday.note}}</textarea>
+            <textarea #dayNoteInput class="form-control mt-4" placeholder="Note">{{activeday.note | translate}}</textarea>
             <div class="btns-container mt-3">
                 <button type="button" (click)="modal.close();saveDayNote(dayNoteInput)" class="integraa-btn ml-2 float-right" >{{'shared.postmen_calendar.continue'|translate}}</button>
-                <button type="button" (click)="modal.close();" class="integraa-btn ml-2 bg-light float-right" >{{'shared.postmen_calendar.continue'|translate}}</button>
+                <button type="button" (click)="modal.close();" class="integraa-btn ml-2 bg-light float-right" >{{'shared.postmen_calendar.cancel'|translate}}</button>
                 <div class="clear-both"></div>
             </div>
         </div>
@@ -313,7 +313,7 @@
     <div class="modal-container nFoundItemModal">
         <div class="modal-body">
             <h6 class="text-center">
-                <fa-icon [icon]="['fa','upload']"></fa-icon> {{'shared.postmen_calendar.set_day'|translate}} {{activeday._idx}} ({{days[activeday._idx] | translate}}) {{'shared.postmen_calendar.attachment'|translate}}
+                <fa-icon [icon]="['fa','upload']"></fa-icon> {{'shared.postmen_calendar.set_day'|translate}} {{activeday._idx | translate}} ({{days[activeday._idx] | translate}}) {{'shared.postmen_calendar.attachment'|translate}}
             </h6>
             <ngx-file-drop dropZoneLabel="Drop files here" [dropZoneClassName]="'drop-file-area'" (onFileDrop)="fileSelected($event)">
                 <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">

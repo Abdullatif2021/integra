@@ -103,7 +103,7 @@ export const FilterConfig = {
     dispatch: {
         search: (container, sp) => [
             {type: 'text', label: 'filter_config.dispatch.search.distinguished_name', key: 'setName'},
-            {type: 'ng-select', label: 'filter_config.dispatch.search.agency', 
+            {type: 'ng-select', label: 'filter_config.dispatch.search.agency',
             key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name'},
             {type: 'text', label: 'filter_config.dispatch.search.product_name', key: 'productTypeName', value: ''},
             {type: 'text', label: 'filter_config.dispatch.search.recipient_name', key: 'recipientName'},
@@ -183,7 +183,7 @@ export const FilterConfig = {
             {type: 'auto-complete', label: 'filter_config.delivering.filter.category', key: 'category', items: sp.filters_data.categories,
                 labelVal: 'name', value: '', getMethod: (term) => container.getCategoriesByName(term), _class: 'auto-complete'},
             {type: 'simpleText', label: 'filter_config.delivering.filter.recipient_name', key: 'recipientName'},
-            {type: 'auto-complete', label: 'filter_config.delivering.filter.recipient_postal_code', 
+            {type: 'auto-complete', label: 'filter_config.delivering.filter.recipient_postal_code',
             key: 'recipientCap', items: sp.filters_data.caps_group,
                 labelVal: 'name', getMethod: (term) => container.recipientsService.getCapCity(term), _class: 'auto-complete'},
             {type: 'simpleText', label: 'filter_config.delivering.filter.recipient_address', key: 'recipientAddress'},
