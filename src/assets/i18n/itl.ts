@@ -58,7 +58,7 @@ export const itl = {
         },
         search_panal: {
             search: {
-                value: 'Cerca',
+                value: 'Cercaa',
                 place_holder: 'Cerca',
                 place_holder2: 'Nel Campo'
             },
