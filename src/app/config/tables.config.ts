@@ -247,37 +247,37 @@ export const TablesConfig = {
         // dispatchTable used in dispatch.component
         deliveringTable : {
             cols: [
-                {title: 'table_config.table.delivering_table.cols.action', field: false, actions: [
+                {title: 'table_config.table.delivering_table.action', field: false, actions: [
                         {action: 'edit', click: (elm) => { console.log('export . '); }},
                         {action: 'print', click: (elm) => { console.log('print . '); }},
                         {action: 'excel_export', click: (elm) => {console.log('export . '); }},
                         {action: 'view', click: (elm, container) => { container.showDispatchModal(elm); }},
                         {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm)}}
                     ]},
-                {title: 'table_config.table.delivering_table.cols.name', field: 'name', actions: [], order: '1'},
-                {title: 'table_config.table.delivering_table.cols.empty', field: [], actions: []},
-                {title: ['table_config.table.delivering_table.cols.post_cspi.postman',
-                 'table_config.table.delivering_table.cols.post_cspi.cspi'], 
+                {title: 'table_config.table.delivering_table.name', field: 'name', actions: [], order: '1'},
+                {title: 'table_config.table.delivering_table.empty', field: [], actions: []},
+                {title: ['table_config.table.delivering_table.post_cspi.postman',
+                 'table_config.table.delivering_table.post_cspi.cspi'],
                  field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned',
                         (elm) => elm.user ? elm.user.full_name : ''  ], separator: true, value_separator: 'dashed',
                     actions: [], order: ['6', '7']},
-                    {title: ['table_config.table.delivering_table.cols.state_distinct.state',
-                    'table_config.table.delivering_table.cols.state_distinct.distinct'], field: [(elm) => {
+                    {title: ['table_config.table.delivering_table.state_distinct.state',
+                    'table_config.table.delivering_table.state_distinct.distinct'], field: [(elm) => {
                            switch (elm.status) {
-                               case 'not_prepare': return 'table_config.table.delivering_table.cols.state_distinct.not_prepare';
-                               case 'not_assigned': return 'table_config.table.delivering_table.cols.state_distinct.not_assigned ';
-                               case 'prepared': return 'table_config.table.delivering_table.cols.state_distinct.prepared';
+                               case 'not_prepare': return 'table_config.table.delivering_table.state_distinct.not_prepare';
+                               case 'not_assigned': return 'table_config.table.delivering_table.state_distinct.not_assigned ';
+                               case 'prepared': return 'table_config.table.delivering_table.state_distinct.prepared';
                                default: return elm.status;
                            }
                     }, 'pre_dispatch_code'], actions: [
                         {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ], order: ['2', '8'], separator: true, value_separator: 'dashed', },
-                    {title: 'table_config.table.delivering_table.cols.quint', field: 'quantity', actions: [], order: '5'},
-                    {title: ['table_config.table.delivering_table.cols.delivery_start_date.t1',
-                     'table_config.table.delivering_table.cols.delivery_start_date.t2'], field: ['started_at', 'created_at'], actions: [],
+                    {title: 'table_config.table.delivering_table.quint', field: 'quantity', actions: [], order: '5'},
+                    {title: ['table_config.table.delivering_table.delivery_start_date.t1',
+                     'table_config.table.delivering_table.delivery_start_date.t2'], field: ['started_at', 'created_at'], actions: [],
                         order: ['3'], separator: true, value_separator: 'dashed'},
-                    {title: 'table_config.table.delivering_table.cols.note', field: 'note', actions: [], order: '9'},
+                    {title: 'table_config.table.delivering_table.note', field: 'note', actions: [], order: '9'},
                 // {title: 'OPERATION', actions: [
                 //         { action: 'progress',  field: 'percent',},
                 //     ]},

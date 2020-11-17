@@ -29,6 +29,7 @@ import {faCalendarDay} from '@fortawesome/free-solid-svg-icons/faCalendarDay';
 import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
+
 @NgModule({
   imports: [
     CommonModule,

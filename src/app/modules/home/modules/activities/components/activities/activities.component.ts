@@ -34,7 +34,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       private activitiesService: ActivitiesService,
       public translate: TranslateService,
   ) {
-      translate.setDefaultLang('itl');
+      translate.setDefaultLang('itly');
       const browserLang = translate.getBrowserLang();
     }
 

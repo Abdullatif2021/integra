@@ -23,8 +23,8 @@ export class ProductsService {
   getToDeliverProducts(cities, streets, order_field = null, order_method = '1') {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)
-              .set('pageSize', this.paginationService.rpp)};
-
+              .set('pageSize', this.paginationService.rpp)
+              .set('statusType', 'to_be_delivered')};
       const citiesType = this.filtersService.getGrouping();
       if (citiesType === 'by_client') {
           options.params = options.params.set('by_clients_Filter', '1');
@@ -75,6 +75,7 @@ export class ProductsService {
           catchError(this.handleError)
       );
   }
+ 
 
   getPreDispatchProducts(id) {
       const options = { params: new HttpParams()
@@ -114,7 +115,7 @@ export class ProductsService {
   updateProductsStatusByFilters(status) {
       const data = {
           status: status,
-      }
+      };
       const options = { params: new HttpParams()};
       options.params = this.filtersService.getHttpParams(options.params) ;
       return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, data, options);
