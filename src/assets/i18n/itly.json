@@ -624,7 +624,7 @@
       "products_table": {
         "cols": {
           "action": "Azioni",
-          "bar_code": "BARCODE",
+          "bar_code": "BARCODE ",
           "act": "ATTO",
           "product_list": {
             "product": "PRODOTTO",
@@ -685,24 +685,24 @@
       "delivering_table": {
         "action": "Azioni",
         "name": "Nome",
+        "empty": "",
         "post_cspi": {
           "postman": "Postino",
           "cspi": "CSPI"
+                     },
+        "state_distinct": {
+          "state": "Stato distinta",
+          "distinct": "Distinta",
+          "not_prepare": "Borsa non preparata",
+          "not_assigned": "Non assegnato ",
+          "prepared": "Borsa preparata"
         },
-        "title6": {
-          "t1": "Stato distinta",
-          "t2": "Distinta",
-          "ret1": "Borsa non preparata",
-          "ret2": "Non assegnato ",
-          "ret3": "Borsa preparata",
-          "action": "view"
-        },
-        "title7": "Q.tà",
-        "title78": {
+        "quint": "Q.tà",
+        "delivery_start_date": {
           "t1": "Data inizio consegna",
           "t2": "Data creazione"
         },
-        "title9": "Nota"
+        "note": "Nota"
       }
     }
   }

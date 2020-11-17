@@ -21,7 +21,7 @@ import {MapService} from './service/map.service';
 import {MarkersService} from './service/markers.service';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-
+// import { SetStatusModalComponent } from '../app/modules/pages/modules/dispatch-view/modals/set-status-modal/set-status-modal.component';
 
 
 @NgModule({
