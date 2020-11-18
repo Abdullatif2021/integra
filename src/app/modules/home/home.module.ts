@@ -36,6 +36,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {ProductStatusService} from '../../service/product-status.service';
 import {NotDeliveredService} from '../../service/not-delivered.service';
+import {DispatchViewService} from '../pages/modules/dispatch-view/service/dispatch-view.service';
 
 
 @NgModule({
@@ -79,7 +80,8 @@ import {NotDeliveredService} from '../../service/not-delivered.service';
       DispatchActionsService,
       CalenderService,
       ProductStatusService,
-      NotDeliveredService
+      NotDeliveredService,
+      DispatchViewService
   ],
   entryComponents: [
       PreDispatchAddComponent,

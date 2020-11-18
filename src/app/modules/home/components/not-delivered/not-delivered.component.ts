@@ -11,7 +11,7 @@ import {ActionsService} from '../../../../service/actions.service';
 import {SimpleTableComponent} from '../../../../shared/components/simple-table/simple-table.component';
 import {FilterConfig} from '../../../../config/filters.config';
 import {NotDeliveredService} from '../../../../service/not-delivered.service';
-import {Subject} from 'rxjs';
+import {from, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {RecipientsService} from '../../../../service/recipients.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -29,7 +29,7 @@ import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.serv
 import { TranslateService } from '@ngx-translate/core';
 import {ProductStatusService} from '../../../../service/product-status.service';
 import {SetStatusModalComponent} from '../../../../shared/modals/set-status-modal/set-status-modal.component';
-
+import {DispatchViewService} from '../../../pages/modules/dispatch-view/service/dispatch-view.service';
 @Component({
   selector: 'app-not-delivered',
   templateUrl: './not-delivered.component.html',
@@ -62,9 +62,11 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
                 ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ],
-        modal: SetStatusModalComponent
-    }
-  ];
+        modal: SetStatusModalComponent,
+        modalData: {
+            selected: () => this.notdeliveredService.getSelectedProducts(),
+            state: 'not_delivered' }
+ }];
 
   citiesGetMethod = (page, rpp, name, order) => this.citiesService.getNotDeliveredCities(page, rpp, name, order);
   streetsGetMethod = (page, rpp, name, order) => this.streetsService.getNotDeliveredStreets(page, rpp, name, this.current_cities, order);
@@ -80,6 +82,7 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       private preDispatchActionsService: PreDispatchActionsService,
       protected recipientsService: RecipientsService,
       private activatedRoute: ActivatedRoute,
+      private dispatchViewService: DispatchViewService,
       private notdeliveredService: NotDeliveredService,
       private preDispatchService: PreDispatchService,
       private agenciesService: AgenciesService,
