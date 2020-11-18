@@ -15,12 +15,11 @@ import {faChevronDown} from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import {faCheck} from '@fortawesome/free-solid-svg-icons/faCheck';
 import {DndModule} from 'ngx-drag-drop';
 import {CoreModule} from '../../../../core/core.module';
-import { SetStatusModalComponent } from './modals/set-status-modal/set-status-modal.component';
 import {NgSelectModule} from '@ng-select/ng-select';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
+import {FormsModule} from '@angular/forms';
+import {TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import { HttpClientModule , HttpClient} from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 
 const routes: Routes = [
     {path: '', component: DispatchViewComponent}
@@ -48,14 +47,11 @@ const routes: Routes = [
         },
         })
   ],
-  declarations: [DispatchViewComponent, SetStatusModalComponent],
+  declarations: [DispatchViewComponent],
   providers: [
       DispatchViewService,
       {provide: MapsAPILoader, useClass: IntegraaLazyMapApiLoaderService}
   ],
-  entryComponents: [
-      SetStatusModalComponent
-  ]
 })
 export class DispatchViewModule {
     constructor() {

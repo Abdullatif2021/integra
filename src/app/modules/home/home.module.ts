@@ -19,8 +19,6 @@ import { PreDispatchEditComponent } from './modals/pre-dispatch-edit/pre-dispatc
 import { PreDispatchDeleteComponent } from './modals/pre-dispatch-delete/pre-dispatch-delete.component';
 import { PreDispatchAddDirectComponent } from './modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
 import { PwsisbsConfirmModalComponent } from './modals/pwsisbs-confirm-modal/pwsisbs-confirm-modal.component';
-import { SetStatusModalComponent} from '../pages/modules/dispatch-view/modals/set-status-modal/set-status-modal.component';
-
 import { PsbatpdwsiConfirmModalComponent } from './modals/psbatpdwsi-confirm-modal/psbatpdwsi-confirm-modal.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -34,7 +32,6 @@ import {DispatchDeleteComponent} from './modals/dispatch-delete/dispatch-delete.
 import { DispatchPrepareComponent } from './modals/dispatch-prepare/dispatch-prepare.component';
 import {CalenderService} from './service/calender.service';
 import { DispatchAssignComponent } from './modals/dispatch-assign/dispatch-assign.component';
-import { ChangeStatusComponent } from './modals/change-status/change-status.component';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {ProductStatusService} from '../../service/product-status.service';
@@ -57,7 +54,6 @@ import {NotDeliveredService} from '../../service/not-delivered.service';
       DispatchComponent,
       DeliveringComponent,
       InStockComponent,
-    //   SetStatusModalComponent,
       NotDeliveredComponent,
       HomeComponent,
       PreDispatchAddComponent,
@@ -72,7 +68,6 @@ import {NotDeliveredService} from '../../service/not-delivered.service';
       DispatchDeleteComponent,
       DispatchPrepareComponent,
       DispatchAssignComponent,
-      ChangeStatusComponent,
   ],
   exports: [
       HomeComponent,
@@ -99,8 +94,6 @@ import {NotDeliveredService} from '../../service/not-delivered.service';
       DispatchDeleteComponent,
       DispatchPrepareComponent,
       DispatchAssignComponent,
-      ChangeStatusComponent,
-    //   SetStatusModalComponent
   ],
 
 })

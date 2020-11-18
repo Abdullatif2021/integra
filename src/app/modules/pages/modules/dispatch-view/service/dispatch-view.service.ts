@@ -18,6 +18,10 @@ export class DispatchViewService {
         this.selectedProducts = products;
     }
 
+    getSelectedProducts() {
+        return this.selectedProducts;
+    }
+
     sendGetSetGroupsRequest(dispatch, page = 1) {
         const options = {params: new HttpParams()};
         options.params = options.params.set('page', page + '');
@@ -81,14 +85,6 @@ export class DispatchViewService {
 
     getSetMarkers(setId): Observable<any> {
         return this.http.get<any>(AppConfig.endpoints.getSetMarkers(setId));
-    }
-
-    getStats() {
-        const options = {params: new HttpParams()};
-        options.params = options.params.set('type', 'in_delivery');
-        options.params = options.params.set('page', '1');
-        options.params = options.params.set('pageSize', '500');
-        return this.http.get<any>(AppConfig.endpoints.getAvailableStatuses, options);
     }
 
 }

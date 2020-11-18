@@ -1,4 +1,3 @@
-import { ChangeStatusComponent } from './../../modals/change-status/change-status.component';
 import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { CitiesService } from '../../../../service/cities.service';
 import { TablesConfig } from '../../../../config/tables.config';
@@ -9,13 +8,10 @@ import {ApiResponseInterface} from '../../../../core/models/api-response.interfa
 import {FiltersService} from '../../../../service/filters.service';
 import {TableComponent} from '../../../../shared/components/table/table.component';
 import {ActionsService} from '../../../../service/actions.service';
-import {PreDispatchAddComponent} from '../../modals/pre-dispatch-add/pre-dispatch-add.component';
-import {PreDispatchNewComponent} from '../../modals/pre-dispatch-new/pre-dispatch-new.component';
-import {ImportFromBarcodesComponent} from '../../modals/import-from-barcodes/import-from-barcodes.component';
 import {SimpleTableComponent} from '../../../../shared/components/simple-table/simple-table.component';
 import {FilterConfig} from '../../../../config/filters.config';
-import {NotDeliveredService} from '../../../../service/not-delivered.service';  
-import {from, Subject} from 'rxjs';
+import {NotDeliveredService} from '../../../../service/not-delivered.service';
+import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {RecipientsService} from '../../../../service/recipients.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -28,11 +24,11 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../../shared/directives/modal.directive';
 import {PwsisbsConfirmModalComponent} from '../../modals/pwsisbs-confirm-modal/pwsisbs-confirm-modal.component';
 import {PsbatpdwsiConfirmModalComponent} from '../../modals/psbatpdwsi-confirm-modal/psbatpdwsi-confirm-modal.component';
-import {StreetsLocatingService} from '../../../../service/locating/streets-locating.service';
 import {SnotifyService} from 'ng-snotify';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import { TranslateService } from '@ngx-translate/core';
 import {ProductStatusService} from '../../../../service/product-status.service';
+import {SetStatusModalComponent} from '../../../../shared/modals/set-status-modal/set-status-modal.component';
 
 @Component({
   selector: 'app-not-delivered',
@@ -66,7 +62,7 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
                 ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ],
-        modal: ChangeStatusComponent
+        modal: SetStatusModalComponent
     }
   ];
 

@@ -3,7 +3,7 @@
     <div class="modal-body">
       <ng-container *ngIf="data.method === 'filters' &&  !filtersCount && !confirmed; else ActualModal" >
         <div class="no-filters-warning-message">
-            {{'pages.dispatch_view.modals.set_status.filter_applied' | translate}}
+          {{'pages.dispatch_view.modals.set_status.filter_applied' | translate}}
         </div>
         <div class="btns-container mt-3">
           <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="confirm()">{{'pages.dispatch_view.modals.set_status.run' | translate}}</button>

@@ -35,19 +35,21 @@ import { CommentsComponent } from './components/comments/comments.component';
 import {FormsModule} from '@angular/forms';
 import {faDownload} from '@fortawesome/free-solid-svg-icons/faDownload';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import { SetStatusModalComponent } from './modals/set-status-modal/set-status-modal.component';
+import {StatusesService} from './service/statuses.service';
 
 @NgModule({
   imports: [
-    CommonModule,
-    NgbModule,
-    FontAwesomeModule,
-    NgSelectModule,
-    InfiniteScrollModule,
-    RouterModule,
-    GooglePlaceModule,
-    NgxFileDropModule,
-    FormsModule,
-    TranslateModule
+      CommonModule,
+      NgbModule,
+      FontAwesomeModule,
+      NgSelectModule,
+      InfiniteScrollModule,
+      RouterModule,
+      GooglePlaceModule,
+      NgxFileDropModule,
+      FormsModule,
+      TranslateModule
   ],
   declarations: [
       SearchBoxComponent,
@@ -60,7 +62,8 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
       AddressInputComponent,
       IframeComponent,
       PostmenCalendarComponent,
-      CommentsComponent
+      CommentsComponent,
+      SetStatusModalComponent
   ],
   exports: [
       SearchBoxComponent,
@@ -73,12 +76,17 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
       AddressInputComponent,
       IframeComponent,
       PostmenCalendarComponent,
-      TranslateModule
+      TranslateModule,
+      SetStatusModalComponent
   ],
   providers: [
       PlacesAutocompleteService,
-      GoogleApiService
+      GoogleApiService,
+      StatusesService
   ],
+  entryComponents: [
+      SetStatusModalComponent
+  ]
 })
 export class SharedModule {
 

@@ -4,7 +4,7 @@ import {MapMarker} from '../../../../../../core/models/map-marker.interface';
 import {ActivatedRoute} from '@angular/router';
 import {DispatchViewService} from '../../service/dispatch-view.service';
 import {MapsAPILoader} from '@agm/core';
-import {SetStatusModalComponent} from '../../modals/set-status-modal/set-status-modal.component';
+import {SetStatusModalComponent} from '../../../../../../shared/modals/set-status-modal/set-status-modal.component';
 import {ActionsService} from '../../../../../../service/actions.service';
 import {PaginationService} from '../../../../../../service/pagination.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -38,11 +38,11 @@ export class DispatchViewComponent implements OnInit {
         private actionsService: ActionsService,
         private paginationService: PaginationService,
         private translate: TranslateService,
-) {
+    ) {
     translate.setDefaultLang('itly');
     const browserLang = translate.getBrowserLang();
     this.dispatch = route.snapshot.params.id;
-  }
+    }
 
     ngOnInit() {
         this.paginationService.updateLoadingState(false);
@@ -171,7 +171,11 @@ export class DispatchViewComponent implements OnInit {
                         ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
                     }
                 ],
-                modal: SetStatusModalComponent
+                modal: SetStatusModalComponent,
+                modalData: {
+                    selected: () => this.dispatchViewService.getSelectedProducts() ,
+                    state: 'in_delivery'
+                },
             },
         ]);
     }
@@ -237,10 +241,12 @@ export class DispatchViewComponent implements OnInit {
                 this.dispatchViewService.selectedProducts = this.dispatchViewService.selectedProducts.concat(item.products.map(p => p.id));
             } else {
                 this.dispatchViewService.selectedProducts =
-                    this.dispatchViewService.selectedProducts.filter( i => !item.products.find(j => j.id === i));
+                this.dispatchViewService.selectedProducts.filter( i => !item.products.find(j => j.id === i));
             }
         }
+        console.log(this.dispatchViewService.getSelectedProducts());
     }
+
     mapReady(map) {
         const that = this;
         map.addListener('dragend', function () {
