@@ -51,7 +51,7 @@ export class FiltersService {
       return this.grouping;
   }
 
-  getHttpParams(options: HttpParams) {
+  getHttpParams(options: HttpParams, includeSpecial = false) {
     let applied = false ;
     // if there is no filters return the original options
     if ( typeof this.filters !== 'object') {return options ; }
@@ -62,9 +62,39 @@ export class FiltersService {
       // if a filter is valid, set applied to true
       applied = true ;
     });
+
+    if (includeSpecial && typeof this.specials === 'object') {
+        Object.keys(this.specials).forEach(key => {
+            options = options.set(key, this.specials[key].items) ;
+        });
+    }
     // if any filter was applied set withFilter param to true
     if (applied) { options = options.set('withFilter', '1') ; }
     return options ;
+  }
+
+  getFilterObject(includeSpecial = false) {
+      let applied = false ;
+      // if there is no filters return the original options
+      if ( typeof this.filters !== 'object' && !includeSpecial) { return {} ; }
+      const filters = {} ;
+      // loop through all filters and add them if there value was not empty string or null
+      Object.keys(typeof this.filters === 'object' ? this.filters : {}).forEach((filterKey) => {
+          if (!this.filters[filterKey] || this.filters[filterKey] === '') { return ; }
+          filters[filterKey] = this.filters[filterKey] ;
+          // if a filter is valid, set applied to true
+          applied = true ;
+      });
+
+      if (includeSpecial && typeof this.specials === 'object') {
+          Object.keys(this.specials).forEach(key => {
+              filters[key] = this.specials[key].items;
+          });
+      }
+
+      // if any filter was applied set withFilter param to true
+      if (applied) { filters['withFilter'] = 1 ; }
+      return filters ;
   }
 
   getFiltersObject() {

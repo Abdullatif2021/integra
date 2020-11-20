@@ -20,10 +20,8 @@ export class ActivitiesService {
       const data = <any>{} ;
       const options = {params: new HttpParams(), headers: new HttpHeaders()};
       if (method === 'filters') {
-          options.params = this.filtersService.getHttpParams(options.params);
-          const filters = Object.assign(this.filtersService.filters,
-              this.filtersService.specials.cities ? this.filtersService.specials.cities : {});
-          data.filters = Object.assign(filters, this.filtersService.specials.streets ? this.filtersService.specials.streets : {});
+          options.params = this.filtersService.getHttpParams(options.params, true);
+          data.filters = this.filtersService.getFilterObject(true);
       } else {
           data.product_ids = this.productsService.selectedProducts.map(p => p.id);
       }
