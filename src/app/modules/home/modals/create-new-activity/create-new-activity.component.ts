@@ -122,6 +122,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
               if (data.statusCode === 200) {
                   this.saving = false ;
                   modal.close();
+                  this.snotifyService.success('Activity Created Successfully', { showProgressBar: false, timeout: 4000 });
                   return ;
               }
               this.saving = false ;
