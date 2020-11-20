@@ -259,6 +259,11 @@ export class SearchPanelComponent implements OnInit {
   }
 
   initFields() {
+      if (!this.fieldsData || !this.fieldsData.fields) {
+          this.filtersFields = null;
+          this.searchFields = null;
+          return ;
+      }
       this.filtersFields = this.fieldsData.fields.filters( this.fieldsData.container, this);
       this.searchFields = this.fieldsData.fields.search( this.fieldsData.container, this);
   }

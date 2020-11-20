@@ -44,7 +44,7 @@ export class ActivitiesService {
       const options = {params: new HttpParams(), headers: new HttpHeaders()};
       options.params = options.params.set('activity', activity);
       options.params = options.params.set('caps', caps);
-      options.params = options.params.set('pageSize', '30');
+      options.params = options.params.set('pageSize', '30000');
       options.params = options.params.set('page', `${page}`);
       return this.http.get(AppConfig.endpoints.getActivityAvailableProductCategories, options);
   }

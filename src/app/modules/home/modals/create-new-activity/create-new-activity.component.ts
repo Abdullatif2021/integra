@@ -79,6 +79,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   loadCaps(subActivity, page = 1) {
+      console.log('caps category', subActivity.categories);
       if (page < 2 || !this.caps) {
           this.caps = [] ;
       }
@@ -96,6 +97,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
               } else {
                   this.caps = data.data ;
               }
+              console.log('caps category 2', subActivity.categories);
               subActivity.isCapsLoading = false ;
           }, error => {
               this.snotifyService.error('Something went wrong !', { showProgressBar: false, timeout: 4000 });
@@ -145,6 +147,9 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
               if (data.statusCode === 200) {
                   subActivity.isCategoriesLoading = false ;
                   this.saveSubActivity(subActivity);
+                  if (subActivity.categories) {
+                      subActivity.categories = subActivity.categories.filter((c) => data.data.find(i => i.id === c));
+                  }
                   if (page > 1 && this.categories) {
                       if (!data.data || !data.data.length) {
                           this.allCategoriesLoaded = true ;
@@ -161,14 +166,16 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   capsChanged(subActivity, categoriesSelect) {
+
       if (subActivity.created) {
           this.resetLastCaps(subActivity);
       }
-      categoriesSelect.handleClearClick();
-      this.categories = [];
-      subActivity.categories = null ;
+      // categoriesSelect.handleClearClick();
+      // this.categories = subActivity.categories.map(i => {id: i});
+      // subActivity.categories = null ;
       if (!subActivity.caps || !subActivity.caps.length) { return this.isReady(subActivity); }
       this.saveSubActivity(subActivity);
+      this.loadCategories(subActivity);
   }
 
   resetLastCaps(subActivity) {
@@ -200,7 +207,6 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   categoriesChanged(subActivity) {
-      subActivity.qtyPerDay = null ;
       if (!subActivity.categories || !subActivity.categories.length) {
           return this.isReady(subActivity);
       }
