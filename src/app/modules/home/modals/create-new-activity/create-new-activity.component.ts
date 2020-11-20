@@ -189,7 +189,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
           .pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               if (data.statusCode === 200) {
-                  subActivity.qtyPerDay = data.data;
+                  subActivity.totalQuantity = data.data;
                   return this.saveSubActivity(subActivity);
               }
               this.snotifyService.error(data.message, { showProgressBar: false, timeout: 4000 });
@@ -235,7 +235,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       this.categories = [];
   }
 
-  totalProductsChanged(subActivity) {
+  productsPerDayChanged(subActivity) {
       if (this.isReadyToGetEndDate(subActivity)) {
           this.loadEndDate(subActivity);
           this.resetAll();
@@ -244,14 +244,14 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   isReadyToGetEndDate(subActivity) {
-      return subActivity.caps && subActivity.categories && subActivity.qtyPerDay && subActivity.postmen
+      return subActivity.caps && subActivity.categories && subActivity.qtyPerDay && subActivity.qtyPerDay !== '0' && subActivity.postmen
           && subActivity.caps.length && subActivity.categories.length && subActivity.postmen.length && subActivity.startDate;
   }
 
   isReady(subActivity) {
       if (subActivity.caps && subActivity.categories && subActivity.qtyPerDay && subActivity.postmen
           && subActivity.operators && subActivity.caps.length && subActivity.categories.length
-          && subActivity.postmen.length && subActivity.startDate) {
+          && subActivity.qtyPerDay !== '0' && subActivity.postmen.length && subActivity.startDate) {
           subActivity.ready = true ;
           this.checkConflicts();
           return true ;
@@ -311,7 +311,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
           subActivity.qtyPerDay, subActivity.nextSaturdayStatus ? true : false, subActivity.startDate).pipe(takeUntil(this.unsubscribe))
           .subscribe(
               data => {
-                  if (data.statusCode === 200) {
+                  if (data && data.statusCode === 200) {
                       subActivity.created = true ;
                       this.checkIfAnyNotSaved();
                   }

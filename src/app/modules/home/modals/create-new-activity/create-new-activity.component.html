@@ -31,7 +31,7 @@
             <!--<div class="col-2 d-flex"><div class="m-auto">Postmen</div></div>-->
             <div class="col-4 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">Caps</div> <div>Categories </div></div></div>
             <!--<div class="col-2 d-flex"><div class="m-auto">Categories</div></div>-->
-            <div class="col-1 d-flex"><div class="w-100 text-center">Quantity per day</div></div>
+            <div class="col-1 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">Qty per day</div> <div>Total Qty</div></div></div>
             <div class="col-1 d-flex"><div class="w-100 text-center">Saturday Status</div></div>
             <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">Start Date</div> <div> End Date</div></div></div>
             <!--<div class="col-1 d-flex"><div class="m-auto"></div></div>-->
@@ -67,14 +67,16 @@
               <div class="col-1">
                 <input type="numer"
                        [disabled]="!subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length || !subActivity.postmen || !subActivity.postmen.length  || !subActivity.operators"
-                       [(ngModel)]="subActivity.qtyPerDay" (change)="totalProductsChanged(subActivity)" class="form-control form-control-sm integraa-input" placeholder="quantity per day">
+                       [(ngModel)]="subActivity.qtyPerDay" (change)="productsPerDayChanged(subActivity)" class="form-control form-control-sm integraa-input text-center" placeholder="quantity per day">
+                <div class="border-bottom-dashed-black"></div>
+                <div class="total-quantity text-center m-auto">{{subActivity.totalQuantity}}</div>
               </div>
               <div class="col-1 d-flex">
                 <input type="checkbox" [(ngModel)]="subActivity.nextSaturdayStatus" (change)="saveSubActivity(subActivity)" class="d-block m-auto">
               </div>
               <div class="col-2">
                 <input type="date"
-                       [disabled]="disabled || !subActivity.qtyPerDay || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length || !subActivity.postmen || !subActivity.postmen.length  || !subActivity.operators"
+                       [disabled]="disabled || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length || !subActivity.postmen || !subActivity.postmen.length  || !subActivity.operators"
                        [(ngModel)]="subActivity.startDate" (change)="startDateChanged(subActivity)" class="form-control form-control-sm integraa-input">
                 <div class="border-bottom-dashed-black"></div>
                 <input type="date" disabled [(ngModel)]="subActivity.endDate" class="form-control form-control-sm integraa-input">

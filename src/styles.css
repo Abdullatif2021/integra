@@ -473,3 +473,17 @@ a:hover {
         transform: translate(24px, 0);
     }
 }
+
+
+
+/* NgSelect Classes */
+.ng-value {
+    max-width: 90%;
+    display: flex;
+}
+.ng-value-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: auto;
+}
