@@ -38,7 +38,6 @@ export class DispatchLogComponent implements OnInit, OnDestroy {
         this.dispatchService.getLog(this.id).pipe(takeUntil(this.unsubscribe)).subscribe(
             res => {
                 this.log = res.data;
-                console.log(this.log, res);
                 this.loading = false ;
             }, error => {
                 this.loading = false;
