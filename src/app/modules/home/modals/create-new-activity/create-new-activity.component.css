@@ -4,6 +4,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     position: relative;
+    width: calc(100% + 15px);
 }
 .sub-activity-container.created {
     border-left: 3px solid #4CAF50;
@@ -29,7 +30,7 @@
 .sub-activities-container {
     min-height: 50vh;
     max-height: 65vh;
-    overflow-y: auto;
+    overflow-y: overlay;
 }
 .loading-container {
     min-height: 60vh;
