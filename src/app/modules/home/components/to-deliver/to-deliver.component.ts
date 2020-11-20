@@ -30,6 +30,8 @@ import {StreetsLocatingService} from '../../../../service/locating/streets-locat
 import {SnotifyService} from 'ng-snotify';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import { TranslateService } from '@ngx-translate/core';
+import {CreateNewActivityComponent} from '../../modals/create-new-activity/create-new-activity.component';
+import {ActivitiesService} from '../../service/activities.service';
 
 @Component({
   selector: 'app-to-deliver',
@@ -63,7 +65,9 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
                 ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ],
-        run: (event) => this.createActivity(event)
+        before_modal_open: (event) => this.createActivityCheck(event),
+        modal: CreateNewActivityComponent,
+        modalOptions: {size: 'xl'}
     },
     {
         name: 'Crea nuova Pre-Distinta', fields: [
@@ -131,7 +135,6 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private snotifyService: SnotifyService,
       private router: Router,
       private translate: TranslateService,
-
   ) {
       translate.setDefaultLang('itly');
       this.paginationService.updateResultsCount(null) ;
@@ -290,14 +293,16 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       }
   }
 
-  createActivity(event) {
+  createActivityCheck(event) {
       if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
-          return this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+          this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+          // return false;
       } else if (event.method === 'filters' && !Object.keys(this.filtersService.filters).length
           && !Object.keys(this.filtersService.specials).length) {
-          return this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
+          this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
+          return false;
       }
-      this.router.navigate(['to-deliver/activities']);
+      return true;
   }
 
   ngOnDestroy() {

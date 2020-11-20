@@ -1,0 +1,68 @@
+.sub-activity-container {
+    padding: 10px 0px;
+    border-left: 3px solid #9E9E9E;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+.sub-activity-container.created {
+    border-left: 3px solid #4CAF50;
+}
+.sub-activity-container.not-ready {
+    border-left: 3px solid red;
+}
+.sub-activity-header {
+    background-color: #222222;
+    color: #feda44;
+    font-size: 11px;
+}
+.actions-container {
+    padding: 10px;
+    display: flex;
+}
+.actions-container .left {
+    flex: 1;
+}
+.new-sub-activity-button {
+    font-size: 13px;
+}
+.sub-activities-container {
+    min-height: 50vh;
+    max-height: 65vh;
+    overflow-y: auto;
+}
+.loading-container {
+    min-height: 60vh;
+}
+.header-title {
+    border-bottom: 1px solid gainsboro;
+    padding: 0px 10px 10px 10px;
+    flex: 1;
+}
+.activity-name-input {
+    font-size: 13px;
+}
+.disabled {
+    pointer-events: none;
+    background-color: #e9ecef;
+}
+.border-bottom-dashed {
+    border-bottom: 1px dashed #feda44;;
+}
+.border-bottom-dashed-black {
+    border-bottom: 1px dashed #222222;
+    margin: 5px;
+    padding: 5px;
+}
+.sub-activity-delete {
+    position: absolute;
+    top: -17px;
+    font-size: 22px;
+    right: 0px;
+    border-radius: 50%;
+    color: #607D8B;
+    cursor: pointer;
+}
+.sub-activity-delete:hover {
+    color: red;
+}

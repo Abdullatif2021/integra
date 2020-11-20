@@ -1,0 +1,109 @@
+<ng-template #modalRef let-modal>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h5 class="modal-title">Create new Activity</h5>
+      <div type="button" class="close" (click)="modal.close()" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </div>
+    </div>
+    <div class="modal-body">
+      <ng-container *ngIf="!saving">
+        <div class="row">
+          <div class="activity-name-input col-4">
+            <input placeholder="Activity Name" [(ngModel)]="activityName" class="form-control integraa-input activity-name-input"/>
+          </div>
+        </div>
+
+        <div class="actions-container">
+
+          <div class="left"></div>
+          <div class="right">
+            <div class="new-sub-activity-button-container">
+              <button class="btn btn-primary new-sub-activity-button" (click)="addNewSubActivity()" [disabled]="disabled || (subActivities && subActivities.length && !subActivities[subActivities.length - 1].created)">New Sub Activity</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="sub-activities-container container-fluid">
+          <div class="sub-activity-header row">
+            <div class="col-4 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">Operator</div> <div>Postmen</div></div> </div>
+            <!--<div class="col-2 d-flex"><div class="m-auto">Postmen</div></div>-->
+            <div class="col-4 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">Caps</div> <div>Categories </div></div></div>
+            <!--<div class="col-2 d-flex"><div class="m-auto">Categories</div></div>-->
+            <div class="col-1 d-flex"><div class="w-100 text-center">Quantity per day</div></div>
+            <div class="col-1 d-flex"><div class="w-100 text-center">Saturday Status</div></div>
+            <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">Start Date</div> <div> End Date</div></div></div>
+            <!--<div class="col-1 d-flex"><div class="m-auto"></div></div>-->
+          </div>
+          <ng-container *ngFor="let subActivity of subActivities">
+            <!-- Sub activity view {  -->
+            <div class="sub-activity-container row z-depth-1" [ngClass]="{'disabled': disabled || (hasConflict && !( subActivity.created && !subActivity.ready )), 'created': subActivity.created, 'not-ready': subActivity.created && !subActivity.ready}">
+              <div class="sub-activity-delete" *ngIf="!subActivity.created" (click)="deleteLast()">×</div>
+              <div class="col-4">
+                <ng-select placeholder="operator" [(ngModel)]="subActivity.operators" [items]="operators" [bindLabel]="'name'"
+                           (change)="saveSubActivity(subActivity)" class="integraa-select" [bindValue]="'id'"></ng-select>
+                <div class="border-bottom-dashed-black"></div>
+                <ng-select placeholder="postmen" [ngClass]="{'disabled': !subActivity.operators}"
+                           [disabled]="!subActivity.operators" [(ngModel)]="subActivity.postmen" [items]="postmen" [bindLabel]="'full_name'" [multiple]="true" (change)="saveSubActivity(subActivity)" class="integraa-select" [bindValue]="'id'"></ng-select>
+              </div>
+              <!--<div class="col-2">-->
+              <!--</div>-->
+              <div class="col-4">
+                <ng-select placeholder="caps" (open)="loadCaps(subActivity)" [loading]="subActivity.isCapsLoading" #capsSelect
+                           [ngClass]="{'disabled': !subActivity.postmen || !subActivity.postmen.length || !subActivity.operators }"
+                           [disabled]="!subActivity.postmen || !subActivity.postmen.length || !subActivity.operators" [(ngModel)]="subActivity.caps" [items]="caps"
+                           (change)="capsChanged(subActivity, categoriesSelect)" [bindLabel]="'name'" [multiple]="true" class="integraa-select"
+                           [bindValue]="'id'" (scrollToEnd)="loadCaps(subActivity, subActivity.capsPage + 1)"></ng-select>
+                <div class="border-bottom-dashed-black"></div>
+                <ng-select placeholder="categories" (open)="loadCategories(subActivity)" [loading]="subActivity.isCategoriesLoading" #categoriesSelect
+                           [ngClass]="{'disabled': !subActivity.caps || !subActivity.caps.length || !subActivity.postmen.length  || !subActivity.operators}"
+                           [disabled]="!subActivity.caps || !subActivity.caps.length || !subActivity.postmen.length  || !subActivity.operators"
+                           [items]="categories" (change)="categoriesChanged(subActivity)" [bindLabel]="'name'" [(ngModel)]="subActivity.categories"
+                           [multiple]="true" class="integraa-select" [bindValue]="'id'" (scrollToEnd)="loadCategories(subActivity, subActivity.categoriesPage + 1)"></ng-select>
+              </div>
+              <!--<div class="col-2">-->
+              <!--</div>-->
+              <div class="col-1">
+                <input type="numer"
+                       [disabled]="!subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length || !subActivity.postmen || !subActivity.postmen.length  || !subActivity.operators"
+                       [(ngModel)]="subActivity.qtyPerDay" (change)="totalProductsChanged(subActivity)" class="form-control form-control-sm integraa-input" placeholder="quantity per day">
+              </div>
+              <div class="col-1 d-flex">
+                <input type="checkbox" [(ngModel)]="subActivity.nextSaturdayStatus" (change)="saveSubActivity(subActivity)" class="d-block m-auto">
+              </div>
+              <div class="col-2">
+                <input type="date"
+                       [disabled]="disabled || !subActivity.qtyPerDay || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length || !subActivity.postmen || !subActivity.postmen.length  || !subActivity.operators"
+                       [(ngModel)]="subActivity.startDate" (change)="startDateChanged(subActivity)" class="form-control form-control-sm integraa-input">
+                <div class="border-bottom-dashed-black"></div>
+                <input type="date" disabled [(ngModel)]="subActivity.endDate" class="form-control form-control-sm integraa-input">
+              </div>
+              <!--<div class="col-1">-->
+              <!--</div>-->
+            </div>
+            <!-- } Sub activity view -->
+          </ng-container>
+
+        </div>
+
+        <div class="actions-container">
+
+          <div class="left"></div>
+          <div class="right">
+            <div class="new-sub-activity-button-container">
+              <button class="btn btn-success new-sub-activity-button" [disabled]="disabled || !subActivities || !subActivities.length || hasConflict || !activityName || anyNotSaved" (click)="saveActivity(modal)">Save Activity</button>
+            </div>
+          </div>
+
+        </div>
+      </ng-container>
+      <ng-container *ngIf="saving">
+        <div class="d-flex loading-container">
+          <div class="lds-ellipsis m-auto"><div></div><div></div><div></div><div></div></div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+

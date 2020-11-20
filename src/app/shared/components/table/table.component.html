@@ -32,7 +32,7 @@
                         <div class="position-relative">
                             <!-- print col separator if needed -->
                             <div class="separator" *ngIf="i && col.separator"></div>
-                            <div>{{title |translate}}</div>
+                            <div>{{title | translate}}</div>
                             <div class="order-container multiple-order" *ngIf="col.order && col.order[i]">
                                 <div (click)="changeOrder(col.order[i],'ASC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-desc order-btn"></div>
                                 <div (click)="changeOrder(col.order[i],'DESC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-asc order-btn"></div>
@@ -193,7 +193,7 @@
     <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/delete.x.png" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.remove' | translate}}" class="action-icon"></div>
 </ng-template>
 <ng-template #progress let-action="action" let-item="item">
-    <div class="action-icon-container"><div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': itemsProgressWarning[item.id]}" [ngStyle]="{width:item[action.field]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz {{action.status ? action.status(item) : ''}}">{{item[action.field] | translate}} %</div></div></div>
+    <div class="action-icon-container"><div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': itemsProgressWarning[item.id]}" [ngStyle]="{width:item[action.field]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz {{action.status ? action.status(item) : ''}}">{{item[action.field]}} %</div></div></div>
 </ng-template>
 <ng-template #more let-item="item" let-action="action">
     <div class="action-icon-container"><span class="collapse-arrow action-icon">
