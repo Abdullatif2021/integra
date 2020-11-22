@@ -136,9 +136,9 @@
                             <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].availableRevisore,day: data[current_day], klass:'bg-green', title: 'shared.postmen_calendar.postman_available_title'}"></ng-container>
                         </div>
                         <div class="available-postmen-sub-part day-sub-part">
-                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].revisore ? data[current_day].revisore : [],day: data[current_day], klass:'bg-red', title: 'shared.postman_calender.busy_evisers_title'}"></ng-container>
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].revisore ? data[current_day].revisore : [],day: data[current_day], klass:'bg-red', title: 'shared.postmen_calendar.busy_evisers_title'}"></ng-container>
                         </div>
-                    </div>
+                    </div>  
                 </div>
                 <div class="single-day-col" *ngIf="data[current_day].skeleton">
                     <div class="day-part revisers-part">
@@ -237,10 +237,10 @@
                         <ng-select class="integraa-select" [bindLabel]="'name'" [items]="detailsStatuses" [(ngModel)]="details.status" [clearable]="false" (change)="detailsStatusChanged($event)"></ng-select>
                     </div>
                     <div class="notes postman-info-row2 mt-3">
-                        <app-comments title="Note interne" [comments]="details.internalNotes" (commentAdded)="addSetNote($event, 'internal_note')"></app-comments>
+                        <app-comments title="{{'shared.postmen_calendar.note_title'| translate}}" [comments]="details.internalNotes" (commentAdded)="addSetNote($event, 'internal_note')"></app-comments>
                     </div>
                     <div class="postman-notifications postman-info-row2 mt-3">
-                        <app-comments title="Notifica per postino" [file]="true" [comments]="details.postmanNotes" (commentAdded)="addSetNote($event, 'postman_note')"></app-comments>
+                        <app-comments title="{{'shared.postmen_calendar.notifiction_postman'| translate}}" [file]="true" [comments]="details.postmanNotes" (commentAdded)="addSetNote($event, 'postman_note')"></app-comments>
                     </div>
                 </div>
             </div>
@@ -260,7 +260,7 @@
                     <div class="d-flex">
                         <div class="postman-icon"><img src="/assets/images/postman-icon.png"></div>
                         <div class="postman-name">{{row.full_name}}</div>
-                        <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, day)"><fa-icon ngbTooltip="Nota distinta" [icon]="['fa','pen']"></fa-icon></div>
+                        <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, day)"><fa-icon ngbTooltip="{{'shared.postmen_calendar.ngbTooltip_openEditPostmanNoteModal'| translate}}" [icon]="['fa','pen']"></fa-icon></div>
                     </div>
                     <div class="postman-note">{{row.note}}</div>
                 </div>

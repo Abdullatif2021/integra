@@ -174,7 +174,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
     onDragEnd() {
-        console.log('your drag is ended')
+        console.log('your drag is ended');
         this.dragging = null ;
     }
 
@@ -259,13 +259,15 @@ export class AddressesComponent implements OnInit, OnDestroy {
         };
         this.listTreeService.mergeTwoStreets(this.preDispatch, source, target).pipe(takeUntil(this.unsubscribe)).subscribe(
             async data => {
-                this.snotifyService.success('Strade unite con successo', {showProgressBar: false});
+                this.snotifyService.success(this.translate.instant('schedule.address.snotify_mergeTwoStreets.success'),
+                {showProgressBar: false});
                 await this.reloadNode({item: {node: this.merge_data.source.parent, next: ''}});
                 this.merge_data = {source: null, targets: []};
 
             },
             error => {
-                this.snotifyService.error('Qualcosa è andato storto!!', {showProgressBar: false});
+                this.snotifyService.error(this.translate.instant('schedule.address.snotify_mergeTwoStreets.error'),
+                 {showProgressBar: false});
                 this.merge_data = {source: null, targets: []};
             }
         );
@@ -297,22 +299,26 @@ export class AddressesComponent implements OnInit, OnDestroy {
         if (item.type === 'cityId') {
             this.addressesActionsService.renameCity(item.id, this.preDispatch, event.target.value).subscribe(
                 data => {
-                    this.snotifyService.success('La città è stata rinominata con successo', {showProgressBar: false});
+                    this.snotifyService.success(this.translate.instant('schedule.address.snotify_renameCity.success'),
+                     {showProgressBar: false});
                 },
                 error => {
                     item.text = old;
-                    this.snotifyService.error('La città non è stata rinominata', {showProgressBar: false, timeout: 3000});
+                    this.snotifyService.error(this.translate.instant('schedule.address.snotify_renameCity.error'),
+                     {showProgressBar: false, timeout: 3000});
                 }
             );
         } else if (item.type === 'streetId') {
             this.addressesActionsService.renameStreet(item.parent.parent.id, this.preDispatch, item.parent.id, item.id, event.target.value)
                 .subscribe(
                     data => {
-                        this.snotifyService.success('La strada è stata rinominata con successo', {showProgressBar: false});
+                        this.snotifyService.success(this.translate.instant('schedule.address.snotify_renameStreet.success'),
+                         {showProgressBar: false});
                     },
                     error => {
                         item.text = old;
-                        this.snotifyService.error('La strada non è stata rinominata', {showProgressBar: false, timeout: 3000});
+                        this.snotifyService.error(this.translate.instant('schedule.address.snotify_renameStreet.error'),
+                         {showProgressBar: false, timeout: 3000});
                     }
                 );
         }
@@ -327,14 +333,17 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.addressesActionsService.updatePreDispatchStartPoint(this.preDispatch, input.itemsList.selectedItems[0].value.id).subscribe(
             data => {
                 if (data.success) {
-                    this.snotifyService.success('Punto d\'inizio aggiornato correttamente', {showProgressBar: false});
+                    this.snotifyService.success(this.translate.instant('schedule.address.snotify_updatePreDispatchStartPoint.success'),
+                     {showProgressBar: false});
                     this.startPointTextInput.nativeElement.value = input.itemsList.selectedItems[0].value.text;
                 } else {
-                    this.snotifyService.error('Il punto d\'inizio non è stato aggiornato', {showProgressBar: false});
+                    this.snotifyService.error(this.translate.instant('schedule.address.snotify_updatePreDispatchStartPoint.error'),
+                     {showProgressBar: false});
                 }
             },
             error => {
-                this.snotifyService.error('Il punto d\'inizio non è stato aggiornato', {showProgressBar: false});
+                this.snotifyService.error(this.translate.instant('schedule.address.snotify_updatePreDispatchStartPoint.error'),
+                 {showProgressBar: false});
             }
         );
     }
@@ -346,16 +355,20 @@ export class AddressesComponent implements OnInit, OnDestroy {
             try {
                 const e_res = await this.addressesActionsService.editStartPoint(address, input.address.id).toPromise();
                 if (!e_res.success) {
-                    return this.snotifyService.error('Start point was not updated', {showProgressBar: false});
+                    return this.snotifyService.error(this.translate.instant('schedule.address.snotify_editStartPoint.error'),
+                     {showProgressBar: false});
                 }
                 const res = await this.addressesActionsService.updatePreDispatchStartPoint(this.preDispatch, input.address.id).toPromise();
                 if (!res.success) {
-                    return this.snotifyService.error('Start point was not updated', {showProgressBar: false});
+                    return this.snotifyService.error(this.translate.instant('schedule.address.snotify_editStartPoint.error'),
+                     {showProgressBar: false});
                 }
-                this.snotifyService.success('Start Point updated successfully', {showProgressBar: false});
+                this.snotifyService.success(this.translate.instant('schedule.address.snotify_editStartPoint.success'),
+                 {showProgressBar: false});
                 this.startPointTextInput.nativeElement.value = input.address.text;
             } catch (e) {
-                this.snotifyService.error('Start point was not updated', {showProgressBar: false});
+                this.snotifyService.error(this.translate.instant('schedule.address.snotify_editStartPoint.error'),
+                 {showProgressBar: false});
             }
         }).catch((e) => {
             console.log(e);
@@ -369,16 +382,19 @@ export class AddressesComponent implements OnInit, OnDestroy {
             try {
                 const e_res = await this.addressesActionsService.editEndPoint(address, input.address.id).toPromise();
                 if (!e_res.success) {
-                    return this.snotifyService.error('End point was not updated', {showProgressBar: false});
+                    return this.snotifyService.error(this.translate.instant('schedule.address.snotify_editEndPoint.error'),
+                     {showProgressBar: false});
                 }
                 const res = await this.addressesActionsService.updatePoreDispatchEndPoint(this.preDispatch, input.address.id).toPromise();
                 if (!res.success) {
-                    return this.snotifyService.error('End point was not updated', {showProgressBar: false});
+                    return this.snotifyService.error(this.translate.instant('schedule.address.snotify_editEndPoint.error'),
+                     {showProgressBar: false});
                 }
-                this.snotifyService.success('Il punto di fine è stato aggiornato correttamente', {showProgressBar: false});
+                this.snotifyService.success(this.translate.instant('schedule.address.snotify_editEndPoint.success'),
+                 {showProgressBar: false});
                 this.endPointTextInput.nativeElement.value = input.address.text;
             } catch (e) {
-                this.snotifyService.error('Il punto di fine non è stato aggiornato', {showProgressBar: false});
+                this.snotifyService.error(this.translate.instant('schedule.address.snotify_editEndPoint.error2'), {showProgressBar: false});
             }
         }).catch((e) => {
 
@@ -392,14 +408,17 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.addressesActionsService.updatePoreDispatchEndPoint(this.preDispatch, select.itemsList.selectedItems[0].value.id).subscribe(
             data => {
                 if (data.success) {
-                    this.snotifyService.success('Il punto di fine è stato aggiornato correttamente', {showProgressBar: false});
+                    this.snotifyService.success(this.translate.instant('schedule.address.snotify_updatePoreDispatchEndPoint.success'),
+                     {showProgressBar: false});
                     this.endPointTextInput.nativeElement.value = select.itemsList.selectedItems[0].value.text;
                 } else {
-                    this.snotifyService.error('Il punto di fine non è stato aggiornato', {showProgressBar: false});
+                    this.snotifyService.error(this.translate.instant('schedule.address.snotify_updatePoreDispatchEndPoint.error'),
+                     {showProgressBar: false});
                 }
             },
             error => {
-                this.snotifyService.error('Il punto di fine non è stato aggiornato', {showProgressBar: false});
+                this.snotifyService.error(this.translate.instant('schedule.address.snotify_updatePoreDispatchEndPoint.error'),
+                 {showProgressBar: false});
             }
         );
     }
@@ -407,7 +426,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     async locateStartEndPoint(address: ACAddress, error_domain: string): Promise<ACAddress> {
         return new Promise<ACAddress>( async(resolve, reject) => {
             if (!address.hasObject) {
-                this.errors[error_domain] = 'Il formato di indirizzo è errato' ;
+                this.errors[error_domain] = this.translate.instant('schedule.address.locateStartEndPoint.error');
                 return reject(false);
             }
             if (!address.located) {
@@ -416,7 +435,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
                     address.address.lat = locatedAddress.lat ;
                     address.address.lng = locatedAddress.long ;
                 } catch (e) {
-                    this.errors[error_domain] = 'Non è stato possibile localizzare questo indirizzo';
+                    this.errors[error_domain] = this.translate.instant('schedule.address.locateStartEndPoint.error2');
                     return reject(e) ;
                 }
             }
@@ -430,10 +449,11 @@ export class AddressesComponent implements OnInit, OnDestroy {
             this.modalService.dismissAll();
             this.addressesActionsService.createStartPoint(address).subscribe(
                data => {
-                   this.snotifyService.success('Punto d\'inizio è stato creato con successo', {showProgressBar: false});
+                   this.snotifyService.success(this.translate.instant('schedule.address.createStartPoint.success'),
+                    {showProgressBar: false});
                },
                error => {
-                    this.snotifyService.error('Non è stato possibile creare il punto d\'inizio, Riprova più tardi!',
+                    this.snotifyService.error(this.translate.instant('schedule.address.createStartPoint.error'),
                         {showProgressBar: false});
                }
            ) ;
@@ -447,10 +467,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
             this.modalService.dismissAll();
             this.addressesActionsService.createEndPoint(address).subscribe(
                data => {
-                   this.snotifyService.success('Punto di fine è stato creato con successo', {showProgressBar: false});
+                   this.snotifyService.success(this.translate.instant('schedule.address.createEndPoint.success'), {showProgressBar: false});
                },
                error => {
-                    this.snotifyService.error('n è stato possibile creare il punto di fine, Riprova più tardi!', {showProgressBar: false});
+                    this.snotifyService.error(this.translate.instant('schedule.address.createEndPoint.error'), {showProgressBar: false});
                }
            ) ;
         }).catch((e) => {
@@ -512,10 +532,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
     async editBuildingAddress(input, item, container) {
         const address: ACAddress = input.address ;
         if (!address.hasObject) {
-            return this.errors['editBuildingAddress-' + item.id] = 'Si prega di inserire un\'indirizzo valido' ;
+            return this.errors['editBuildingAddress-' + item.id] = this.translate.instant('schedule.address.editBuildingAddress.error') ;
         }
         if (!address.address.strict) {
-            return this.errors['editBuildingAddress-' + item.id] = 'L\'indirizzo inserito deve essere un indirizzo di palazzo' ;
+            return this.errors['editBuildingAddress-' + item.id] = this.translate.instant('schedule.address.editBuildingAddress.error2') ;
         }
         if (!address.located) {
             try {
@@ -538,25 +558,27 @@ export class AddressesComponent implements OnInit, OnDestroy {
                     }
                 }
             } catch (e) {
-                return this.errors['editBuildingAddress-' + item.id] = 'Non è stato riuscito a localizzare questi indirizzi' ;
+                return this.errors['editBuildingAddress-' + item.id] =
+                this.translate.instant('schedule.address.editBuildingAddress.error3');
             }
         }
         this.errors['editBuildingAddress-' + item.id] = null ;
         container.style.display = 'none';
         this.addressesActionsService.changeBuldinAddress(address.address, item.id, this.preDispatch).subscribe(
             data => {
-                this.snotifyService.success('L\'indirizzo è stato modificato con successo', {showProgressBar: false});
+                this.snotifyService.success(this.translate.instant('schedule.address.changeBuldinAddress.success'),
+                 {showProgressBar: false});
                 this.reloadNode({item: {node: item.parent.parent}});
             },
             error => {
-                this.snotifyService.error('Errore durante l\'aggiornamento dell\'indirizzo', {showProgressBar: false});
+                this.snotifyService.error(this.translate.instant('schedule.address.changeBuldinAddress.error'), {showProgressBar: false});
             }
         );
     }
     async editBuildingLocation(latInput, lngInput, item, container) {
 
         if (!latInput.value || !lngInput.value || !parseFloat(latInput.value) || !parseFloat(lngInput.value)) {
-            return this.errors['editBuildingLocation-' + item.id] = 'Please Enter a valid coordinates' ;
+            return this.errors['editBuildingLocation-' + item.id] = this.translate.instant('schedule.address.editBuildingLocation.error');
         }
         this.errors['editBuildingLocation-' + item.id] = null ;
         container.style.display = 'none' ;
@@ -566,10 +588,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 lngInput.value = '' ;
                 this.mapService.removeMarker('EditLocationMarker');
                 this.mapService.onClick(null);
-                this.snotifyService.success('Coordinates Were Changed successfully', {showProgressBar: false});
+                this.snotifyService.success(this.translate.instant('schedule.address.removeMarker.success'), {showProgressBar: false});
             },
             error => {
-                this.snotifyService.error('Errore durante l\'aggiornamento dell\'indirizzo', {showProgressBar: false});
+                this.snotifyService.error(this.translate.instant('schedule.address.removeMarker.error'), {showProgressBar: false});
                 item.parent.expanded = false ;
                 item.parent.loading = false ;
                 this.reloadNode({item: {node: item.parent}});
@@ -583,7 +605,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
         if (force) {
             return this.planningService.moveToInPlanning(this.preDispatch, data, filter, status, () => {
                 this.reloadNode({item: {node: this.tree[0]}});
-                return 'I prodotti sono stati spostati con successo';
+                return this.translate.instant('schedule.address.moveToInPlanning.return');
             });
         }
         return this.planningService.moveToInPlanningCheck(this.preDispatch, data, filter, status).subscribe(
@@ -594,7 +616,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 } else {
                     this.planningService.moveToInPlanning(this.preDispatch, data, filter, status, () => {
                         this.reloadNode({item: {node: this.tree[0]}});
-                        return 'I prodotti sono stati spostati con successo';
+                        return this.translate.instant('schedule.address.moveToInPlanning.return');
                     });
                 }
             }
@@ -716,7 +738,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
                     this.addressesActionsService.changeBuldinAddress(
                         {lat: event.coords.lat, lng: event.coords.lng},
                         marker.id, this.preDispatch).subscribe(_data => {
-                            this.snotifyService.success('Posizione aggiornata', {showProgressBar: false});
+                            this.snotifyService.success(this.translate.instant('schedule.address.createMarkersList.success'),
+                            {showProgressBar: false});
                         });
                 });
             }

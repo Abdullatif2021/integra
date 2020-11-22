@@ -8,6 +8,7 @@ import {BackProcessingService} from '../back-processing.service';
 import {AppConfig} from '../../config/app.config';
 import {ApiResponseInterface} from '../../core/models/api-response.interface';
 import {MapService} from '../map.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +21,10 @@ export class PlanningService {
         private snotifyService: SnotifyService,
         private googleDirectionsService: GoogleDirectionsService,
         private backProcessingService: BackProcessingService,
-    ) { }
+        private translate: TranslateService,
+        ) {
+            translate.setDefaultLang('itly');
+        }
 
     moveItemsToInPlaningChanges = new EventEmitter<any>() ;
     moveItemsBackToAddressesChanges = new EventEmitter<any>() ;
@@ -55,7 +59,9 @@ export class PlanningService {
     }
 
     moveToInPlanning(preDispatchId, data, filter = null, status = null, success) {
-        this.run(this.sendMoveToInPlanningRequest(preDispatchId, data, filter, status, true), 'Moving Items', success, () => {
+        this.run(this.sendMoveToInPlanningRequest(preDispatchId, data, filter, status, true),
+         this.translate.instant('services.planning_service.moving_items'),
+         success, () => {
             console.log('error');
         });
     }

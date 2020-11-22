@@ -44,23 +44,25 @@ export class ParametersComponent implements OnInit, OnDestroy {
 
     options = {
         serviceTimeOptions: [
-            {label: 'Default', value: ''},
-            {label: '5 Minuti', value: '5'},
-            {label: '10 Minuti', value: '10'},
-            {label: '15 Minuti', value: '15'},
-            {label: '20 Minuti', value: '20'},
-            {label: '30 Minuti', value: '30'},
+            {label: this.translate.instant('schedule.parameters.options.default'), value: ''},
+            {label: this.translate.instant('schedule.parameters.options.time1'), value: '5'},
+            {label: this.translate.instant('schedule.parameters.options.time2'), value: '10'},
+            {label: this.translate.instant('schedule.parameters.options.time3'), value: '15'},
+            {label: this.translate.instant('schedule.parameters.options.time4'), value: '20'},
+            {label: this.translate.instant('schedule.parameters.options.time5'), value: '30'},
         ],
         travelModes: [
-            {label: 'Moto', value: 'bicycle'},
-            {label: 'Auto', value: 'car'}
+            {label: this.translate.instant('schedule.parameters.options.travelModes.moto'), value: 'bicycle'},
+            {label: this.translate.instant('schedule.parameters.options.travelModes.auto'), value: 'car'}
         ],
         devision: [20, 50, 70, 100],
-        target:  [{label: 'Percorso più corto', value: 'short_path'}, {label: 'Tempo minore', value: 'less_time'}],
-        mixedCities:  [{label: 'Consentito', value: true}, {label: 'Non consentito', value: false}],
+        target:  [{label: this.translate.instant('schedule.parameters.options.target.shorter_route'),
+         value: 'short_path'}, {label: this.translate.instant('schedule.parameters.options.target.less_time'), value: 'less_time'}],
+        mixedCities:  [{label: this.translate.instant('schedule.parameters.options.mixedCities.allowed'), value: true},
+                    {label: this.translate.instant('schedule.parameters.options.mixedCities.not_allowed'), value: false}],
         pathStart:  [
-            {label: 'Dal più vicino al più lontano', value: 'from_start_to_end'},
-            {label: 'Dal più lontano al più vicino', value: 'from_end_to_start'}
+            {label: this.translate.instant('schedule.parameters.options.pathStartr.from_start_to_end'), value: 'from_start_to_end'},
+            {label: this.translate.instant('schedule.parameters.options.pathStart.from_end_to_start'), value: 'from_end_to_start'}
         ],
     };
 
@@ -106,7 +108,8 @@ export class ParametersComponent implements OnInit, OnDestroy {
     @ViewChild('lowmatchesModal') lowmatchesModal: NgbModalRef ;
     @ViewChild('fullmatchesModal') fullmatchesModal: NgbModalRef ;
 
-    views = [{value: 1, label: 'Secondo i parametri impostati'}, {value: 2, label: 'Secondo predistinta pianificata'}];
+    views = [{value: 1, label: this.translate.instant('schedule.parameters.view.1')},
+     {value: 2, label: this.translate.instant('schedule.parameters.view.2')}];
     unsubscribe: Subject<void> = new Subject();
     errors = {} ;
 
@@ -120,7 +123,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
                 this.updateDataObject();
             },
             error => {
-                this.snotifyService.error('Qualcosa è andato storto!!');
+                this.snotifyService.error(this.translate.instant('schedule.parameters.getPreDispatchData.error'));
             }
         );
         this.scheduleService.nextButtonClicked.pipe(takeUntil(this.unsubscribe)).subscribe(
@@ -381,7 +384,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
             return ;
         }
         if (this.backProcessingService.isRunning('planning-' + this.preDispatch)) {
-            this.snotifyService.warning('already in planning !', {
+            this.snotifyService.warning(this.translate.instant('schedule.parameters.validateAll.warning'), {
                 position: 'centerTop',
                 showProgressBar: false,
             });
@@ -389,15 +392,16 @@ export class ParametersComponent implements OnInit, OnDestroy {
         await this.planningService.saveParameters(this.getData(), async () => {
 
             if (['notPlanned', 'in_grouping', 'in_localize'].find((elm) => elm === this.preDispatchData.status)) {
-                this.snotifyService.warning('Per iniziare la pianificazione, è necessario localizzare questa pre-distinta',
+                this.snotifyService.warning(this.translate.instant('schedule.parameters.saveParameters.warning'),
                     {
                         position: 'centerTop',
                         showProgressBar: false,
                         type: 'confirm',
                         timeout: 6000,
                         buttons: [
-                            {text: 'Close', action: (toast) => { this.snotifyService.remove(toast.id); }},
-                            {text: 'Localize', action: (toast) => {
+                            {text: this.translate.instant('schedule.parameters.saveParameters.buttons.close'),
+                             action: (toast) => { this.snotifyService.remove(toast.id); }},
+                            {text: this.translate.instant('schedule.parameters.saveParameters.buttons.locolize'), action: (toast) => {
                                     // this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
                                     window.parent.postMessage({runPreDispatch: this.preDispatchData}, '*');
                                     this.snotifyService.remove(toast.id);
@@ -405,18 +409,18 @@ export class ParametersComponent implements OnInit, OnDestroy {
                         ]
                     }
                 );
-                return 'Successo';
+                return this.translate.instant('schedule.parameters.saveParameters.buttons.return');
             }
             if (!this.can_plan) {
-                this.snotifyService.error('Nessun oggetto da pianificare!', {
+                this.snotifyService.error(this.translate.instant('schedule.parameters.can_plan.error'), {
                     position: 'centerTop',
                     timeout: 6000,
                     showProgressBar: false,
                 });
-                return 'Successo';
+                return this.translate.instant('schedule.parameters.can_plan.return');
             }
             this.startPlanning();
-            return 'Successo' ;
+            return this.translate.instant('schedule.parameters.can_plan.return') ;
         }, (e) => {
             if (this.data.departure_time && !this.data.departure_date) {
                 this.errors['departure_date'] = 1;

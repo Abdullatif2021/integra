@@ -5,6 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {DragAndDropService} from '../../../../service/drag-and-drop.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {ScheduleService} from '../../service/schedule.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-not-fixed-tree',
@@ -18,8 +19,11 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
       private snotifyService: SnotifyService,
       private route: ActivatedRoute,
       private dragAndDropService: DragAndDropService,
-      private scheduleService: ScheduleService
-  ) { }
+      private scheduleService: ScheduleService,
+      private translate: TranslateService,
+      ) {
+          translate.setDefaultLang('itly');
+      }
 
   list = [];
   preDispatch;
@@ -35,11 +39,13 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
     this.preDispatch = this.route.snapshot.params.id;
     this.preDispatchData = this.route.snapshot.data.data ;
     const data = await this.resultsService.getNotFixedItems(this.preDispatch).toPromise().catch(e => {
-      this.snotifyService.error('Qualcosa andato storto', { showProgressBar: false, timeout: 1500 });
+      this.snotifyService.error( this.translate.instant('schedule.fixed_tree.getNotFixedItems.error'),
+       { showProgressBar: false, timeout: 1500 });
     });
     if (data && data.data) {
       this.list = data.data ;
-      this.snotifyService.warning('Alcuni prodotti doveno trascianti manualmente alle distinte', { showProgressBar: false, timeout: 1500 });
+      this.snotifyService.warning( this.translate.instant('schedule.fixed_tree.getNotFixedItems.warning'),
+       { showProgressBar: false, timeout: 1500 });
     }
     this.dragAndDropService.dropped.pipe(takeUntil(this.unsubscribe)).subscribe(
         (_d: any) => {
@@ -80,12 +86,13 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
   }
 
   async loadMore() {
-      if (this.loading) { return ;}
+      if (this.loading) { return ; }
       this.page++;
       this.loading = true ;
       this.list.push({skeleton: true});
       const data = await this.resultsService.getNotFixedItems(this.preDispatch, this.page).toPromise().catch(e => {
-          this.snotifyService.error('Qualcosa andato storto', { showProgressBar: false, timeout: 1500 });
+          this.snotifyService.error( this.translate.instant('schedule.fixed_tree.getNotFixedItems.error'),
+           { showProgressBar: false, timeout: 1500 });
       });
       this.list.pop();
       this.loading = false ;

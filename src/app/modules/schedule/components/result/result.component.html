@@ -78,10 +78,10 @@
           </div>
           <div class="col-5 wide-col">
             <div class="postman-name h-100" >
-              <ng-select *ngIf="!item.is_distenta_created && !notFixedProductsTableShown" class="integraa-select postman-select" [items]="postmen[parent.day]" [placeholder]="'Not Assigned'" (change)="assignPostman($event, item, parent)" [clearable]="false" [bindLabel]="'full_name'" [(ngModel)]="selectedPostmen[parent.day][item.id]"></ng-select>
+              <ng-select *ngIf="!item.is_distenta_created && !notFixedProductsTableShown" class="integraa-select postman-select" [items]="postmen[parent.day]" placeholder="{{'schedule.result.plshold.not_assigned' | translate}}" (change)="assignPostman($event, item, parent)" [clearable]="false" [bindLabel]="'full_name'" [(ngModel)]="selectedPostmen[parent.day][item.id]"></ng-select>
               <span class="mt-auto mb-auto" *ngIf="item.is_distenta_created" >{{selectedPostmen[parent.day][item.id] ? selectedPostmen[parent.day][item.id].full_name : 'Not Assigned'}}</span>
               <select [disabled]="true" *ngIf="notFixedProductsTableShown" class="integraa-select postman-select ng-select-similar"><option selected>{{'schedule.result.not_assigned2' | translate}}</option></select>
-              <input type="text" (change)="changeDispatchName($event, item)" *ngIf="scheduleResultsDisplayedTab === 'assigned'" [disabled]="item.is_distenta_created" class="dispatch-name-input" value="{{item.name}}" placeholder="Nome distinta"/>
+              <input type="text" (change)="changeDispatchName($event, item)" *ngIf="scheduleResultsDisplayedTab === 'assigned'" [disabled]="item.is_distenta_created" class="dispatch-name-input" value="{{item.name}}" placeholder="{{'schedule.result.plshold.dispatchname' | translate}}"/>
               <span class="error-msg" *ngIf="errors.sets[item.id] === 1">{{'schedule.result.required_field' | translate}}</span>
             </div>
           </div>

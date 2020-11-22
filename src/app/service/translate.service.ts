@@ -10,7 +10,7 @@ export class OwnTranslateService {
     const keysChain = key.split('.');
     let currentObjState = itl;
     // will set from local storage when support multi labguage
-    switch (setting.lang){
+    switch (setting.lang) {
         case 'en' : break;
         default : currentObjState = itl; }
         for ( key of keysChain) {

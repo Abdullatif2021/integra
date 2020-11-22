@@ -164,10 +164,10 @@ export class DispatchViewComponent implements OnInit {
         if (!isPrepared) { return ;}
         this.actionsService.setActions([
             {
-                name: 'Cambiare stato', fields: [
+                name: this.translate.instant('pages.dispatch_view.action.action_name'), fields: [
                     { type: 'select', field: 'method', options: [
-                            {name: 'Selezionati', value: 'selected'},
-                            {name: 'Secondo i filtri applicati', value: 'filters'}
+                            {name: this.translate.instant('pages.dispatch_view.action.selected'), value: 'selected'},
+                            {name: this.translate.instant('pages.dispatch_view.action.by_filter'), value: 'filters'}
                         ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
                     }
                 ],

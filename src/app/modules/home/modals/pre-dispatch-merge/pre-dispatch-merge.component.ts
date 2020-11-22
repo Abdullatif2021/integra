@@ -18,7 +18,7 @@ export class PreDispatchMergeComponent extends ModalComponent implements OnInit 
       private translate: TranslateService,
   ) {
     super();
-    translate.setDefaultLang('itl');
+    translate.setDefaultLang('itly');
   }
 
   name = '' ;

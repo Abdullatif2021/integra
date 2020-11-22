@@ -1,6 +1,6 @@
 <div class="d-flex tables-area full-width">
   <div class="full-width-table v-wide-col">
-    <app-table [items]="preDispatchList" [refresh]="refresh" (orderChange)="changeOrder($event)" [parent]="this" (selected)="selectedItemsChanged($event)" #preDispatchTable [table]="table"></app-table>
+    <app-table [items]="preDispatchList" [refresh]="refresh" style="text-align: center;" (orderChange)="changeOrder($event)" [parent]="this" (selected)="selectedItemsChanged($event)" #preDispatchTable [table]="table"></app-table>
   </div>
 </div>
 <ng-template appModal></ng-template>

@@ -83,12 +83,15 @@ export class SetStatusModalComponent extends ModalComponent implements OnInit, O
             this.statusesService.updateProductsStatusByProducts(selected, this.selectedStatus).subscribe(
                 data => {
                     if (data.success) {
-                        this.snotifyService.success('Status changed successfully', { showProgressBar: false, timeout: 2000 });
+                        this.snotifyService.success(this.translate.instant('pages.dispatch_view.modals.set_status.success_massege'),
+                         { showProgressBar: false, timeout: 2000 });
                     } else {
-                        this.snotifyService.error('Something went wrong', { showProgressBar: false, timeout: 2000 });
+                        this.snotifyService.error(this.translate.instant('pages.dispatch_view.modals.set_status.wrong_massege'),
+                         { showProgressBar: false, timeout: 2000 });
                     }
                 }, error => {
-                    this.snotifyService.error('Something went wrong', { showProgressBar: false, timeout: 2000 });
+                    this.snotifyService.error(this.translate.instant('pages.dispatch_view.modals.set_status.wrong_massege'),
+                    { showProgressBar: false, timeout: 2000 });
                 }
             );
         }
@@ -96,12 +99,15 @@ export class SetStatusModalComponent extends ModalComponent implements OnInit, O
             this.statusesService.updateProductsStatusByFilters(this.selectedStatus).subscribe(
                 data => {
                     if (data.success) {
-                        this.snotifyService.success('Status changed successfully', { showProgressBar: false, timeout: 2000 });
+                        this.snotifyService.success(this.translate.instant('pages.dispatch_view.modals.set_status.success_massege'),
+                         { showProgressBar: false, timeout: 2000 });
                     } else {
-                        this.snotifyService.error('Something went wrong', { showProgressBar: false, timeout: 2000 });
+                        this.snotifyService.error(this.translate.instant('pages.dispatch_view.modals.set_status.wrong_massege')
+                        , { showProgressBar: false, timeout: 2000 });
                     }
                 }, error => {
-                    this.snotifyService.error('Something went wrong', { showProgressBar: false, timeout: 2000 });
+                    this.snotifyService.error(this.translate.instant('pages.dispatch_view.modals.set_status.wrong_massege'),
+                     { showProgressBar: false, timeout: 2000 });
                 }
             );
         }

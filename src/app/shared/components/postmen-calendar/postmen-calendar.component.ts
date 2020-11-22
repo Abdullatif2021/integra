@@ -115,8 +115,6 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
           return this.data = null ;
       }
       const date = new Date(this.data[0].dayDate.split('/').reverse().join('-'));
-      
-
 
     let currentMonth = this.monthes[date.getMonth()];
     this.translate.get(`${currentMonth}`).subscribe(( data: any ) =>  {
@@ -126,8 +124,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
           `.trim();
     });
 
-    // this.translate.get('menu').subscribe((data:any)=> {        console.log(data);       });
-      
+    // this.translate.get('menu').subscribe((data:any)=> {        console.log(data);       })
 
 
       this.data_sizes = {postmen: 0, revisore: 0, availablePostmen: 0, availableRevisore: 0 };
@@ -288,7 +285,8 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
 
       // get the available postmen.
       const ap = await this.availableUsersGetMethod(postman).toPromise().catch(e => {});
-      if (!ap) { return this.snotifyService.error('Something went wrong', {showProgressBar: false}); }
+      if (!ap) { return this.snotifyService.error(this.translate.instant('shared.postmen_calendar.error_massege'),
+       {showProgressBar: false}); }
       this.availableUsers = ap.data;
 
       // get the details.

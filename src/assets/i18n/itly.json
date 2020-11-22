@@ -57,6 +57,21 @@
   },
   "home": {
     "modals": {
+      "not_delivered_actions": {
+          "action_name": "Cambiare stato",
+          "selected": "Selezionati",
+          "by_filter": "Secondo i filtri applicati",
+          "action_name2": "Aggiungi a Pre-Distinta esistente",
+          "selected2": "Selezionati",
+          "by_filter2": "Secondo i filtri applicati",
+
+          "warning": { 
+            "name_is_short": "Il nuovo nome è molto corto",
+            "select_first": "You have to select products first",
+            "no_filter_applied": "No Filters applied"
+
+          }
+      },
       "dispatch_assign": {
         "filter_applied": "ATTENZIONE! Non è stato applicato nessun filtro, sei sicuro di voler eseguire?",
         "run": "Esegui",
@@ -113,7 +128,7 @@
         "dele_prod": "Sei sicuro di voler cancellare questo prodotto?",
         "no_select": " Nessuna riga selezionata !",
         "run": "Esegui",
-        "cancel": "Cancel",
+        "cancel": "Annulla",
         "go_out": "Esci",
         "canot_dele": "Non puoi eliminare la pre-distinta mentre che c'è un processo in lavorazione, pausa il processo e riprova a eliminarla.",
         "ok": "Ok",
@@ -174,7 +189,104 @@
         "value1": "Continua",
         "value2": "Annulla"
       }
+    },
+    "modules": {
+      "delivering_calender": {
+        "name": "",
+        "agency": "Agenzia",
+        "productTypeName": "Nome Prodotto:",
+        "recipientName": "Nominativo Destinatario",
+        "client": "Cliente",
+        "filteragency": "Agenzia",
+        "filtername": "Nominativo Distinta",
+        "dayNote": "Nota giorno",
+        "setNote": "Note interne",
+        "postmanNote": "Notifiche postino",
+        "postmanDayNote": "Note distinta",
+        "docName": "Nome allegato",
+        "states": "Stato Distinta ",
+        "prepared": "Prepared",
+        "StartDataDistinta": "Start Data Distinta:",
+        "DataDistinta:": "Data Distinta:",
+        "barcode": "Codice Barre",
+        "actCode": "Codice Atto",
+        "setCode": "Set Code",
+        "productTypeNameId": "Prodotto",
+        "category": "Categoria",
+        "recipientName2": "Nominativo Destinatario",
+        "recipientCap": "CAP Destinatario:",
+        "recipientAddress": "Indirizzo Destinatario:",
+        "week": "Week",
+        "day": "Day",
+        "prepared2": "Borsa Pronta alla consegna",
+        "prepareDispatch": "selected",
+        "revisore": "revisore",
+        "addNoteToSet": {
+          "success": "Node Added Successfuly",
+          "error": "Something went wrong"
+        },
+        "assignToUser": {
+          "success": "Set Assigned Successfully",
+          "error": "Something went wrong"
+        },
+        "updateDayNote": {
+          "success": "Note Updated Successfuly",
+          "error": "Something went wrong"
+        },
+        "updatePostmanDayNote":{
+          "success": "Postman Note Updated Successfuly",
+          "error": "Something went wrong"
+        }          
+      },
+      "dispatch_calender": {
+        "name": "",
+        "agency": "Agenzia",
+        "productTypeName": "Nome Prodotto:",
+        "recipientName": "Nominativo Destinatario",
+        "client": "Cliente",
+        "filteragency": "Agenzia",
+        "filtername": "Nominativo Distinta",
+        "dayNote": "Nota giorno",
+        "setNote": "Note interne",
+        "postmanNote": "Notifiche postino",
+        "postmanDayNote": "Note distinta",
+        "docName": "Nome allegato",
+        "states": "Stato Distinta ",
+        "prepared": "Prepared",
+        "StartDataDistinta": "Start Data Distinta:",
+        "DataDistinta:": "Data Distinta:",
+        "barcode": "Codice Barre",
+        "actCode": "Codice Atto",
+        "setCode": "Set Code",
+        "productTypeNameId": "Prodotto",
+        "category": "Categoria",
+        "recipientName2": "Nominativo Destinatario",
+        "recipientCap": "CAP Destinatario:",
+        "recipientAddress": "Indirizzo Destinatario:",
+        "week": "Week",
+        "day": "Day",
+        "prepared2": "Borsa Pronta alla consegna",
+        "prepareDispatch": "selected",
+        "revisore": "revisore",
+        "addNoteToSet": {
+          "success": "Node Added Successfuly",
+          "error": "Something went wrong"
+        },
+        "assignToUser": {
+          "success": "Set Assigned Successfully",
+          "error": "Something went wrong"
+        },
+         "updateDayNote": {
+          "success": "Note Updated Successfuly",
+          "error": "Something went wrong"
+        },
+        "updatePostmanDayNote":{
+          "success": "Postman Note Updated Successfuly",
+          "error": "Something went wrong"
+        }          
+       
     }
+  }
   },
   "pages": {
     "dispatch_log": {
@@ -190,6 +302,11 @@
       "product": "Prodotto",
       "barcode": "Codice a Barre",
       "act_code": "Codice Atto",
+      "action": {
+        "action_name": "Cambiare stato",
+        "selected": "Selezionati",
+        "by_filter": "Secondo i filtri applicati"
+      },
       "modals": {
         "set_status": {
           "filter_applied": "ATTENZIONE! Non è stato applicato nessun filtro, sei sicuro di voler eseguire?",
@@ -199,7 +316,9 @@
           "about_try": "ATTENZIONE! questo è il numero di prodotti che hai selezionato",
           "correct_quantity": " sei sicuro di non voler cambiare.",
           "select_status": "Devi selezionare uno stato",
-          "status_req": "Lo stato è obbligatorio"
+          "status_req": "Lo stato è obbligatorio",
+          "success_massege": "Status changed successfully",
+          "wrong_massege": "Some thing Went wrong"
         }
       }
     },
@@ -248,7 +367,73 @@
       "create_strpoint": "Crea punto d'inizio",
       "strpoint_address": "Indirizzo peeeeunto d'inizio",
       "create_strpoint2": "Crea punto d'inizio",
-      "strpoint_address2": "Indirizzo punto d'inizio"
+      "strpoint_address2": "Indirizzo punto d'inizio",
+
+      "snotify_mergeTwoStreets": {
+        "success": "Strade unite con successo",
+        "error": "Qualcosa è andato storto!!"
+      },
+      "snotify_renameCity": {
+        "success": "La città è stata rinominata con successo",
+        "error": "La città non è stata rinominata"
+      },
+      "snotify_renameStreet": {
+        "success": "La strada è stata rinominata con successo",
+        "error": "La strada non è stata rinominata"
+      },
+      "snotify_updatePreDispatchStartPoint": {
+        "success": "Punto d/'inizio aggiornato correttamente",
+        "error": "Il punto d/'inizio non è stato aggiornato"
+      },
+      "snotify_editStartPoint": {
+        "success": "Punto di partenza aggiornato correttamente",
+        "error": "Il punto di partenza non è stato aggiornato"
+      },
+      "snotify_editEndPoint": {
+        "success": "Il punto di fine è stato aggiornato correttamente",
+        "error": "Il punto finale non è stato aggiornato",
+        "error2": "Il punto di fine non è stato aggiornato"
+      },
+      "snotify_updatePoreDispatchEndPoint": {
+        "success": "Il punto di fine è stato aggiornato correttamente",
+        "error": "Il punto di fine non è stato aggiornato"
+      },
+      "locateStartEndPoint": {
+        "error": "Il formato di indirizzo è errato",
+        "error2": "Non è stato possibile localizzare questo indirizzo"
+      },
+      "createStartPoint": {
+        "success": "Punto d/'inizio è stato creato con successo",
+        "error": "Non è stato possibile creare il punto d/'inizio, Riprova più tardi!"
+      },
+      "createEndPoint": {
+        "success": "Punto di fine è stato creato con successo",
+        "error": "n è stato possibile creare il punto di fine, Riprova più tardi!"
+      },
+      "editBuildingAddress": {
+        "error": "Si prega di inserire un/'indirizzo valido",
+        "error2": "L/'indirizzo inserito deve essere un indirizzo di palazzo",
+        "error3": "Non è stato riuscito a localizzare questi indirizzi"
+      },
+      "changeBuldinAddress": {
+        "success": "L/'indirizzo è stato modificato con successo",
+        "error": "Errore durante l/'aggiornamento dell/'indirizzo"
+      },
+      "editBuildingLocation": {
+        "error": "Please Enter a valid coordinates"
+      },
+      "removeMarker": {
+        "success": "Coordinates Were Changed successfully",
+        "error": "Errore durante l/'aggiornamento dell/'indirizzo"
+      },
+      "moveToInPlanning": {
+        "return": "I prodotti sono stati spostati con successo"
+      },
+      "createMarkersList": {
+        "success": "Posizione aggiornata"
+
+      }
+
         },
     "parameters": {
         "general_settings": "Impostazioni Generali",
@@ -275,8 +460,31 @@
         "print_oper": "Prendere in considerazione lavorazione di Stampa",
         "ques_res": "Vuoi far uscire sulla stessa via gli esiti degli assenti e non assenti per fare i passaggi successivi nella stessa distinta?",
         "predistinct_planned": "Predistinte pianificate",
-        "plan": "Pianifica"
-                },
+        "plan": "Pianifica",
+        "options": { 
+          "default": "Default",
+          "time1": "5 Minuti",
+          "time2": "10 Minuti",
+          "time3": "15 Minuti",
+          "time4": "20 Minuti",
+          "time5": "30 Minuti",
+          "travelModes": {"moto": "Moto","auto": "Auto"},
+          "target":  {"shorter_route": "Percorso più corto","less_time": "Tempo minore"},
+          "mixedCities":{ "allowed": "Consentito","not_allowed": "Non consentito"},
+          "pathStart":{"from_start_to_end": "Dal più vicino al più lontano","from_end_to_start": "Dal più lontano al più vicino"}
+              },
+          "view": {"1": "Secondo i parametri impostati","2": "Secondo predistinta pianificata"},
+          "getPreDispatchData": {"error": "Qualcosa è andato storto!!"},
+          "validateAll": {"warning": "already in planning !"},
+          "saveParameters": {
+            "warning": "Per iniziare la pianificazione, è necessario localizzare questa pre-distinta",
+            "buttons": {"close": "Close", "locolize": "Localize", "return": "Successo"}
+          },
+          "can_plan": { 
+            "error": "Nessun oggetto da pianificare!",
+            "return": "Successo"
+          }
+            },
     "result": {
       "not_assigned": "Non assegnati",
       "assigned": "Assegnati",
@@ -286,6 +494,10 @@
       "not_assigned2": "Non assegnati",
       "required_field": "Campo obbligatorio",
       "deliveries": "Consegne",
+      "plshold": {
+        "not_assigned": "Not Assigned",
+        "dispatchname": "Nome distinta"
+      },
       "found": "Trovato",
       "not_found": "Non Trovato",
       "adres": "Indirizzo",
@@ -297,16 +509,47 @@
       "act_code": "Codice Atto",
       "proceed_with_operation": "Per procedere con questa operazione è necessario riprogrammare alcune distinte",
       "run": "Esegui",
-      "stop": "Fermare"
+      "stop": "Fermare",
+      "scheduleResults": {
+        "success": "Postino assegnato", 
+        "error": "Qualcosa è andato storto!!"
+       },
+       "makeDispatchesVisible": {
+        "warning": "Nessuna distinta selezionata",
+        "warning2": "Some sets does not have name",
+        "success": "Distinta è stata creata con successo!",
+        "error": "Qualcosa è andato storto!!"
+       },
+       "add_start_and_end_points": {
+         "start_end": "Start/End",
+         "start": "Start",
+         "end": "End"
+       },
+       "updateItemsMarkers": "Some Items was not saved, are you sure you want to exit",
+       "saveMovedNotFixed": {
+        "success": "Prodotti spostati con successo", 
+        "error": "Qualcosa è andato storto spostando il prodotto"
+       },
+       "moveSelectedTo": {"warning": "Nessun prodotto selezionato", "warning2": "Non puoi spostare prodotti assegnati"},
+      "sendMoveToRequest": { "error": "Impossibile spostare i prodotti" ,"success": "Dati spostati correttamente"}
+
+       
          },
     "to_plan": {
         "quint": "Q.ta",
-        "reload": "Reload"
+        "reload": "Reload",
+        "moveToInPlanning": "Items moved successfully"
     },
+
     "fixed_tree": { 
       "address": "Indirizzo",
       "deliver": "Consegne",
-      "time_of_arrival": "Ora d’arrivo"
+      "time_of_arrival": "Ora d’arrivo",
+      "getNotFixedItems": {"error": "Qualcosa andato storto","warning": "Alcuni prodotti doveno trascianti manualmente alle distinte"}
+    },
+    "list_tree_service": {
+      "success": "Strada spostata con successo",
+      "success2": "Cap spostato con successo"
     },
     "schedule1": {
         "addresses": "Indirizzi",
@@ -336,6 +579,14 @@
     }
     },
   "settings": {
+      "subSettings": {
+        "general": {"service_time": "Tempo di servizio",
+                    "pagination_options": "Pagination Options"
+                    },
+        "settings": {"general": "General",
+                     "map_provider": "Map Provider"
+                     }
+      },
       "header": {
         "back": "Indietro",
         "add_new_key": "Aggiungi nuova chiave"
@@ -384,6 +635,9 @@
         "product": "Prodotti",
         "preparing_bag": "Operatore che prepara la borsa",
         "preparation_outcome": "Esito preparazione borsa",
+        "note_title": "Note interne",
+        "notifiction_postman": "Notifica per postino",
+        "ngbTooltip_openEditPostmanNoteModal": "Nota distinta",
         "postman_note": "Set Postman Note",
         "postman_note_plhold": "Note",
         "continue": "Continua",
@@ -423,11 +677,13 @@
           "october": "ottobre",
           "november": "novembre",
           "december": "dicembre"
-        }
+        },
+        "error_massege": "Something went wrong"
                 },
       "table": {
         "ngbTooltip": {
           "view": "Visualizza",
+          "print": "Stampa",
           "export": "Esporta",
           "edit": "Modifica",
           "calender": "Calender",
@@ -436,6 +692,28 @@
           "remove": "Elimina",
           "more": "Di Più",
           "less": "Di meno"
+        }
+      }
+  },
+  "services":{
+      "planning_service": {"moving_items": "Moving Items"},
+      "pre_dispatch_global_actions_service": {
+        "ultimatePause": {
+          "error": "Qualcosa è andato storto, controlla le impostazioni...",
+          "error2": "Process Aborted"
+        }
+      },
+      "pre_dispatch_service": {
+        "translateStatus":{
+          "in_localize": "In localizzazione",
+          "notPlanned": "Non Pianificato",
+          "planned": "Pianificata",
+          "inPlanning": "In Pianificazione",
+          "localized": "Localizzato",
+          "in_grouping": "Ragruppamento",
+          "in_divide": "In Divisione",
+          "in_drawing": "Percoso in disegnamento",
+          "drawing_paths": "Disegno percorso"
         }
       }
   },
@@ -546,7 +824,7 @@
         "bill_date": "Data Distinta:",
         "bar_code": "Codice Barre",
         "act_code": "Codiceatto",
-        "set_code": "Set Code",
+        "set_code": "Imposta codice",
         "product": "Prodotto",
         "category": "Categoria",
         "recipient_name": "Nominativo Destinatario",
@@ -576,7 +854,7 @@
         "bill_date": "Data Distinta:",
         "bar_code": "Codice Barre",
         "act_code": "Codice Atto",
-        "set_code": "Set Code",
+        "set_code": "Imposta codice",
         "product": "Prodotto",
         "category": "Categoria",
         "recipient_name": "Nominativo Destinatario",
@@ -601,7 +879,7 @@
         "plhold": "Cerca postino previsto"
       },
       "custom_postmen_table": {
-        "value": "Postmen",
+        "value": "Postini",
         "plhold": "Cerca postino previsto"
       },
       "reviser_table": {
@@ -629,7 +907,7 @@
       "products_table": {
         "cols": {
           "action": "Azioni",
-          "bar_code": "BARCODE ",
+          "bar_code": "Codice a barre",
           "act": "ATTO",
           "product_list": {
             "product": "PRODOTTO",

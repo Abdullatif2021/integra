@@ -6,7 +6,7 @@
     <app-simple-table #StreetsTable (onAction)="handleStreetsAction($event)" [table]="streetsTable" (changed)="streetChanged($event)" [getMethod]="streetsGetMethod"></app-simple-table>
   </div>
   <div class="large-table v-wide-col">
-    <app-table #ProductsTable (selected)="selectedItemsChanged($event)" (orderChange)="changeOrder($event)" [items]="products" [table]="productsTable"></app-table>
+    <app-table #ProductsTable style="text-align: center;" (selected)="selectedItemsChanged($event)" (orderChange)="changeOrder($event)" [items]="products" [table]="productsTable"></app-table>
   </div>
 </div>
 <ng-template appModal></ng-template>

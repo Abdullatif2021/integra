@@ -55,10 +55,10 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
 
   actions = [
     {
-        name: 'Cambiare stato', fields: [
+        name: this.translate.instant('home.modals.not_delivered_actions.action_name'), fields: [
             { type: 'select', field: 'method', options: [
-                    {name: 'Selezionati', value: 'selected'},
-                    {name: 'Secondo i filtri applicati', value: 'filters'}
+                    {name: this.translate.instant('home.modals.not_delivered_actions.selected'), value: 'selected'},
+                    {name: this.translate.instant('home.modals.not_delivered_actions.by_filter'), value: 'filters'}
                 ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ],
@@ -101,10 +101,10 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       this.activatedRoute.queryParams.subscribe(params => {
           if (params['actionsonly'] === 'addproductstopd') {
               this.actions = <any>{
-                  name: 'Aggiungi a Pre-Distinta esistente', fields: [
+                  name: this.translate.instant('home.modals.not_delivered_actions.action_name2'), fields: [
                       { type: 'select', field: 'method', options: [
-                              {name: 'Selezionati', value: 'selected'},
-                              {name: 'Secondo i filtri applicati', value: 'filters'}
+                              {name: this.translate.instant('home.modals.not_delivered_actions.selected2'), value: 'selected'},
+                              {name: this.translate.instant('home.modals.not_delivered_actions.by_filter2'), value: 'filters'}
                           ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
                       }
                   ],
@@ -243,7 +243,8 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
   handleStreetsAction(event) {
       if (event.action.action === 'rename') {
           if (event.inputValue.length < 2 ) {
-              this.snotifyService.warning('Il nuovo nome è molto corto', { showProgressBar: false, timeout: 2000 });
+              this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.name_is_short'),
+               { showProgressBar: false, timeout: 2000 });
               return ;
           }
           const promise = this.streetsService.renameStreet(event.item, event.inputValue);
@@ -254,10 +255,12 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
 
   createActivity(event) {
       if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
-          return this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+          return this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'),
+           { showProgressBar: false, timeout: 2000 });
       } else if (event.method === 'filters' && !Object.keys(this.filtersService.filters).length
           && !Object.keys(this.filtersService.specials).length) {
-          return this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
+          return this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'),
+           { showProgressBar: false, timeout: 2000 });
       }
       this.router.navigate(['not-delivered/activities']);
   }
