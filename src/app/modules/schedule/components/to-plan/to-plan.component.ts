@@ -33,7 +33,6 @@ export class ToPlanComponent implements OnInit, OnDestroy {
       private planningService: PlanningService,
       private translate: TranslateService,
       ) {
-          translate.setDefaultLang('itly');
       this.route.parent.params.subscribe(
           data => {
             this.preDispatch = data.id;

@@ -56,45 +56,45 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
 
   actions = [
     {
-        name: 'Crea nuova attivita', fields: [
+        name: 'home.to_delivered_action.create_one.value', fields: [
             { type: 'select', field: 'method', options: [
-                    {name: 'Selezionati', value: 'selected'},
-                    {name: 'Secondo i filtri applicati', value: 'filters'}
-                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                    {name: 'home.to_delivered_action.create_one.select', value: 'selected'},
+                    {name: 'home.to_delivered_action.create_one.by_filter', value: 'filters'}
+                ], selectedAttribute: {name: 'home.to_delivered_action.create_one.select', value: 'selected'}
             }
         ],
         run: (event) => this.createActivity(event)
     },
     {
-        name: 'Crea nuova Pre-Distinta', fields: [
+        name: 'home.to_delivered_action.cre_pre_dispatch.value', fields: [
             { type: 'select', field: 'method', options: [
-                    {name: 'Selezionati', value: 'selected'},
-                    {name: 'Secondo i filtri applicati', value: 'filters'}
-                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                    {name: 'home.to_delivered_action.cre_pre_dispatch.select', value: 'selected'},
+                    {name: 'home.to_delivered_action.cre_pre_dispatch.by_filter', value: 'filters'}
+                ], selectedAttribute: {name: 'home.to_delivered_action.cre_pre_dispatch.select', value: 'selected'}
             }
         ],
         modal: PreDispatchNewComponent
     },
     {
-        name: 'Mosta attivita in corso',
+        name: 'home.to_delivered_action.cre_pre_dispatch.show_activity',
         run: (event) => {this.router.navigate(['to-deliver/activities'])}
     },
     {
-        name: 'Aggiungi a Pre-Distinta esistente', fields: [
+        name: 'home.to_delivered_action.add_to_existing_pre_bill.value', fields: [
             { type: 'select', field: 'method', options: [
-                    {name: 'Selezionati', value: 'selected'},
-                    {name: 'Secondo i filtri applicati', value: 'filters'}
-                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                    {name: 'home.to_delivered_action.add_to_existing_pre_bill.select', value: 'selected'},
+                    {name: 'home.to_delivered_action.add_to_existing_pre_bill.by_filter', value: 'filters'}
+                ], selectedAttribute: {name: 'home.to_delivered_action.add_to_existing_pre_bill.select', value: 'selected'}
             }
         ],
         modal: PreDispatchAddComponent,
     },
     {
-        name: 'Importa Prodotti da Codici a Barre', fields: [],
+        name: 'home.to_delivered_action.add_to_existing_pre_bill.import_products', fields: [],
         modal: ImportFromBarcodesComponent,
     },
     {
-        name: 'Carica prodotti da Scanner', fields: [
+        name: 'home.to_delivered_action.add_to_existing_pre_bill.load_products_by_scanner', fields: [
             { type: 'text', field: 'barcode', placeholder: 'Barcode'},
         ], submit: (data, event) => {
           this.filtersService.addBarcodeFilter(data.barcode);
@@ -133,17 +133,16 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private translate: TranslateService,
 
   ) {
-      translate.setDefaultLang('itly');
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
       this.activatedRoute.queryParams.subscribe(params => {
           if (params['actionsonly'] === 'addproductstopd') {
               this.actions = <any>{
-                  name: 'Aggiungi a Pre-Distinta esistente', fields: [
+                  name: 'home.to_delivered_action.add_to_existing_pre_bill.value', fields: [
                       { type: 'select', field: 'method', options: [
-                              {name: 'Selezionati', value: 'selected'},
-                              {name: 'Secondo i filtri applicati', value: 'filters'}
-                          ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                              {name: 'home.to_delivered_action.add_to_existing_pre_bill.select', value: 'selected'},
+                              {name: 'home.to_delivered_action.add_to_existing_pre_bill.by_filter', value: 'filters'}
+                          ], selectedAttribute: {name: 'home.to_delivered_action.add_to_existing_pre_bill.select', value: 'selected'}
                       }
                   ],
                   modal: PreDispatchAddDirectComponent,
@@ -166,8 +165,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-      this.citiesTable.title = 'Paese';
-      this.citiesTable.searchPlaceHolder =  'Cerca Paese';
+      this.citiesTable.title = this.translate.instant('table_config.simpletable.cities_table.value');
+      this.citiesTable.searchPlaceHolder =  this.translate.instant('table_config.simpletable.cities_table.plhold');
       this.filtersService.clear();
       this.loadProducts(false);
       this.paginationService.rppValueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((rpp: number) => {
@@ -281,7 +280,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   handleStreetsAction(event) {
       if (event.action.action === 'rename') {
           if (event.inputValue.length < 2 ) {
-              this.snotifyService.warning('Il nuovo nome è molto corto', { showProgressBar: false, timeout: 2000 });
+              this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.name_is_short'),
+               { showProgressBar: false, timeout: 2000 });
               return ;
           }
           const promise = this.streetsService.renameStreet(event.item, event.inputValue);
@@ -292,10 +292,12 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
 
   createActivity(event) {
       if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
-          return this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+          return this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'),
+           { showProgressBar: false, timeout: 2000 });
       } else if (event.method === 'filters' && !Object.keys(this.filtersService.filters).length
           && !Object.keys(this.filtersService.specials).length) {
-          return this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
+          return this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'),
+           { showProgressBar: false, timeout: 2000 });
       }
       this.router.navigate(['to-deliver/activities']);
   }

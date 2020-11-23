@@ -4,7 +4,6 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {ActivatedRoute} from '@angular/router';
 import {DispatchService} from '../../../../../../service/dispatch.service';
 import {IntegraaModalService} from '../../../../../../service/integraa-modal.service';
-import { OwnTranslateService } from '../../../../../../service/translate.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -19,11 +18,7 @@ export class DispatchLogComponent implements OnInit, OnDestroy {
         private dispatchService: DispatchService,
         private integraaModalService: IntegraaModalService,
         private translate: TranslateService,
-        public translateService: OwnTranslateService
-    ) {
-        translate.setDefaultLang('itly');
-        const browserLang = translate.getBrowserLang();
-      }
+    ) {}
 
     log = [];
     loading = true ;

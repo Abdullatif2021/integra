@@ -18,8 +18,6 @@ export class ImportFromBarcodesComponent extends ModalComponent implements OnIni
       private translate: TranslateService,
   ) {
     super() ;
-    translate.setDefaultLang('itly');
-    const browserLang = translate.getBrowserLang();
   }
 
   ngOnInit() {

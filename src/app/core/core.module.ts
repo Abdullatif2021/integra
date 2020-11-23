@@ -43,7 +43,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
     AngularDraggableModule,
     AutocompleteLibModule,
     HttpClientModule,
-    TranslateModule.forRoot({
+    TranslateModule.forChild({
       loader: {
       provide: TranslateLoader,
       useFactory: (http: HttpClient) => {

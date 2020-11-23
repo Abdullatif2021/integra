@@ -18,9 +18,7 @@ export class LoadingComponent implements OnInit, OnDestroy {
   constructor(
       private loadingService: LoadingService,
       private translate: TranslateService
-      ) {
-          translate.setDefaultLang('itly');
-      }
+      ) {}
 
   ngOnInit() {
     this.loadingService.loadingState.pipe(takeUntil(this.unsubscribe)).subscribe(

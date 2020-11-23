@@ -11,6 +11,7 @@ import {ApiResponseInterface} from '../../core/models/api-response.interface';
 import {BuildingLocationInterface, LocatedBuildingInterface} from '../../core/models/building.interface';
 import {BackProcessingService} from '../back-processing.service';
 import {NavigationEnd, Router} from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class LocatingService implements OnDestroy {
@@ -22,7 +23,8 @@ export class LocatingService implements OnDestroy {
         private tuttocittaGeocodeService: TuttocittaGeocodeService,
         private mapBoxGeocodeService: MapBoxGeocodeService,
         private snotifyService: SnotifyService,
-        private backProcessingService: BackProcessingService
+        private backProcessingService: BackProcessingService,
+        private translate: TranslateService,
     ) {
     }
 
@@ -44,7 +46,7 @@ export class LocatingService implements OnDestroy {
 
         if (skip) {
             await this.createTree(handle);
-            return this.snotifyService.success('Albero creato con successo', { showProgressBar: false});
+            return this.snotifyService.success(this.translate.instant('services.locating_service.createTree'), { showProgressBar: false});
         }
 
         Object.keys(buildings).forEach((key) => {
@@ -85,7 +87,7 @@ export class LocatingService implements OnDestroy {
         // if the process is done, create the tree.
         if (!this.buildings.length && !this.fixed.length) {
             await this.createTree(handle);
-            this.snotifyService.success('Tutti gli indirizzo sono localizzati!', { showProgressBar: false});
+            this.snotifyService.success(this.translate.instant('services.locating_service.success'), { showProgressBar: false});
         }
     }
 
@@ -139,7 +141,7 @@ export class LocatingService implements OnDestroy {
         // if every thing is done or the user is not in the pre-dispatch page, create the tree.
         if (!this.buildings.length && !this.fixed.length) {
             await this.createTree(handle);
-            this.snotifyService.success('Tutti gli indirizzo sono localizzati!', { showProgressBar: false});
+            this.snotifyService.success(this.translate.instant('services.locating_service.success'), { showProgressBar: false});
         }
 
         return true;

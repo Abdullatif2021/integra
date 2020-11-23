@@ -20,8 +20,8 @@ import {TranslateService} from '@ngx-translate/core';
 export class PreDispatchAddComponent extends ModalComponent implements OnInit, OnDestroy {
 
   options = [
-      {name: 'Il nome della Pre-distinta', value: 'name'},
-      {name: 'N° della Predistinta', value: 'code'}
+      {name: 'home.modals.pre_add.options.pre_name', value: 'name'},
+      {name: 'home.modals.pre_add.options.pre_code', value: 'code'}
   ];
 
   bindLabel = 'name' ;
@@ -41,8 +41,7 @@ export class PreDispatchAddComponent extends ModalComponent implements OnInit, O
       private translate: TranslateService,
   ) {
     super();
-    translate.setDefaultLang('itly');
-  }
+    }
 
   ngOnInit() {
     this.filteredProductsCount = this.paginationService.resultsCount ;

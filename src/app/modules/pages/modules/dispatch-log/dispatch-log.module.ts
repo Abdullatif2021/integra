@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule , CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {DispatchLogComponent} from './components/dispatch-log/dispatch-log.component';
 import {RouterModule, Routes} from '@angular/router';
@@ -20,7 +20,7 @@ const routes: Routes = [
     SharedModule,
     CoreModule,
     FontAwesomeModule,
-    TranslateModule.forRoot({
+    TranslateModule.forChild({
       loader: {
       provide: TranslateLoader,
       useFactory: (http: HttpClient) => {
@@ -32,6 +32,7 @@ const routes: Routes = [
   ],
   declarations: [
       DispatchLogComponent
-  ]
+  ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class DispatchLogModule { }

@@ -36,7 +36,6 @@ export class ResultComponent implements OnInit, OnDestroy {
       private backProcessingService: BackProcessingService,
       private translate: TranslateService,
       ) {
-          translate.setDefaultLang('itly');
       this.preDispatchData = this.route.snapshot.parent.data.data ;
       this.preDispatch = this.route.snapshot.parent.params.id;
       this.scheduleResults = this.route.snapshot.data.data.scheduleResults;

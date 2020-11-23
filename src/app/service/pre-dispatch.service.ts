@@ -20,9 +20,7 @@ export class PreDispatchService {
         private paginationService: PaginationService,
         private integraaModalService: IntegraaModalService,
         private translate: TranslateService,
-        ) {
-            translate.setDefaultLang('itly');
-        }
+        ) {}
 
     public selectedPreDispatches = [] ;
     canPlanChanges = new EventEmitter<boolean>();

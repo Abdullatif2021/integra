@@ -9,9 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class SettingsHeaderComponent implements OnInit {
 
   constructor( private translate: TranslateService,
-    ) {
-        translate.setDefaultLang('itly');
-    }
+    ) {}
 
   @Output() create = new EventEmitter();
   @Input() create_btn = true ;

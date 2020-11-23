@@ -33,9 +33,7 @@ export class SetStatusModalComponent extends ModalComponent implements OnInit, O
         private snotifyService: SnotifyService,
         private translate: TranslateService,
         private statusesService: StatusesService
-    ) { super();
-        translate.setDefaultLang('itly');
-    }
+    ) { super(); }
 
     ngOnInit() {
         this.selectedItems = this.data.modalData.selected;

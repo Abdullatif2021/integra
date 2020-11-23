@@ -17,9 +17,7 @@ export class PaginationOptionsComponent implements OnInit, OnDestroy {
   unsubscribe: Subject<void> = new Subject();
   data;
   constructor(private settingsService: SettingsService , private translate: TranslateService,
-    ) {
-        translate.setDefaultLang('itly');
-    }
+    ) {}
 
   ngOnInit() {
     this.settingsService.getPaginationOptions().pipe(takeUntil(this.unsubscribe)).subscribe((res: any) => {

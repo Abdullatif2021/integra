@@ -19,7 +19,7 @@ const routes: Routes = [
     SharedModule,
     CoreModule,
     FontAwesomeModule,
-    TranslateModule.forRoot({
+    TranslateModule.forChild({
       loader: {
       provide: TranslateLoader,
       useFactory: (http: HttpClient) => {

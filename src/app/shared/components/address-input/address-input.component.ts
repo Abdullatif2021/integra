@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angula
 import {PlacesAutocompleteService} from '../../service/places.autocomplete.service';
 import {ACAddress} from '../../../core/models/address.interface';
 import {MapsAPILoader} from '@agm/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-address-input',
@@ -13,7 +14,9 @@ export class AddressInputComponent implements OnInit, OnChanges {
 
     constructor(
         private googlePlacesService: PlacesAutocompleteService,
-        private mapsAPILoader: MapsAPILoader
+        private mapsAPILoader: MapsAPILoader,
+        private translate: TranslateService,
+
 
         ) {
     }

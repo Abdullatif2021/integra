@@ -5,8 +5,6 @@ import {ProductInterface} from '../core/models/product.interface';
 import {AppConfig} from './app.config';
 import {PreDispatchEditComponent} from '../modules/home/modals/pre-dispatch-edit/pre-dispatch-edit.component';
 import {PreDispatchDeleteComponent} from '../modules/home/modals/pre-dispatch-delete/pre-dispatch-delete.component';
-import {OwnTranslateService} from 'src/app/service/translate.service';
-
 export const TablesConfig = {
 
     // simple tables structure

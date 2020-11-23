@@ -21,9 +21,7 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
       private dragAndDropService: DragAndDropService,
       private scheduleService: ScheduleService,
       private translate: TranslateService,
-      ) {
-          translate.setDefaultLang('itly');
-      }
+      ) {}
 
   list = [];
   preDispatch;

@@ -12,7 +12,7 @@ import { HttpClientModule , HttpClient} from '@angular/common/http';
   imports: [
     CommonModule,
     PagesRoutingModule,
-    TranslateModule.forRoot({
+    TranslateModule.forChild({
       loader: {
       provide: TranslateLoader,
       useFactory: (http: HttpClient) => {

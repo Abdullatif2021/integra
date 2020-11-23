@@ -38,11 +38,9 @@ export class AddressesComponent implements OnInit, OnDestroy {
         private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
         private translate: TranslateService,
     ) {
-        translate.setDefaultLang('itly');
-        const browserLang = translate.getBrowserLang();
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data ;
-    }
+      }
 
     preDispatch: number;
     unsubscribe = new EventEmitter();

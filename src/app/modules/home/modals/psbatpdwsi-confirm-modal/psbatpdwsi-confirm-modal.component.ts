@@ -4,7 +4,6 @@ import {ApiResponseInterface} from '../../../../core/models/api-response.interfa
 import {ActionsService} from '../../../../service/actions.service';
 import {SnotifyService} from 'ng-snotify';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
-import {OwnTranslateService} from './../../../../service/translate.service';
 import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'app-psbatpdwsi-confirm-modal',
@@ -17,12 +16,9 @@ export class PsbatpdwsiConfirmModalComponent extends ModalComponent implements O
       private preDispatchActionsService: PreDispatchActionsService,
       private snotifyService: SnotifyService,
       private translate: TranslateService,
-  )
-  {
+  ) {
     super();
-    translate.setDefaultLang('itly');
-    const browserLang = translate.getBrowserLang();
-  }
+    }
 
   data: any;
   ngOnInit() {
@@ -32,7 +28,8 @@ export class PsbatpdwsiConfirmModalComponent extends ModalComponent implements O
       modal.close();
       console.log(this.data);
       if (!this.data.data[0]) {
-          this.snotifyService.error('Something went wrong', { showProgressBar: false, timeout: 3000 });
+          this.snotifyService.error(this.translate.instant
+            ('home.modules.dispatch_calender.assignToUser.error'), { showProgressBar: false, timeout: 3000 });
       }
       this.preDispatchActionsService.createNewPreDispatch(this.data.defaultData, this.data.name, (error) => {
       }, true, [], this.data.data[0].id) ;

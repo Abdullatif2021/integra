@@ -18,9 +18,7 @@ export class PreDispatchGlobalActionsService {
         private snotifyService: SnotifyService,
         private preDispatchService: PreDispatchService,
         private translate: TranslateService,
-        ) {
-            translate.setDefaultLang('itly');
-        }
+        ) {}
     planningErrors = new EventEmitter();
     handles = {} ;
     handleCreated = new EventEmitter();

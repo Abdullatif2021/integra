@@ -56,6 +56,30 @@
     }
   },
   "home": {
+
+    "dispatch_action": {
+          "bag_prepared":{ "value": "Borsa preparata",
+          "select": "Selezionati",
+          "by_filter": "Secondo i filtri applicati",
+          "remove": "Elimina"
+        },
+          "operator_prepar":{
+            "value": "Operatore che prepara la borsa",
+          "select": "Selezionati",
+          "by_filter": "Secondo i filtri applicati"
+             }
+        },
+        "pre_dispatch_action": {
+          "merge_Pre_bills": "Unisci Pre-distinte",
+          "remove": "Elimina"
+        },
+      "to_delivered_action": {
+            "create_one": {"value": "Crea nuova attivita","select": "Selezionati","by_filter": "Secondo i filtri applicati"},
+            "cre_pre_dispatch": {"value": "Crea nuova Pre-Distinta","select": "Selezionati","by_filter": "Secondo i filtri applicati", "show_activity": "Mosta attivita in corso"},
+            "add_to_existing_pre_bill": {"value": "Aggiungi a Pre-Distinta esistente","select": "Selezionati","by_filter": "Secondo i filtri applicati",
+               "import_products": "Importa Prodotti da Codici a Barre", "load_products_by_scanner": "Carica prodotti da Scanner"}    
+      },
+     
     "modals": {
       "not_delivered_actions": {
           "action_name": "Cambiare stato",
@@ -113,8 +137,10 @@
         "run": "Esegui",
         "go_out": "Esci",
         "used_products": "Questi prodotti sono stati già usati in un'altra pre-distinta",
-        "ok": "Ok"
+        "ok": "Ok",
+        "options": {"pre_name": "Il nome della Pre-distinta","pre_code": "N° della Predistinta" }
       },
+        
       "pre_direct": {
         "filter_applied": "ATTENZIONE! Non è stato applicato nessun filtro, sei sicuro di voler eseguire?",
         "run": "Esegui",
@@ -188,9 +214,20 @@
         "ad": "Address",
         "value1": "Continua",
         "value2": "Annulla"
-      }
+                  }
     },
     "modules": {
+      "activities":{
+        "tableConfig":{
+          "operator": "Operatore",
+          "start_date": "Data inizio distribuzione",
+          "end_date": "Data fine distribuzione",
+          "product": "Prodotti",
+          "quintity_per_day": "Q.ta prevista per giorno",
+          "expected_cap": "Cap previsti",
+          "proposed_postman": "Postini proposti"
+                      }
+            },
       "delivering_calender": {
         "name": "",
         "agency": "Agenzia",
@@ -284,15 +321,45 @@
           "success": "Postman Note Updated Successfuly",
           "error": "Something went wrong"
         }          
-       
-    }
-  }
+      }
+    },
+    "services":{
+      "dispatch_actions_service": {
+        "delete": "Elimina in corso",
+        "success_delete": "Distinte Elimina con successo",
+        "prepare": "Prepare in progress",
+        "prepare_delete": "Distinte Prepared successfully",
+        "bag_not_preperd": "La borsa non è preparata deve prima essere abbinata ad un operatore",
+        "upload_attachement": "Caricamento allegato",
+        "upload_attachement_success": "L/'allegato è stato caricato con successo",
+        "assigment": "Assegnazione di Distinta",
+        "assigment_success": "Distinta assegnata con successo"
+      },
+      "pre_dispatch_actions_service": {
+        "error": "Nessun prodotto selezionato",
+        "prod_add": "Aggiunta in corso",
+        "prod_add_suc": "Prodotti aggiunti con successo",
+        "pre_cre": "Creazione Pre-Distinta in corsot",
+        "pre_cre_suc": "Pre-distinta Creata con successo",
+        "pre_merge": "Unione in corso",
+        "pre_merge_suc": "Pre-Distinte uniti con successo",
+        "pre_edit": "Edit in corso",
+        "pre_edit_suc": "Pre-Distinte Edit con successo",
+        "pre_delet": "Elimina in corso",
+        "pre_delet_suc": "Pre-Distinte Elimina con successo"
+      }
+                }
   },
   "pages": {
     "dispatch_log": {
       "data": "Data",
       "operator": "Operator",
-      "status": "Stato"
+      "status": "Stato",
+      "ngbTooltip":{
+        "more": "Di Più",
+        "less": "Di meno",
+        "view": "Visualizza"
+      }
     },
     "dispatch_view": {
       "address": "Indirizzo",
@@ -300,6 +367,11 @@
       "time_of_arrival": "Ora d’arrivo",
       "destinatario": "Destinatario",
       "product": "Prodotto",
+      "add_start_and_end_points": {
+        "empty" : "",
+        "start_end": "Start/End",
+        "start": "Start",
+        "end": "End"},
       "barcode": "Codice a Barre",
       "act_code": "Codice Atto",
       "action": {
@@ -610,6 +682,7 @@
       }
   },
   "shared": {
+      "address_input_plhold": "Inserisci Indirizzo",
       "loading": {
         "hide": "Hide"
           },
@@ -644,6 +717,7 @@
         "cancel": "Annulla",
         "note": "Note",
         "set_day": "Set Day",
+        "plhold": "Note",
         "attachment": "Attachment",
         "drop_file_here": "Drop file here",
         "browse_files": "Browse Files",
@@ -686,6 +760,9 @@
           "print": "Stampa",
           "export": "Esporta",
           "edit": "Modifica",
+          "distinct_note": "Nota distinta",
+          "dayNote": "Nota giorno",
+          "upload_file": "Carica file",
           "calender": "Calender",
           "resume": "Riprendi",
           "pause": "Pausa",
@@ -696,7 +773,23 @@
       }
   },
   "services":{
-      "planning_service": {"moving_items": "Moving Items"},
+    "google_service": {"alert": "Google Maps Keys are invalid, this provider will be ignored"},
+    "locating_service": {
+      "createTree": "Albero creato con successo",
+      "emit_massege": "initializing...",
+      "emit_massege2": "initializing...",
+      "success": "Tutti gli indirizzo sono localizzati!"
+         },
+      "streets_locating_service": {
+        "snotifyService_info": "Some streets are being localized!"
+                    },
+
+      "planning_service": {
+        "moving_items": "Moving Items",
+        "error": "Something went wrong",
+        "save": "Saving",
+        "return": "Pre-Dispatches was matched"
+      },
       "pre_dispatch_global_actions_service": {
         "ultimatePause": {
           "error": "Qualcosa è andato storto, controlla le impostazioni...",

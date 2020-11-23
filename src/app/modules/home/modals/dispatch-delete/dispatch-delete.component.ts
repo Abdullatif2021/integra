@@ -19,7 +19,6 @@ export class DispatchDeleteComponent extends ModalComponent implements OnInit {
       private translate: TranslateService,
   ) {
     super();
-    translate.setDefaultLang('itly');
   }
 
   ngOnInit() {

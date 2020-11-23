@@ -3,7 +3,6 @@ import {PaginationService} from '../../../../../../service/pagination.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {ActivitiesService} from '../../service/activities.service';
 import {Subject} from 'rxjs';
-import { OwnTranslateService } from '../../../../../../service/translate.service';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-activities',
@@ -14,13 +13,18 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
 
   tableConfig = {
       cols: [
-          {title: 'Operatore', field: 'users_list', valueDisplay: 'select', value: 'user', valueDisplayLabel: 'name', },
-          {title: 'Data inizio distribuzione', field: 'startedAt', valueDisplay: 'dateSelect'},
-          {title: 'Data fine distribuzione', field: 'startedAt', valueDisplay: 'dateSelect'},
-          {title: 'Prodotti', field: 'productsCategories', valueDisplay: 'select', value: 'productValue', valueDisplayLabel: 'name'},
-          {title: 'Q.ta prevista per giorno', field: 'qty', valueDisplay: 'singleSelect'},
-          {title: 'Cap previsti', field: 'cap', valueDisplay: 'select', value: 'capValue', valueDisplayLabel: 'name'},
-          {title: 'Postini proposti', field: 'postmen_list', valueDisplay: 'select', value: 'postmen', valueDisplayLabel: 'full_name'},
+          {title: this.translate.instant('home.modules.activities.tableConfig.operator'),
+           field: 'users_list', valueDisplay: 'select', value: 'user', valueDisplayLabel: 'name', },
+          {title: this.translate.instant('home.modules.activities.tableConfig.start_date'), field: 'startedAt', valueDisplay: 'dateSelect'},
+          {title: this.translate.instant('home.modules.activities.tableConfig.end_date'), field: 'startedAt', valueDisplay: 'dateSelect'},
+          {title: this.translate.instant('home.modules.activities.tableConfig.product'),
+           field: 'productsCategories', valueDisplay: 'select', value: 'productValue', valueDisplayLabel: 'name'},
+          {title: this.translate.instant('home.modules.activities.tableConfig.quintity_per_day'),
+           field: 'qty', valueDisplay: 'singleSelect'},
+          {title: this.translate.instant('home.modules.activities.tableConfig.expected_cap'),
+           field: 'cap', valueDisplay: 'select', value: 'capValue', valueDisplayLabel: 'name'},
+          {title: this.translate.instant('home.modules.activities.tableConfig.proposed_postman'),
+           field: 'postmen_list', valueDisplay: 'select', value: 'postmen', valueDisplayLabel: 'full_name'},
       ],
       theme: 'gray-white',
       selectable: false
@@ -35,7 +39,6 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       public translate: TranslateService,
   ) {
       translate.setDefaultLang('itly');
-      const browserLang = translate.getBrowserLang();
     }
 
   ngOnInit() {

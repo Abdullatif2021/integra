@@ -16,9 +16,7 @@ export class MapsComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private settingsService: SettingsService,
         private translate: TranslateService
-        ) {
-            translate.setDefaultLang('itly');
-        }
+        ) {}
     settings = [];
     provider: number ;
     loading = true ;

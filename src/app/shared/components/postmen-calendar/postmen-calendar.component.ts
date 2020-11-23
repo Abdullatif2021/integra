@@ -81,9 +81,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
       private calenderService: CalenderService,
       private snotifyService: SnotifyService,
       private translate: TranslateService
-    ) {
-        translate.setDefaultLang('itly');
-    }
+    ) {}
 
   ngOnInit() {
   }

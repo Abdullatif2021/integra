@@ -39,10 +39,8 @@ export class DispatchViewComponent implements OnInit {
         private paginationService: PaginationService,
         private translate: TranslateService,
     ) {
-    translate.setDefaultLang('itly');
-    const browserLang = translate.getBrowserLang();
     this.dispatch = route.snapshot.params.id;
-    }
+      }
 
     ngOnInit() {
         this.paginationService.updateLoadingState(false);
@@ -96,7 +94,7 @@ export class DispatchViewComponent implements OnInit {
             this.markers.push({
                 lat: elm.lat,
                 lng: elm.long,
-                label: '',
+                label: this.translate.instant('pages.dispatch_view.add_start_and_end_points.empty'),
                 title: elm.name,
                 id: elm.id,
                 icon: icon,
@@ -114,7 +112,7 @@ export class DispatchViewComponent implements OnInit {
             this.markers.push({
                 lat: this.startPoint.lat,
                 lng: this.startPoint.long,
-                label: 'Start/End',
+                label: this.translate.instant('pages.dispatch_view.add_start_and_end_points.start_end'),
                 title: this.startPoint.text,
                 id: 'start+end+point',
                 icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
@@ -125,7 +123,7 @@ export class DispatchViewComponent implements OnInit {
             this.markers.push({
                 lat: this.startPoint.lat,
                 lng: this.startPoint.long,
-                label: 'Start',
+                label: this.translate.instant('pages.dispatch_view.add_start_and_end_points.start'),
                 title: this.startPoint.text,
                 id: 'start+point',
                 icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
@@ -135,7 +133,7 @@ export class DispatchViewComponent implements OnInit {
             this.markers.push({
                 lat: this.endPoint.lat,
                 lng: this.endPoint.long,
-                label: 'End',
+                label: this.translate.instant('pages.dispatch_view.add_start_and_end_points.end'),
                 title: this.endPoint.text,
                 id: 'end+point',
                 icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
@@ -161,14 +159,14 @@ export class DispatchViewComponent implements OnInit {
     }
 
     handleActions(isPrepared) {
-        if (!isPrepared) { return ;}
+        if (!isPrepared) { return ; }
         this.actionsService.setActions([
             {
                 name: this.translate.instant('pages.dispatch_view.action.action_name'), fields: [
                     { type: 'select', field: 'method', options: [
                             {name: this.translate.instant('pages.dispatch_view.action.selected'), value: 'selected'},
                             {name: this.translate.instant('pages.dispatch_view.action.by_filter'), value: 'filters'}
-                        ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                        ], selectedAttribute: {name: this.translate.instant('pages.dispatch_view.action.selected'), value: 'selected'}
                     }
                 ],
                 modal: SetStatusModalComponent,

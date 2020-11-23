@@ -19,8 +19,7 @@ export class PreDispatchAddDirectComponent extends ModalComponent implements OnI
         private translate: TranslateService,
     ) {
       super();
-      translate.setDefaultLang('itly');
-    }
+      }
 
     name = '' ;
     error: any = false ;

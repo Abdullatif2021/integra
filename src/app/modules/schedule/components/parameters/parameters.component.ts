@@ -36,7 +36,6 @@ export class ParametersComponent implements OnInit, OnDestroy {
         private listTreeService: ListTreeService,
         private translate: TranslateService,
     ) {
-        translate.setDefaultLang('itly');
         this.preDispatch = this.route.snapshot.parent.params.id;
         this.preDispatchData = this.route.snapshot.parent.data.data ;
 

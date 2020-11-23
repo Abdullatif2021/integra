@@ -37,7 +37,7 @@ const routes: Routes = [
     DndModule,
     NgSelectModule,
     FormsModule,
-    TranslateModule.forRoot({
+    TranslateModule.forChild({
         loader: {
         provide: TranslateLoader,
         useFactory: (http: HttpClient) => {

@@ -6,11 +6,12 @@ import {GoogleGeocodeResponseInterface} from '../../core/models/google-geocode-r
 import {SettingsService} from '../settings.service';
 import {LocatedStreetInterface} from '../../core/models/located-street.interface';
 import {StreetLocationInterface} from '../../core/models/street.location.interface';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class GoogleGeocodeService {
 
-    constructor(private http: HttpClient, private settingsService: SettingsService) {
+    constructor(private http: HttpClient, private translate: TranslateService, private settingsService: SettingsService) {
     }
 
     keys: any;
@@ -118,7 +119,7 @@ export class GoogleGeocodeService {
 
     handleExpiredToken() {
         if (!this.invalid_keys_alerted) {
-            alert('Google Maps Keys are invalid, this provider will be ignored') ;
+            alert(this.translate.instant('services.google_service.alert')) ;
             this.invalid_keys_alerted = true;
         }
     }

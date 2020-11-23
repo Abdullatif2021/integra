@@ -95,16 +95,15 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       private translate: TranslateService,
 
   ) {
-      translate.setDefaultLang('itly');
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
       this.activatedRoute.queryParams.subscribe(params => {
           if (params['actionsonly'] === 'addproductstopd') {
               this.actions = <any>{
-                  name: this.translate.instant('home.modals.not_delivered_actions.action_name2'), fields: [
+                  name: 'home.modals.not_delivered_actions.action_name2', fields: [
                       { type: 'select', field: 'method', options: [
-                              {name: this.translate.instant('home.modals.not_delivered_actions.selected2'), value: 'selected'},
-                              {name: this.translate.instant('home.modals.not_delivered_actions.by_filter2'), value: 'filters'}
+                              {name: 'home.modals.not_delivered_actions.selected2', value: 'selected'},
+                              {name: 'home.modals.not_delivered_actions.by_filter2', value: 'filters'}
                           ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
                       }
                   ],
@@ -128,8 +127,8 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-      this.citiesTable.title = 'Paese';
-      this.citiesTable.searchPlaceHolder =  'Cerca Paese';
+      this.citiesTable.title = this.translate.instant('table_config.simpletable.cities_table.value');
+      this.citiesTable.searchPlaceHolder =  this.translate.instant('table_config.simpletable.cities_table.plhold');
       this.filtersService.clear();
       this.loadProducts(false);
       this.paginationService.rppValueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((rpp: number) => {

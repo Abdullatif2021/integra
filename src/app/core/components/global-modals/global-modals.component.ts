@@ -6,7 +6,6 @@ import {Subject} from 'rxjs';
 import {ProductsService} from '../../../service/products.service';
 import {ModalDirective} from '../../../shared/directives/modal.directive';
 import {TranslateService} from '@ngx-translate/core';
-import {OwnTranslateService} from 'src/app/service/translate.service';
 
 @Component({
     selector: 'app-global-modals',

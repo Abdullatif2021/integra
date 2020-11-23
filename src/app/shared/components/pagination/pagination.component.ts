@@ -26,9 +26,7 @@ export class PaginationComponent implements OnInit {
   ]
 
   constructor(private paginationService: PaginationService , private translate: TranslateService
-    ) {
-        translate.setDefaultLang('itly');
-    }
+    ) {}
 
   ngOnInit() {
     this.paginationService.resultsCountChanges.subscribe((results: number) => {

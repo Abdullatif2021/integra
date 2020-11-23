@@ -43,21 +43,21 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     filtersConfig = null;
     actions = [
-        {name: 'Borsa preparata', fields: [
+        {name: 'home.dispatch_action.bag_prepared.value', fields: [
                 { type: 'select', field: 'method', options: [
-                        {name: 'Selezionati', value: 'selected'},
-                        {name: 'Secondo i filtri applicati', value: 'filters'}
-                    ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                        {name: 'home.dispatch_action.bag_prepared.select', value: 'selected'},
+                        {name: 'home.dispatch_action.bag_prepared.by_filter', value: 'filters'}
+                    ], selectedAttribute: {name: 'home.dispatch_action.bag_prepared.select', value: 'selected'}
                 }
             ], modal: DispatchPrepareComponent},
-        {name: 'Operatore che prepara la borsa', fields: [
+        {name: 'home.dispatch_action.operator_prepar.value', fields: [
             { type: 'select', field: 'method', options: [
-                    {name: 'Selezionati', value: 'selected'},
-                    {name: 'Secondo i filtri applicati', value: 'filters'}
-                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                    {name: 'home.dispatch_action.operator_prepar.select', value: 'selected'},
+                    {name: 'home.dispatch_action.operator_prepar.by_filter', value: 'filters'}
+                ], selectedAttribute: {name: 'home.dispatch_action.operator_prepar.select', value: 'selected'}
             }
         ], modal: DispatchAssignComponent},
-        {name: 'Elimina', modal: DispatchDeleteComponent},
+        {name: 'home.dispatch_action.operator_prepar.remove', modal: DispatchDeleteComponent},
     ];
 
 
@@ -77,10 +77,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
         private router: Router,
         private translate: TranslateService,
 
-    ) {
-        translate.setDefaultLang('itly');
-        const browserLang = translate.getBrowserLang();
-      }
+    ) {}
 
     ngOnInit() {
         this.actionsService.setActions(this.actions);

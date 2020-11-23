@@ -34,8 +34,8 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   @ViewChild('imodal') imodal ;
   @ViewChild(ModalDirective) modalHost: ModalDirective;
   actions = [
-      {name: 'Unisci Pre-distinte', modal: PreDispatchMergeComponent},
-      {name: 'Elimina', modal: PreDispatchDeleteComponent, modalOptions: {}},
+      {name: 'home.pre_dispatch_action.merge_Pre_bills', modal: PreDispatchMergeComponent},
+      {name: 'home.pre_dispatch_action.remove', modal: PreDispatchDeleteComponent, modalOptions: {}},
   ] ;
   unsubscribe: Subject<void> = new Subject();
   order_field = null ;
@@ -54,7 +54,9 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       public router: Router,
       public backProcessingService: BackProcessingService,
       public preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
-  ) { }
+      private translate: TranslateService,
+
+      ) {}
 
 
    ngOnInit() {

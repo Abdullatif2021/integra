@@ -18,9 +18,7 @@ export class PwsisbsConfirmModalComponent extends ModalComponent implements OnIn
       private translate: TranslateService,
   ) {
     super();
-    translate.setDefaultLang('itly');
-    const browserLang = translate.getBrowserLang();
-  }
+    }
 
   unsubscribe: Subject<void> = new Subject();
   data: any;

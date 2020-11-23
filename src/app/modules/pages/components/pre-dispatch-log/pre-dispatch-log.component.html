@@ -14,8 +14,8 @@
   <div [ngClass]="{'odd-bg': idx%2, 'even-bg': !(idx%2)}" class="log-row">
     <div class="log-col log-more-col">
       <div class="more-button" *ngIf="item.data && item.data.length" (click)="expand(item)">
-        <fa-icon *ngIf="!item.expanded && item.data" [icon]="['fa','chevron-right']" placement="bottom" ngbTooltip="Di Più"></fa-icon>
-        <fa-icon *ngIf="item.expanded && item.data" [icon]="['fa','chevron-up']"  placement="bottom" ngbTooltip="Di meno"></fa-icon>
+        <fa-icon *ngIf="!item.expanded && item.data" [icon]="['fa','chevron-right']" placement="bottom" ngbTooltip="{{'pages.dispatch_log.ngbTooltip.more' | translate}}"></fa-icon>
+        <fa-icon *ngIf="item.expanded && item.data" [icon]="['fa','chevron-up']"  placement="bottom" ngbTooltip="{{'pages.dispatch_log.ngbTooltip.less' | translate}}"></fa-icon>
       </div>
     </div>
     <div class="log-col log-date-col">{{item.date}}</div>
@@ -31,7 +31,7 @@
       <div class="log-col log-operator-col">{{item.user.full_name}}</div>
       <div class="log-col log-state-col">
         {{subitem.code}}
-        <img (click)="showLog(subitem.id)" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="Visualizza">
+        <img (click)="showLog(subitem.id)" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="{{'pages.dispatch_log.ngbTooltip.view' | translate}}">
       </div>
     </div>
   </ng-container>

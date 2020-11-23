@@ -10,7 +10,6 @@ export class MainNavComponent implements OnInit {
 
   constructor(private translate: TranslateService) {
 
-    translate.setDefaultLang('itly');
   }
 
   @Input() active_tab = 'to-deliver';

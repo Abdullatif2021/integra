@@ -59,11 +59,10 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
         private translate: TranslateService,
         ) {
-            translate.setDefaultLang('itly');
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data;
         this.exportResultsLink = AppConfig.endpoints.exportPreDispatchResults(this.preDispatchData.id);
-    }
+          }
 
     latitude = 40.8440337;
     longitude = 14.3435834;
