@@ -73,7 +73,7 @@ export class SearchPanelComponent implements OnInit {
       });
       this.filtersService.cleared.subscribe(() => {
           this._active_filters = this.fieldsData && this.fieldsData.fields &&
-            this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {} ;
+          this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {} ;
           this._m_active_action = null ;
           this.active_action = null ;
           this._search = null ;
@@ -85,7 +85,6 @@ export class SearchPanelComponent implements OnInit {
       });
       this.filtersService.fields.subscribe((data) => {
           this.fieldsData = data ;
-          console.log(this.fieldsData);
           this.filters = Object.assign({}, data.fields.default_filters);
           this._active_filters = Object.assign({}, data.fields.default_filters);
           if ( this.loaded ) {
@@ -216,6 +215,11 @@ export class SearchPanelComponent implements OnInit {
 
   runAction(force = false) {
     if ( this.active_action && this.active_action.modal ) {
+        if (typeof this.active_action.before_modal_open === 'function') {
+            if (!this.active_action.before_modal_open(this.active_action)) {
+                return ;
+            }
+        }
         if (!force && this.active_action.method && this.active_action.method === 'filters') {
             // check if there is any non committed filters
             if (Object.keys(this.filters).length !== Object.keys(this._active_filters).length) {
@@ -234,7 +238,7 @@ export class SearchPanelComponent implements OnInit {
             this.active_action.modalOptions ? this.active_action.modalOptions : {} );
         this.modalService.open(instance.modalRef, modalOptions) ;
     } else if ( this.active_action && typeof this.active_action.run === 'function' ) {
-        this.active_action.run() ;
+        this.active_action.run(this.active_action) ;
     }
   }
 
@@ -255,6 +259,11 @@ export class SearchPanelComponent implements OnInit {
   }
 
   initFields() {
+      if (!this.fieldsData || !this.fieldsData.fields) {
+          this.filtersFields = null;
+          this.searchFields = null;
+          return ;
+      }
       this.filtersFields = this.fieldsData.fields.filters( this.fieldsData.container, this);
       this.searchFields = this.fieldsData.fields.search( this.fieldsData.container, this);
   }

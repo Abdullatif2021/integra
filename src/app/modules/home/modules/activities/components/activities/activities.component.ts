@@ -5,6 +5,7 @@ import {ActivitiesService} from '../../service/activities.service';
 import {Subject} from 'rxjs';
 import { OwnTranslateService } from '../../../../../../service/translate.service';
 import { TranslateService } from '@ngx-translate/core';
+import {FiltersService} from '../../../../../../service/filters.service';
 @Component({
   selector: 'app-activities',
   templateUrl: './activities.component.html',
@@ -33,6 +34,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       private paginationService: PaginationService,
       private activitiesService: ActivitiesService,
       public translate: TranslateService,
+      private filtersService: FiltersService
   ) {
       translate.setDefaultLang('itly');
       const browserLang = translate.getBrowserLang();

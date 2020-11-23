@@ -110,10 +110,21 @@ export const AppConfig = {
         getDispatchLog: (id) => `${api_url}/api/set/${id}/logs`,
         getSetProductsAndPath: (id) => `${api_url}/api/set/${id}/products`,
         getActivities: `${api_url}/api/activity/get`,
+        getSubActivities: `${api_url}/api/activity/sub/get`,
         getActivitiesPostmen: `${api_url}/api/activity/postmen/get`,
         getActivitiesOperators: `${api_url}/api/activity/operators/get`,
         getAvailableStatuses: `${api_url}/api/products/getAvailableStatus`,
         changeProductStatus: `${api_url}/api/products/changeStatus`,
+        createNewActivity: `${api_url}/api/activity/create`,
+        getActivityAvailableCaps: `${api_url}/api/activity/sub/getCaps`,
+        getActivityAvailableProductCategories: `${api_url}/api/activity/sub/getCategories`,
+        getActivityTotalProducts: `${api_url}/api/activity/sub/getTotalProducts`,
+        getActivitySubActivityEndDate: `${api_url}/api/activity/sub/getEndDate`,
+        getActivityOperators: `${api_url}/api/activity/operators/get`,
+        getActivityPostmen: `${api_url}/api/activity/postmen/get`,
+        createSubActivity: `${api_url}/api/activity/sub/create`,
+        updateSubActivity: `${api_url}/api/activity/sub/update`,
+        updateActivity: `${api_url}/api/activity/update`
     },
 
 };

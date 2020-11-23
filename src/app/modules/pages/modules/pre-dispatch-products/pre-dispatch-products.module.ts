@@ -5,9 +5,7 @@ import {PreDispatchProductsComponent} from './components/pre-dispatch-products/p
 import {CoreModule} from '../../../../core/core.module';
 import {SharedModule} from '../../../../shared/shared.module';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import { HttpClientModule , HttpClient} from '@angular/common/http';
+import {TranslateModule} from '@ngx-translate/core';
 
 const routes: Routes = [
     {path: '', component: PreDispatchProductsComponent}
@@ -20,15 +18,7 @@ const routes: Routes = [
     SharedModule,
     CoreModule,
     FontAwesomeModule,
-    TranslateModule.forRoot({
-      loader: {
-      provide: TranslateLoader,
-      useFactory: (http: HttpClient) => {
-      return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-      },
-      deps: [HttpClient],
-      },
-      })
+    TranslateModule.forChild()
   ],
   declarations: [
       PreDispatchProductsComponent

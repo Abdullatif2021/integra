@@ -103,7 +103,7 @@ export const TablesConfig = {
                     ]},
                 {title: 'table_config.table.products_table.cols.bar_code', field : 'barcode', order: '2'},
                 {title: 'table_config.table.products_table.cols.act', field : 'act_code', order: '1'},
-                {title: ['table_config.table.products_table.cols.product_list.product', 
+                {title: ['table_config.table.products_table.cols.product_list.product',
                 'table_config.table.products_table.cols.product_list.list'],
                  field: ['product_category', 'dispatch_code'], separator: true, value_separator: 'dashed',
                     order: ['7', '3']},
@@ -148,7 +148,8 @@ export const TablesConfig = {
                     }},
                     {action: 'pDelete', print_if: (item, container) => {
                             return !container.backProcessingService.isRunningAny(item.id) &&
-                                item.localize_status === 'pause'},
+                                item.localize_status === 'pause';
+                        },
                         click: (item, container) => {
                             container.openModal(PreDispatchDeleteComponent, {deleteItem: true, item: item}) ;
                         }
