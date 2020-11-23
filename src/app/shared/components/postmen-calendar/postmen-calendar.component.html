@@ -347,7 +347,7 @@
                         <div class="d-flex">
                             <div class="postman-icon"><img src="/assets/images/postman-icon.png"></div>
                             <div class="postman-name">{{row.full_name}}</div>
-                            <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, loadMoreSave.day)"><fa-icon ngbTooltip="Nota distinta" [icon]="['fa','pen']"></fa-icon></div>
+                            <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, loadMoreSave.day)"><fa-icon ngbTooltip="{{'shared.table.ngbTooltip.remove' | translate}}" [icon]="['fa','pen']"></fa-icon></div>
                         </div>
                         <div class="postman-note">{{row.note}}</div>
                     </div>

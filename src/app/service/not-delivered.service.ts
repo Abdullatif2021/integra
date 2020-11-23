@@ -26,6 +26,9 @@ export class NotDeliveredService {
      setSelectedProducts(products) {
          this.selectedProducts = products.id;
      }
+     getSelectedProducts() {
+        return this.selectedProducts;
+    }
      updateProductsStatusByProducts(products, status) {
         const options = {
             status: status,
@@ -33,6 +36,9 @@ export class NotDeliveredService {
         }
         return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, options);
     }
+    // getSelectedProducts() {
+    //     return this.selectedProducts;
+    // }
     getNotDeliverProducts(cities, streets, order_field = null, order_method = '1') {
         const options = { params: new HttpParams()
                 .set('page', this.paginationService.current_page)

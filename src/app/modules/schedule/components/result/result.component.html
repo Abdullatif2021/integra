@@ -99,7 +99,7 @@
         <!--<div dndPlaceholderRef class="dndPlaceholder"></div>-->
         <!--<div *ngFor="let child of item.children; let i = index" [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"-->
              <!--(dndStart)="onDragStart($event, child)" class="ngx-dnd-item">-->
-          <ng-container [ngTemplateOutlet]="streetItems" [ngTemplateOutletContext]="{idx: idx+1, item:item, next: next+':'+i}"></ng-container>
+          <ng-container [ngTemplateOutlet]="streetItems" [ngTemplateOutletContext]="{idx: idx+1, item:item, next: next+':'+i }"></ng-container>
         <!--</div>-->
       <!--</div>-->
     </ng-container>

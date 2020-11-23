@@ -164,7 +164,7 @@ export class DispatchViewComponent implements OnInit {
         if (!isPrepared) { return ;}
         this.actionsService.setActions([
             {
-                name: 'Change status', fields: [
+                name: 'Cambiare stato', fields: [
                     { type: 'select', field: 'method', options: [
                             {name: 'Selezionati', value: 'selected'},
                             {name: 'Secondo i filtri applicati', value: 'filters'}

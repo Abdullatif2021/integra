@@ -26,7 +26,7 @@ export class StatusesService {
       const options = {
           status: status,
           product_ids: products,
-      }
+      };
       return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, options);
   }
 

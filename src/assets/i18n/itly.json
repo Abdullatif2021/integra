@@ -195,11 +195,11 @@
           "filter_applied": "ATTENZIONE! Non è stato applicato nessun filtro, sei sicuro di voler eseguire?",
           "run": "Esegui",
           "go_out": "Esci",
-          "create_one": "Crea nuova Pre-Distinta",
-          "about_try": "ATTENZIONE! Stai per processare",
-          "correct_quantity": " righe. Assicurati che la quantità sia corretta,altrimenti riprova o contatta l'assistenz. Premi su Conferma se non hai dubbi sull'operazione.",
-          "select_status": "You have to select a status",
-          "status_req": "Status is required"
+          "create_one": "Cambiare stato",
+          "about_try": "ATTENZIONE! questo è il numero di prodotti che hai selezionato",
+          "correct_quantity": " sei sicuro di non voler cambiare.",
+          "select_status": "Devi selezionare uno stato",
+          "status_req": "Lo stato è obbligatorio"
         }
       }
     },
@@ -302,6 +302,11 @@
     "to_plan": {
         "quint": "Q.ta",
         "reload": "Reload"
+    },
+    "fixed_tree": { 
+      "address": "Indirizzo",
+      "deliver": "Consegne",
+      "time_of_arrival": "Ora d’arrivo"
     },
     "schedule1": {
         "addresses": "Indirizzi",

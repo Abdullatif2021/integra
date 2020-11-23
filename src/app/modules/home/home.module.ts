@@ -81,7 +81,7 @@ import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
       DispatchActionsService,
       CalenderService,
       ProductStatusService,
-      NotDeliveredService
+      NotDeliveredService,
   ],
   entryComponents: [
       PreDispatchAddComponent,
