@@ -7,11 +7,13 @@ import {faChevronRight, faChevronUp} from '@fortawesome/free-solid-svg-icons';
 import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { HttpClientModule , HttpClient} from '@angular/common/http';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   imports: [
     CommonModule,
     PagesRoutingModule,
+    FontAwesomeModule,
     TranslateModule.forChild({
       loader: {
       provide: TranslateLoader,

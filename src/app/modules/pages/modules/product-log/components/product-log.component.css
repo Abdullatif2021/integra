@@ -15,11 +15,11 @@
 .log-more-col fa-icon {
     cursor: pointer;
 }
-.log-date-col, .log-operator-col {
+.log-date-col, .log-operator-col, .log-code-col {
     width: 30%;
     text-align: center;
 }
-.log-header-element.log-date-col, .log-header-element.log-operator-col {
+.log-header-element.log-date-col, .log-header-element.log-operator-col, .log-header-element.log-code-col {
     border-right: 1px solid #FFF;
 }
 .log-state-col {

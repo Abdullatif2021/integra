@@ -20,6 +20,10 @@ const routes: Routes = [
             path: 'dispatch/view/:id',
             loadChildren: './modules/dispatch-view/dispatch-view.module#DispatchViewModule'
         },
+        {
+            path: 'product/:id/log',
+            loadChildren: './modules/product-log/product-log.module#ProductLogModule'
+        },
     ]}
 ];
 

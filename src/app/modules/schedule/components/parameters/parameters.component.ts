@@ -60,7 +60,7 @@ export class ParametersComponent implements OnInit, OnDestroy {
         mixedCities:  [{label: this.translate.instant('schedule.parameters.options.mixedCities.allowed'), value: true},
                     {label: this.translate.instant('schedule.parameters.options.mixedCities.not_allowed'), value: false}],
         pathStart:  [
-            {label: this.translate.instant('schedule.parameters.options.pathStartr.from_start_to_end'), value: 'from_start_to_end'},
+            {label: this.translate.instant('schedule.parameters.options.pathStart.from_start_to_end'), value: 'from_start_to_end'},
             {label: this.translate.instant('schedule.parameters.options.pathStart.from_end_to_start'), value: 'from_end_to_start'}
         ],
     };

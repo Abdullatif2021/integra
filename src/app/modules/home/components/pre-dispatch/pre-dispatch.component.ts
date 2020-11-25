@@ -16,7 +16,6 @@ import {ModalDirective} from '../../../../shared/directives/modal.directive';
 import {PreDispatchDeleteComponent} from '../../modals/pre-dispatch-delete/pre-dispatch-delete.component';
 import {Router} from '@angular/router';
 import {BackProcessingService} from '../../../../service/back-processing.service';
-import {LocatingService} from '../../../../service/locating/locating.service';
 import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-global-actions.service';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -34,8 +33,8 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   @ViewChild('imodal') imodal ;
   @ViewChild(ModalDirective) modalHost: ModalDirective;
   actions = [
-      {name: 'home.pre_dispatch_action.merge_Pre_bills', modal: PreDispatchMergeComponent},
-      {name: 'home.pre_dispatch_action.remove', modal: PreDispatchDeleteComponent, modalOptions: {}},
+      {name: this.translate.instant('home.pre_dispatch_action.merge_Pre_bills'), modal: PreDispatchMergeComponent},
+      {name: this.translate.instant('home.pre_dispatch_action.remove'), modal: PreDispatchDeleteComponent, modalOptions: {}},
   ] ;
   unsubscribe: Subject<void> = new Subject();
   order_field = null ;

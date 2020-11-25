@@ -29,7 +29,8 @@ import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.serv
 import { TranslateService } from '@ngx-translate/core';
 import {ProductStatusService} from '../../../../service/product-status.service';
 import {SetStatusModalComponent} from '../../../../shared/modals/set-status-modal/set-status-modal.component';
-import {DispatchViewService} from '../../../pages/modules/dispatch-view/service/dispatch-view.service';
+import {IntegraaModalService} from '../../../../service/integraa-modal.service';
+
 @Component({
   selector: 'app-not-delivered',
   templateUrl: './not-delivered.component.html',
@@ -77,12 +78,12 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       private productsService: ProductsService,
       private paginationService: PaginationService,
       private filtersService: FiltersService,
+      private integraaModalService: IntegraaModalService,
       private actionsService: ActionsService,
       private productstatusService: ProductStatusService,
       private preDispatchActionsService: PreDispatchActionsService,
       protected recipientsService: RecipientsService,
       private activatedRoute: ActivatedRoute,
-      private dispatchViewService: DispatchViewService,
       private notdeliveredService: NotDeliveredService,
       private preDispatchService: PreDispatchService,
       private agenciesService: AgenciesService,
@@ -221,7 +222,9 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
   }
 
   selectedItemsChanged(items) {
-        this.notdeliveredService.selectedProducts.push(items.id);
+        for (const item of items) {
+            this.notdeliveredService.selectedProducts.push(item.id);
+        }
   }
 
   getCategoriesByName(name) {
@@ -251,6 +254,10 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
           return ;
       }
   }
+  showLogModal(elm) {
+    this.integraaModalService.open(`/pages/product/${elm.id}/log`,
+        {width: 1000, height: 600, title: `Log: ${elm.barcode}`}, {});
+        }
 
   createActivity(event) {
       if (event.method === 'selected' && !this.productsService.selectedProducts.length) {

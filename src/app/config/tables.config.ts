@@ -96,14 +96,14 @@ export const TablesConfig = {
         productsTable : {
             cols: [
                 {title: 'table_config.table.products_table.cols.action', field: false, actions: [
-                                {action: 'view'},
+                    {action: 'view', click: (elm, container) => {container.showLogModal(elm); }},
                                 {action: 'book'},
                     ]},
                 {title: 'table_config.table.products_table.cols.bar_code', field : 'barcode', order: '2'},
                 {title: 'table_config.table.products_table.cols.act', field : 'act_code', order: '1'},
-                {title: ['table_config.table.products_table.cols.product_list.product', 
+                {title: ['table_config.table.products_table.cols.product_list.product',
                 'table_config.table.products_table.cols.product_list.list'],
-                 field: ['product_category', 'dispatch_code'], separator: true, value_separator: 'dashed',
+                 field: ['product_category', 'dispatch_code' ], separator: true, value_separator: 'dashed',
                     order: ['7', '3']},
                 {title: 'table_config.table.products_table.cols.status', field: 'product_status', order: '8'},
                 {title: ['table_config.table.products_table.cols.data.data_time', 'table_config.table.products_table.cols.data.quanti',
@@ -146,7 +146,8 @@ export const TablesConfig = {
                     }},
                     {action: 'pDelete', print_if: (item, container) => {
                             return !container.backProcessingService.isRunningAny(item.id) &&
-                                item.localize_status === 'pause'},
+                                item.localize_status === 'pause';
+                        },
                         click: (item, container) => {
                             container.openModal(PreDispatchDeleteComponent, {deleteItem: true, item: item}) ;
                         }
@@ -156,7 +157,7 @@ export const TablesConfig = {
                 {title: 'table_config.table.pre_dispatch_table.cols.distincta', field: 'code', actions: [], order: '4'},
                 {title: 'table_config.table.pre_dispatch_table.cols.stat_outcome',
                  field: (item, container) => container.getTranslatedState(item), actions: [
-                    {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
+                    {action: 'view', click: (elm,  container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ], order: '3'},
                 {title: 'table_config.table.pre_dispatch_table.cols.quint', field: 'quantity', actions: [], order: '2'},
@@ -206,37 +207,37 @@ export const TablesConfig = {
         // dispatchTable used in dispatch.component
         dispatchTable : {
             cols: [
-                {title: 'table_config.table.dispatch_table.action', field: false, actions: [
+                {title: 'table_config.table.dispatch_table.cols.action', field: false, actions: [
                     {action: 'edit', click: (elm) => { console.log('export . '); }},
                     {action: 'print', click: (elm) => { console.log('print . '); }},
                     {action: 'excel_export', click: (elm) => {console.log('export . '); }},
                     {action: 'view', click: (elm, container) => { container.showDispatchModal(elm); }},
                     {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm)}}
                 ]},
-                {title: 'table_config.table.dispatch_table.name', field: 'name', actions: [], order: '1'},
-                {title: 'table_config.table.dispatch_table.empty', field: [], actions: []},
-                {title: ['table_config.table.dispatch_table.post_cspi.postman',
-                 'table_config.table.dispatch_table.post_cspi.cspi'],
+                {title: 'table_config.table.dispatch_table.cols.name', field: 'name', actions: [], order: '1'},
+                {title: 'table_config.table.dispatch_table.cols.empty', field: [], actions: []},
+                {title: ['table_config.table.dispatch_table.cols.post_cspi.postman',
+                 'table_config.table.dispatch_table.cols.post_cspi.cspi'],
                  field: [(elm) => elm.postman ? elm.postman.full_name : 'Not Assigned',
                         (elm) => elm.user ? elm.user.full_name : ''  ], separator: true, value_separator: 'dashed',
                         actions: [], order: ['6', '7']},
-                {title: ['table_config.table.dispatch_table.state_distinct.state',
-                 'table_config.table.dispatch_table.state_distinct.distinct'], field: [(elm) => {
+                {title: ['table_config.table.dispatch_table.cols.state_distinct.state',
+                 'table_config.table.dispatch_table.cols.state_distinct.distinct'], field: [(elm) => {
                         switch (elm.status) {
-                            case 'not_prepare': return 'table_config.table.dispatch_table.state_distinct.not_prepare';
-                            case 'not_assigned': return 'table_config.table.dispatch_table.state_distinct.not_assigned ';
-                            case 'prepared': return 'table_config.table.dispatch_table.state_distinct.prepared';
+                            case 'not_prepare': return 'table_config.table.dispatch_table.cols.state_distinct.not_prepare';
+                            case 'not_assigned': return 'table_config.table.dispatch_table.cols.state_distinct.not_assigned ';
+                            case 'prepared': return 'table_config.table.dispatch_table.cols.state_distinct.prepared';
                             default: return elm.status;
                         }
                     }, 'pre_dispatch_code'], actions: [
-                        {action: 'View',click: (elm, container) => { container.showLogModal(elm); },
+                        {action: 'View', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ], order: ['2', '8'], separator: true, value_separator: 'dashed',},
-                {title: 'table_config.table.dispatch_table.quint', field: 'quantity', actions: [], order: '5'},
-                {title: ['table_config.table.dispatch_table.delivery_start_date.t1',
-                 'table_config.table.dispatch_table.delivery_start_date.t2'], field: ['started_at', 'created_at'], actions: [],
+                {title: 'table_config.table.dispatch_table.cols.quint', field: 'quantity', actions: [], order: '5'},
+                {title: ['table_config.table.dispatch_table.cols.delivery_start_date.t1',
+                 'table_config.table.dispatch_table.cols.delivery_start_date.t2'], field: ['started_at', 'created_at'], actions: [],
                     order: ['3'], separator: true, value_separator: 'dashed'},
-                {title: 'table_config.table.dispatch_table.note', field: 'note', actions: [], order: '9'},
+                {title: 'table_config.table.dispatch_table.cols.note', field: 'note', actions: [], order: '9'},
                 // {title: 'OPERATION', actions: [
                 //         { action: 'progress',  field: 'percent',},
                 //     ]},

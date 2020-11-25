@@ -43,21 +43,21 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     filtersConfig = null;
     actions = [
-        {name: 'home.dispatch_action.bag_prepared.value', fields: [
+        {name: this.translate.instant('home.dispatch_action.bag_prepared.value'), fields: [
                 { type: 'select', field: 'method', options: [
-                        {name: 'home.dispatch_action.bag_prepared.select', value: 'selected'},
-                        {name: 'home.dispatch_action.bag_prepared.by_filter', value: 'filters'}
-                    ], selectedAttribute: {name: 'home.dispatch_action.bag_prepared.select', value: 'selected'}
+                        {name: this.translate.instant('home.dispatch_action.bag_prepared.select'), value: 'selected'},
+                        {name: this.translate.instant('home.dispatch_action.bag_prepared.by_filter'), value: 'filters'}
+                    ], selectedAttribute: {name: this.translate.instant('home.dispatch_action.bag_prepared.select'), value: 'selected'}
                 }
             ], modal: DispatchPrepareComponent},
-        {name: 'home.dispatch_action.operator_prepar.value', fields: [
+        {name: this.translate.instant('home.dispatch_action.operator_prepar.value'), fields: [
             { type: 'select', field: 'method', options: [
-                    {name: 'home.dispatch_action.operator_prepar.select', value: 'selected'},
-                    {name: 'home.dispatch_action.operator_prepar.by_filter', value: 'filters'}
-                ], selectedAttribute: {name: 'home.dispatch_action.operator_prepar.select', value: 'selected'}
+                    {name: this.translate.instant('home.dispatch_action.operator_prepar.select'), value: 'selected'},
+                    {name: this.translate.instant('home.dispatch_action.operator_prepar.by_filter'), value: 'filters'}
+                ], selectedAttribute: {name: this.translate.instant('home.dispatch_action.operator_prepar.select'), value: 'selected'}
             }
         ], modal: DispatchAssignComponent},
-        {name: 'home.dispatch_action.operator_prepar.remove', modal: DispatchDeleteComponent},
+        {name: this.translate.instant('home.dispatch_action.operator_prepar.remove'), modal: DispatchDeleteComponent},
     ];
 
 

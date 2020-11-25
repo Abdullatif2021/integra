@@ -9,7 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-pre-dispatch-log',
   templateUrl: './pre-dispatch-log.component.html',
-  styleUrls: ['./pre-dispatch-log.component.css']
+  // styleUrls: ['./pre-dispatch-log.component.css']
 })
 export class PreDispatchLogComponent implements OnInit, OnDestroy {
 

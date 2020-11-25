@@ -33,10 +33,10 @@ import { DispatchPrepareComponent } from './modals/dispatch-prepare/dispatch-pre
 import {CalenderService} from './service/calender.service';
 import { DispatchAssignComponent } from './modals/dispatch-assign/dispatch-assign.component';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import {ProductStatusService} from '../../service/product-status.service';
 import {NotDeliveredService} from '../../service/not-delivered.service';
-import {DispatchViewService} from '../pages/modules/dispatch-view/service/dispatch-view.service';
+import { CreateNewActivityComponent } from './modals/create-new-activity/create-new-activity.component';
+import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
 
 
 @NgModule({
@@ -69,6 +69,7 @@ import {DispatchViewService} from '../pages/modules/dispatch-view/service/dispat
       DispatchDeleteComponent,
       DispatchPrepareComponent,
       DispatchAssignComponent,
+      CreateNewActivityComponent,
   ],
   exports: [
       HomeComponent,
@@ -81,7 +82,6 @@ import {DispatchViewService} from '../pages/modules/dispatch-view/service/dispat
       CalenderService,
       ProductStatusService,
       NotDeliveredService,
-      DispatchViewService
   ],
   entryComponents: [
       PreDispatchAddComponent,
@@ -96,6 +96,7 @@ import {DispatchViewService} from '../pages/modules/dispatch-view/service/dispat
       DispatchDeleteComponent,
       DispatchPrepareComponent,
       DispatchAssignComponent,
+      CreateNewActivityComponent
   ],
 
 })
@@ -103,5 +104,6 @@ export class HomeModule {
     constructor() {
         library.add(faCaretLeft);
         library.add(faCaretRight);
+        library.add(faTrash);
     }
 }

@@ -75,7 +75,7 @@ export class ProductsService {
           catchError(this.handleError)
       );
   }
- 
+
 
   getPreDispatchProducts(id) {
       const options = { params: new HttpParams()
@@ -103,7 +103,6 @@ export class ProductsService {
       }
       return this.http.post<ApiResponseInterface>(AppConfig.endpoints.getProductByCategory, options);
   }
-
   handleError(error: HttpErrorResponse) {
       if (error.error instanceof ErrorEvent) {
           console.error('An error occurred:', error.error.message);

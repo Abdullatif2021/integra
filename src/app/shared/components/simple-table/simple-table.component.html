@@ -1,6 +1,6 @@
 <div class="table-container" [ngClass]="{'table-container-mid-height': mid_height}">
   <div class="table-head">
-    <span>{{table.title |translate}}</span>
+    <span>{{table.title | translate}}</span>
     <ng-container *ngIf="table.order">
       <div class="order-container">
         <div (click)="changeOrder('2')" [ngClass]="{'active-order': this.currentOrder === '2'}" class="order-desc order-btn"></div>
@@ -39,7 +39,7 @@
     <div class="extra-fields d-flex" *ngIf="table.extra_fields && item.id">
       <div class="extra-field-container" *ngFor="let field of table.extra_fields">
         <span class="extra-field-label">{{field.label |translate}}</span>
-        <span class="extra-field-value">{{field.value(item)}}</span>
+        <span class="extra-field-value">{{field.value(item) | translate}}</span>
       </div>
     </div>
   </div>
@@ -48,7 +48,7 @@
     <div *ngIf="item._actions && item._actions.length" class="actions-dropdown"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
     <div *ngIf="item._actions && item._actions.length" class="dropdown-menu">
       <ng-container *ngFor="let action of item._actions">
-        <a class="dropdown-item small-text-dropdown-item" (click)="runAction(action, item)">{{action.label |translate}}</a>
+        <a class="dropdown-item small-text-dropdown-item" (click)="runAction(action, item)">{{action.label | translate}}</a>
       </ng-container>
     </div>
   </div>

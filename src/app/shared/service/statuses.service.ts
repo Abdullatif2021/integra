@@ -8,6 +8,7 @@ import {FiltersService} from '../../service/filters.service';
   providedIn: 'root'
 })
 export class StatusesService {
+    selectedProducts = [];
 
   constructor(
       private http: HttpClient,
@@ -21,7 +22,12 @@ export class StatusesService {
       options.params = options.params.set('pageSize', `${pageSize}`);
       return this.http.get<any>(AppConfig.endpoints.getAvailableStatuses, options);
   }
-
+  setSelectedProducts(products) {
+      this.selectedProducts = products.id;
+  }
+  getSelectedProducts() {
+     return this.selectedProducts;
+ }
   updateProductsStatusByProducts(products, status) {
       const options = {
           status: status,

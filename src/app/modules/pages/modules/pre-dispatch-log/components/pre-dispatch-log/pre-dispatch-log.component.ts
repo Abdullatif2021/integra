@@ -33,7 +33,6 @@ export class PreDispatchLogComponent implements OnInit, OnDestroy {
     this.preDispatchService.getLog(this.id).pipe(takeUntil(this.unsubscribe)).subscribe(
         res => {
           this.log = res.data;
-          console.log(this.log, res);
           this.loading = false ;
         }, error => {
           this.loading = false;
