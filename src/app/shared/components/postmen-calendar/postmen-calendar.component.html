@@ -237,11 +237,13 @@
                         <ng-select class="integraa-select" [bindLabel]="'name'" [items]="detailsStatuses" [(ngModel)]="details.status" [clearable]="false" (change)="detailsStatusChanged($event)"></ng-select>
                     </div>
                     <div class="notes postman-info-row2 mt-3">
-                        <app-comments title="{{'shared.postmen_calendar.note_title'| translate}}" [comments]="details.internalNotes" (commentAdded)="addSetNote($event, 'internal_note')"></app-comments>
+                        <app-comments title="shared.postmen_calendar.note_title" [comments]="details.internalNotes" (commentAdded)="addSetNote($event, 'internal_note')"></app-comments>
                     </div>
+
                     <div class="postman-notifications postman-info-row2 mt-3">
                         <app-comments title="{{'shared.postmen_calendar.notifiction_postman'| translate}}" [file]="true" [comments]="details.postmanNotes" (commentAdded)="addSetNote($event, 'postman_note')"></app-comments>
                     </div>
+
                 </div>
             </div>
         </div>

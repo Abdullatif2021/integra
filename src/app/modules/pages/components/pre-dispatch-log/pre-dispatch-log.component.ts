@@ -5,6 +5,7 @@ import {Subject} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 import { TranslateService } from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-pre-dispatch-log',
@@ -18,6 +19,7 @@ export class PreDispatchLogComponent implements OnInit, OnDestroy {
       private preDispatchService: PreDispatchService,
       private integraaModalService: IntegraaModalService,
       private translate: TranslateService,
+      private selectConf: TranslateSelectorService,
 
       ) {}
 

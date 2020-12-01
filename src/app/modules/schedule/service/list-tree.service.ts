@@ -17,9 +17,7 @@ export class ListTreeService implements OnDestroy {
         private snotifyService: SnotifyService,
         private markersService: MarkersService,
         private translate: TranslateService,
-        ) {
-            translate.setDefaultLang('itly');
-        }
+        ) {}
 
     unsubscribe = new EventEmitter();
     levels = ['root', 'cityId', 'capId', 'streetId', 'oet', 'building', 'end'];

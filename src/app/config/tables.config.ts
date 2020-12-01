@@ -198,7 +198,7 @@ export const TablesConfig = {
                 {label: 'table_config.table.pre_dispatch_table.collapsed_actions.place_in_delivery',
                  _class: 'yellow-btn', click: (elm, container) => {console.log('clicked') ; }},
                 {label: 'table_config.table.pre_dispatch_table.collapsed_actions.add_products',
-                 _class: 'orange-btn', click: (elm, container) => {container.openAddProductsModal(elm)}},
+                 _class: 'orange-btn', click: (elm, container) => {container.openAddProductsModal(elm); }},
                 {label: 'table_config.table.pre_dispatch_table.collapsed_actions.delete', _class: 'red-btn', click: (elm, container) => {
                     container.openModal(PreDispatchDeleteComponent, {deleteItem: true, item: elm}) ;
                 }}

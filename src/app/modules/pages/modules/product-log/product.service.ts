@@ -14,7 +14,7 @@ export class ProductService {
 ) {}
 
 getLog(id) {
-    return this.http.get<any>(AppConfig.endpoints.getproductLog(5617)).pipe(
+    return this.http.get<any>(AppConfig.endpoints.getproductLog(id)).pipe(
         catchError(this.handleError)
     );
 }

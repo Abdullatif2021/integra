@@ -40,7 +40,6 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       public translate: TranslateService,
       private filtersService: FiltersService
   ) {
-      translate.setDefaultLang('itly');
     }
 
   ngOnInit() {

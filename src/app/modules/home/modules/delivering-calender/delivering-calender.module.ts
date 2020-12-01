@@ -15,15 +15,7 @@ const routes = [
         CommonModule,
         SharedModule,
         RouterModule.forChild(routes),
-        TranslateModule.forChild({
-            loader: {
-            provide: TranslateLoader,
-            useFactory: (http: HttpClient) => {
-            return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-            },
-            deps: [HttpClient],
-            },
-            })
+        TranslateModule.forChild()
     ],
     declarations: [DeliveringCalenderComponent]
 })

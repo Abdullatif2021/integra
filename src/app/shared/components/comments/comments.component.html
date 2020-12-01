@@ -1,11 +1,12 @@
 <div class="comments-container">
   <div class="new-comment">
-    <div class="comments-title">{{title}}</div>
+    <div class="comments-title">{{title | translate}}</div>
     <ng-container *ngIf="file">
-        <input type="file" class="mb-2 mt-2" (change)="setFile($event)">
+        <input type="file" class="mb-2 mt-2 hidden" #fileInput (change)="setFile($event)">
+        <button type="button" class="integraa-btn ml-2 float-lift" (click)="fileInput.click()" >{{'shared.comments.browse_files'|translate}}</button>
     </ng-container>
     <textarea class="form-control comment-input" #commentInput></textarea>
-    <button class="integraa-btn new-comment-button" (click)="addComment(commentInput)">Salva</button>
+    <button class="integraa-btn new-comment-button" (click)="addComment(commentInput)">{{'shared.comments.save'|translate}}</button>
     <div class="clear-both"></div>
   </div>
 

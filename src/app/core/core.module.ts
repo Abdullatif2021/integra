@@ -30,6 +30,7 @@ import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/c
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -43,15 +44,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
     AngularDraggableModule,
     AutocompleteLibModule,
     HttpClientModule,
-    TranslateModule.forChild({
-      loader: {
-      provide: TranslateLoader,
-      useFactory: (http: HttpClient) => {
-      return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-      },
-      deps: [HttpClient],
-      },
-      })
+    TranslateModule.forChild()
   ],
   declarations: [
       UserNavComponent,

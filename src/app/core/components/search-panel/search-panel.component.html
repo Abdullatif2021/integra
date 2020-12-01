@@ -30,8 +30,9 @@
       </div>
       <!-- } easy search field select  -->
       <!-- easy search submit { -->
-      <div class="col-lg-3">
-        <button type="button" (click)="search()" class="integraa-btn">{{'core.search_panal.search.button1' | translate}}</button>
+      <div class="col-lg-3" >
+        <button class="integraa-btn" *ngIf="_search" (click)="clearsearch()">{{'core.search_panal.filter.btn_reset' | translate}}</button>
+        <button type="button" id="search" (click)="search()" class="integraa-btn">{{'core.search_panal.search.button1' | translate}}</button>
       </div>
       <!-- } easy search submit -->
     </ng-container>
@@ -114,7 +115,7 @@
         </ng-container>
         <ng-container *ngIf="field.type == 'button'">
           <div class="col-lg-1 col-md-10" >
-            <button type="submit" (click)="field.click(active_action)" class="integraa-btn integraa-light-btn">{{ field.label }}</button>
+            <button type="submit" (click)="field.click(active_action)" class="integraa-btn integraa-light-btn">{{ field.label | translate }}</button>
           </div>
         </ng-container>
       </ng-container>

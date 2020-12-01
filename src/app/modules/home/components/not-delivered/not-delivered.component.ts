@@ -53,6 +53,8 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
   unsubscribe: Subject<void> = new Subject();
   order_field = null ;
   order_method = '1' ;
+  refresh = 0 ;
+
 
   actions = [
     {
@@ -163,7 +165,7 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       this.productsService.selectAllOnLoadEvent.pipe(takeUntil(this.unsubscribe)).subscribe((state: boolean) => {
           this.selectAllOnLoad = state ;
       });
-      this.filtersService.setFields(FilterConfig.products, this);
+      this.filtersService.setFields(FilterConfig.notdelivered, this);
   }
 
   cityChanged(event) {
@@ -257,6 +259,7 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
   showLogModal(elm) {
     this.integraaModalService.open(`/pages/product/${elm.id}/log`,
         {width: 1000, height: 600, title: `Log: ${elm.barcode}`}, {});
+        this.refresh++ ;
         }
 
   createActivity(event) {

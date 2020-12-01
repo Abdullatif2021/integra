@@ -44,6 +44,10 @@ import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/c
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { HttpClientModule , HttpClient} from '@angular/common/http';
 
+
+export function HttpLoaderFactory(httpClient: HttpClient) {
+    return new TranslateHttpLoader(httpClient);
+  }
 @NgModule({
   imports: [
     CommonModule,
@@ -62,13 +66,11 @@ import { HttpClientModule , HttpClient} from '@angular/common/http';
     NgxMaterialTimepickerModule,
     TranslateModule.forChild({
         loader: {
-        provide: TranslateLoader,
-        useFactory: (http: HttpClient) => {
-        return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-        },
-        deps: [HttpClient],
-        },
-        })
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+        }
+      })
   ],
   declarations: [
       ScheduleComponent,

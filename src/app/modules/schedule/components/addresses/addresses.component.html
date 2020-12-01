@@ -358,6 +358,8 @@
       </div>
       <div class="btns-container mt-3">
         <button type="button" (click)="createStartPoint(StartPontAddressInput)" class="integraa-btn ml-2 float-right" >{{'schedule.address.run' | translate}}</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.address.go_out' | translate}}</button>
+
         <div class="clear-both"></div>
       </div>
     </div>
@@ -380,6 +382,7 @@
       </div>
       <div class="btns-container mt-3">
         <button type="button" (click)="createEndPoint(EndPontAddressInput)" class="integraa-btn ml-2 float-right" >{{'schedule.address.run' | translate}}</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.address.go_out' | translate}}</button>
         <div class="clear-both"></div>
       </div>
     </div>

@@ -43,6 +43,7 @@
     "ngx-file-drop": "^8.0.8",
     "ngx-google-places-autocomplete": "^2.0.4",
     "ngx-infinite-scroll": "6.0.0",
+    "ngx-language-selector": "^3.0.6",
     "ngx-material-timepicker": "^3.2.2",
     "popper.js": "^1.16.0",
     "rxjs": "6.0.0",

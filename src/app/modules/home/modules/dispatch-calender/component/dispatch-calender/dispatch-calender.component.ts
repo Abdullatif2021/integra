@@ -190,10 +190,7 @@ export class DispatchCalenderComponent implements OnInit, OnDestroy {
         protected agenciesService: AgenciesService,
         protected recipientsService: RecipientsService,
         private translate: TranslateService,
-        ) {
-          translate.setDefaultLang('itly');
-          const browserLang = translate.getBrowserLang();
-        }
+        ) {}
 
     ngOnInit() {
         this.actionsService.setActions(this.actions);

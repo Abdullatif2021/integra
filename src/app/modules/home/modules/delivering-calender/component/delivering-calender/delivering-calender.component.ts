@@ -190,8 +190,6 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
         protected recipientsService: RecipientsService,
         private translate: TranslateService,
     ) {
-      translate.setDefaultLang('itly');
-      const browserLang = translate.getBrowserLang();
     }
 
     ngOnInit() {

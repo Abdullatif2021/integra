@@ -37,6 +37,14 @@ import {ProductStatusService} from '../../service/product-status.service';
 import {NotDeliveredService} from '../../service/not-delivered.service';
 import { CreateNewActivityComponent } from './modals/create-new-activity/create-new-activity.component';
 import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
+import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { HttpClient} from '@angular/common/http';
+
+
+export function HttpLoaderFactory(httpClient: HttpClient) {
+    return new TranslateHttpLoader(httpClient);
+  }
 
 
 @NgModule({
@@ -48,6 +56,7 @@ import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
     NgSelectModule,
     FontAwesomeModule,
     FormsModule,
+    TranslateModule
   ],
   declarations: [
       ToDeliverComponent,

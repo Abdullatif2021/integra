@@ -6,8 +6,13 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {faChevronRight, faChevronUp} from '@fortawesome/free-solid-svg-icons';
 import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import { HttpClientModule , HttpClient} from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+
+
+export function HttpLoaderFactory(httpClient: HttpClient) {
+    return new TranslateHttpLoader(httpClient);
+  }
 
 @NgModule({
   imports: [
@@ -15,13 +20,11 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     PagesRoutingModule,
     FontAwesomeModule,
     TranslateModule.forChild({
-      loader: {
-      provide: TranslateLoader,
-      useFactory: (http: HttpClient) => {
-      return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-      },
-      deps: [HttpClient],
-      },
+        loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+        }
       })
   ],
   declarations: [
