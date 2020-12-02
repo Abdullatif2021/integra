@@ -129,7 +129,12 @@ export const TablesConfig = {
                         'sender_name': 'text-gray',
                         '2': 'marked'
                     }, order: ['9', '10', '11']}
-            ]
+            ],
+            mark: {
+                field: 'activity',
+                prefix: 'Activity Code : ',
+                icon: '/assets/images/activity.png'
+            }
         },
         // preDispatchTable used in preDispatch.component
         preDispatchTable : {

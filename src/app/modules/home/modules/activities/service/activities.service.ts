@@ -5,11 +5,11 @@ import {catchError} from 'rxjs/operators';
 import {AppConfig} from '../../../../../config/app.config';
 import {throwError} from 'rxjs';
 import {PaginationService} from '../../../../../service/pagination.service';
+import {takeUntil} from 'rxjs/internal/operators';
 
 
 @Injectable()
 export class ActivitiesService {
-
 
     constructor(
         private http: HttpClient,
@@ -23,6 +23,7 @@ export class ActivitiesService {
         const options = { params: new HttpParams() };
         options.params = options.params.set('page', `${this.paginationService.current_page}`);
         options.params = options.params.set('pageSize', `${this.paginationService.rpp}`);
+        options.params = this.filtersService.getHttpParams(options.params);
         return this.http.get<any>(AppConfig.endpoints.getActivities, options).pipe(
             catchError(this.handleError)
         );
@@ -49,13 +50,10 @@ export class ActivitiesService {
         );
     }
 
-    getFilledActivities() {
+    getFilledActivities(unsubscripe) {
         return new Promise(async (resolve, reject) => {
 
             let error = null ;
-            const activities = await this.getActivities().toPromise().catch(e => {
-                error = e;
-            });
 
             const postmen = await this.getPostmen().toPromise().catch( e => {
                 error = e;
@@ -64,25 +62,7 @@ export class ActivitiesService {
             const operators = await this.getOperators().toPromise().catch( e => {
                 error = e;
             });
-
-            if (error) { return reject(error); }
-            const filledData = [];
-            activities.data.forEach(row => {
-                row.startedAt = row.startedAt ? row.startedAt.substr(0, 10).split('/').reverse().join('-') : null;
-                row.doneAt = row.doneAt ? row.doneAt.substr(0, 10).split('/').reverse().join('-') : null;
-                row.postmen = row.postmen && row.postmen.length ? row.postmen[0].id : null;
-                if (row.user) {
-                    row.user = row.user.id;
-                }
-                filledData.push( {
-                    ...row,
-                    productValue: row.productsCategories.length ? row.productsCategories[0].id : null,
-                    capValue: row.caps ? row.caps[0] : null,
-                    users_list: operators.data,
-                    postmen_list: postmen.data,
-                });
-            });
-            return resolve({data: filledData, pagination: activities.pagination}) ;
+            return resolve({}) ;
         });
     }
 

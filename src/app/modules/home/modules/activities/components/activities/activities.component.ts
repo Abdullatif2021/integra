@@ -6,6 +6,12 @@ import {Subject} from 'rxjs';
 import { OwnTranslateService } from '../../../../../../service/translate.service';
 import { TranslateService } from '@ngx-translate/core';
 import {FiltersService} from '../../../../../../service/filters.service';
+import {FilterConfig} from '../../../../../../config/filters.config';
+import {Router} from '@angular/router';
+import {RecipientsService} from '../../../../../../service/recipients.service';
+import {CustomersService} from '../../../../../../service/customers.service';
+import {AgenciesService} from '../../../../../../service/agencies.service';
+import {CategoriesService} from '../../../../../../service/categories.service';
 @Component({
   selector: 'app-activities',
   templateUrl: './activities.component.html',
@@ -15,13 +21,17 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
 
   tableConfig = {
       cols: [
-          {title: 'Operatore', field: 'users_list', valueDisplay: 'select', value: 'user', valueDisplayLabel: 'name', },
+          {title: 'Operatore', field: 'operator', valueDisplay: 'select', value: 'operator_value',
+              valueDisplayLabel: 'name', multiple: false},
           {title: 'Data inizio distribuzione', field: 'startedAt', valueDisplay: 'dateSelect'},
           {title: 'Data fine distribuzione', field: 'startedAt', valueDisplay: 'dateSelect'},
-          {title: 'Prodotti', field: 'productsCategories', valueDisplay: 'select', value: 'productValue', valueDisplayLabel: 'name'},
-          {title: 'Q.ta prevista per giorno', field: 'qty', valueDisplay: 'singleSelect'},
-          {title: 'Cap previsti', field: 'cap', valueDisplay: 'select', value: 'capValue', valueDisplayLabel: 'name'},
-          {title: 'Postini proposti', field: 'postmen_list', valueDisplay: 'select', value: 'postmen', valueDisplayLabel: 'full_name'},
+          {title: 'Prodotti', field: 'productsCategories', valueDisplay: 'select', value: 'product_value',
+              valueDisplayLabel: 'name', multiple: true},
+          {title: 'Q.ta prevista per giorno', field: 'productsQty', valueDisplay: 'singleSelect'},
+          {title: 'Cap previsti', field: 'caps', valueDisplay: 'select', value: 'caps_value',
+              valueDisplayLabel: 'name', multiple: true},
+          {title: 'Postini proposti', field: 'postmen', valueDisplay: 'select',
+              value: 'postmen_value', valueDisplayLabel: 'full_name', multiple: true},
       ],
       theme: 'gray-white',
       selectable: false
@@ -34,31 +44,68 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       private paginationService: PaginationService,
       private activitiesService: ActivitiesService,
       public translate: TranslateService,
-      private filtersService: FiltersService
+      protected recipientsService: RecipientsService,
+      private customersService: CustomersService,
+      private agenciesService: AgenciesService,
+      private filtersService: FiltersService,
+      private router: Router,
+      protected categoriesService: CategoriesService,
   ) {
       translate.setDefaultLang('itly');
       const browserLang = translate.getBrowserLang();
     }
 
   ngOnInit() {
+      this.filtersService.setFields(FilterConfig.products, this, 'products');
+      this.filtersService.keep('products');
+      this.filtersService.clear('products');
       this.paginationService.rppValueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((rpp: number) => {
           this.loadData() ;
       });
       this.paginationService.currentPageChanges.pipe(takeUntil(this.unsubscribe)).subscribe( (page: number) => {
           this.loadData() ;
       });
+      this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filtersData: any) => {
+          this.handleGroupingDisplay(filtersData.filters);
+          this.loadData();
+      });
       this.loadData();
   }
+
+  handleGroupingDisplay(filters) {
+      if (filters.grouping !== 'show_activities') {
+          return this.router.navigate(['/']);
+      }
+  }
+
   ngOnDestroy() {
       this.unsubscribe.next();
       this.unsubscribe.complete();
   }
+
   async loadData() {
-      const data = <any> await this.activitiesService.getFilledActivities().catch(e => { console.error(e); });
-      if (!data) { return ; }
-      this.data = data.data;
-      this.paginationService.updateLoadingState(false);
-      this.paginationService.updateResultsCount(data.pagination.total);
+      const filledData = [] ;
+      this.activitiesService.getSubActivities().pipe(takeUntil(this.unsubscribe)).subscribe(
+          activities => {
+              console.log(activities);
+              activities.data.forEach(row => {
+                  row.startedAt = row.startedAt ? row.startedAt.substr(0, 10).split('/').reverse().join('-') : null;
+                  row.doneAt = row.doneAt ? row.doneAt.substr(0, 10).split('/').reverse().join('-') : null;
+                  row.postmen_value = row.postmen ? row.postmen.map(p => p.id ) : null;
+                  row.product_value = row.productsCategories ? row.productsCategories.map(p => p.id ) : null;
+                  row.caps_value = row.caps.map(c => c.id);
+                  row.operator_value = row.operator ? row.operator.id : null;
+                  row.operator = [row.operator];
+                  filledData.push(row);
+              });
+              this.data = filledData;
+              console.log(this.data);
+              this.paginationService.updateLoadingState(false);
+              this.paginationService.updateResultsCount(activities.pagination.total);
+          }, error => {
+
+          }
+      );
   }
 
 

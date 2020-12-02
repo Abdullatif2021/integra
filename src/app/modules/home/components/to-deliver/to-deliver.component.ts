@@ -80,10 +80,6 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
         modal: PreDispatchNewComponent
     },
     {
-        name: 'Mosta attivita in corso',
-        run: (event) => {this.router.navigate(['to-deliver/activities'])}
-    },
-    {
         name: 'Aggiungi a Pre-Distinta esistente', fields: [
             { type: 'select', field: 'method', options: [
                     {name: 'Selezionati', value: 'selected'},
@@ -169,9 +165,10 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-      this.citiesTable.title = 'Paese';
-      this.citiesTable.searchPlaceHolder =  'Cerca Paese';
-      this.filtersService.clear();
+      this.filtersService.setFields(FilterConfig.products, this, 'products');
+      this.filtersService.keep('products');
+      this.filtersService.clear('products');
+      this.handleGroupingDisplay(this.filtersService.getGrouping(), this.filtersService.filters, this.filtersService.getPlaceholders());
       this.loadProducts(false);
       this.paginationService.rppValueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((rpp: number) => {
           this.loadProducts(false) ;
@@ -181,15 +178,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       });
       this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filtersData: any) => {
           const filters = filtersData.filters ;
-          this.citiesTable.title = filters.grouping === 'by_client' ? 'Cliente' : 'Paese' ;
-          this.citiesTable.searchPlaceHolder = filters.grouping === 'by_client' ? 'Cerca Cliente' : 'Cerca Paese' ;
-          if (filters.grouping === 'by_cap' && filters.recipientCap && filtersData.placeholders && filtersData.placeholders.recipientCap) {
-              this._streetsTable.clearData();
-              this._citiesTable.setSearchValue(filtersData.placeholders.recipientCap);
-              this.current_cities = {all: true, items: [], search: filtersData.placeholders.recipientCap};
-          } else if (this._citiesTable.resetIfAuto()) {
-              this.current_cities = {all: true, items: [], search: null};
-          }
+          this.handleGroupingDisplay(filters.grouping, filters, filtersData.placeholders);
           this.loadProducts(true) ;
           this._streetsTable.reload();
           this._citiesTable.reload();
@@ -204,7 +193,21 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       this.productsService.selectAllOnLoadEvent.pipe(takeUntil(this.unsubscribe)).subscribe((state: boolean) => {
           this.selectAllOnLoad = state ;
       });
-      this.filtersService.setFields(FilterConfig.products, this);
+  }
+
+  handleGroupingDisplay(grouping, filters, placeholders) {
+      if (grouping === 'show_activities') {
+          return this.router.navigate(['to-deliver/activities']);
+      }
+      this.citiesTable.title = grouping === 'by_client' ? 'Cliente' : 'Paese' ;
+      this.citiesTable.searchPlaceHolder = grouping === 'by_client' ? 'Cerca Cliente' : 'Cerca Paese' ;
+      if (grouping === 'by_cap' && filters.recipientCap && placeholders && placeholders.recipientCap) {
+          this._streetsTable.clearData();
+          this._citiesTable.setSearchValue(placeholders.recipientCap);
+          this.current_cities = {all: true, items: [], search: placeholders.recipientCap};
+      } else if (this._citiesTable.resetIfAuto()) {
+          this.current_cities = {all: true, items: [], search: null};
+      }
   }
 
   cityChanged(event) {
@@ -264,10 +267,6 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
 
   selectedItemsChanged(items) {
       this.productsService.selectedProducts = items ;
-  }
-
-  getCategoriesByName(name) {
-      return this.categoriesService.getCategoriesByName(name);
   }
 
   openModal(modal, data, options = {}) {

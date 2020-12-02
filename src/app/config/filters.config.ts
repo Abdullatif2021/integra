@@ -42,7 +42,7 @@ export const FilterConfig = {
             {type: 'ng-select', label: 'filter_config.products.filter.product', key: 'productTypeNameId',
                 items: sp.filters_data.products_type, labelVal: 'type'},
             {type: 'auto-complete', label: 'filter_config.products.filter.category', key: 'categoryId', items: sp.filters_data.categories,
-                labelVal: 'name', value: '', getMethod: (term) => container.getCategoriesByName(term), _class: 'auto-complete'},
+                labelVal: 'name', value: '', getMethod: (term) => container.categoriesService.getCategoriesByName(term), _class: 'auto-complete'},
             {type: 'simpleText', label: 'filter_config.products.filter.recipient_name', key: 'recipientName', value: ''},
             {type: 'auto-complete', label: 'filter_config.products.filter.address', key: 'recipientId', labelVal: 'name',
                 getMethod: (term) => container.recipientsService.getRecipientsByName(term),
@@ -52,8 +52,11 @@ export const FilterConfig = {
                 labelVal: 'name', getMethod: (term) => container.recipientsService.getCapCity(term), _class: 'auto-complete'},
             {type: 'simpleText', label: 'filter_config.products.filter.destination', key: 'destination'},
             {type: 'ng-select', label: 'filter_config.products.filter.grouping.value', labelVal: 'name', key: 'grouping',
-                items: [{name: 'filter_config.products.filter.grouping.value', id: 'by_cap'},
-                 {name: 'filter_config.products.filter.grouping.quant_per_client', id: 'by_client'}], unclearbale: true,
+                items: [
+                    {name: 'filter_config.products.filter.grouping.value', id: 'by_cap'},
+                    {name: 'filter_config.products.filter.grouping.quant_per_client', id: 'by_client'},
+                    {name: 'Mosta attivita in corso', id: 'show_activities'}
+                ], unclearbale: true,
                 selectedAttribute: {name: 'filter_config.products.filter.grouping.quant_per_cap', id: 'by_cap'}},
             {type: 'ng-select', label: 'filter_config.products.filter.street_location', labelVal: 'name', key: 'fixed',
                 items: [{name: 'Tutti', id: 'null'}, {name: 'Localizzato', id: '1'}, {name: 'Non localizzato', id: '0'}], unclearbale: true,

@@ -29,6 +29,8 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   saving = false ;
   allCapsLoaded = false ;
   allCategoriesLoaded = false ;
+  addCap ;
+  addCategory ;
 
   constructor(
       private activitiesService: ActivitiesService,
@@ -58,14 +60,34 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       );
   }
 
-  loadPostmen() {
-      this.activitiesService.getPostmen(1).pipe(takeUntil(this.unsubscribe)).subscribe(
+  loadPostmen(subActivity) {
+      this.activitiesService.getPostmen(
+          this.activityId, subActivity.startDate, subActivity.caps, subActivity.categories,
+          subActivity.qtyPerDay, subActivity.nextSaturdayStatus, 0, 1, subActivity.id
+      ).pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
-              this.postmen = data.data;
+              subActivity.postmenList = data.data;
           }, error => {
               this.snotifyService.error('Something went wrong !', { showProgressBar: false, timeout: 4000 });
           }
       );
+  }
+
+  loadRecommendedPostmen(subActivity) {
+      this.activitiesService.getPostmen(
+          this.activityId, subActivity.startDate, subActivity.caps, subActivity.categories,
+          subActivity.qtyPerDay, subActivity.nextSaturdayStatus, 1, 1, subActivity.id
+      ).pipe(takeUntil(this.unsubscribe)).subscribe(
+          data => {
+              subActivity.recommendedPostmenList = data.data;
+          }, error => {
+              this.snotifyService.error('Something went wrong !', { showProgressBar: false, timeout: 4000 });
+          }
+      );
+  }
+
+  recommendedPostmenChanged(subActivity) {
+      subActivity.recommendedPostmen = null ;
   }
 
   loadOperators() {
@@ -79,7 +101,6 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   loadCaps(subActivity, page = 1) {
-      console.log('caps category', subActivity.categories);
       if (page < 2 || !this.caps) {
           this.caps = [] ;
       }
@@ -87,7 +108,8 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       if (this.allCapsLoaded) { return ; }
       subActivity.capsPage = page ;
       subActivity.isCapsLoading = true ;
-      this.activitiesService.getAvailableCaps(this.activityId, page).pipe(takeUntil(this.unsubscribe)).subscribe(
+      this.activitiesService.getAvailableCaps(this.activityId, page, subActivity.id)
+          .pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               if (!data.data || !data.data.length) {
                   this.allCapsLoaded = true ;
@@ -97,8 +119,8 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
               } else {
                   this.caps = data.data ;
               }
-              console.log('caps category 2', subActivity.categories);
               subActivity.isCapsLoading = false ;
+              // if (this.addCap) { this.caps.push(this.addCap); }
           }, error => {
               this.snotifyService.error('Something went wrong !', { showProgressBar: false, timeout: 4000 });
           });
@@ -106,7 +128,6 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
 
   init() {
       this.createActivity();
-      this.loadPostmen();
       this.loadOperators();
   }
 
@@ -123,8 +144,8 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
           data => {
               if (data.statusCode === 200) {
                   this.saving = false ;
-                  modal.close();
                   this.snotifyService.success('Activity Created Successfully', { showProgressBar: false, timeout: 4000 });
+                  modal.close();
                   return ;
               }
               this.saving = false ;
@@ -141,7 +162,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       subActivity.isCategoriesLoading = true ;
       if (page === 1) { this.allCategoriesLoaded = false ; }
       if (this.allCategoriesLoaded) { return ; }
-      this.activitiesService.getAvailableProductsCategories(this.activityId, subActivity.caps, 1)
+      this.activitiesService.getAvailableProductsCategories(this.activityId, subActivity.caps, subActivity.id, 1)
           .pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               if (data.statusCode === 200) {
@@ -154,9 +175,16 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
                       if (!data.data || !data.data.length) {
                           this.allCategoriesLoaded = true ;
                       }
+                      // if (this.addCategory) {
+                      //     this.categories.push(this.addCategory);
+                      // }
                       return this.categories = this.categories.concat(data.data);
                   }
-                  return this.categories = data.data;
+                  this.categories = data.data;
+                  if (this.addCategory) {
+                      this.categories.push(this.addCategory);
+                  }
+                  return ;
               }
               this.snotifyService.error(data.message, { showProgressBar: false, timeout: 4000 });
           }, error => {
@@ -165,17 +193,26 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       );
   }
 
-  capsChanged(subActivity, categoriesSelect) {
+  capRemoved(event, subActivity) {
+      if (subActivity.created && (!subActivity.caps || !subActivity.caps.length)) {
+          this.addCap = event.value;
+      }
+  }
 
+  categoryRemoved(event, subActivity) {
+      if (subActivity.created && (!subActivity.categories || !subActivity.categories.length)) {
+          this.addCategory = event.value;
+      }
+  }
+
+  capsChanged(event, subActivity) {
       if (subActivity.created) {
           this.resetLastCaps(subActivity);
       }
-      // categoriesSelect.handleClearClick();
-      // this.categories = subActivity.categories.map(i => {id: i});
-      // subActivity.categories = null ;
       if (!subActivity.caps || !subActivity.caps.length) { return this.isReady(subActivity); }
-      this.saveSubActivity(subActivity);
       this.loadCategories(subActivity);
+      this.loadTotalProducts(subActivity);
+      this.saveSubActivity(subActivity);
   }
 
   resetLastCaps(subActivity) {
@@ -192,6 +229,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   loadTotalProducts(subActivity) {
+      if (!subActivity.categories || !subActivity.categories.length) { return  ; }
       this.activitiesService.getTotalProducts(this.activityId, subActivity.caps, subActivity.categories)
           .pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
@@ -211,6 +249,10 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
           return this.isReady(subActivity);
       }
       this.loadTotalProducts(subActivity);
+      this.saveSubActivity(subActivity);
+  }
+
+  postmenChanged(subActivity) {
       this.saveSubActivity(subActivity);
   }
 
@@ -298,6 +340,8 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
                   if (data.statusCode === 200) {
                       subActivity.created = true ;
                       subActivity.id = data.data.id;
+                      this.addCap = null ;
+                      this.addCategory = null ;
                       return ;
                   }
                   this.checkIfAnyNotSaved();
@@ -319,7 +363,10 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
               data => {
                   if (data && data.statusCode === 200) {
                       subActivity.created = true ;
-                      this.checkIfAnyNotSaved();
+                      console.log('add cap was cleared');
+                      this.addCap = null ;
+                      this.addCategory = null ;
+                      return this.checkIfAnyNotSaved();
                   }
                   this.snotifyService.error(data.message, { showProgressBar: false, timeout: 4000 });
               }, error => {

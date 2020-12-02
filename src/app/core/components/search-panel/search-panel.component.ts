@@ -84,9 +84,11 @@ export class SearchPanelComponent implements OnInit {
           this._changed_filters = {};
       });
       this.filtersService.fields.subscribe((data) => {
+          if (data.keep) {
+              return ;
+          }
           this.fieldsData = data ;
           this.filters = Object.assign({}, data.fields.default_filters);
-          this._active_filters = Object.assign({}, data.fields.default_filters);
           if ( this.loaded ) {
               this.initFields() ;
           }
