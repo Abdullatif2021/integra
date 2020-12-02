@@ -3,7 +3,6 @@ import {PaginationService} from '../../../../../../service/pagination.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {ActivitiesService} from '../../service/activities.service';
 import {Subject} from 'rxjs';
-import { OwnTranslateService } from '../../../../../../service/translate.service';
 import { TranslateService } from '@ngx-translate/core';
 import {FiltersService} from '../../../../../../service/filters.service';
 import {FilterConfig} from '../../../../../../config/filters.config';
@@ -21,14 +20,18 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
 
   tableConfig = {
       cols: [
-          {title: this.translate.instant('home.modules.activities.tableConfig.operator'), field: 'operator', valueDisplay: 'select', value: 'operator_value',
+          {title: this.translate.instant('home.modules.activities.tableConfig.operator'),
+              field: 'operator', valueDisplay: 'select', value: 'operator_value',
               valueDisplayLabel: 'name', multiple: false},
           {title: this.translate.instant('home.modules.activities.tableConfig.start_date'), field: 'startedAt', valueDisplay: 'dateSelect'},
           {title: this.translate.instant('home.modules.activities.tableConfig.end_date'), field: 'startedAt', valueDisplay: 'dateSelect'},
-          {title: this.translate.instant('home.modules.activities.tableConfig.product'), field: 'productsCategories', valueDisplay: 'select', value: 'product_value',
+          {title: this.translate.instant('home.modules.activities.tableConfig.product'),
+              field: 'productsCategories', valueDisplay: 'select', value: 'product_value',
               valueDisplayLabel: 'name', multiple: true},
-          {title: this.translate.instant('home.modules.activities.tableConfig.quintity_per_day'), field: 'productsQty', valueDisplay: 'singleSelect'},
-          {title: this.translate.instant('home.modules.activities.tableConfig.expected_cap'), field: 'caps', valueDisplay: 'select', value: 'caps_value',
+          {title: this.translate.instant('home.modules.activities.tableConfig.quintity_per_day'),
+              field: 'productsQty', valueDisplay: 'singleSelect'},
+          {title: this.translate.instant('home.modules.activities.tableConfig.expected_cap'),
+              field: 'caps', valueDisplay: 'select', value: 'caps_value',
               valueDisplayLabel: 'name', multiple: true},
           {title: this.translate.instant('home.modules.activities.tableConfig.proposed_postman'), field: 'postmen', valueDisplay: 'select',
               value: 'postmen_value', valueDisplayLabel: 'full_name', multiple: true},
