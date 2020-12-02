@@ -10,22 +10,12 @@ import { HttpClient} from '@angular/common/http';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 
-export function HttpLoaderFactory(httpClient: HttpClient) {
-    return new TranslateHttpLoader(httpClient);
-  }
-
 @NgModule({
   imports: [
     CommonModule,
     PagesRoutingModule,
     FontAwesomeModule,
-    TranslateModule.forChild({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
-        }
-      })
+    TranslateModule.forChild()
   ],
   declarations: [
       PagesComponent,

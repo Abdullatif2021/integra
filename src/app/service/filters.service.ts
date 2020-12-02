@@ -33,7 +33,6 @@ export class FiltersService {
   }
 
   updateFilters(filters, placeholders = {}) {
-      console.log('updated', filters);
     const grouping = filters.grouping;
     this.grouping =  grouping ? grouping : 'by_cap' ;
     this.filters = Object.assign({}, filters) ;

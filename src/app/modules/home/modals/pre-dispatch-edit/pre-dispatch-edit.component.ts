@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ModalComponent} from '../modal.component';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import {TranslateService} from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-pre-dispach-edit',
@@ -13,9 +14,12 @@ export class PreDispatchEditComponent extends ModalComponent implements OnInit {
   constructor(
     private preDispatchActionsService: PreDispatchActionsService ,
     private translate: TranslateService,
-) {
-  super();
-  }
+    private translateSelectorService: TranslateSelectorService,
+
+    ) {
+      super();
+      this.translateSelectorService.setDefaultLanuage();
+    }
 
   name = '' ;
   error = null ;

@@ -1,3 +1,4 @@
+
 import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { CitiesService } from '../../../../service/cities.service';
 import { TablesConfig } from '../../../../config/tables.config';
@@ -10,35 +11,27 @@ import {TableComponent} from '../../../../shared/components/table/table.componen
 import {ActionsService} from '../../../../service/actions.service';
 import {SimpleTableComponent} from '../../../../shared/components/simple-table/simple-table.component';
 import {FilterConfig} from '../../../../config/filters.config';
-import {NotDeliveredService} from '../../../../service/not-delivered.service';
-import {from, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {RecipientsService} from '../../../../service/recipients.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {PreDispatchAddDirectComponent} from '../../modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
-import {PreDispatchService} from '../../../../service/pre-dispatch.service';
-import {AgenciesService} from '../../../../service/agencies.service';
-import {CustomersService} from '../../../../service/customers.service';
+import {Router} from '@angular/router';
 import {CategoriesService} from '../../../../service/categories.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../../shared/directives/modal.directive';
-import {PwsisbsConfirmModalComponent} from '../../modals/pwsisbs-confirm-modal/pwsisbs-confirm-modal.component';
-import {PsbatpdwsiConfirmModalComponent} from '../../modals/psbatpdwsi-confirm-modal/psbatpdwsi-confirm-modal.component';
 import {SnotifyService} from 'ng-snotify';
-import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import { TranslateService } from '@ngx-translate/core';
-import {ProductStatusService} from '../../../../service/product-status.service';
 import {SetStatusModalComponent} from '../../../../shared/modals/set-status-modal/set-status-modal.component';
 import {IntegraaModalService} from '../../../../service/integraa-modal.service';
-
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
+import { InStockService } from './../../../../service/in-stock.service';
 @Component({
-  selector: 'app-not-delivered',
+  selector: 'app-in-stock',
   templateUrl: './in-stock.component.html',
   styleUrls: ['./in-stock.component.css']
 })
 export class InStockComponent implements OnInit, OnDestroy {
 
-  productsTable = TablesConfig.table.productsTable ;
+  instockTable = TablesConfig.table.instockTable ;
   citiesTable = TablesConfig.simpleTable.citiesTable ;
   streetsTable = TablesConfig.simpleTable.streetsTable ;
   products: any ;
@@ -67,12 +60,12 @@ export class InStockComponent implements OnInit, OnDestroy {
         ],
         modal: SetStatusModalComponent,
         modalData: {
-            selected: () => this.notdeliveredService.getSelectedProducts(),
-            state: 'not_delivered' }
+            selected: () => this.instockservice.getSelectedProducts(),
+            state: 'in_stock' }
  }];
 
-  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getNotDeliveredCities(page, rpp, name, order);
-  streetsGetMethod = (page, rpp, name, order) => this.streetsService.getNotDeliveredStreets(page, rpp, name, this.current_cities, order);
+  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getInStockCities(page, rpp, name, order);
+  streetsGetMethod = (page, rpp, name, order) => this.streetsService.getInStockStreets(page, rpp, name, this.current_cities, order);
 
   constructor(
       private citiesService: CitiesService,
@@ -82,51 +75,19 @@ export class InStockComponent implements OnInit, OnDestroy {
       private filtersService: FiltersService,
       private integraaModalService: IntegraaModalService,
       private actionsService: ActionsService,
-      private productstatusService: ProductStatusService,
-      private preDispatchActionsService: PreDispatchActionsService,
       protected recipientsService: RecipientsService,
-      private activatedRoute: ActivatedRoute,
-      private notdeliveredService: NotDeliveredService,
-      private preDispatchService: PreDispatchService,
-      private agenciesService: AgenciesService,
-      private customersService: CustomersService,
       protected categoriesService: CategoriesService,
       private componentFactoryResolver: ComponentFactoryResolver,
       private modalService: NgbModal,
       private snotifyService: SnotifyService,
       private router: Router,
+      private instockservice: InStockService,
       private translate: TranslateService,
-
-  ) {
+      private translateSelectorService: TranslateSelectorService,
+      ) {
+      this.translateSelectorService.setDefaultLanuage();
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
-      this.activatedRoute.queryParams.subscribe(params => {
-          if (params['actionsonly'] === 'addproductstopd') {
-              this.actions = <any>{
-                  name: 'home.modals.not_delivered_actions.action_name2', fields: [
-                      { type: 'select', field: 'method', options: [
-                              {name: 'home.modals.not_delivered_actions.selected2', value: 'selected'},
-                              {name: 'home.modals.not_delivered_actions.by_filter2', value: 'filters'}
-                          ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
-                      }
-                  ],
-                  modal: PreDispatchAddDirectComponent,
-              };
-          }
-          if (params['activepredispatch']) {
-              this.preDispatchService.setActivePreDispatch(params['activepredispatch']);
-          }
-      });
-      this.preDispatchService.confirmProductsWithSameInfoShouldBeSelected.pipe(takeUntil(this.unsubscribe)).subscribe(
-          data => {
-              this.openModal(PwsisbsConfirmModalComponent, data);
-          }
-      );
-      this.preDispatchService.confirmProductsShouldBeAddedToPreDispatchWithSameInfo.pipe(takeUntil(this.unsubscribe)).subscribe(
-          data => {
-              this.openModal(PsbatpdwsiConfirmModalComponent, data);
-          }
-      );
   }
 
   ngOnInit() {
@@ -156,16 +117,10 @@ export class InStockComponent implements OnInit, OnDestroy {
           this._citiesTable.reload();
       });
       this.actionsService.setActions(this.actions);
-      this.preDispatchActionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
-          this.loadProducts(false) ;
-          this._citiesTable.reload(true);
-          this._streetsTable.reload(true);
-          this.productsService.selectedProducts = [] ;
-      });
       this.productsService.selectAllOnLoadEvent.pipe(takeUntil(this.unsubscribe)).subscribe((state: boolean) => {
           this.selectAllOnLoad = state ;
       });
-      this.filtersService.setFields(FilterConfig.notdelivered, this);
+      this.filtersService.setFields(FilterConfig.instock, this);
   }
 
   cityChanged(event) {
@@ -193,13 +148,13 @@ export class InStockComponent implements OnInit, OnDestroy {
           return false;
       }
       this.products = [];
-      this._productsTable.loading(true);
+      this._productsTable.loading(false);
       if (reset) {
           this.paginationService.updateCurrentPage(1, true);
           this.paginationService.updateLoadingState(true);
           this._productsTable.resetSelected();
       }
-      this.subscription = this.notdeliveredService.getNotDeliverProducts(
+      this.subscription = this.instockservice.getInStockProducts(
           this.current_cities,
           this.current_streets,
           this.order_field,
@@ -225,7 +180,7 @@ export class InStockComponent implements OnInit, OnDestroy {
 
   selectedItemsChanged(items) {
         for (const item of items) {
-            this.notdeliveredService.selectedProducts.push(item.id);
+            this.instockservice.selectedProducts.push(item.id);
         }
   }
 
@@ -271,7 +226,7 @@ export class InStockComponent implements OnInit, OnDestroy {
           return this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'),
            { showProgressBar: false, timeout: 2000 });
       }
-      this.router.navigate(['not-delivered/activities']);
+      this.router.navigate(['in-stock/activities']);
   }
 
   ngOnDestroy() {

@@ -6,14 +6,21 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class TranslateSelectorService {
 
-  currentLang = 'Italy';
+  // currentLang = 'Italy';
+  currentLang = localStorage.getItem('language') || 'Italy';
   translateService: TranslateService;
+
+  setDefaultLanuage(){
+    if(!this.currentLang || this.currentLang == null) {this.currentLang = 'Italy'; }
+    this.applyLanguage(this.currentLang);
+  }
 
   setSelectedLanguage(language) {
     this.currentLang = language;
+    localStorage.setItem('language', language);
     this.applyLanguage(this.currentLang);
   }
-  private applyLanguage(language) {
+  private applyLanguage(language) { 
     this.translateService.use(language);
   }
   getLanguages() {

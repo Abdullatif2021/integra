@@ -3,6 +3,7 @@ import {ModalComponent} from '../modal.component';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import {TranslateService} from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-pre-dispatch-merge',
@@ -15,9 +16,12 @@ export class PreDispatchMergeComponent extends ModalComponent implements OnInit 
       private preDispatchActionsService: PreDispatchActionsService,
       public preDispatchService: PreDispatchService,
       private translate: TranslateService,
-  ) {
-    super();
-    }
+      private translateSelectorService: TranslateSelectorService,
+
+      ) {
+        super();
+        this.translateSelectorService.setDefaultLanuage();
+      }
 
   name = '' ;
   error = null ;

@@ -74,10 +74,13 @@ export class SetStatusModalComponent extends ModalComponent implements OnInit, O
         if (!this.selectedStatus) {
             return this.error = 1;
         }
+        const run = {} ;
         if (this.data.method === 'selected') {
             let selected = this.data.modalData.selected;
             if (typeof this.data.modalData.selected === 'function') {
                 selected = this.data.modalData.selected();
+                this.filtersService.updateFilters(this.run) ;
+
             }
             this.statusesService.updateProductsStatusByProducts(selected, this.selectedStatus).subscribe(
                 data => {
@@ -115,6 +118,7 @@ export class SetStatusModalComponent extends ModalComponent implements OnInit, O
 
     confirm() {
         this.confirmed = true ;
+
     }
 
     ngOnDestroy() {

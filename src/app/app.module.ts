@@ -1,3 +1,4 @@
+import { TranslateSelectorService } from './service/translate-selector-service';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule , HttpClient} from '@angular/common/http';
 import { NgModule } from '@angular/core';

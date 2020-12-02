@@ -5,6 +5,8 @@ import {ActivitiesService} from '../../service/activities.service';
 import {Subject} from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import {FiltersService} from '../../../../../../service/filters.service';
+import {TranslateSelectorService} from '../../../../../../service/translate-selector-service';
+
 @Component({
   selector: 'app-activities',
   templateUrl: './activities.component.html',
@@ -38,9 +40,12 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       private paginationService: PaginationService,
       private activitiesService: ActivitiesService,
       public translate: TranslateService,
-      private filtersService: FiltersService
-  ) {
-    }
+      private filtersService: FiltersService,
+      private translateSelectorService: TranslateSelectorService,
+
+      ) {
+        this.translateSelectorService.setDefaultLanuage();
+      }
 
   ngOnInit() {
       this.paginationService.rppValueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((rpp: number) => {

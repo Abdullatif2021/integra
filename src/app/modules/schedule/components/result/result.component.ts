@@ -15,6 +15,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {NotFixedTreeComponent} from '../../parts-components/not-fixed-tree/not-fixed-tree.component';
 import {BackProcessingService} from '../../../../service/back-processing.service';
 import { TranslateService } from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-result',
@@ -35,7 +36,10 @@ export class ResultComponent implements OnInit, OnDestroy {
       private modalService: NgbModal,
       private backProcessingService: BackProcessingService,
       private translate: TranslateService,
+      private translateSelectorService: TranslateSelectorService,
+
       ) {
+      this.translateSelectorService.setDefaultLanuage();
       this.preDispatchData = this.route.snapshot.parent.data.data ;
       this.preDispatch = this.route.snapshot.parent.params.id;
       this.scheduleResults = this.route.snapshot.data.data.scheduleResults;

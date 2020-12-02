@@ -5,6 +5,8 @@ import {ActionsService} from '../../../../service/actions.service';
 import {SnotifyService} from 'ng-snotify';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import {TranslateService} from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
+
 @Component({
   selector: 'app-psbatpdwsi-confirm-modal',
   templateUrl: './psbatpdwsi-confirm-modal.component.html',
@@ -16,9 +18,12 @@ export class PsbatpdwsiConfirmModalComponent extends ModalComponent implements O
       private preDispatchActionsService: PreDispatchActionsService,
       private snotifyService: SnotifyService,
       private translate: TranslateService,
-  ) {
-    super();
-    }
+      private translateSelectorService: TranslateSelectorService,
+
+      ) {
+        super();
+        this.translateSelectorService.setDefaultLanuage();
+      }
 
   data: any;
   ngOnInit() {

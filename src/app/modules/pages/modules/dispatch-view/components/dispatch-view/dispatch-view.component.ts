@@ -1,3 +1,4 @@
+import { TranslateSelectorService } from './../../../../../../service/translate-selector-service';
 import {Component, OnInit} from '@angular/core';
 import {MapService} from '../../../../../../service/map.service';
 import {MapMarker} from '../../../../../../core/models/map-marker.interface';
@@ -38,7 +39,9 @@ export class DispatchViewComponent implements OnInit {
         private actionsService: ActionsService,
         private paginationService: PaginationService,
         private translate: TranslateService,
+        private translateSelectorService: TranslateSelectorService,
     ) {
+        this.translateSelectorService.setDefaultLanuage();
     this.dispatch = route.snapshot.params.id;
       }
 

@@ -6,6 +6,7 @@ import {DragAndDropService} from '../../../../service/drag-and-drop.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {ScheduleService} from '../../service/schedule.service';
 import { TranslateService } from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-not-fixed-tree',
@@ -21,7 +22,12 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
       private dragAndDropService: DragAndDropService,
       private scheduleService: ScheduleService,
       private translate: TranslateService,
-      ) {}
+      private translateSelectorService: TranslateSelectorService,
+
+      ) {
+        this.translateSelectorService.setDefaultLanuage();
+
+      }
 
   list = [];
   preDispatch;

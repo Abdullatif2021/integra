@@ -14,6 +14,7 @@ import {CategoriesService} from '../../../../../../service/categories.service';
 import {AgenciesService} from '../../../../../../service/agencies.service';
 import {RecipientsService} from '../../../../../../service/recipients.service';
 import {CustomersService} from '../../../../../../service/customers.service';
+import {TranslateSelectorService} from '../../../../../../service/translate-selector-service';
 import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'app-delivering-calender',
@@ -189,8 +190,11 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
         protected agenciesService: AgenciesService,
         protected recipientsService: RecipientsService,
         private translate: TranslateService,
-    ) {
-    }
+        private translateSelectorService: TranslateSelectorService,
+
+        ) {
+          this.translateSelectorService.setDefaultLanuage();
+        }
 
     ngOnInit() {
         this.actionsService.setActions(this.actions);

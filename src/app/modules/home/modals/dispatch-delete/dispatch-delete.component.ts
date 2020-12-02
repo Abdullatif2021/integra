@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import {DispatchService} from '../../../../service/dispatch.service';
 import {DispatchActionsService} from '../../service/dispatch-actions.service';
 import {ModalComponent} from '../modal.component';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
+
 @Component({
   selector: 'app-dispatch-delete',
   templateUrl: './dispatch-delete.component.html',
@@ -17,8 +19,12 @@ export class DispatchDeleteComponent extends ModalComponent implements OnInit {
       private dispatchService: DispatchService,
       private dispatchActionsService: DispatchActionsService,
       private translate: TranslateService,
+      private translateSelectorService: TranslateSelectorService,
+
   ) {
     super();
+    this.translateSelectorService.setDefaultLanuage();
+
   }
 
   ngOnInit() {

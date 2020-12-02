@@ -10,6 +10,7 @@ import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import {TranslateService} from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-pre-dispatch-add',
@@ -39,9 +40,12 @@ export class PreDispatchAddComponent extends ModalComponent implements OnInit, O
       public paginationService: PaginationService,
       private modalService: NgbModal,
       private translate: TranslateService,
-  ) {
-    super();
-    }
+      private translateSelectorService: TranslateSelectorService,
+
+      ) {
+        super();
+        this.translateSelectorService.setDefaultLanuage();
+      }
 
   ngOnInit() {
     this.filteredProductsCount = this.paginationService.resultsCount ;

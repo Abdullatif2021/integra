@@ -287,7 +287,7 @@
           "recipientName2": "Nominativo Destinatario",
           "recipientCap": "CAP Destinatario:",
           "recipientAddress": "Indirizzo Destinatario:",
-          "week": "Week",
+          "week": "Weekzzz",
           "day": "Day",
           "prepared2": "Borsa Pronta alla consegna",
           "prepareDispatch": "selected",
@@ -392,23 +392,23 @@
         "ngbTooltip":{
           "more": "Di Più",
           "less": "Di meno",
-          "view": "Visualizza"
+          "view": "zzzzzzzzView"
         }
       },
       "product_log": {
         "data": "Date",
         "operator": "Operator",
-        "massege": "Massaggio",
+        "massege": "Massege",
         "code": "Code",
         "status": "Stato",
         "ngbTooltip":{
           "more": "Di Più",
           "less": "Di meno",
-          "view": "Visualizza"
+          "view": "View"
         }
       },
       "dispatch_view": {
-        "address": "Indirizzo",
+        "address": "Address",
         "deliver": "Consegne",
         "time_of_arrival": "Ora d’arrivo",
         "destinatario": "Destinatario",
@@ -449,10 +449,10 @@
     "schedule": {
       "address": {
         "departure": "Partenza",
-        "found_yourself": "Trovati",
-        "not_found": "Non Trovati",
-        "create_new_group": "Crea nuovo gruppo",
-        "without_house_num": "Senza numero civico",
+        "found_yourself": "Found",
+        "not_found": "Not Found",
+        "create_new_group": "Create new group",
+        "without_house_num": "Without house number",
         "search_address_plhold": "search indirizzo",
         "arrival": "Arrivo",
         "quant": "Q.ta",
@@ -838,7 +838,7 @@
                   },
         "table": {
           "ngbTooltip": {
-            "view": "Visualizza",
+            "view": "View",
             "print": "Stampa",
             "export": "Esporta",
             "edit": "Modifica",

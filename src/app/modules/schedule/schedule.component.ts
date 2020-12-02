@@ -17,6 +17,7 @@ import {PageDirective} from '../../shared/directives/page.directive';
 import {PreDispatchGlobalActionsService} from '../../service/pre-dispatch-global-actions.service';
 import {AppConfig} from '../../config/app.config';
 import { TranslateService } from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../service/translate-selector-service';
 
 @Component({
     selector: 'app-schedules',
@@ -58,7 +59,10 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private componentFactoryResolver: ComponentFactoryResolver,
         private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
         private translate: TranslateService,
+        private translateSelectorService: TranslateSelectorService,
+
         ) {
+        this.translateSelectorService.setDefaultLanuage();
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data;
         this.exportResultsLink = AppConfig.endpoints.exportPreDispatchResults(this.preDispatchData.id);

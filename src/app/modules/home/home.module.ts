@@ -1,3 +1,4 @@
+import { TranslateSelectorService } from './../../service/translate-selector-service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToDeliverComponent } from './components/to-deliver/to-deliver.component';
@@ -37,14 +38,7 @@ import {ProductStatusService} from '../../service/product-status.service';
 import {NotDeliveredService} from '../../service/not-delivered.service';
 import { CreateNewActivityComponent } from './modals/create-new-activity/create-new-activity.component';
 import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
-import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import { HttpClient} from '@angular/common/http';
-
-
-export function HttpLoaderFactory(httpClient: HttpClient) {
-    return new TranslateHttpLoader(httpClient);
-  }
+import {TranslateModule} from '@ngx-translate/core';
 
 
 @NgModule({
@@ -56,7 +50,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     NgSelectModule,
     FontAwesomeModule,
     FormsModule,
-    TranslateModule
+    TranslateModule.forChild()
   ],
   declarations: [
       ToDeliverComponent,

@@ -19,6 +19,8 @@ import {BackProcessingService} from '../../../../service/back-processing.service
 import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-global-actions.service';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import { TranslateService } from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
+
 @Component({
   selector: 'app-pre-dispatch',
   templateUrl: './pre-dispatch.component.html',
@@ -54,8 +56,10 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       public backProcessingService: BackProcessingService,
       public preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
       private translate: TranslateService,
-
-      ) {}
+      private translateSelectorService: TranslateSelectorService,
+      ) {
+      this.translateSelectorService.setDefaultLanuage();
+    }
 
 
    ngOnInit() {

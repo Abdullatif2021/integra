@@ -19,9 +19,12 @@ export class PreDispatchLogComponent implements OnInit, OnDestroy {
       private preDispatchService: PreDispatchService,
       private integraaModalService: IntegraaModalService,
       private translate: TranslateService,
-      private selectConf: TranslateSelectorService
+      private selectConf: TranslateSelectorService,
+      private translateSelectorService: TranslateSelectorService,
 
-  ) {}
+  ) {
+    this.translateSelectorService.setDefaultLanuage();
+  }
 
   log = [];
   loading = true ;
