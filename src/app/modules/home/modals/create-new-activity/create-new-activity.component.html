@@ -1,7 +1,7 @@
 <ng-template #modalRef let-modal>
   <div class="modal-container">
     <div class="modal-header">
-      <h5 class="modal-title">Create new Activity</h5>
+      <h5 class="modal-title">{{'home.modals.cre_activity.cre_new_activity' | translate}}</h5>
       <div type="button" class="close" (click)="modal.close()" aria-label="Close">
         <span aria-hidden="true">×</span>
       </div>
@@ -10,7 +10,7 @@
       <ng-container *ngIf="!saving">
         <div class="row">
           <div class="activity-name-input col-4">
-            <input placeholder="Activity Name" [(ngModel)]="activityName" class="form-control integraa-input activity-name-input"/>
+            <input placeholder="{{'home.modals.cre_activity.activ_nam_plhold' | translate}}" [(ngModel)]="activityName" class="form-control integraa-input activity-name-input"/>
           </div>
         </div>
 
@@ -19,7 +19,7 @@
           <div class="left"></div>
           <div class="right">
             <div class="new-sub-activity-button-container">
-              <button class="btn btn-primary new-sub-activity-button" (click)="addNewSubActivity()" [disabled]="disabled || (subActivities && subActivities.length && !subActivities[subActivities.length - 1].created)">New Sub Activity</button>
+              <button class="btn btn-primary new-sub-activity-button" (click)="addNewSubActivity()" [disabled]="disabled || (subActivities && subActivities.length && !subActivities[subActivities.length - 1].created)">{{'home.modals.cre_activity.new_sub_ativity' | translate}}</button>
             </div>
           </div>
 
@@ -27,11 +27,11 @@
 
         <div class="sub-activities-container container-fluid">
           <div class="sub-activity-header row">
-            <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">Operator</div> <div>Saturday Status</div></div> </div>
-            <div class="col-4 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">Caps</div> <div>Categories</div></div></div>
-            <div class="col-1 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">Qty per day</div> <div>Total Qty</div></div></div>
-            <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">Start Date</div> <div> End Date</div></div></div>
-            <div class="col-3 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">Postmen</div> <div> Recommended Postmen</div></div></div>
+            <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.operator' | translate}}</div> <div>Saturday Status</div></div> </div>
+            <div class="col-4 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{'home.modals.cre_activity.caps' | translate}}</div> <div>{{'home.modals.cre_activity.categories' | translate}}</div></div></div>
+            <div class="col-1 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.qty_per_day' | translate}}</div> <div>{{'home.modals.cre_activity.total_qty' | translate}}</div></div></div>
+            <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.str_date' | translate}}</div> <div> {{'home.modals.cre_activity.end_date' | translate}}</div></div></div>
+            <div class="col-3 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.postmen' | translate}}</div> <div> Recommended Postmen</div></div></div>
             <!--<div class="col-1 d-flex"><div class="m-auto"></div></div>-->
           </div>
           <ng-container *ngFor="let subActivity of subActivities">
@@ -42,7 +42,7 @@
               <div class="col-2">
 
                 <!-- Operator { -->
-                <ng-select placeholder="operator" [(ngModel)]="subActivity.operators" [items]="operators" [bindLabel]="'name'"
+                <ng-select placeholder="{{'home.modals.cre_activity.oper_plhold' | translate}}" [(ngModel)]="subActivity.operators" [items]="operators" [bindLabel]="'name'"
                            (change)="saveSubActivity(subActivity)" class="integraa-select" [bindValue]="'id'">
                 </ng-select>
                 <!-- } Operator -->
@@ -57,7 +57,7 @@
 
               <div class="col-4">
                 <!-- Caps { -->
-                <ng-select placeholder="caps" (open)="loadCaps(subActivity)" [loading]="subActivity.isCapsLoading" #capsSelect
+                <ng-select placeholder="{{'home.modals.cre_activity.caps_plhold' | translate}}" (open)="loadCaps(subActivity)" [loading]="subActivity.isCapsLoading" #capsSelect
                            [ngClass]="{'disabled': !subActivity.operators }"
                            [disabled]="!subActivity.operators" [(ngModel)]="subActivity.caps" [items]="caps"
                            (change)="capsChanged($event, subActivity)" (remove)="capRemoved($event, subActivity)" [bindLabel]="'name'" [clearable]="false" [multiple]="true" class="integraa-select"
@@ -68,7 +68,7 @@
                 <div class="border-bottom-dashed-black"></div>
 
                 <!-- Categories { -->
-                <ng-select placeholder="categories" (open)="loadCategories(subActivity)" [loading]="subActivity.isCategoriesLoading" #categoriesSelect
+                <ng-select placeholder="{{'home.modals.cre_activity.categories_plhold' | translate}}" (open)="loadCategories(subActivity)" [loading]="subActivity.isCategoriesLoading" #categoriesSelect
                            [ngClass]="{'disabled': !subActivity.caps || !subActivity.caps.length || !subActivity.operators}"
                            [disabled]="!subActivity.caps || !subActivity.caps.length || !subActivity.operators"
                            [items]="categories" (change)="categoriesChanged(subActivity)" (remove)="categoryRemoved($event, subActivity)" [bindLabel]="'name'" [(ngModel)]="subActivity.categories"
@@ -83,7 +83,7 @@
                 <!-- Quantity per day { -->
                 <input type="numer"
                        [disabled]="!subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length || !subActivity.operators"
-                       [(ngModel)]="subActivity.qtyPerDay" (change)="productsPerDayChanged(subActivity)" class="form-control form-control-sm integraa-input text-center" placeholder="quantity per day">
+                       [(ngModel)]="subActivity.qtyPerDay" (change)="productsPerDayChanged(subActivity)" class="form-control form-control-sm integraa-input text-center" placeholder="{{'home.modals.cre_activity.qty_per_day_plhold' | translate}}">
                 <!-- } Quantity per day -->
 
                 <div class="border-bottom-dashed-black"></div>
@@ -113,7 +113,7 @@
               <div class="col-3">
 
                 <!-- Postmen { -->
-                <ng-select placeholder="postmen"
+                <ng-select placeholder="{{'home.modals.cre_activity.postmen_plhold' | translate}}"
                            [ngClass]="{'disabled': disabled || !subActivity.startDate || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators}"
                            [disabled]="disabled || !subActivity.startDate || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators"
                            [(ngModel)]="subActivity.postmen" (open)="loadPostmen(subActivity)"
@@ -147,7 +147,7 @@
           <div class="left"></div>
           <div class="right">
             <div class="new-sub-activity-button-container">
-              <button class="btn btn-success new-sub-activity-button" [disabled]="disabled || !subActivities || !subActivities.length || hasConflict || !activityName || anyNotSaved" (click)="saveActivity(modal)">Save Activity</button>
+              <button class="btn btn-success new-sub-activity-button" [disabled]="disabled || !subActivities || !subActivities.length || hasConflict || !activityName || anyNotSaved" (click)="saveActivity(modal)">{{'home.modals.cre_activity.save_activity' | translate}}</button>
             </div>
           </div>
 

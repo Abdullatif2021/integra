@@ -16,10 +16,7 @@ export class HomeComponent implements OnInit {
       private streetsLocatingService: StreetsLocatingService,
       private translate: TranslateService,
 
-  ) {
-      translate.setDefaultLang('itly');
-      const browserLang = translate.getBrowserLang();
-    }
+  ) {}
   active_tab = 'to-deliver';
   actions_only = false ;
   ngOnInit() {

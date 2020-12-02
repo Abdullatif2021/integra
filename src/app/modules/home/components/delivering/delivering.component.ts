@@ -57,11 +57,7 @@ export class DeliveringComponent implements OnInit, OnDestroy, AfterViewInit {
         private router: Router,
         private translate: TranslateService,
 
-    ) {
-        translate.setDefaultLang('itly');
-
-    const browserLang = translate.getBrowserLang();
-    }
+    ) {}
 
     ngOnInit() {
         this.actionsService.setActions(this.actions);

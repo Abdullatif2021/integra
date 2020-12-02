@@ -23,13 +23,13 @@
             </div>
             <div class="calender-row">
                 <ng-container *ngFor="let i of week_range">
-                    <div *ngIf="!data[i].skeleton" class="day-note calender-col d-flex"><div *ngIf="data[i].note" class="note-text">{{data[i].note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(data[i], i)"><fa-icon ngbTooltip="Nota giorno" [icon]="['fa','pen']"></fa-icon></div></div>
+                    <div *ngIf="!data[i].skeleton" class="day-note calender-col d-flex"><div *ngIf="data[i].note" class="note-text">{{data[i].note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(data[i], i)"><fa-icon ngbTooltip="{{'shared.table.ngbTooltip.dayNote' | translate}}" [icon]="['fa','pen']"></fa-icon></div></div>
                     <div *ngIf="data[i].skeleton" class="rect-loading-skeleton m-2  h-30"></div>
                 </ng-container>
             </div>
             <div class="calender-row">
                 <ng-container *ngFor="let i of week_range">
-                    <div *ngIf="!data[i].skeleton" class="day-attachment calender-col d-flex"><a *ngIf="data[i].file && data[i].file.path" class="note-text text-truncate" href="{{AppConfig.api_url + data[i].file.path}}" target="_blank">{{data[i].file.name}}</a><div (click)="openEditDayAttachmentModal(data[i], i)" class="edit-icon"><fa-icon  ngbTooltip="Carica file" [icon]="['fa','upload']"></fa-icon></div></div>
+                    <div *ngIf="!data[i].skeleton" class="day-attachment calender-col d-flex"><a *ngIf="data[i].file && data[i].file.path" class="note-text text-truncate" href="{{AppConfig.api_url + data[i].file.path}}" target="_blank">{{data[i].file.name}}</a><div (click)="openEditDayAttachmentModal(data[i], i)" class="edit-icon"><fa-icon  ngbTooltip="{{'shared.table.ngbTooltip.upload_file' | translate}}" [icon]="['fa','upload']"></fa-icon></div></div>
                     <div *ngIf="data[i].skeleton" class="rect-loading-skeleton m-2  h-30"></div>
                 </ng-container>
             </div>
@@ -80,7 +80,7 @@
                                 <div class="d-flex">
                                     <div class="postman-icon"><img src="/assets/images/postman-icon.png"></div>
                                     <div class="postman-name">{{data[i][key][j].full_name}}</div>
-                                    <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, data[i][key][j], data[i])"><fa-icon ngbTooltip="Nota distinta" [icon]="['fa','pen']"></fa-icon></div>
+                                    <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, data[i][key][j], data[i])"><fa-icon ngbTooltip="{{'shared.table.ngbTooltip.distinct_note' | translate}}" [icon]="['fa','pen']"></fa-icon></div>
                                 </div>
                                 <div class="postman-note">{{data[i][key][j].note}}</div>
                             </div>
@@ -114,7 +114,7 @@
                 </div>
                 <div class="single-day-date-switch-right" (click)="changeCurrentDay(1)"><fa-icon [icon]="['fa', 'chevron-right']"></fa-icon></div>
             </div>
-            <div class="single-day-note-text">{{data[current_day].note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(data[current_day], current_day)"><fa-icon ngbTooltip="Nota giorno" [icon]="['fa','pen']"></fa-icon></div>
+            <div class="single-day-note-text">{{data[current_day].note}}</div><div class="edit-icon" (click)="openEditDayNoteModal(data[current_day], current_day)"><fa-icon ngbTooltip="{{'shared.table.ngbTooltip.dayNote' | translate}}" [icon]="['fa','pen']"></fa-icon></div>
             <a *ngIf="data[current_day].file && data[current_day].file.path" href="{{AppConfig.api_url + data[current_day].file.path}}" target="_blank" class="single-day-attachment" ><img title="{{data[current_day].file.name}}" src="/assets/images/file_icon.svg"></a>
         </div>
         <div class="single-day-header" *ngIf="data[current_day].skeleton">
@@ -136,9 +136,9 @@
                             <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].availableRevisore,day: data[current_day], klass:'bg-green', title: 'shared.postmen_calendar.postman_available_title'}"></ng-container>
                         </div>
                         <div class="available-postmen-sub-part day-sub-part">
-                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].revisore ? data[current_day].revisore : [],day: data[current_day], klass:'bg-red', title: 'shared.postman_calender.busy_evisers_title'}"></ng-container>
+                            <ng-container [ngTemplateOutlet]="data_set" [ngTemplateOutletContext]="{data:data[current_day].revisore ? data[current_day].revisore : [],day: data[current_day], klass:'bg-red', title: 'shared.postmen_calendar.busy_evisers_title'}"></ng-container>
                         </div>
-                    </div>
+                    </div>  
                 </div>
                 <div class="single-day-col" *ngIf="data[current_day].skeleton">
                     <div class="day-part revisers-part">
@@ -237,10 +237,10 @@
                         <ng-select class="integraa-select" [bindLabel]="'name'" [items]="detailsStatuses" [(ngModel)]="details.status" [clearable]="false" (change)="detailsStatusChanged($event)"></ng-select>
                     </div>
                     <div class="notes postman-info-row2 mt-3">
-                        <app-comments title="Note interne" [comments]="details.internalNotes" (commentAdded)="addSetNote($event, 'internal_note')"></app-comments>
+                        <app-comments title="{{'shared.postmen_calendar.note_title'| translate}}" [comments]="details.internalNotes" (commentAdded)="addSetNote($event, 'internal_note')"></app-comments>
                     </div>
                     <div class="postman-notifications postman-info-row2 mt-3">
-                        <app-comments title="Notifica per postino" [file]="true" [comments]="details.postmanNotes" (commentAdded)="addSetNote($event, 'postman_note')"></app-comments>
+                        <app-comments title="{{'shared.postmen_calendar.notifiction_postman'| translate}}" [file]="true" [comments]="details.postmanNotes" (commentAdded)="addSetNote($event, 'postman_note')"></app-comments>
                     </div>
                 </div>
             </div>
@@ -260,7 +260,7 @@
                     <div class="d-flex">
                         <div class="postman-icon"><img src="/assets/images/postman-icon.png"></div>
                         <div class="postman-name">{{row.full_name}}</div>
-                        <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, day)"><fa-icon ngbTooltip="Nota distinta" [icon]="['fa','pen']"></fa-icon></div>
+                        <div class="edit-icon pr-0" (click)="openEditPostmanNoteModal($event, row, day)"><fa-icon ngbTooltip="{{'shared.postmen_calendar.ngbTooltip_openEditPostmanNoteModal'| translate}}" [icon]="['fa','pen']"></fa-icon></div>
                     </div>
                     <div class="postman-note">{{row.note}}</div>
                 </div>
@@ -298,7 +298,7 @@
             <h6 class="text-center">
                 <fa-icon [icon]="['fa','pen']"></fa-icon> {{'shared.postmen_calendar.set_day'|translate}} {{activeday._idx}} ({{days[activeday._idx] | translate}}) {{'shared.postmen_calendar.note'|translate}}
             </h6>
-            <textarea #dayNoteInput class="form-control mt-4" placeholder="Note">{{activeday.note | translate}}</textarea>
+            <textarea #dayNoteInput class="form-control mt-4" placeholder="{{'shared.postmen_calendar.plhold'|translate}}">{{activeday.note | translate}}</textarea>
             <div class="btns-container mt-3">
                 <button type="button" (click)="modal.close();saveDayNote(dayNoteInput)" class="integraa-btn ml-2 float-right" >{{'shared.postmen_calendar.continue'|translate}}</button>
                 <button type="button" (click)="modal.close();" class="integraa-btn ml-2 bg-light float-right" >{{'shared.postmen_calendar.cancel'|translate}}</button>

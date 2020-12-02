@@ -58,9 +58,10 @@ export const FilterConfig = {
                     {name: 'Mosta attivita in corso', id: 'show_activities'}
                 ], unclearbale: true,
                 selectedAttribute: {name: 'filter_config.products.filter.grouping.quant_per_cap', id: 'by_cap'}},
-            {type: 'ng-select', label: 'filter_config.products.filter.street_location', labelVal: 'name', key: 'fixed',
-                items: [{name: 'Tutti', id: 'null'}, {name: 'Localizzato', id: '1'}, {name: 'Non localizzato', id: '0'}], unclearbale: true,
-                selectedAttribute: {name: 'Tutti', id: 'null'}},
+            {type: 'ng-select', label: 'filter_config.products.filter.street_location.value', labelVal: 'name', key: 'fixed',
+                items: [{name: 'filter_config.products.filter.street_location.value', id: 'null'},
+                 {name: 'Localizzato', id: '1'}, {name: 'filter_config.products.filter.street_location.all', id: '0'}], unclearbale: true,
+                selectedAttribute: {name: 'filter_config.products.filter.street_location.localize', id: 'null'}},
             // {type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
             //         {name: 'Tutto', id: 'all'}, {name: 'Con Filtri Applicati', id: 'filters'} ], labelVal: 'name',
             //     selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'},
@@ -72,6 +73,8 @@ export const FilterConfig = {
             group: true, key: ['fromArticleLawDate', 'toArticleLawDate']},
             {type: ['date', 'date'], label: 'filter_config.products.filter.acceptance_date',
              group: true, key: ['fromAcceptanceDate', 'toAcceptanceDate']},
+             {type: 'simpleText', label: 'filter_config.products.filter.activity', key: '', value: ''},
+
         ],
         grouping: false,
         default_filters: {'grouping': 'by_cap', 'fixed': 'null'}

@@ -43,7 +43,15 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
     AngularDraggableModule,
     AutocompleteLibModule,
     HttpClientModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild({
+      loader: {
+      provide: TranslateLoader,
+      useFactory: (http: HttpClient) => {
+      return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+      },
+      deps: [HttpClient],
+      },
+      })
   ],
   declarations: [
       UserNavComponent,

@@ -7,7 +7,7 @@ import {PreDispatchGlobalActionsService} from './service/pre-dispatch-global-act
 import {BuildingLocationInterface} from './core/models/building.interface';
 import {GoogleApiService} from './shared/service/google.api.service';
 import {PreDispatchService} from './service/pre-dispatch.service';
-import {itl} from '../assets/i18n/itl';
+
 
 
 @Component({

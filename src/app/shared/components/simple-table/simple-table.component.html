@@ -38,7 +38,7 @@
     <ng-template #normalName>{{item[table.text] ? item[table.text] : item.name }}</ng-template>
     <div class="extra-fields d-flex" *ngIf="table.extra_fields && item.id">
       <div class="extra-field-container" *ngFor="let field of table.extra_fields">
-        <span class="extra-field-label">{{field.label | translate}}</span>
+        <span class="extra-field-label">{{field.label |translate}}</span>
         <span class="extra-field-value">{{field.value(item) | translate}}</span>
       </div>
     </div>

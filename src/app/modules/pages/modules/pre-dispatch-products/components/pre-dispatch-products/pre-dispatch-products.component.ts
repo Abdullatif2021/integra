@@ -28,10 +28,7 @@ export class PreDispatchProductsComponent implements OnInit, AfterViewChecked {
         private recipientsService: RecipientsService,
         private categoriesService: CategoriesService,
         private translate: TranslateService,
-        ) {
-            translate.setDefaultLang('itly');
-            const browserLang = translate.getBrowserLang();
-          }
+        ) {}
 
     id: number;
     table = TablesConfig.table.productsTable;

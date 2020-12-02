@@ -35,7 +35,6 @@ export class DispatchAssignComponent extends ModalComponent implements OnInit, O
 
     ) {
         super();
-        translate.setDefaultLang('itly');
       }
 
     ngOnInit() {

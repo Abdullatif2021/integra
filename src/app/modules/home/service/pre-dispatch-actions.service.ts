@@ -3,6 +3,7 @@ import {ProductsService} from '../../../service/products.service';
 import {PreDispatchService} from '../../../service/pre-dispatch.service';
 import {SnotifyService} from 'ng-snotify';
 import {ActionsService} from '../../../service/actions.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class PreDispatchActionsService {
@@ -11,9 +12,11 @@ export class PreDispatchActionsService {
         private actionsService: ActionsService,
         private snotifyService: SnotifyService,
         private productsService: ProductsService,
-        private preDispatchService: PreDispatchService
-    ) {
-    }
+        private preDispatchService: PreDispatchService,
+        private translate: TranslateService,
+        ) {
+          translate.setDefaultLang('itly');
+        }
 
     reloadData = new EventEmitter();
 
@@ -23,7 +26,8 @@ export class PreDispatchActionsService {
         let method;
         if (!data.method || data.method === 'selected') {
             if (!products || (typeof products === 'object' && !products.length)) {
-                return this.snotifyService.error('Nessun prodotto selezionato', {showProgressBar: false, timeout: 3000});
+                return this.snotifyService.error(this.translate.instant('home.services.pre_dispatch_actions_service.error'),
+                 {showProgressBar: false, timeout: 3000});
             }
             const productsIds = [];
             products.forEach((elm) => {
@@ -33,11 +37,11 @@ export class PreDispatchActionsService {
         } else {
             method = this.preDispatchService.addProductsByFilters(preDispatchId);
         }
-        this.actionsService.run(method, 'Aggiunta in corso', () => {
+        this.actionsService.run(method, this.translate.instant('home.services.pre_dispatch_actions_service.prod_add'), () => {
             setTimeout(() => {
                 this.reloadData.emit(true);
             }, 500);
-            return 'Prodotti aggiunti con successo';
+            return this.translate.instant('home.services.pre_dispatch_actions_service.prod_add_suc');
         }, (error) => {
             if (typeof failed === 'function') {
                 failed(error);
@@ -55,7 +59,8 @@ export class PreDispatchActionsService {
         let method;
         if (!data.method || data.method === 'selected') {
             if (!products || (typeof products === 'object' && !products.length)) {
-                return this.snotifyService.error('Nessun prodotto selezionato', {showProgressBar: false, timeout: 3000});
+                return this.snotifyService.error(this.translate.instant('home.services.pre_dispatch_actions_service.error'),
+                 {showProgressBar: false, timeout: 3000});
             }
             const productsIds = [];
             products.forEach((elm) => {
@@ -68,14 +73,14 @@ export class PreDispatchActionsService {
         } else {
             method = this.preDispatchService.createByFilters(name, confirm);
         }
-        this.actionsService.run(method, 'Creazione Pre-Distinta in corsot', () => {
+        this.actionsService.run(method, this.translate.instant('home.services.pre_dispatch_actions_service.pre_cre'), () => {
             setTimeout(() => {
                 this.reloadData.emit(true);
             }, 500);
             if (typeof data.finish === 'function') {
                 data.finish();
             }
-            return 'Pre-distinta Creata con successo';
+            return this.translate.instant('home.services.pre_dispatch_actions_service.pre_cre_suc');
         }, (error) => {
             if (typeof failed === 'function') {
                 failed(error);
@@ -102,7 +107,8 @@ export class PreDispatchActionsService {
 
         const preDispatches = this.preDispatchService.selectedPreDispatches;
         if (!preDispatches || (typeof preDispatches === 'object' && !preDispatches.length)) {
-            return this.snotifyService.error('Nessuna predestinata selezionata', {showProgressBar: false, timeout: 3000});
+            return this.snotifyService.error(this.translate.instant('home.services.pre_dispatch_actions_service.error'),
+             {showProgressBar: false, timeout: 3000});
         }
         const items = [];
         preDispatches.forEach((elm) => {
@@ -110,31 +116,31 @@ export class PreDispatchActionsService {
         });
 
         const method = this.preDispatchService.merge(items, name);
-        this.actionsService.run(method, 'Unione in corso', () => {
+        this.actionsService.run(method, this.translate.instant('home.services.pre_dispatch_actions_service.pre_merge'), () => {
             setTimeout(() => {
                 this.reloadData.emit(true);
             }, 500);
-            return 'Pre-Distinte uniti con successo';
+            return this.translate.instant('home.services.pre_dispatch_actions_service.pre_merge_suc');
         }, (error) => error.error.message);
     }
 
     editPreDispatch(name, id) {
         const method = this.preDispatchService.edit(id, name);
-        this.actionsService.run(method, 'Edit in corso', () => {
+        this.actionsService.run(method, this.translate.instant('home.services.pre_dispatch_actions_service.pre_edit'), () => {
             setTimeout(() => {
                 this.reloadData.emit(true);
             }, 500);
-            return 'Pre-Distinte Edit con successo';
+            return this.translate.instant('home.services.pre_dispatch_actions_service.pre_edit_suc');
         }, (error) => error.error.message);
     }
 
     deletePreDispatch(ids, confirm = false): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const method = this.preDispatchService.delete(ids, confirm) ;
-            this.actionsService.run(method, 'Elimina in corso', (result) => {
+            this.actionsService.run(method, this.translate.instant('home.services.pre_dispatch_actions_service.pre_delet'), (result) => {
                 setTimeout(() => {this.reloadData.emit(true) ; }, 500 );
                 resolve(result);
-                return 'Pre-Distinte Elimina con successo' ;
+                return this.translate.instant('home.services.pre_dispatch_actions_service.pre_delet_suc') ;
             }, (error) => {
                 reject(error);
                 setTimeout(() => {this.reloadData.emit(true) ; }, 500 );

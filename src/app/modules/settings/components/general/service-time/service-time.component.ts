@@ -13,9 +13,7 @@ export class ServiceTimeComponent implements OnInit {
 
   constructor(
       private settingsService: SettingsService , private translate: TranslateService,
-      ) {
-          translate.setDefaultLang('itly');
-      }
+      ) {}
   settings = [];
   subscription ;
   loading = true ;

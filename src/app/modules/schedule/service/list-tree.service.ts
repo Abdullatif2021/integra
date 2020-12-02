@@ -7,6 +7,7 @@ import {Observable} from 'rxjs';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
 import {SnotifyService} from 'ng-snotify';
 import {MarkersService} from '../../../service/markers.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class ListTreeService implements OnDestroy {
@@ -14,9 +15,11 @@ export class ListTreeService implements OnDestroy {
     constructor(
         private http: HttpClient,
         private snotifyService: SnotifyService,
-        private markersService: MarkersService
-    ) {
-    }
+        private markersService: MarkersService,
+        private translate: TranslateService,
+        ) {
+            translate.setDefaultLang('itly');
+        }
 
     unsubscribe = new EventEmitter();
     levels = ['root', 'cityId', 'capId', 'streetId', 'oet', 'building', 'end'];
@@ -179,14 +182,16 @@ export class ListTreeService implements OnDestroy {
             this.sendMoveStreetRequest(item.parent.parent.id, item.parent.id, parent.id, item.id, preDispatch)
                 .subscribe(
                     data => {
-                        this.snotifyService.success('Strada spostata con successo', {showProgressBar: false});
+                        this.snotifyService.success( this.translate.instant('schedule.list_tree_service.success'),
+                        {showProgressBar: false});
                     }
                 );
         } else if (item.type === 'capId') {
             this.sendMoveCapRequest(item.parent.id, parent.id, item.id, preDispatch)
                 .subscribe(
                     data => {
-                        this.snotifyService.success('Cap spostato con successo', {showProgressBar: false});
+                        this.snotifyService.success(this.translate.instant('schedule.list_tree_service.success2'),
+                         {showProgressBar: false});
                     }
                 );
         }

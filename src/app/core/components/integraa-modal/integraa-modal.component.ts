@@ -17,10 +17,7 @@ export class IntegraaModalComponent implements OnInit {
       private integraaModalService: IntegraaModalService,
       private backProcessingService: BackProcessingService,
       private translate: TranslateService,
-    ) {
-        translate.setDefaultLang('itly');
-
-    }
+    ) {}
 
   @ViewChild('modal') modal ;
   @ViewChild('modalsContainer') modalsContainer ;

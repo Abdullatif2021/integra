@@ -115,8 +115,8 @@
                                     <ng-container *ngFor="let field of col.field; let idx = index">
                                         <div class="separator" *ngIf="idx && col.value_separator == 'dashed'"></div>
                                         <div class="line-separator" *ngIf="idx && col.value_separator == 'line'"></div>
-                                        <div *ngIf="typeof(field) === 'string'"><span [ngClass]="col.classes !== undefined ? (col.classes[field] ? col.classes[field] : '') : ''">{{item[field]}}</span></div>
-                                        <div *ngIf="typeof(field) === 'function'"><span [ngClass]="col.classes !== undefined ? (col.classes[idx] ? col.classes[idx] : '') : ''" [innerHTML]="field(item, parent)"></span></div>
+                                        <div *ngIf="typeof(field) === 'string'"><span [ngClass]="col.classes !== undefined ? (col.classes[field] ? col.classes[field] : '') : ''">{{item[field] | translate}}</span></div>
+                                        <div *ngIf="typeof(field) === 'function'"><span [ngClass]="col.classes !== undefined ? (col.classes[idx] ? col.classes[idx] : '') : ''" [innerHTML]="field(item, parent) | translate"></span></div>
                                     </ng-container>
                                 </span>
                             </ng-template>
@@ -182,7 +182,7 @@
     <div class="action-icon-container"><img (click)="$event.stopPropagation(); action.click && action.click(item, parent)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.view' | translate}}"></div>
 </ng-template>
 <ng-template #book><div class="action-icon-container"><img src="assets/images/notepad.svg" class="action-icon"></div></ng-template>
-<ng-template #print><div class="action-icon-container"><img src="assets/images/printer.svg" class="action-icon" placement="bottom" ngbTooltip="Stampa"></div></ng-template>
+<ng-template #print><div class="action-icon-container"><img src="assets/images/printer.svg" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.print' | translate}}"></div></ng-template>
 <ng-template #excel_export let-action="action" let-item="item"><div class="action-icon-container"><img (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/excel.svg" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.export' | translate}}"></div></ng-template>
 <ng-template #edit let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/edit.svg" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.edit' | translate}}"></div></ng-template>
 <ng-template #calender_view let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/calender.png" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.calender' | translate}}"></div></ng-template>

@@ -60,7 +60,7 @@ import { HttpClientModule , HttpClient} from '@angular/common/http';
     FormsModule,
     ReactiveFormsModule,
     NgxMaterialTimepickerModule,
-    TranslateModule.forRoot({
+    TranslateModule.forChild({
         loader: {
         provide: TranslateLoader,
         useFactory: (http: HttpClient) => {

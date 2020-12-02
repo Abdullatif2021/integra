@@ -10,9 +10,7 @@ import { TranslateService , TranslatePipe } from '@ngx-translate/core';
   })
   export class SimpleTableComponent implements OnInit, OnChanges {
 
-      constructor(private snotifyService: SnotifyService, private translate: TranslateService) {
-          translate.setDefaultLang('itly');
-        }
+      constructor(private snotifyService: SnotifyService, private translate: TranslateService) {}
 
       @Input() table: any = {
           title: '',

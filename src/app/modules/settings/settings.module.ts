@@ -20,7 +20,7 @@ import { HttpClientModule , HttpClient} from '@angular/common/http';
     CoreModule,
     SettingsRoutingModule,
     NgSelectModule,
-    TranslateModule.forRoot({
+    TranslateModule.forChild({
       loader: {
       provide: TranslateLoader,
       useFactory: (http: HttpClient) => {

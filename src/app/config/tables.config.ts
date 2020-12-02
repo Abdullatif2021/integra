@@ -5,8 +5,6 @@ import {ProductInterface} from '../core/models/product.interface';
 import {AppConfig} from './app.config';
 import {PreDispatchEditComponent} from '../modules/home/modals/pre-dispatch-edit/pre-dispatch-edit.component';
 import {PreDispatchDeleteComponent} from '../modules/home/modals/pre-dispatch-delete/pre-dispatch-delete.component';
-import {OwnTranslateService} from 'src/app/service/translate.service';
-
 export const TablesConfig = {
 
     // simple tables structure
@@ -98,14 +96,14 @@ export const TablesConfig = {
         productsTable : {
             cols: [
                 {title: 'table_config.table.products_table.cols.action', field: false, actions: [
-                                {action: 'view'},
+                    {action: 'view', click: (elm, container) => {container.showLogModal(elm); }},
                                 {action: 'book'},
                     ]},
                 {title: 'table_config.table.products_table.cols.bar_code', field : 'barcode', order: '2'},
                 {title: 'table_config.table.products_table.cols.act', field : 'act_code', order: '1'},
                 {title: ['table_config.table.products_table.cols.product_list.product',
                 'table_config.table.products_table.cols.product_list.list'],
-                 field: ['product_category', 'dispatch_code'], separator: true, value_separator: 'dashed',
+                 field: ['product_category', 'dispatch_code' ], separator: true, value_separator: 'dashed',
                     order: ['7', '3']},
                 {title: 'table_config.table.products_table.cols.status', field: 'product_status', order: '8'},
                 {title: ['table_config.table.products_table.cols.data.data_time', 'table_config.table.products_table.cols.data.quanti',
@@ -164,7 +162,7 @@ export const TablesConfig = {
                 {title: 'table_config.table.pre_dispatch_table.cols.distincta', field: 'code', actions: [], order: '4'},
                 {title: 'table_config.table.pre_dispatch_table.cols.stat_outcome',
                  field: (item, container) => container.getTranslatedState(item), actions: [
-                    {action: 'view', click: (elm, container) => { container.showLogModal(elm); },
+                    {action: 'view', click: (elm,  container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ], order: '3'},
                 {title: 'table_config.table.pre_dispatch_table.cols.quint', field: 'quantity', actions: [], order: '2'},
@@ -237,7 +235,7 @@ export const TablesConfig = {
                             default: return elm.status;
                         }
                     }, 'pre_dispatch_code'], actions: [
-                        {action: 'View',click: (elm, container) => { container.showLogModal(elm); },
+                        {action: 'View', click: (elm, container) => { container.showLogModal(elm); },
                             _class: ['float-right', 'mt-0', 'mr-2']}
                     ], order: ['2', '8'], separator: true, value_separator: 'dashed',},
                 {title: 'table_config.table.dispatch_table.cols.quint', field: 'quantity', actions: [], order: '5'},

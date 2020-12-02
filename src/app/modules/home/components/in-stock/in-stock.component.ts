@@ -14,8 +14,6 @@ export class InStockComponent implements OnInit {
         private translate: TranslateService,
 
     ) {
-        translate.setDefaultLang('itly');
-        const browserLang = translate.getBrowserLang();
       }
 
   productsTable = TablesConfig.table.productsTable ;

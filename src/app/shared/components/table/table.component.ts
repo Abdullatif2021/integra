@@ -9,7 +9,8 @@ import {
     Output,
     SimpleChanges, OnChanges, OnDestroy
 } from '@angular/core';
-import { TranslateService , TranslatePipe } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import {IntegraaModalService} from '../../../service/integraa-modal.service';
 
 @Component({
     selector: 'app-table',
@@ -18,10 +19,9 @@ import { TranslateService , TranslatePipe } from '@ngx-translate/core';
 })
 export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDestroy {
 
-    constructor(private cdr: ChangeDetectorRef , private translate: TranslateService)
-    {
-      translate.setDefaultLang('itly');
-    }
+    constructor(private cdr: ChangeDetectorRef     , private integraaModalService: IntegraaModalService,
+         private translate: TranslateService)
+    {}
 
     cells_size = [] ;
     @ViewChild('tableRow') tableRowElement;
@@ -111,7 +111,9 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
             this.selectable = typeof this.table.selectable !== 'undefined' ? this.table.selectable : true ;
         }
     }
-
+    showLog(id) {
+        this.integraaModalService.open(`/pages/pre-dispatch/${id}/log`, {width: 900, height: 600}, {});
+    }
     trackItems(item) {
         return item.id ;
     }

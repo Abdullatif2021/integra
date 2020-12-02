@@ -29,7 +29,8 @@ import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.serv
 import { TranslateService } from '@ngx-translate/core';
 import {ProductStatusService} from '../../../../service/product-status.service';
 import {SetStatusModalComponent} from '../../../../shared/modals/set-status-modal/set-status-modal.component';
-import {DispatchViewService} from '../../../pages/modules/dispatch-view/service/dispatch-view.service';
+import {IntegraaModalService} from '../../../../service/integraa-modal.service';
+
 @Component({
   selector: 'app-not-delivered',
   templateUrl: './not-delivered.component.html',
@@ -55,10 +56,10 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
 
   actions = [
     {
-        name: 'Cambiare stato', fields: [
+        name: this.translate.instant('home.modals.not_delivered_actions.action_name'), fields: [
             { type: 'select', field: 'method', options: [
-                    {name: 'Selezionati', value: 'selected'},
-                    {name: 'Secondo i filtri applicati', value: 'filters'}
+                    {name: this.translate.instant('home.modals.not_delivered_actions.selected'), value: 'selected'},
+                    {name: this.translate.instant('home.modals.not_delivered_actions.by_filter'), value: 'filters'}
                 ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ],
@@ -77,12 +78,12 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       private productsService: ProductsService,
       private paginationService: PaginationService,
       private filtersService: FiltersService,
+      private integraaModalService: IntegraaModalService,
       private actionsService: ActionsService,
       private productstatusService: ProductStatusService,
       private preDispatchActionsService: PreDispatchActionsService,
       protected recipientsService: RecipientsService,
       private activatedRoute: ActivatedRoute,
-      private dispatchViewService: DispatchViewService,
       private notdeliveredService: NotDeliveredService,
       private preDispatchService: PreDispatchService,
       private agenciesService: AgenciesService,
@@ -95,16 +96,15 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       private translate: TranslateService,
 
   ) {
-      translate.setDefaultLang('itly');
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
       this.activatedRoute.queryParams.subscribe(params => {
           if (params['actionsonly'] === 'addproductstopd') {
               this.actions = <any>{
-                  name: 'Aggiungi a Pre-Distinta esistente', fields: [
+                  name: 'home.modals.not_delivered_actions.action_name2', fields: [
                       { type: 'select', field: 'method', options: [
-                              {name: 'Selezionati', value: 'selected'},
-                              {name: 'Secondo i filtri applicati', value: 'filters'}
+                              {name: 'home.modals.not_delivered_actions.selected2', value: 'selected'},
+                              {name: 'home.modals.not_delivered_actions.by_filter2', value: 'filters'}
                           ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
                       }
                   ],
@@ -128,8 +128,8 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-      this.citiesTable.title = 'Paese';
-      this.citiesTable.searchPlaceHolder =  'Cerca Paese';
+      this.citiesTable.title = this.translate.instant('table_config.simpletable.cities_table.value');
+      this.citiesTable.searchPlaceHolder =  this.translate.instant('table_config.simpletable.cities_table.plhold');
       this.filtersService.clear();
       this.loadProducts(false);
       this.paginationService.rppValueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((rpp: number) => {
@@ -222,7 +222,9 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
   }
 
   selectedItemsChanged(items) {
-        this.notdeliveredService.selectedProducts.push(items.id);
+        for (const item of items) {
+            this.notdeliveredService.selectedProducts.push(item.id);
+        }
   }
 
   getCategoriesByName(name) {
@@ -243,7 +245,8 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
   handleStreetsAction(event) {
       if (event.action.action === 'rename') {
           if (event.inputValue.length < 2 ) {
-              this.snotifyService.warning('Il nuovo nome è molto corto', { showProgressBar: false, timeout: 2000 });
+              this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.name_is_short'),
+               { showProgressBar: false, timeout: 2000 });
               return ;
           }
           const promise = this.streetsService.renameStreet(event.item, event.inputValue);
@@ -251,13 +254,19 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
           return ;
       }
   }
+  showLogModal(elm) {
+    this.integraaModalService.open(`/pages/product/${elm.id}/log`,
+        {width: 1000, height: 600, title: `Log: ${elm.barcode}`}, {});
+        }
 
   createActivity(event) {
       if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
-          return this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+          return this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'),
+           { showProgressBar: false, timeout: 2000 });
       } else if (event.method === 'filters' && !Object.keys(this.filtersService.filters).length
           && !Object.keys(this.filtersService.specials).length) {
-          return this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
+          return this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'),
+           { showProgressBar: false, timeout: 2000 });
       }
       this.router.navigate(['not-delivered/activities']);
   }

@@ -32,6 +32,7 @@ import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.serv
 import { TranslateService } from '@ngx-translate/core';
 import {CreateNewActivityComponent} from '../../modals/create-new-activity/create-new-activity.component';
 import {ActivitiesService} from '../../service/activities.service';
+import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 
 @Component({
   selector: 'app-to-deliver',
@@ -58,11 +59,11 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
 
   actions = [
     {
-        name: 'Crea nuova attivita', fields: [
+        name: this.translate.instant('home.to_delivered_action.create_one.value'), fields: [
             { type: 'select', field: 'method', options: [
-                    {name: 'Selezionati', value: 'selected'},
-                    {name: 'Secondo i filtri applicati', value: 'filters'}
-                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                    {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'},
+                    {name: this.translate.instant('home.to_delivered_action.create_one.by_filter'), value: 'filters'}
+                ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'}
             }
         ],
         before_modal_open: (event) => this.createActivityCheck(event),
@@ -70,11 +71,11 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
         modalOptions: {size: 'xl'}
     },
     {
-        name: 'Crea nuova Pre-Distinta', fields: [
+        name: this.translate.instant('home.to_delivered_action.cre_pre_dispatch.value'), fields: [
             { type: 'select', field: 'method', options: [
-                    {name: 'Selezionati', value: 'selected'},
-                    {name: 'Secondo i filtri applicati', value: 'filters'}
-                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                    {name: this.translate.instant('home.to_delivered_action.cre_pre_dispatch.select'), value: 'selected'},
+                    {name: this.translate.instant('home.to_delivered_action.cre_pre_dispatch.by_filter'), value: 'filters'}
+                ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.cre_pre_dispatch.select'), value: 'selected'}
             }
         ],
         modal: PreDispatchNewComponent
@@ -82,19 +83,20 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
     {
         name: 'Aggiungi a Pre-Distinta esistente', fields: [
             { type: 'select', field: 'method', options: [
-                    {name: 'Selezionati', value: 'selected'},
-                    {name: 'Secondo i filtri applicati', value: 'filters'}
-                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                    {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.select'), value: 'selected'},
+                    {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.by_filter'), value: 'filters'}
+                ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.select'),
+                 value: 'selected'}
             }
         ],
         modal: PreDispatchAddComponent,
     },
     {
-        name: 'Importa Prodotti da Codici a Barre', fields: [],
+        name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.import_products'), fields: [],
         modal: ImportFromBarcodesComponent,
     },
     {
-        name: 'Carica prodotti da Scanner', fields: [
+        name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.load_products_by_scanner'), fields: [
             { type: 'text', field: 'barcode', placeholder: 'Barcode'},
         ], submit: (data, event) => {
           this.filtersService.addBarcodeFilter(data.barcode);
@@ -132,17 +134,18 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private router: Router,
       private translate: TranslateService,
   ) {
-      translate.setDefaultLang('itly');
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
       this.activatedRoute.queryParams.subscribe(params => {
           if (params['actionsonly'] === 'addproductstopd') {
               this.actions = <any>{
-                  name: 'Aggiungi a Pre-Distinta esistente', fields: [
+                  name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.value'), fields: [
                       { type: 'select', field: 'method', options: [
-                              {name: 'Selezionati', value: 'selected'},
-                              {name: 'Secondo i filtri applicati', value: 'filters'}
-                          ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                              {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.select'), value: 'selected'},
+                              {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.by_filter'),
+                               value: 'filters'}
+                          ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.select'),
+                           value: 'selected'}
                       }
                   ],
                   modal: PreDispatchAddDirectComponent,
@@ -283,7 +286,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   handleStreetsAction(event) {
       if (event.action.action === 'rename') {
           if (event.inputValue.length < 2 ) {
-              this.snotifyService.warning('Il nuovo nome è molto corto', { showProgressBar: false, timeout: 2000 });
+              this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.name_is_short'),
+               { showProgressBar: false, timeout: 2000 });
               return ;
           }
           const promise = this.streetsService.renameStreet(event.item, event.inputValue);
@@ -291,6 +295,11 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
           return ;
       }
   }
+
+  showLogModal(elm) {
+    this.integraaModalService.open(`/pages/product/${elm.id}/log`,
+        {width: 1000, height: 600, title: `Log: ${elm.barcode}`}, {});
+        }
 
   createActivityCheck(event) {
       if (event.method === 'selected' && !this.productsService.selectedProducts.length) {

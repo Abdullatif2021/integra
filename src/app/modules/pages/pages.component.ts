@@ -8,10 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class PagesComponent implements OnInit {
 
   constructor(  private translate: TranslateService,
-    ) {
-        translate.setDefaultLang('itly');
-        const browserLang = translate.getBrowserLang();
-      }
+    ) {}
 
 
   ngOnInit() {

@@ -15,9 +15,7 @@ export class PreDispatchEditComponent extends ModalComponent implements OnInit {
     private translate: TranslateService,
 ) {
   super();
-  translate.setDefaultLang('itly');
-  const browserLang = translate.getBrowserLang();
-}
+  }
 
   name = '' ;
   error = null ;

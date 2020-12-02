@@ -6,7 +6,10 @@ import {Observable, throwError} from 'rxjs';
 import {FiltersService} from '../../../service/filters.service';
 
 @Injectable()
-export class CalenderService {
+export class 
+
+
+CalenderService {
 
     constructor(
         private http: HttpClient,

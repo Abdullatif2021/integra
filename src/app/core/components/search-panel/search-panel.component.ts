@@ -23,7 +23,6 @@ export class SearchPanelComponent implements OnInit {
       private modalService: NgbModal,
       private translate: TranslateService
   ) {
-    translate.setDefaultLang('itly');
   }
 
   isCollapsed = true ;
