@@ -10,7 +10,7 @@ import {PaginationService} from './pagination.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsService {
+export class InStockService {
 
   constructor(
       private http: HttpClient,
@@ -33,11 +33,11 @@ export class ProductsService {
       };
       return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, options);
   }
-  getToDeliverProducts(cities, streets, order_field = null, order_method = '1') {
+  getInStockProducts(cities, streets, order_field = null, order_method = '1') {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)
               .set('pageSize', this.paginationService.rpp)
-              .set('statusType', 'to_be_delivered')};
+              .set('statusType', 'in_stock')};
       const citiesType = this.filtersService.getGrouping();
       if (citiesType === 'by_client') {
           options.params = options.params.set('by_clients_Filter', '1');
@@ -89,19 +89,6 @@ export class ProductsService {
       );
   }
 
-
-  getPreDispatchProducts(id) {
-      const options = { params: new HttpParams()
-              .set('page', this.paginationService.current_page)
-              .set('pageSize', this.paginationService.rpp)
-              .set('pre_dispatch_id', id)
-      };
-      options.params = this.filtersService.getHttpParams(options.params) ;
-      return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchProducts, options).pipe(
-          catchError(this.handleError)
-      );
-  }
-
   selectAllOnLoad(val) {
       this.selectAllOnLoadEvent.emit(val);
   }
@@ -113,7 +100,7 @@ export class ProductsService {
           on_create: on_create,
           page: page,
           per_page: per_page,
-      }
+      };
       return this.http.post<ApiResponseInterface>(AppConfig.endpoints.getProductByCategory, options);
   }
   handleError(error: HttpErrorResponse) {

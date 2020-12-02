@@ -5,6 +5,8 @@ import {BackProcessingService} from '../../../../service/back-processing.service
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import {TranslateService} from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
+
 @Component({
     selector: 'app-pre-dispatch-delete',
     templateUrl: './pre-dispatch-delete.component.html',
@@ -18,10 +20,12 @@ export class PreDispatchDeleteComponent extends ModalComponent implements OnInit
         private backProcessingService: BackProcessingService,
         private modalService: NgbModal,
         private translate: TranslateService,
-    ) {
-      super();
-  
-    }
+        private translateSelectorService: TranslateSelectorService,
+
+        ) {
+          super();
+          this.translateSelectorService.setDefaultLanuage();
+        }
     error = null;
     items = [];
     needsToConfirmPreDispatches = [];

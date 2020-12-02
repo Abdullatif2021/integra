@@ -16,6 +16,7 @@ import {FiltersService} from '../../../../service/filters.service';
 import {CategoriesService} from '../../../../service/categories.service';
 import {Router} from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-delivering',
@@ -56,8 +57,10 @@ export class DeliveringComponent implements OnInit, OnDestroy, AfterViewInit {
         private categoriesService: CategoriesService,
         private router: Router,
         private translate: TranslateService,
-
-    ) {}
+        private translateSelectorService: TranslateSelectorService,
+        ) {
+            this.translateSelectorService.setDefaultLanuage();
+        }
 
     ngOnInit() {
         this.actionsService.setActions(this.actions);

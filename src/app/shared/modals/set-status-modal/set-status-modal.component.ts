@@ -9,6 +9,7 @@ import {SnotifyService} from 'ng-snotify';
 import { TranslateService } from '@ngx-translate/core';
 import {FiltersService} from '../../../service/filters.service';
 import {StatusesService} from '../../service/statuses.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
     selector: 'app-set-status-modal',
@@ -32,6 +33,7 @@ export class SetStatusModalComponent extends ModalComponent implements OnInit, O
         private modalService: NgbModal,
         private snotifyService: SnotifyService,
         private translate: TranslateService,
+        private router: Router,
         private statusesService: StatusesService
     ) { super(); }
 
@@ -72,12 +74,14 @@ export class SetStatusModalComponent extends ModalComponent implements OnInit, O
         if (!this.selectedStatus) {
             return this.error = 1;
         }
+        const run = {} ;
         if (this.data.method === 'selected') {
             let selected = this.data.modalData.selected;
             if (typeof this.data.modalData.selected === 'function') {
                 selected = this.data.modalData.selected();
+                this.filtersService.updateFilters(this.run) ;
+
             }
-            console.log(selected);
             this.statusesService.updateProductsStatusByProducts(selected, this.selectedStatus).subscribe(
                 data => {
                     if (data.success) {
@@ -114,6 +118,7 @@ export class SetStatusModalComponent extends ModalComponent implements OnInit, O
 
     confirm() {
         this.confirmed = true ;
+
     }
 
     ngOnDestroy() {

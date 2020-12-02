@@ -15,7 +15,6 @@ export class PreDispatchActionsService {
         private preDispatchService: PreDispatchService,
         private translate: TranslateService,
         ) {
-          translate.setDefaultLang('itly');
         }
 
     reloadData = new EventEmitter();

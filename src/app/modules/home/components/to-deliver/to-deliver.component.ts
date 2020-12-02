@@ -33,6 +33,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {CreateNewActivityComponent} from '../../modals/create-new-activity/create-new-activity.component';
 import {ActivitiesService} from '../../service/activities.service';
 import {IntegraaModalService} from '../../../../service/integraa-modal.service';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-to-deliver',
@@ -41,7 +42,7 @@ import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 })
 export class ToDeliverComponent implements OnInit, OnDestroy {
 
-  productsTable = TablesConfig.table.productsTable ;
+  productssTable = TablesConfig.table.productsTable ;
   citiesTable = TablesConfig.simpleTable.citiesTable ;
   streetsTable = TablesConfig.simpleTable.streetsTable ;
   products: any ;
@@ -111,8 +112,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
     },
   ];
 
-  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getCities(page, rpp, name, order);
-  streetsGetMethod = (page, rpp, name, order) => this.streetsService.getStreets(page, rpp, name, this.current_cities, order);
+  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getToDeliverCities(page, rpp, name, order);
+  streetsGetMethod = (page, rpp, name, order) => this.streetsService.getToDeliverStreets(page, rpp, name, this.current_cities, order);
 
   constructor(
       private citiesService: CitiesService,
@@ -133,7 +134,9 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private snotifyService: SnotifyService,
       private router: Router,
       private translate: TranslateService,
-  ) {
+      private translateSelectorService: TranslateSelectorService,
+      ) {
+      this.translateSelectorService.setDefaultLanuage();
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
       this.activatedRoute.queryParams.subscribe(params => {

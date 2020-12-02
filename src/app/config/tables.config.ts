@@ -203,7 +203,7 @@ export const TablesConfig = {
                 {label: 'table_config.table.pre_dispatch_table.collapsed_actions.place_in_delivery',
                  _class: 'yellow-btn', click: (elm, container) => {console.log('clicked') ; }},
                 {label: 'table_config.table.pre_dispatch_table.collapsed_actions.add_products',
-                 _class: 'orange-btn', click: (elm, container) => {container.openAddProductsModal(elm)}},
+                 _class: 'orange-btn', click: (elm, container) => {container.openAddProductsModal(elm); }},
                 {label: 'table_config.table.pre_dispatch_table.collapsed_actions.delete', _class: 'red-btn', click: (elm, container) => {
                     container.openModal(PreDispatchDeleteComponent, {deleteItem: true, item: elm}) ;
                 }}
@@ -285,6 +285,78 @@ export const TablesConfig = {
                 // {title: 'OPERATION', actions: [
                 //         { action: 'progress',  field: 'percent',},
                 //     ]},
+            ]
+        },
+        instockTable : {
+            cols: [
+                {title: 'table_config.table.products_table.cols.action', field: false, actions: [
+                    {action: 'view', click: (elm, container) => {container.showLogModal(elm); }},
+                                {action: 'book'},
+                    ]},
+                {title: 'table_config.table.products_table.cols.bar_code', field : 'barcode', order: '2'},
+                {title: 'table_config.table.products_table.cols.act', field : 'act_code', order: '1'},
+                {title: ['table_config.table.products_table.cols.product_list.product',
+                'table_config.table.products_table.cols.product_list.list'],
+                 field: ['product_category', 'dispatch_code' ], separator: true, value_separator: 'dashed',
+                    order: ['7', '3']},
+                {title: 'table_config.table.products_table.cols.status', field: 'product_status', order: '8'},
+                {title: ['table_config.table.products_table.cols.data.data_time', 'table_config.table.products_table.cols.data.quanti',
+                 'table_config.table.products_table.cols.data.attempts'], field: [
+                        'date',
+                        (elm: ProductInterface) => (elm.count === '') || !elm.count ? '1' : elm.count,
+                        'attempt'
+                    ], separator: false, value_separator: 'dashed',
+                    classes: {
+                        '1': 'text-center d-block',
+                        'attempt': 'text-center d-block'
+                    }, order: ['4', '5', '6']},
+                {title: ['table_config.table.products_table.cols.postman.cust', 'table_config.table.products_table.cols.postman.sender',
+                 'table_config.table.products_table.cols.postman.recipient'], field: [
+                    'customer_name',
+                    'sender_name',
+                    (elm: ProductInterface) => `<b>${elm.recipient_name}</b> - ${elm.recipient_street},
+                        ${elm.recipient_house_number}, ${elm.recipient_cap} ${elm.recipient_city}`
+                    ], separator: false,
+                    value_separator: 'line', classes: {
+                        'sender_name': 'text-gray',
+                        '2': 'marked'
+                    }, order: ['9', '10', '11']}
+            ]
+        },
+        notDeliveredTable : {
+            cols: [
+                {title: 'table_config.table.products_table.cols.action', field: false, actions: [
+                    {action: 'view', click: (elm, container) => {container.showLogModal(elm); }},
+                                {action: 'book'},
+                    ]},
+                {title: 'table_config.table.products_table.cols.bar_code', field : 'barcode', order: '2'},
+                {title: 'table_config.table.products_table.cols.act', field : 'act_code', order: '1'},
+                {title: ['table_config.table.products_table.cols.product_list.product',
+                'table_config.table.products_table.cols.product_list.list'],
+                 field: ['product_category', 'dispatch_code' ], separator: true, value_separator: 'dashed',
+                    order: ['7', '3']},
+                {title: 'table_config.table.products_table.cols.status', field: 'product_status', order: '8'},
+                {title: ['table_config.table.products_table.cols.data.data_time', 'table_config.table.products_table.cols.data.quanti',
+                 'table_config.table.products_table.cols.data.attempts'], field: [
+                        'date',
+                        (elm: ProductInterface) => (elm.count === '') || !elm.count ? '1' : elm.count,
+                        'attempt'
+                    ], separator: false, value_separator: 'dashed',
+                    classes: {
+                        '1': 'text-center d-block',
+                        'attempt': 'text-center d-block'
+                    }, order: ['4', '5', '6']},
+                {title: ['table_config.table.products_table.cols.postman.cust', 'table_config.table.products_table.cols.postman.sender',
+                 'table_config.table.products_table.cols.postman.recipient'], field: [
+                    'customer_name',
+                    'sender_name',
+                    (elm: ProductInterface) => `<b>${elm.recipient_name}</b> - ${elm.recipient_street},
+                        ${elm.recipient_house_number}, ${elm.recipient_cap} ${elm.recipient_city}`
+                    ], separator: false,
+                    value_separator: 'line', classes: {
+                        'sender_name': 'text-gray',
+                        '2': 'marked'
+                    }, order: ['9', '10', '11']}
             ]
         },
     }

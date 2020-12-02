@@ -3,6 +3,7 @@ import {TablesConfig} from '../../config/tables.config';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {SettingsService} from '../../service/settings.service';
 import {ApiResponseInterface} from '../../core/models/api-response.interface';
+import {TranslateSelectorService} from '../../service/translate-selector-service';
 
 @Component({
   selector: 'app-settings',
@@ -37,12 +38,14 @@ export class SettingsComponent implements OnInit {
   constructor(
       private router: Router,
       private activatedRoute: ActivatedRoute,
-      private settingsService: SettingsService
-  ) {
+      private settingsService: SettingsService,
+      private translateSelectorService: TranslateSelectorService,
+      ) {
+      this.translateSelectorService.setDefaultLanuage();
       router.events.subscribe((_route) => {
         if (_route instanceof NavigationEnd) { this.updateActiveTabFromRoute() ; }
       });
-  }
+    }
 
   ngOnInit() {
       this.activatedRoute.data.subscribe((d) => {

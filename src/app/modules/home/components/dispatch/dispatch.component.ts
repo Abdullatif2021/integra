@@ -19,6 +19,7 @@ import {CategoriesService} from '../../../../service/categories.service';
 import {DispatchAssignComponent} from '../../modals/dispatch-assign/dispatch-assign.component';
 import {Router} from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
     selector: 'app-dispatch',
@@ -76,8 +77,10 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
         private categoriesService: CategoriesService,
         private router: Router,
         private translate: TranslateService,
-
-    ) {}
+        private translateSelectorService: TranslateSelectorService,
+        ) {
+            this.translateSelectorService.setDefaultLanuage();
+        }
 
     ngOnInit() {
         this.actionsService.setActions(this.actions);

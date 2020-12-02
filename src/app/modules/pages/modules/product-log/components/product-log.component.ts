@@ -6,6 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {IntegraaModalService} from '../../../../../service/integraa-modal.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ProductService } from '../product.service';
+import {TranslateSelectorService} from '../../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-in-delivered-log',
@@ -19,7 +20,11 @@ export class ProductLogComponent implements OnInit {
     private todeliverservice: ProductService,
     private integraaModalService: IntegraaModalService,
     private translate: TranslateService,
-) {}
+    private translateSelectorService: TranslateSelectorService,
+
+) {
+    this.translateSelectorService.setDefaultLanuage();
+}
 
 log = [];
 loading = true ;

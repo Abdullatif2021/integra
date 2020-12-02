@@ -22,10 +22,7 @@ export class GlobalModalsComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private productsService: ProductsService,
         private translate: TranslateService,
-    ) {
-        translate.setDefaultLang('itly');
-
-    }
+    ) {}
 
     @ViewChild('confirmPlanningModalRef') planningConfirmModal;
     @ViewChild('confirmPlanningAddProductsModalRef') planningAddProductsConfirmModal;

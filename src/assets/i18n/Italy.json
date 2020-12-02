@@ -74,10 +74,24 @@
           "remove": "Elimina"
         },
       "to_delivered_action": {
-            "create_one": {"value": "Crea nuova attivita","select": "Selezionati","by_filter": "Secondo i filtri applicati"},
-            "cre_pre_dispatch": {"value": "Crea nuova Pre-Distinta","select": "Selezionati","by_filter": "Secondo i filtri applicati", "show_activity": "Mosta attivita in corso"},
-            "add_to_existing_pre_bill": {"value": "Aggiungi a Pre-Distinta esistente","select": "Selezionati","by_filter": "Secondo i filtri applicati",
-               "import_products": "Importa Prodotti da Codici a Barre", "load_products_by_scanner": "Carica prodotti da Scanner"}    
+            "create_one": {
+              "value": "Crea nuova attivita",
+              "select": "Selezionati",
+              "by_filter": "Secondo i filtri applicati"
+            },
+            "cre_pre_dispatch": {
+              "value": "Crea nuova Pre-Distinta",
+              "select": "Selezionati",
+              "by_filter": "Secondo i filtri applicati",
+              "show_activity": "Mosta attivita in corso"
+            },
+            "add_to_existing_pre_bill": {
+              "value": "Aggiungi a Pre-Distinta esistente",
+              "select": "Selezionati",
+              "by_filter": "Secondo i filtri applicati",
+               "import_products": "Importa Prodotti da Codici a Barre",
+                "load_products_by_scanner": "Carica prodotti da Scanner"
+            }    
       },
      
     "modals": {
@@ -572,17 +586,40 @@
           "time3": "15 Minuti",
           "time4": "20 Minuti",
           "time5": "30 Minuti",
-          "travelModes": {"moto": "Moto","auto": "Auto"},
-          "target":  {"shorter_route": "Percorso più corto","less_time": "Tempo minore"},
-          "mixedCities":{ "allowed": "Consentito","not_allowed": "Non consentito"},
-          "pathStart":{"from_start_to_end": "Dal più vicino al più lontano","from_end_to_start": "Dal più lontano al più vicino"}
+          "travelModes": {
+            "moto": "Moto",
+            "auto": "Auto"
+          },
+          "target":  {
+            "shorter_route": "Percorso più corto",
+            "less_time": "Tempo minore"
+          },
+          "mixedCities":{ 
+            "allowed": "Consentito",
+            "not_allowed": "Non consentito"
+          },
+          "pathStart":{
+            "from_start_to_end": "Dal più vicino al più lontano",
+            "from_end_to_start": "Dal più lontano al più vicino"
+          }
               },
-          "view": {"1": "Secondo i parametri impostati","2": "Secondo predistinta pianificata"},
-          "getPreDispatchData": {"error": "Qualcosa è andato storto!!"},
-          "validateAll": {"warning": "already in planning !"},
+          "view": {
+            "1": "Secondo i parametri impostati",
+            "2": "Secondo predistinta pianificata"
+          },
+          "getPreDispatchData": {
+            "error": "Qualcosa è andato storto!!"
+          },
+          "validateAll": {
+            "warning": "already in planning !"
+          },
           "saveParameters": {
             "warning": "Per iniziare la pianificazione, è necessario localizzare questa pre-distinta",
-            "buttons": {"close": "Close", "locolize": "Localize", "return": "Successo"}
+            "buttons": {
+              "close": "Close",
+              "locolize": "Localize",
+              "return": "Successo"
+              }
           },
           "can_plan": { 
             "error": "Nessun oggetto da pianificare!",
@@ -634,10 +671,14 @@
         "success": "Prodotti spostati con successo", 
         "error": "Qualcosa è andato storto spostando il prodotto"
        },
-       "moveSelectedTo": {"warning": "Nessun prodotto selezionato", "warning2": "Non puoi spostare prodotti assegnati"},
-      "sendMoveToRequest": { "error": "Impossibile spostare i prodotti" ,"success": "Dati spostati correttamente"}
-
-       
+       "moveSelectedTo": {
+         "warning": "Nessun prodotto selezionato",
+          "warning2": "Non puoi spostare prodotti assegnati"
+        },
+      "sendMoveToRequest": { 
+        "error": "Impossibile spostare i prodotti" ,
+        "success": "Dati spostati correttamente"
+      }
          },
     "to_plan": {
         "quint": "Q.ta",
@@ -649,7 +690,10 @@
       "address": "Indirizzo",
       "deliver": "Consegne",
       "time_of_arrival": "Ora d’arrivo",
-      "getNotFixedItems": {"error": "Qualcosa andato storto","warning": "Alcuni prodotti doveno trascianti manualmente alle distinte"}
+      "getNotFixedItems": {
+        "error": "Qualcosa andato storto",
+        "warning": "Alcuni prodotti doveno trascianti manualmente alle distinte"
+      }
     },
     "list_tree_service": {
       "success": "Strada spostata con successo",
@@ -715,9 +759,15 @@
   },
   "shared": {
       "address_input_plhold": "Inserisci Indirizzo",
+      "comments": {
+        "browse_files": "Browse Files",
+        "save": "Salva"
+
+        
+      },
       "loading": {
         "hide": "Hide"
-          },
+          }, 
       "pagination": {
         "result_per_page": "Risultati per pagina"
                 },
@@ -992,6 +1042,60 @@
         "recipient_postal_code": "CAP Destinatario:",
         "recipient_address": "Indirizzo Destinatario:"
       }
+    },
+    "notdelivered": {
+      "search": {
+        "client": "Cliente",
+        "client_name": "Nominativo Cliente",
+        "postal_distinction": "Distinita Postale",
+        "bar_code": "Codice Barre",
+        "act_code": "Codice Atto",
+        "recipient_name": "Nominativo Destinatario",
+        "address": "Destinatario",
+        "date_time": "Data/Ora",
+        "article_law_name": "Articolo Legge",
+        "article_law_date": "Data Articolo Legge",
+        "acceptance_date": "Data Accettazione",
+        "attempts": "TENTATIVI",
+        "sender_name": "Nominativo MITTENTE",
+        "sender": "MITTENTE",
+        "category": "Categoria",
+        "agency": "Agenzia",
+        "product_type": "Product Type",
+        "note": "Note"
+      },
+      "filter": {
+        "Customer_name": "Nominativo Cliente",
+        "client": "Cliente",
+        "agency": "Agenzia",
+        "postal_distinction": "Distinita Postale",
+        "bar_code": "Codice Barre",
+        "act_code": "Codice Atto",
+        "product_name": "Nome Prodotto",
+        "product": "Prodotto",
+        "category": "Categoria",
+        "recipient_name": "Nominativo Destinatario",
+        "address": "Destinatario",
+        "recipient_postal_code": "CAP Destinatario:",
+        "destination": "Indirizzo Destinatario:",
+        "grouping": {
+          "value": "Raggruppamento quantita:",
+          "quant_per_cap": "Quantità per CAP",
+          "quant_per_client": "Quantità per Cliente"
+        },
+        "street_location": {
+          "value": "Localizzazione strada:",
+          "all": "Tutti",
+          "localize": "Localizzato"
+        },
+        "date_time": "Data/Ora:",
+        "article_law": "Articolo Legge",
+        "article_law_date": "Data Articolo Legge:",
+        "acceptance_date": "Data Accettazione:",
+        "activity": "Attività"
+
+      }
+      
     }
   },
   "table_config": {

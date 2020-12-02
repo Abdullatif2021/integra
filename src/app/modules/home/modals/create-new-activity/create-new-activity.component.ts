@@ -5,6 +5,7 @@ import {ActivitiesService} from '../../service/activities.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {Subject} from 'rxjs';
 import {SnotifyService} from 'ng-snotify';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-create-new-activity',
@@ -35,8 +36,10 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   constructor(
       private activitiesService: ActivitiesService,
       private snotifyService: SnotifyService,
-  ) {
+      private translateSelectorService: TranslateSelectorService,
+    ) {
     super();
+    this.translateSelectorService.setDefaultLanuage();
   }
 
   ngOnInit() {

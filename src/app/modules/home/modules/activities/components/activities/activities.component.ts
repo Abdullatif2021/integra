@@ -11,6 +11,8 @@ import {RecipientsService} from '../../../../../../service/recipients.service';
 import {CustomersService} from '../../../../../../service/customers.service';
 import {AgenciesService} from '../../../../../../service/agencies.service';
 import {CategoriesService} from '../../../../../../service/categories.service';
+import {TranslateSelectorService} from '../../../../../../service/translate-selector-service';
+
 @Component({
   selector: 'app-activities',
   templateUrl: './activities.component.html',
@@ -53,10 +55,10 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       private filtersService: FiltersService,
       private router: Router,
       protected categoriesService: CategoriesService,
+      private translateSelectorService: TranslateSelectorService,
   ) {
-      translate.setDefaultLang('itly');
-      const browserLang = translate.getBrowserLang();
-    }
+      this.translateSelectorService.setDefaultLanuage();
+  }
 
   ngOnInit() {
       this.filtersService.setFields(FilterConfig.products, this, 'products');

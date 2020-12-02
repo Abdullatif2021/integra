@@ -1,3 +1,4 @@
+import { TranslateSelectorService } from './service/translate-selector-service';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule , HttpClient} from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -21,9 +22,10 @@ import {MapService} from './service/map.service';
 import {MarkersService} from './service/markers.service';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-// import { SetStatusModalComponent } from '../app/modules/pages/modules/dispatch-view/modals/set-status-modal/set-status-modal.component';
 
-
+export function HttpLoaderFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient);
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,13 +42,11 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
-      provide: TranslateLoader,
-      useFactory: (http: HttpClient) => {
-      return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-      },
-      deps: [HttpClient],
-      },
-      })
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
       { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
@@ -65,5 +65,6 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
   ],
   bootstrap: [AppComponent]
 })
+
 
 export class AppModule { }

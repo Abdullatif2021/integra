@@ -9,6 +9,8 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import {TranslateService} from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
+
 @Component({
   selector: 'app-pre-dispatch-new',
   templateUrl: './pre-dispatch-new.component.html',
@@ -24,9 +26,12 @@ export class PreDispatchNewComponent extends ModalComponent  implements OnInit, 
       private modalService: NgbModal,
       private preDispatchService: PreDispatchService,
       private translate: TranslateService,
-  ) {
-    super();
-    }
+      private translateSelectorService: TranslateSelectorService,
+
+      ) {
+        super();
+        this.translateSelectorService.setDefaultLanuage();
+      }
 
   name = '' ; // the new pre-dispatch name
   error: any = false ; // error to display.

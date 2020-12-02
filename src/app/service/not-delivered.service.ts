@@ -22,6 +22,7 @@ export class NotDeliveredService {
     }
 
     selectedProducts = [];
+    selectAllOnLoadEvent = new EventEmitter() ;
      setSelectedProducts(products) {
          this.selectedProducts = products.id;
      }
@@ -90,6 +91,27 @@ export class NotDeliveredService {
             catchError(this.handleError)
         );
     }
+  
+    getStats() {
+        const options = {params: new HttpParams()};
+        options.params = options.params.set('type', 'not_delivered');
+        options.params = options.params.set('page', '1');
+        options.params = options.params.set('pageSize', '500');
+        return this.http.get<any>(AppConfig.endpoints.getAvailableStatuses, options);
+    }
+    selectAllOnLoad(val) {
+        this.selectAllOnLoadEvent.emit(val);
+    }
+    // get the pagination of products that should be added on pre-dispatch create
+    getProductByCategory(products_ids, on_create = true, page = 2, per_page = 25) {
+        const options = {
+            products_ids: products_ids,
+            on_create: on_create,
+            page: page,
+            per_page: per_page,
+        }
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.getProductByCategory, options);
+    }
     handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             console.error('An error occurred:', error.error.message);
@@ -98,12 +120,5 @@ export class NotDeliveredService {
         }
         return throwError('');
     }
-    getStats() {
-        const options = {params: new HttpParams()};
-        options.params = options.params.set('type', 'not_delivered');
-        options.params = options.params.set('page', '1');
-        options.params = options.params.set('pageSize', '500');
-        return this.http.get<any>(AppConfig.endpoints.getAvailableStatuses, options);
-    }
+  }
 
-}

@@ -112,6 +112,11 @@ export class SearchPanelComponent implements OnInit {
       }
       this._active_filters = {} ;
   }
+  clearsearch() {
+    this.search_value = null ;
+    this._search = null ;
+    this.filtersService.updateFilters(this.search) ;
+    }
 
   changeFiltersValue(event, key, type, idx) {
     setTimeout(() => {

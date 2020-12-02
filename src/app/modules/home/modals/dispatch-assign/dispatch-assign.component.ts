@@ -8,6 +8,7 @@ import {Subject} from 'rxjs';
 import {DispatchService} from '../../../../service/dispatch.service';
 import {SnotifyService} from 'ng-snotify';
 import {DispatchActionsService} from '../../service/dispatch-actions.service';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
     selector: 'app-dispatch-assign',
@@ -32,9 +33,11 @@ export class DispatchAssignComponent extends ModalComponent implements OnInit, O
         private snotifyService: SnotifyService,
         private dispatchActionsService: DispatchActionsService,
         private translate: TranslateService,
+        private translateSelectorService: TranslateSelectorService,
 
     ) {
         super();
+        this.translateSelectorService.setDefaultLanuage();
       }
 
     ngOnInit() {

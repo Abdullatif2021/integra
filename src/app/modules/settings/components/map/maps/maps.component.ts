@@ -4,6 +4,7 @@ import {ApiResponseInterface} from '../../../../../core/models/api-response.inte
 import {SettingsService} from '../../../../../service/settings.service';
 import {first, withLatestFrom} from 'rxjs/internal/operators';
 import { TranslateService } from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-maps',
@@ -15,8 +16,11 @@ export class MapsComponent implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute,
         private settingsService: SettingsService,
-        private translate: TranslateService
-        ) {}
+        private translate: TranslateService,
+        private translateSelectorService: TranslateSelectorService,
+        ) {
+            this.translateSelectorService.setDefaultLanuage();
+        }
     settings = [];
     provider: number ;
     loading = true ;

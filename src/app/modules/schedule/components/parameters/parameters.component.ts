@@ -14,6 +14,7 @@ import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {Tree} from '@angular/router/src/utils/tree';
 import {ListTreeService} from '../../service/list-tree.service';
 import { TranslateService } from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
     selector: 'app-parameter',
@@ -35,7 +36,10 @@ export class ParametersComponent implements OnInit, OnDestroy {
         private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
         private listTreeService: ListTreeService,
         private translate: TranslateService,
+        private translateSelectorService: TranslateSelectorService,
+
     ) {
+        this.translateSelectorService.setDefaultLanuage();
         this.preDispatch = this.route.snapshot.parent.params.id;
         this.preDispatchData = this.route.snapshot.parent.data.data ;
 

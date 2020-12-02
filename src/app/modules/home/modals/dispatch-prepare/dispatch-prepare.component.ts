@@ -7,6 +7,7 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {FiltersService} from '../../../../service/filters.service';
 import {PaginationService} from '../../../../service/pagination.service';
 import {Subject} from 'rxjs';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
     selector: 'app-dispatch-prepare',
@@ -28,9 +29,12 @@ export class DispatchPrepareComponent extends ModalComponent implements OnInit, 
         private filtersService: FiltersService,
         private paginationService: PaginationService,
         private translate: TranslateService,
-    ) {
-        super();
-    }
+        private translateSelectorService: TranslateSelectorService,
+
+        ) {
+          super();
+          this.translateSelectorService.setDefaultLanuage();
+        }
 
     ngOnInit() {
         this.items = this.dispatchService.selectedDispatches;

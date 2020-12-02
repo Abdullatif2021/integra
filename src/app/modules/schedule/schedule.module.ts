@@ -40,9 +40,8 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { NotFixedTreeComponent } from './parts-components/not-fixed-tree/not-fixed-tree.component';
 import {IntegraaLazyMapApiLoaderService} from '../../shared/service/integraa-lazy-map-api-loader.service';
 import {MapsAPILoader} from '@agm/core/services/maps-api-loader/maps-api-loader';
-import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import { HttpClientModule , HttpClient} from '@angular/common/http';
+import {TranslateModule} from '@ngx-translate/core';
+
 
 @NgModule({
   imports: [
@@ -60,15 +59,7 @@ import { HttpClientModule , HttpClient} from '@angular/common/http';
     FormsModule,
     ReactiveFormsModule,
     NgxMaterialTimepickerModule,
-    TranslateModule.forChild({
-        loader: {
-        provide: TranslateLoader,
-        useFactory: (http: HttpClient) => {
-        return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-        },
-        deps: [HttpClient],
-        },
-        })
+    TranslateModule.forChild()
   ],
   declarations: [
       ScheduleComponent,

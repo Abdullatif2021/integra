@@ -15,6 +15,7 @@ import {ScheduleService} from '../../service/schedule.service';
 import {BackProcessingService} from '../../../../service/back-processing.service';
 import {PreDispatchGlobalActionsService} from '../../../../service/pre-dispatch-global-actions.service';
 import { TranslateService } from '@ngx-translate/core';
+import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
     selector: 'app-addresses',
@@ -37,7 +38,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
         private backProcessingService: BackProcessingService,
         private preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
         private translate: TranslateService,
+        private translateSelectorService: TranslateSelectorService,
+
     ) {
+        this.translateSelectorService.setDefaultLanuage();
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data ;
       }
