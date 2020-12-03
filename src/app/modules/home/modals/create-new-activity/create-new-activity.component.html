@@ -28,7 +28,7 @@
         <div class="sub-activities-container container-fluid">
           <div class="sub-activity-header row">
             <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.operator' | translate}}</div> <div>Saturday Status</div></div> </div>
-            <div class="col-4 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{'home.modals.cre_activity.caps' | translate}}</div> <div>{{'home.modals.cre_activity.categories' | translate}}</div></div></div>
+            <div class="col-4 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.caps' | translate}}</div> <div>{{'home.modals.cre_activity.categories' | translate}}</div></div></div>
             <div class="col-1 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.qty_per_day' | translate}}</div> <div>{{'home.modals.cre_activity.total_qty' | translate}}</div></div></div>
             <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.str_date' | translate}}</div> <div> {{'home.modals.cre_activity.end_date' | translate}}</div></div></div>
             <div class="col-3 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.postmen' | translate}}</div> <div> Recommended Postmen</div></div></div>
@@ -36,6 +36,10 @@
           </div>
           <ng-container *ngFor="let subActivity of subActivities">
             <!-- Sub activity view {  -->
+
+
+
+
             <div class="sub-activity-container row z-depth-1" [ngClass]="{'disabled': disabled || (hasConflict && !( subActivity.created && !subActivity.ready )), 'created': subActivity.created, 'not-ready': subActivity.created && !subActivity.ready}">
               <div class="sub-activity-delete" *ngIf="!subActivity.created" (click)="deleteLast()">×</div>
 

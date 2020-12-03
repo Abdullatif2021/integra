@@ -366,7 +366,6 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
               data => {
                   if (data && data.statusCode === 200) {
                       subActivity.created = true ;
-                      console.log('add cap was cleared');
                       this.addCap = null ;
                       this.addCategory = null ;
                       return this.checkIfAnyNotSaved();

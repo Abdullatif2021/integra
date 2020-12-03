@@ -135,7 +135,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private router: Router,
       private translate: TranslateService,
       private translateSelectorService: TranslateSelectorService,
-      ) {
+      private integraaModalService: IntegraaModalService
+  ) {
       this.translateSelectorService.setDefaultLanuage();
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
