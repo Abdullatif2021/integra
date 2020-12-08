@@ -1,0 +1,44 @@
+<div class="cols-based-table">
+
+  <ng-container *ngFor="let col of config.cols; let idx = index">
+    <ng-container [ngTemplateOutlet]="colView" [ngTemplateOutletContext]="{col:col, colData: data ? data[col.id] : [], idx: idx}"></ng-container>
+  </ng-container>
+
+
+</div>
+
+
+<ng-template #colView let-col="col" let-colData="colData" let-idx="idx">
+  <div class="col-table" [ngClass]="{'first-row': !idx, 'last-row': idx === config.cols.length - 1}">
+    <div class="col-table-header">{{col.title}}</div>
+    <div class="col-table-content" infiniteScroll (scrolled)="scrolled(col)" [scrollWindow]="false">
+      <ng-container *ngFor="let row of colData; let rowIdx = index">
+        <ng-container [ngTemplateOutlet]="rowView" [ngTemplateOutletContext]="{col:col, row:row, idx: rowIdx}"></ng-container>
+      </ng-container>
+      <div class="rect-loading-skeleton w-100 mt-2" style="height: 25px;" *ngIf="loading[col.id]"></div>
+      <div class="rect-loading-skeleton w-100" style="height: 25px;" *ngIf="loading[col.id]"></div>
+      <div class="rect-loading-skeleton w-100" style="height: 25px;" *ngIf="loading[col.id]"></div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #rowView let-col="col" let-row="row" let-idx="idx">
+  <div class="row-item" (click)="expandItem(col, row)" [ngClass]="{'odd': !(idx%2), 'even': idx%2}">
+    <div class="content-row-item-part">
+      <div *ngIf="col.selectable" (click)="selectItem(col, row)" class="select-container">
+        <div *ngIf="!row.selected" class="not-selected"></div>
+        <div *ngIf="row.selected" class="selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+      </div>
+      <div class="row-text">{{row.__text}}</div>
+    </div>
+    <div *ngIf="row.__expanded" class="expanded-row-item-part">
+      <ng-container *ngFor="let expand of col.expand; let i = index">
+        <div class="expand-item">
+          <div class="expand-label">{{expand.label}}</div>
+          <div class="expand-value">{{row['__expand_'+i]}}</div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>

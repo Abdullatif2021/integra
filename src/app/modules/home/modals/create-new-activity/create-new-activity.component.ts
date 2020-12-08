@@ -6,6 +6,7 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {Subject} from 'rxjs';
 import {SnotifyService} from 'ng-snotify';
 import {TranslateSelectorService} from '../../../../service/translate-selector-service';
+import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 
 @Component({
   selector: 'app-create-new-activity',
@@ -37,7 +38,8 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       private activitiesService: ActivitiesService,
       private snotifyService: SnotifyService,
       private translateSelectorService: TranslateSelectorService,
-    ) {
+      private preDispatchActionsService: PreDispatchActionsService,
+  ) {
     super();
     this.translateSelectorService.setDefaultLanuage();
   }
@@ -149,6 +151,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
                   this.saving = false ;
                   this.snotifyService.success('Activity Created Successfully', { showProgressBar: false, timeout: 4000 });
                   modal.close();
+                  this.preDispatchActionsService.reloadData.emit(true);
                   return ;
               }
               this.saving = false ;
@@ -345,6 +348,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
                       subActivity.id = data.data.id;
                       this.addCap = null ;
                       this.addCategory = null ;
+                      this.checkIfAnyNotSaved();
                       return ;
                   }
                   this.checkIfAnyNotSaved();

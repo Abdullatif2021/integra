@@ -10,7 +10,7 @@
     scrollbar-width: thin;
 }
 .height-higher {
-    height: calc( 100vh - 240px);
+    height: calc( 100vh - 280px);
 }
 .table-container::-webkit-scrollbar-thumb {
     background-color: #C1BEBC;

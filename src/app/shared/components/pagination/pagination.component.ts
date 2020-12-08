@@ -25,15 +25,20 @@ export class PaginationComponent implements OnInit {
       {key: 'Tutto', value: 9000000},
   ]
 
-  constructor(private paginationService: PaginationService , private translate: TranslateService
-    ) {}
+  constructor(
+      private paginationService: PaginationService,
+      private translate: TranslateService
+  ) {}
 
   ngOnInit() {
+    this.loading = this.paginationService.pagination_loading_state ;
+    this.results_count = this.paginationService.resultsCount;
     this.paginationService.resultsCountChanges.subscribe((results: number) => {
       this.results_count = results ;
       this.updatePages();
     });
     this.paginationService.loadingStateChanges.subscribe((state: boolean) => {
+      console.log('loading changed to ', (state ? 'true' : 'false'));
       this.loading = state ;
       this.current_page = this.paginationService.current_page ;
     });

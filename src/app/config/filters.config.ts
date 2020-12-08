@@ -56,26 +56,24 @@ export const FilterConfig = {
                 items: [
                     {name: 'filter_config.products.filter.grouping.value', id: 'by_cap'},
                     {name: 'filter_config.products.filter.grouping.quant_per_client', id: 'by_client'},
-                    {name: 'Mosta attivita in corso', id: 'show_activities'}
+                    {name: 'Mosta attivita in corso', id: 'show_activities'},
+                    {name: 'Mostra sintetico lavori', id: 'show_summary'}
                 ], unclearbale: true,
                 selectedAttribute: {name: 'filter_config.products.filter.grouping.quant_per_cap', id: 'by_cap'}},
             {type: 'ng-select', label: 'filter_config.products.filter.street_location.value', labelVal: 'name', key: 'fixed',
-                items: [{name: 'filter_config.products.filter.street_location.value', id: 'null'},
-                 {name: 'filter_config.products.filter.street_location.localize', id: '1'},
-                  {name: 'filter_config.products.filter.street_location.all', id: '0'}], unclearbale: true,
+                items: [
+                    {name: 'filter_config.products.filter.street_location.value', id: 'null'},
+                    {name: 'filter_config.products.filter.street_location.localize', id: '1'},
+                    {name: 'filter_config.products.filter.street_location.all', id: '0'}]
+                , unclearbale: true,
                 selectedAttribute: {name: 'filter_config.products.filter.street_location.localize', id: 'null'}},
-            // {type: 'ng-select', key: '__quantity_', label: 'Quantita per CAP:', items : [
-            //         {name: 'Tutto', id: 'all'}, {name: 'Con Filtri Applicati', id: 'filters'} ], labelVal: 'name',
-            //     selectedAttribute: {name: 'Con Filtri Applicati', id: 'filters'},
-            //     change: (val) => {sp.grouping.filters = val.id ; }, unclearbale: true
-            // },
             {type: ['date', 'date'], label: 'filter_config.products.filter.date_time', group: true, key: ['fromDate', 'toDate']},
             {type: 'simpleText', label: 'filter_config.products.filter.article_law', key: 'articleLawName'},
             {type: ['date', 'date'], label: 'filter_config.products.filter.article_law_date',
             group: true, key: ['fromArticleLawDate', 'toArticleLawDate']},
             {type: ['date', 'date'], label: 'filter_config.products.filter.acceptance_date',
              group: true, key: ['fromAcceptanceDate', 'toAcceptanceDate']},
-             {type: 'simpleText', label: 'filter_config.products.filter.activity', key: '', value: ''},
+            {type: 'simpleText', label: 'filter_config.products.filter.activity', key: '', value: ''},
 
         ],
         grouping: false,

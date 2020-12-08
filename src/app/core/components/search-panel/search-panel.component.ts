@@ -70,11 +70,14 @@ export class SearchPanelComponent implements OnInit {
               this.active_action = actions;
           }
       });
-      this.filtersService.cleared.subscribe(() => {
-          this._active_filters = this.fieldsData && this.fieldsData.fields &&
-          this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {} ;
+      this.filtersService.cleared.subscribe((event) => {
           this._m_active_action = null ;
           this.active_action = null ;
+          if (!event.keep) {
+              return ;
+          }
+          this._active_filters = this.fieldsData && this.fieldsData.fields &&
+          this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {} ;
           this._search = null ;
           this.filters = this.fieldsData && this.fieldsData.fields &&
               this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {};
@@ -83,11 +86,14 @@ export class SearchPanelComponent implements OnInit {
           this._changed_filters = {};
       });
       this.filtersService.fields.subscribe((data) => {
-          if (data.keep) {
-              return ;
-          }
           this.fieldsData = data ;
-          this.filters = Object.assign({}, data.fields.default_filters);
+          if (data.keep) {
+              this.isCollapsed = false ;
+              this.filters = Object.assign(this.filtersService.filters, data.fields.default_filters);
+          } else {
+              this.filters = Object.assign({}, data.fields.default_filters);
+          }
+          this._active_filters = Object.assign({}, this.filters) ;
           if ( this.loaded ) {
               this.initFields() ;
           }
@@ -112,6 +118,7 @@ export class SearchPanelComponent implements OnInit {
       }
       this._active_filters = {} ;
   }
+
   clearsearch() {
     this.search_value = null ;
     this._search = null ;
@@ -271,6 +278,17 @@ export class SearchPanelComponent implements OnInit {
           return ;
       }
       this.filtersFields = this.fieldsData.fields.filters( this.fieldsData.container, this);
+      // handle translation
+      this.filtersFields.forEach(field => {
+          if (field.type === 'ng-select' && field.items) {
+              console.log(field);
+              field.items.forEach(item => {
+                  const temp = item[field.labelVal ? field.labelVal : 'name'];
+                  item[field.labelVal ? field.labelVal : 'name'] = this.translate.instant(temp ? temp : '');
+              });
+              console.log(field.items);
+          }
+      })
       this.searchFields = this.fieldsData.fields.search( this.fieldsData.container, this);
   }
 

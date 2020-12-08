@@ -30,13 +30,13 @@ export class DispatchViewService {
     }
 
     getDispatchGroups(dispatch, page) {
-        return new Promise<any[]>((resolve, reject) => {
+        return new Promise<any>((resolve, reject) => {
             this.sendGetSetGroupsRequest(dispatch, page).subscribe(
                 data => {
                     if (!data.success) {
                         return reject(data);
                     }
-                    resolve(this.reshapeGroupsData({}, data.data));
+                    resolve({groups: this.reshapeGroupsData({}, data.data.groups), state: data.data.state});
                 },
                 error => reject(error)
             );

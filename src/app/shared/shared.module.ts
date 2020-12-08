@@ -37,6 +37,7 @@ import {faDownload} from '@fortawesome/free-solid-svg-icons/faDownload';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import { SetStatusModalComponent } from './modals/set-status-modal/set-status-modal.component';
 import {StatusesService} from './service/statuses.service';
+import { ColsBasedTableComponent } from './components/cols-based-table/cols-based-table.component';
 
 @NgModule({
   imports: [
@@ -63,7 +64,8 @@ import {StatusesService} from './service/statuses.service';
       IframeComponent,
       PostmenCalendarComponent,
       CommentsComponent,
-      SetStatusModalComponent
+      SetStatusModalComponent,
+      ColsBasedTableComponent
   ],
   exports: [
       SearchBoxComponent,
@@ -77,7 +79,8 @@ import {StatusesService} from './service/statuses.service';
       IframeComponent,
       PostmenCalendarComponent,
       TranslateModule,
-      SetStatusModalComponent
+      SetStatusModalComponent,
+      ColsBasedTableComponent
   ],
   providers: [
       PlacesAutocompleteService,

@@ -35,7 +35,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   @ViewChild('imodal') imodal ;
   @ViewChild(ModalDirective) modalHost: ModalDirective;
   actions = [
-      {name: this.translate.instant('home.pre_dispatch_action.merge_Pre_bills'), modal: PreDispatchMergeComponent},
+      {name: this.translate.instant('home.to_delivered_action.create_one.value'), modal: PreDispatchMergeComponent},
       {name: this.translate.instant('home.pre_dispatch_action.remove'), modal: PreDispatchDeleteComponent, modalOptions: {}},
   ] ;
   unsubscribe: Subject<void> = new Subject();
@@ -61,19 +61,18 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       this.translateSelectorService.setDefaultLanuage();
     }
 
-
-   ngOnInit() {
-        this.actionsService.setActions(this.actions) ;
-        this.filtersService.clear();
-        this.loadItems(true, true);
-        this.preDispatchActionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
-            this.loadItems(false) ;
-            this.preDispatchService.selectedPreDispatches = [] ;
-        });
-        this.filtersService.setFields(FilterConfig.pre_dispatch, this) ;
-        this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filters) => {
-            this.loadItems(true) ;
-        });
+  ngOnInit() {
+      this.actionsService.setActions(this.actions) ;
+      this.filtersService.clear();
+      this.loadItems(true, true);
+      this.preDispatchActionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
+          this.loadItems(false) ;
+          this.preDispatchService.selectedPreDispatches = [] ;
+      });
+      this.filtersService.setFields(FilterConfig.pre_dispatch, this) ;
+      this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filters) => {
+          this.loadItems(true) ;
+      });
   }
 
   loadItems(reset: boolean, startInterval = false) {

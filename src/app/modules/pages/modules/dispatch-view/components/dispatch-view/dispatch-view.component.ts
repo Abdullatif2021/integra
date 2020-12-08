@@ -42,8 +42,8 @@ export class DispatchViewComponent implements OnInit {
         private translateSelectorService: TranslateSelectorService,
     ) {
         this.translateSelectorService.setDefaultLanuage();
-    this.dispatch = route.snapshot.params.id;
-      }
+        this.dispatch = route.snapshot.params.id;
+    }
 
     ngOnInit() {
         this.paginationService.updateLoadingState(false);
@@ -153,10 +153,10 @@ export class DispatchViewComponent implements OnInit {
         this.data = this.data.concat([{skeleton: true}, {skeleton: true}, {skeleton: true}]);
         const data = await this.dispatchViewService.getDispatchGroups(this.dispatch, this.page).catch(e => {});
         this.data.splice(-3);
-        if (!data || !data.length) { return ; }
+        if (!data || !data.groups || !data.groups.length) { return ; }
         this.loading = false;
-        this.data = this.data.concat(data);
-        if (data && data.length && data[0].state === 'prepared') {
+        this.data = this.data.concat(data.groups);
+        if (data && data.groups && data.groups.length && (data.state === 'prepared' || data.state === 'in_delivery')) {
             this.handleActions(true);
         }
     }

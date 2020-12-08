@@ -31,7 +31,6 @@ import {SnotifyService} from 'ng-snotify';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import { TranslateService } from '@ngx-translate/core';
 import {CreateNewActivityComponent} from '../../modals/create-new-activity/create-new-activity.component';
-import {ActivitiesService} from '../../service/activities.service';
 import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
@@ -172,9 +171,12 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-      this.filtersService.setFields(FilterConfig.products, this, 'products');
+
+      const filtersConfig = <any>{...FilterConfig.products};
+      this.filtersService.setFields(filtersConfig, this, 'products');
       this.filtersService.keep('products');
       this.filtersService.clear('products');
+
       this.handleGroupingDisplay(this.filtersService.getGrouping(), this.filtersService.filters, this.filtersService.getPlaceholders());
       this.loadProducts(false);
       this.paginationService.rppValueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((rpp: number) => {
@@ -205,6 +207,9 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   handleGroupingDisplay(grouping, filters, placeholders) {
       if (grouping === 'show_activities') {
           return this.router.navigate(['to-deliver/activities']);
+      }
+      if (grouping === 'show_summary') {
+          return this.router.navigate(['summary']);
       }
       this.citiesTable.title = grouping === 'by_client' ? 'Cliente' : 'Paese' ;
       this.citiesTable.searchPlaceHolder = grouping === 'by_client' ? 'Cerca Cliente' : 'Cerca Paese' ;
