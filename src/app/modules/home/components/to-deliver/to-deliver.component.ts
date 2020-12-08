@@ -81,7 +81,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
         modal: PreDispatchNewComponent
     },
     {
-        name: 'Aggiungi a Pre-Distinta esistente', fields: [
+        name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.value'), fields: [
             { type: 'select', field: 'method', options: [
                     {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.select'), value: 'selected'},
                     {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.by_filter'), value: 'filters'}
@@ -120,6 +120,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private productsService: ProductsService,
       private paginationService: PaginationService,
       private filtersService: FiltersService,
+      private integraaModalService: IntegraaModalService,
       private actionsService: ActionsService,
       private preDispatchActionsService: PreDispatchActionsService,
       protected recipientsService: RecipientsService,
@@ -308,7 +309,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   showLogModal(elm) {
     this.integraaModalService.open(`/pages/product/${elm.id}/log`,
         {width: 1000, height: 600, title: `Log: ${elm.barcode}`}, {});
-        }
+    }
 
   createActivityCheck(event) {
       if (event.method === 'selected' && !this.productsService.selectedProducts.length) {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../service/translate-selector-service';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateSelectorService } from '../../../service/translate-selector-service';
+import * as FriendCard from '../../../../assets/js/flag-dropdwopn.js';
 @Component({
   selector: 'app-user-nav',
   templateUrl: './user-nav.component.html',
@@ -8,13 +9,26 @@ import {TranslateSelectorService} from '../../../service/translate-selector-serv
 })
 export class UserNavComponent implements OnInit {
   selectConf: TranslateSelectorService;
-   constructor(private translate: TranslateService , selectConf: TranslateSelectorService) {
+  selectedLanguage = '';
+  selectedLanguageFlag = '';
+  constructor(private translate: TranslateService, selectConf: TranslateSelectorService) {
 
-      this.selectConf = selectConf;
-      this.selectConf.setUpConf();
-   }
+    this.selectConf = selectConf;
+    this.selectConf.setUpConf();
+  }
   ngOnInit() {
+    this.selectedLanguage = this.selectConf.currentLang;
+    this.selectConf.getLanguagesWithFlags().forEach(langauge => {
+      if (langauge.label === this.selectedLanguage) {
+        this.selectedLanguageFlag = langauge.flag;
+      }
+    });
+  }
 
+  selectChanged(event) {
+    this.selectedLanguage = event.label;
+    this.selectedLanguageFlag = event.flag;
+    this.selectConf.setSelectedLanguage(this.selectedLanguage);
   }
 
 }

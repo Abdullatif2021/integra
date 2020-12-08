@@ -26,12 +26,7 @@ import {AngularDraggableModule} from 'angular2-draggable';
 import { GlobalModalsComponent } from './components/global-modals/global-modals.component';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {faCalendarDay} from '@fortawesome/free-solid-svg-icons/faCalendarDay';
-import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-
-export function HttpLoaderFactory(httpClient: HttpClient) {
-  return new TranslateHttpLoader(httpClient);
-}
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -46,7 +41,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     AngularDraggableModule,
     AutocompleteLibModule,
     HttpClientModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
   ],
   declarations: [
       UserNavComponent,

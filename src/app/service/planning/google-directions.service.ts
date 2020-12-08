@@ -28,7 +28,7 @@ export class GoogleDirectionsService {
                 }
                 return reject(status);
             });
-            setTimeout(() => {if (!done) {reject('REQUEST_LOCALLY_IGNORED')}}, 7000);
+            setTimeout(() => {if (!done) {reject('REQUEST_LOCALLY_IGNORED'); }}, 7000);
         });
     }
 

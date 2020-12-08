@@ -230,7 +230,7 @@ export const TablesConfig = {
                  'table_config.table.dispatch_table.cols.state_distinct.distinct'], field: [(elm) => {
                         switch (elm.status) {
                             case 'not_prepare': return 'table_config.table.dispatch_table.cols.state_distinct.not_prepare';
-                            case 'not_assigned': return 'table_config.table.dispatch_table.cols.state_distinct.not_assigned ';
+                            case 'not_assigned': return 'table_config.table.dispatch_table.cols.state_distinct.not_assigned';
                             case 'prepared': return 'table_config.table.dispatch_table.cols.state_distinct.prepared';
                             default: return elm.status;
                         }
