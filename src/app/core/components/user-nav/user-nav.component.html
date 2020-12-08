@@ -25,19 +25,17 @@
       <div class="settings-area float-right">
         <span class="settings-icon" routerLink="/settings"><fa-icon [icon]="['fa','cogs']"></fa-icon></span>
         <span class="bell-icon"><fa-icon [icon]="['far','bell']"></fa-icon></span>
-        <!-- <div class="dropdown float-right">
-          <div data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
-            <span><img id="img" [(ngModel)]="lang_value" src="assets/images/italy-icon.png" class=""></span>
-          </div>
-          <div class="dropdown-menu" id="menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" id="img" href="#"><img src="assets/images/italy-icon.png" class="lang-icon"></a>
-            <a class="dropdown-item" id="img" href="#"><img src="assets/images/usa-icon.png" class="lang-icon"></a>
-          </div>
-        </div> -->
-        <select id="select" #langSelect (change)="selectConf.setSelectedLanguage(langSelect.value)">
-          <option *ngFor="let lang of selectConf.getLanguages()" [value]="lang" [selected]="lang === this.selectConf.currentLang">{{lang}}</option>
-        </select>
-      </div>
+    <div class="dropdown"> 
+      <div class="dropbtn"> 
+        <img [src]="selectedLanguageFlag"> {{selectedLanguage}}
+      </div> 
+      <div class="dropdown-content"> 
+          <a href="#" *ngFor="let lang of selectConf.getLanguagesWithFlags()" (click)="selectChanged(lang)"> 
+            <img [src]="lang.flag" width="20" height="20"> {{lang.label}} 
+          </a>
+      </div> 
+  </div> 
+    </div>
       <!-- } Settings Area -->
     </div>
   </div>

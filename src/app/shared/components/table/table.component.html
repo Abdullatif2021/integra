@@ -113,7 +113,7 @@
                                         <div class="separator" *ngIf="idx && col.value_separator == 'dashed'"></div>
                                         <div class="line-separator" *ngIf="idx && col.value_separator == 'line'"></div>
                                         <div *ngIf="typeof(field) === 'string'"><span [ngClass]="col.classes !== undefined ? (col.classes[field] ? col.classes[field] : '') : ''">{{item[field] | translate}}</span></div>
-                                        <div *ngIf="typeof(field) === 'function'"><span [ngClass]="col.classes !== undefined ? (col.classes[idx] ? col.classes[idx] : '') : ''" [innerHTML]="field(item, parent) | translate"></span></div>
+                                        <div *ngIf="typeof(field) === 'function'"><span [ngClass]="col.classes !== undefined ? (col.classes[idx] ? col.classes[idx] : '') : ''" [innerHTML]="field(item, parent)|translate"></span></div>
                                     </ng-container>
                                 </span>
                             </ng-template>
