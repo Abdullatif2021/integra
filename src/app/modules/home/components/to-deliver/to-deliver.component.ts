@@ -120,7 +120,6 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private productsService: ProductsService,
       private paginationService: PaginationService,
       private filtersService: FiltersService,
-      private integraaModalService: IntegraaModalService,
       private actionsService: ActionsService,
       private preDispatchActionsService: PreDispatchActionsService,
       protected recipientsService: RecipientsService,
