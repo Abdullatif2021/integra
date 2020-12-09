@@ -82,7 +82,7 @@ export class SearchPanelComponent implements OnInit {
           this.filters = this.fieldsData && this.fieldsData.fields &&
               this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {};
           this._has_active_filters = this._active_filters && Object.keys(this._active_filters) >
-              Object.keys(this.fieldsData.fields && this.fieldsData.fields.default_filters ? this.fieldsData.fields.default_filters : {});
+              Object.keys(this.fieldsData && this.fieldsData.fields && this.fieldsData.fields.default_filters ? this.fieldsData.fields.default_filters : {});
           this.isCollapsed = true ;
           this._changed_filters = {};
       });
