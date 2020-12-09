@@ -21,71 +21,71 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: ColsBasedTableComponent;
   tableConfig = {
     cols: [
-        // {
-        //     id: 'accepted',
-        //     title: 'Prodotti accettati',
-        //     text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
-        //                     ${row.cap.name} - ${row.productCount}`,
-        //     selectable: true,
-        //     expand: [
-        //         {label: 'Product Count', value: 'productCount'},
-        //         {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
-        //     ],
-        //     pagination: true,
-        //     load: (page) => this.getProductsByState(page, 'accepted')
-        // },
-        // {
-        //     id: 'to_be_delivered',
-        //     title: 'Da consegnare 1 Passaggio',
-        //     text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
-        //                     ${row.cap.name} - ${row.productCount}`,
-        //     selectable: true,
-        //     expand: [
-        //         {label: 'Product Count', value: 'productCount'},
-        //         {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
-        //     ],
-        //     pagination: true,
-        //     load: (page) => this.getProductsByState(page, 'to_be_delivered')
-        // },
-        // {
-        //     id: 'to_be_delivered_1',
-        //     title: 'Da consegnare 2 Passaggio',
-        //     text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
-        //                     ${row.cap.name} - ${row.productCount}`,
-        //     selectable: true,
-        //     expand: [
-        //         {label: 'Product Count', value: 'productCount'},
-        //         {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
-        //     ],
-        //     pagination: true,
-        //     load: (page) => this.getProductsByState(page, 'to_be_delivered_1')
-        // },
-        // {
-        //     id: 'to_be_delivered_2',
-        //     title: 'Da consegnare 3 Passaggio',
-        //     text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
-        //                     ${row.cap.name} - ${row.productCount}`,
-        //     selectable: true,
-        //     expand: [
-        //         {label: 'Product Count', value: 'productCount'},
-        //         {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
-        //     ],
-        //     pagination: true,
-        //     load: (page) => this.getProductsByState(page, 'to_be_delivered_2')
-        // },
-        // {
-        //     id: 'to_be_delivered_3',
-        //     title: 'Prodooti da rivisionare',
-        //     text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
-        //                     ${row.cap.name} - ${row.productCount}`,
-        //     selectable: true,
-        //     expand: [
-        //         {label: 'Product Count', value: 'productCount'},
-        //         {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
-        //     ],
-        //     pagination: true,
-        //     load: (page) => this.getProductsByState(page, 'to_be_delivered_3')
-        // },
+        {
+            id: 'accepted',
+            title: 'Prodotti accettati',
+            text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
+                            ${row.cap.name} - ${row.productCount}`,
+            selectable: true,
+            expand: [
+                {label: 'Product Count', value: 'productCount'},
+                {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
+            ],
+            pagination: true,
+            load: (page) => this.getProductsByState(page, 'accepted')
+        },
+        {
+            id: 'to_be_delivered',
+            title: 'Da consegnare 1 Passaggio',
+            text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
+                            ${row.cap.name} - ${row.productCount}`,
+            selectable: true,
+            expand: [
+                {label: 'Product Count', value: 'productCount'},
+                {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
+            ],
+            pagination: true,
+            load: (page) => this.getProductsByState(page, 'to_be_delivered')
+        },
+        {
+            id: 'to_be_delivered_1',
+            title: 'Da consegnare 2 Passaggio',
+            text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
+                            ${row.cap.name} - ${row.productCount}`,
+            selectable: true,
+            expand: [
+                {label: 'Product Count', value: 'productCount'},
+                {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
+            ],
+            pagination: true,
+            load: (page) => this.getProductsByState(page, 'to_be_delivered_1')
+        },
+        {
+            id: 'to_be_delivered_2',
+            title: 'Da consegnare 3 Passaggio',
+            text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
+                            ${row.cap.name} - ${row.productCount}`,
+            selectable: true,
+            expand: [
+                {label: 'Product Count', value: 'productCount'},
+                {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
+            ],
+            pagination: true,
+            load: (page) => this.getProductsByState(page, 'to_be_delivered_2')
+        },
+        {
+            id: 'to_be_delivered_3',
+            title: 'Prodooti da rivisionare',
+            text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
+                            ${row.cap.name} - ${row.productCount}`,
+            selectable: true,
+            expand: [
+                {label: 'Product Count', value: 'productCount'},
+                {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
+            ],
+            pagination: true,
+            load: (page) => this.getProductsByState(page, 'to_be_delivered_3')
+        },
         {
             id: 'not_delivered',
             title: 'Non consegnati',
@@ -100,7 +100,7 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
             load: (page) => this.getProductsByState(page, 'not_delivered')
         },
     ],
-  }
+  };
 
   data = null ;
 
