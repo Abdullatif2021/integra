@@ -73,7 +73,7 @@ export class SearchPanelComponent implements OnInit {
       this.filtersService.cleared.subscribe((event) => {
           this._m_active_action = null ;
           this.active_action = null ;
-          if (!event.keep) {
+          if (event.keep) {
               return ;
           }
           this._active_filters = this.fieldsData && this.fieldsData.fields &&
@@ -81,7 +81,8 @@ export class SearchPanelComponent implements OnInit {
           this._search = null ;
           this.filters = this.fieldsData && this.fieldsData.fields &&
               this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {};
-          this._has_active_filters = false ;
+          this._has_active_filters = this._active_filters && Object.keys(this._active_filters) >
+              Object.keys(this.fieldsData.fields && this.fieldsData.fields.default_filters ? this.fieldsData.fields.default_filters : {});
           this.isCollapsed = true ;
           this._changed_filters = {};
       });
@@ -98,7 +99,6 @@ export class SearchPanelComponent implements OnInit {
               this.initFields() ;
           }
       });
-
   }
 
   searchFieldChanged(event) {
@@ -279,6 +279,8 @@ export class SearchPanelComponent implements OnInit {
       }
       this.filtersFields = this.fieldsData.fields.filters( this.fieldsData.container, this);
       this.searchFields = this.fieldsData.fields.search( this.fieldsData.container, this);
+      this._has_active_filters = this._active_filters && Object.keys(this._active_filters) >
+          Object.keys(this.fieldsData.fields && this.fieldsData.fields.default_filters ? this.fieldsData.fields.default_filters : {});
   }
 
 }

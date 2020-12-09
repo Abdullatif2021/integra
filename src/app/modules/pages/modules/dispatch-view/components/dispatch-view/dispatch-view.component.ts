@@ -9,6 +9,9 @@ import {SetStatusModalComponent} from '../../../../../../shared/modals/set-statu
 import {ActionsService} from '../../../../../../service/actions.service';
 import {PaginationService} from '../../../../../../service/pagination.service';
 import { TranslateService } from '@ngx-translate/core';
+import {AgenciesService} from '../../../../../../service/agencies.service';
+import {RecipientsService} from '../../../../../../service/recipients.service';
+import {CustomersService} from '../../../../../../service/customers.service';
 
 @Component({
     selector: 'app-dispatch-view',
@@ -40,6 +43,9 @@ export class DispatchViewComponent implements OnInit {
         private paginationService: PaginationService,
         private translate: TranslateService,
         private translateSelectorService: TranslateSelectorService,
+        protected recipientsService: RecipientsService,
+        private customersService: CustomersService,
+        private agenciesService: AgenciesService,
     ) {
         this.translateSelectorService.setDefaultLanuage();
         this.dispatch = route.snapshot.params.id;

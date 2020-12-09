@@ -33,6 +33,7 @@ export class ActivitiesService {
         const options = { params: new HttpParams() };
         options.params = options.params.set('page', `${this.paginationService.current_page}`);
         options.params = options.params.set('pageSize', `${this.paginationService.rpp}`);
+        options.params = this.filtersService.getHttpParams(options.params);
         return this.http.get<any>(AppConfig.endpoints.getSubActivities, options).pipe(
             catchError(this.handleError)
         );
