@@ -27,11 +27,11 @@
         <span class="bell-icon"><fa-icon [icon]="['far','bell']"></fa-icon></span>
         <div class="dropdown">
           <div class="dropbtn">
-            <img [src]="selectedLanguageFlag"> {{selectedLanguage}}
+            <img [src]="selectedLanguageFlag"> {{selectedLanguage | translate}}
           </div>
           <div class="dropdown-content">
               <a href="#" *ngFor="let lang of langs" (click)="selectChanged(lang)">
-                <img [src]="lang.flag" width="20" height="20"> {{lang.label}}
+                <img [src]="lang.flag" width="20" height="20"> {{lang.label | translate}}
               </a>
           </div>
         </div>
