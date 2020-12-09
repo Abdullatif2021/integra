@@ -88,7 +88,7 @@ export class SearchPanelComponent implements OnInit {
       this.filtersService.fields.subscribe((data) => {
           this.fieldsData = data ;
           if (data.keep) {
-              this.isCollapsed = false ;
+              this.isCollapsed = true ;
               this.filters = Object.assign(this.filtersService.filters, data.fields.default_filters);
           } else {
               this.filters = Object.assign({}, data.fields.default_filters);
@@ -123,7 +123,7 @@ export class SearchPanelComponent implements OnInit {
     this.search_value = null ;
     this._search = null ;
     this.filtersService.updateFilters(this.search) ;
-    }
+  }
 
   changeFiltersValue(event, key, type, idx) {
     setTimeout(() => {
@@ -278,17 +278,6 @@ export class SearchPanelComponent implements OnInit {
           return ;
       }
       this.filtersFields = this.fieldsData.fields.filters( this.fieldsData.container, this);
-      // handle translation
-      this.filtersFields.forEach(field => {
-          if (field.type === 'ng-select' && field.items) {
-              console.log(field);
-              field.items.forEach(item => {
-                  const temp = item[field.labelVal ? field.labelVal : 'name'];
-                  item[field.labelVal ? field.labelVal : 'name'] = this.translate.instant(temp ? temp : '');
-              });
-              console.log(field.items);
-          }
-      })
       this.searchFields = this.fieldsData.fields.search( this.fieldsData.container, this);
   }
 

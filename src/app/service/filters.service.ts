@@ -199,11 +199,14 @@ export class FiltersService {
 
   clear(keep: string = null) {
       this.cleared.emit({keep: this._to_keep === keep});
+      if (this._to_keep === keep) {
+          return ;
+      }
       this.filters = [] ;
       this.specials = {} ;
       this.grouping = 'by_cap';
       this.clearBarcodFilter();
-      this.cleared.emit(1);
+      // this.cleared.emit(1);
   }
 
 }

@@ -265,7 +265,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   loadEndDate(subActivity) {
       this.activitiesService.getSubActivityEndDate(
           this.activityId, subActivity.startDate, subActivity.postmen, subActivity.caps,
-          subActivity.categories, subActivity.qtyPerDay, subActivity.nextSaturdayStatus
+          subActivity.categories, subActivity.qtyPerDay, subActivity.nextSaturdayStatus, subActivity.id
       ).pipe(takeUntil(this.unsubscribe)).subscribe(
               data => {
                   if (data.statusCode === 200) {

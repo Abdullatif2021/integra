@@ -38,7 +38,6 @@ export class PaginationComponent implements OnInit {
       this.updatePages();
     });
     this.paginationService.loadingStateChanges.subscribe((state: boolean) => {
-      console.log('loading changed to ', (state ? 'true' : 'false'));
       this.loading = state ;
       this.current_page = this.paginationService.current_page ;
     });
