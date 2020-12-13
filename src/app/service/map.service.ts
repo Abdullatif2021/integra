@@ -96,6 +96,7 @@ export class MapService {
         this.pathsChanges.emit(this.pathes);
     }
 
+    
     addInfoWindow(marker, elm) {
         if (marker.type !== 'Product') {
             return ;

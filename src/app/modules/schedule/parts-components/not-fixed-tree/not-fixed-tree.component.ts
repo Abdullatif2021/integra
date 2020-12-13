@@ -35,6 +35,7 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
   allLoaded = false ;
   loading = false ;
   page = 1;
+  dragging = null ;
   unsubscribe = new EventEmitter();
   selected = [];
 

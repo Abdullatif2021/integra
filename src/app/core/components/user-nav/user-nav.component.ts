@@ -11,12 +11,15 @@ export class UserNavComponent implements OnInit {
   selectConf: TranslateSelectorService;
   selectedLanguage = '';
   selectedLanguageFlag = '';
+  selectflag = [];
   constructor(private translate: TranslateService, selectConf: TranslateSelectorService) {
 
     this.selectConf = selectConf;
     this.selectConf.setUpConf();
+  
   }
   ngOnInit() {
+    this.selectflag = this.selectConf.getLanguagesWithFlags();
     this.selectedLanguage = this.selectConf.currentLang;
     this.selectConf.getLanguagesWithFlags().forEach(langauge => {
       if (langauge.label === this.selectedLanguage) {

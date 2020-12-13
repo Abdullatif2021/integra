@@ -15,18 +15,18 @@
 .log-more-col fa-icon {
     cursor: pointer;
 }
-.log-date-col, .log-operator-col, .log-code-col {
+.log-date-col, .log-operator-col, .log-code-col, .log-state-col {
     width: 30%;
     text-align: center;
 }
-.log-header-element.log-date-col, .log-header-element.log-operator-col, .log-header-element.log-code-col {
+.log-header-element.log-date-col, .log-header-element.log-operator-col, .log-header-element.log-code-col, .log-header-element.log-state-col {
     border-right: 1px solid #FFF;
 }
-.log-state-col {
+/* .log-state-col {
     width: 38%;
     max-width: calc(40% - 30px);
     text-align: center;
-}
+} */
 .log-row{
     display: flex;
     padding: 5px 0px;

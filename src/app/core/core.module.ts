@@ -28,6 +28,7 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {faCalendarDay} from '@fortawesome/free-solid-svg-icons/faCalendarDay';
 import {TranslateModule} from '@ngx-translate/core';
 
+
 @NgModule({
   imports: [
     CommonModule,

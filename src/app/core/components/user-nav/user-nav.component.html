@@ -30,7 +30,7 @@
         <img [src]="selectedLanguageFlag"> {{selectedLanguage}}
       </div> 
       <div class="dropdown-content"> 
-          <a href="#" *ngFor="let lang of selectConf.getLanguagesWithFlags()" (click)="selectChanged(lang)"> 
+          <a href="#" *ngFor="let lang of selectflag" (click)="selectChanged(lang)"> 
             <img [src]="lang.flag" width="20" height="20"> {{lang.label}} 
           </a>
       </div> 
