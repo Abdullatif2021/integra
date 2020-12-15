@@ -15,6 +15,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {RecipientsService} from '../../../../service/recipients.service';
 import {Router} from '@angular/router';
+import {CreateNewActivityComponent} from '../../modals/create-new-activity/create-new-activity.component';
 import {CategoriesService} from '../../../../service/categories.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../../shared/directives/modal.directive';
@@ -51,6 +52,20 @@ export class InStockComponent implements OnInit, OnDestroy {
 
   actions = [
     {
+        name: this.translate.instant('home.to_delivered_action.create_one.value'), fields: [
+            { type: 'select', field: 'method', options: [
+                    {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'},
+                    {name: this.translate.instant('home.to_delivered_action.create_one.by_filter'), value: 'filters'}
+                ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'}
+            }
+        ],
+        before_modal_open: (event) => this.createActivityCheck(event),
+        modal: CreateNewActivityComponent,
+        modalOptions: {size: 'xl'}
+    },
+    
+    {
+
         name: this.translate.instant('home.modals.not_delivered_actions.action_name'), fields: [
             { type: 'select', field: 'method', options: [
                     {name: this.translate.instant('home.modals.not_delivered_actions.selected'), value: 'selected'},
@@ -172,16 +187,26 @@ export class InStockComponent implements OnInit, OnDestroy {
       });
   }
 
+  createActivityCheck(event) {
+    if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
+        this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+        return false;
+    } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
+        this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
+        return false;
+    }
+    return true;
+}
+
   changeOrder(event) {
         this.order_field = event.field;
         this.order_method = event.order === 'DESC' ? '1' : '2';
         this.loadProducts(false);
   }
 
-  selectedItemsChanged(items) {
-        for (const item of items) {
-            this.instockservice.selectedProducts.push(item.id);
-        }
+   selectedItemsChanged(items) {
+    this.productsService.selectedProducts = items ;
+
   }
 
   getCategoriesByName(name) {

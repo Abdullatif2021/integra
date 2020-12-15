@@ -89,6 +89,9 @@
                 <tr #tableRow class="table-item" (click)="selectItem(item)" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx, 'selected-row':isSelectedRow(item)}">
                     <!-- select row item <static item > {  -->
                     <td class="table-item-cell select-cell"  *ngIf="selectable">
+                        <ng-container *ngIf="table.mark && table.mark.field && item[table.mark.field] && item[table.mark.field] != '-'">
+                            <img [src]="table.mark.icon" class="row-mark" placement="right" tooltipClass="show-more-tooltip" ngbTooltip="{{ table.mark.prefix | translate }}  {{ item[table.mark.field] }}" >
+                        </ng-container>
                         <div class="select-row rounded-circle" (click)="$event.stopPropagation();selectItem(item)">
                             <div class="selected" *ngIf="isSelectedRow(item)"><fa-icon [icon]="['fa','check']"></fa-icon></div>
                         </div>
@@ -99,7 +102,7 @@
                         <!-- item cell {  -->
                         <td class="table-item-cell justify-content-center">
                             <ng-container *ngIf="col.valueDisplay; else DisplayCell">
-                                <ng-select class="integraa-select" *ngIf="col.valueDisplay === 'select'" [items]="item[col.field]" bindValue="id" [(ngModel)]="item[col.value]" [bindLabel]="col.valueDisplayLabel"></ng-select>
+                                <ng-select class="integraa-select" [multiple]="col.multiple" *ngIf="col.valueDisplay === 'select'" [items]="item[col.field]" [bindValue]="'id'" [(ngModel)]="item[col.value]" [bindLabel]="col.valueDisplayLabel"></ng-select>
                                 <input type="date" class="integraa-select-a-like" *ngIf="col.valueDisplay === 'dateSelect'" [value]="item[col.field]">
                                 <div class="integraa-select-a-like integraa-select-div-a-like" *ngIf="col.valueDisplay === 'singleSelect'">{{item[col.field]}}
                                 </div>
@@ -112,8 +115,8 @@
                                     <ng-container *ngFor="let field of col.field; let idx = index">
                                         <div class="separator" *ngIf="idx && col.value_separator == 'dashed'"></div>
                                         <div class="line-separator" *ngIf="idx && col.value_separator == 'line'"></div>
-                                        <div *ngIf="typeof(field) === 'string'"><span [ngClass]="col.classes !== undefined ? (col.classes[field] ? col.classes[field] : '') : ''">{{item[field] | translate}}</span></div>
-                                        <div *ngIf="typeof(field) === 'function'"><span [ngClass]="col.classes !== undefined ? (col.classes[idx] ? col.classes[idx] : '') : ''" [innerHTML]="field(item, parent)|translate"></span></div>
+                                        <div *ngIf="typeof(field) === 'string'"><span [ngClass]="col.classes !== undefined ? (col.classes[field] ? col.classes[field] : '') : ''">{{item[field]}}</span></div>
+                                        <div *ngIf="typeof(field) === 'function'"><span [ngClass]="col.classes !== undefined ? (col.classes[idx] ? col.classes[idx] : '') : ''" [innerHTML]="field(item, parent)"></span></div>
                                     </ng-container>
                                 </span>
                             </ng-template>

@@ -3,6 +3,7 @@ import {SnotifyService} from 'ng-snotify';
 import {ProductsService} from './products.service';
 import {PreDispatchService} from './pre-dispatch.service';
 import {ApiResponseInterface} from '../core/models/api-response.interface';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +13,17 @@ export class ActionsService {
   constructor(
       private snotifyService: SnotifyService,
       private productsService: ProductsService,
-      private preDispatchService: PreDispatchService
+      private preDispatchService: PreDispatchService,
+      private translate: TranslateService,
   ) { }
   actionsChanges = new EventEmitter<number>() ;
   actions = [] ;
 
   setActions(actions) {
     this.actions = actions ;
+    if (this.actions) {
+        this.actions = this.actions.map(action => action.name = this.translate.instant(action.name));
+    }
     this.actionsChanges.emit(actions);
   }
 

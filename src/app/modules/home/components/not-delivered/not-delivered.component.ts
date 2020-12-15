@@ -19,9 +19,11 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../../shared/directives/modal.directive';
 import {SnotifyService} from 'ng-snotify';
 import { TranslateService } from '@ngx-translate/core';
+import {CreateNewActivityComponent} from '../../modals/create-new-activity/create-new-activity.component';
 import {SetStatusModalComponent} from '../../../../shared/modals/set-status-modal/set-status-modal.component';
 import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 import {TranslateSelectorService} from '../../../../service/translate-selector-service';
+import {ProductsService} from '../../../../service/products.service';
 
 @Component({
   selector: 'app-not-delivered',
@@ -50,6 +52,21 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
 
   actions = [
     {
+        name: this.translate.instant('home.to_delivered_action.create_one.value'), fields: [
+            { type: 'select', field: 'method', options: [
+                    {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'},
+                    {name: this.translate.instant('home.to_delivered_action.create_one.by_filter'), value: 'filters'}
+                ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'}
+            }
+        ],
+        before_modal_open: (event) => this.createActivityCheck(event),
+        modal: CreateNewActivityComponent,
+        modalOptions: {size: 'xl'}
+    },
+    
+    
+    
+    {
         name: this.translate.instant('home.modals.not_delivered_actions.action_name'), fields: [
             { type: 'select', field: 'method', options: [
                     {name: this.translate.instant('home.modals.not_delivered_actions.selected'), value: 'selected'},
@@ -71,6 +88,7 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       private streetsService: StreetsService,
       private paginationService: PaginationService,
       private filtersService: FiltersService,
+      private productsService: ProductsService,
       private integraaModalService: IntegraaModalService,
       private actionsService: ActionsService,
       protected recipientsService: RecipientsService,
@@ -177,9 +195,8 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
   }
 
   selectedItemsChanged(items) {
-        for (const item of items) {
-            this.notdeliveredService.selectedProducts.push(item.id);
-        }
+    this.productsService.selectedProducts = items ;
+
   }
 
   getCategoriesByName(name) {
@@ -227,6 +244,16 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       this.router.navigate(['not-delivered/activities']);
   }
 
+  createActivityCheck(event) {
+    if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
+        this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+        return false;
+    } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
+        this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
+        return false;
+    }
+    return true;
+}
   ngOnDestroy() {
       this.unsubscribe.next();
       this.unsubscribe.complete();

@@ -27,60 +27,117 @@
 
         <div class="sub-activities-container container-fluid">
           <div class="sub-activity-header row">
-            <div class="col-4 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.operator' | translate}}</div> <div>{{'home.modals.cre_activity.postmen' | translate}}</div></div> </div>
-            <!--<div class="col-2 d-flex"><div class="m-auto">Postmen</div></div>-->
-            <div class="col-4 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.caps' | translate}}</div> <div>{{'home.modals.cre_activity.categories' | translate}} </div></div></div>
-            <!--<div class="col-2 d-flex"><div class="m-auto">Categories</div></div>-->
+            <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.operator' | translate}}</div> <div>Saturday Status</div></div> </div>
+            <div class="col-4 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.caps' | translate}}</div> <div>{{'home.modals.cre_activity.categories' | translate}}</div></div></div>
             <div class="col-1 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.qty_per_day' | translate}}</div> <div>{{'home.modals.cre_activity.total_qty' | translate}}</div></div></div>
-            <div class="col-1 d-flex"><div class="w-100 text-center">Saturday Status</div></div>
-            <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.str_date' | translate}}</div> <div>{{'home.modals.cre_activity.end_date' | translate}}</div></div></div>
+            <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.str_date' | translate}}</div> <div> {{'home.modals.cre_activity.end_date' | translate}}</div></div></div>
+            <div class="col-3 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.postmen' | translate}}</div> <div> Recommended Postmen</div></div></div>
             <!--<div class="col-1 d-flex"><div class="m-auto"></div></div>-->
           </div>
           <ng-container *ngFor="let subActivity of subActivities">
             <!-- Sub activity view {  -->
+
+
+
+
             <div class="sub-activity-container row z-depth-1" [ngClass]="{'disabled': disabled || (hasConflict && !( subActivity.created && !subActivity.ready )), 'created': subActivity.created, 'not-ready': subActivity.created && !subActivity.ready}">
               <div class="sub-activity-delete" *ngIf="!subActivity.created" (click)="deleteLast()">×</div>
-              <div class="col-4">
-                <ng-select placeholder="{{'home.modals.cre_activity.oper_plhold' | translate}}" [(ngModel)]="subActivity.operators" [items]="operators" [bindLabel]="'name'"
-                           (change)="saveSubActivity(subActivity)" class="integraa-select" [bindValue]="'id'"></ng-select>
-                <div class="border-bottom-dashed-black"></div>
-                <ng-select placeholder="{{'home.modals.cre_activity.postmen_plhold' | translate}}" [ngClass]="{'disabled': !subActivity.operators}"
-                           [disabled]="!subActivity.operators" [(ngModel)]="subActivity.postmen" [items]="postmen" [bindLabel]="'full_name'" [multiple]="true" (change)="saveSubActivity(subActivity)" class="integraa-select" [bindValue]="'id'"></ng-select>
-              </div>
-              <!--<div class="col-2">-->
-              <!--</div>-->
-              <div class="col-4">
-                <ng-select placeholder="{{'home.modals.cre_activity.caps_plhold' | translate}}" (open)="loadCaps(subActivity)" [loading]="subActivity.isCapsLoading" #capsSelect
-                           [ngClass]="{'disabled': !subActivity.postmen || !subActivity.postmen.length || !subActivity.operators }"
-                           [disabled]="!subActivity.postmen || !subActivity.postmen.length || !subActivity.operators" [(ngModel)]="subActivity.caps" [items]="caps"
-                           (change)="capsChanged(subActivity, categoriesSelect)" [bindLabel]="'name'" [multiple]="true" class="integraa-select"
-                           [bindValue]="'id'" (scrollToEnd)="loadCaps(subActivity, subActivity.capsPage + 1)"></ng-select>
-                <div class="border-bottom-dashed-black"></div>
-                <ng-select placeholder="{{'home.modals.cre_activity.categories_plhold' | translate}}" (open)="loadCategories(subActivity)" [loading]="subActivity.isCategoriesLoading" #categoriesSelect
-                           [ngClass]="{'disabled': !subActivity.caps || !subActivity.caps.length || !subActivity.postmen.length  || !subActivity.operators}"
-                           [disabled]="!subActivity.caps || !subActivity.caps.length || !subActivity.postmen.length  || !subActivity.operators"
-                           [items]="categories" (change)="categoriesChanged(subActivity)" [bindLabel]="'name'" [(ngModel)]="subActivity.categories"
-                           [multiple]="true" class="integraa-select" [bindValue]="'id'" (scrollToEnd)="loadCategories(subActivity, subActivity.categoriesPage + 1)"></ng-select>
-              </div>
-              <!--<div class="col-2">-->
-              <!--</div>-->
-              <div class="col-1">
-                <input type="numer"
-                       [disabled]="!subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length || !subActivity.postmen || !subActivity.postmen.length  || !subActivity.operators"
-                       [(ngModel)]="subActivity.qtyPerDay" (change)="productsPerDayChanged(subActivity)" class="form-control form-control-sm integraa-input text-center" placeholder="{{'home.modals.cre_activity.qty_per_day_plhold' | translate}}">
-                <div class="border-bottom-dashed-black"></div>
-                <div class="total-quantity text-center m-auto">{{subActivity.totalQuantity}}</div>
-              </div>
-              <div class="col-1 d-flex">
-                <input type="checkbox" [(ngModel)]="subActivity.nextSaturdayStatus" (change)="saveSubActivity(subActivity)" class="d-block m-auto">
-              </div>
+
               <div class="col-2">
-                <input type="date"
-                       [disabled]="disabled || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length || !subActivity.postmen || !subActivity.postmen.length  || !subActivity.operators"
-                       [(ngModel)]="subActivity.startDate" (change)="startDateChanged(subActivity)" class="form-control form-control-sm integraa-input">
+
+                <!-- Operator { -->
+                <ng-select placeholder="{{'home.modals.cre_activity.oper_plhold' | translate}}" [(ngModel)]="subActivity.operators" [items]="operators" [bindLabel]="'name'"
+                           (change)="saveSubActivity(subActivity)" class="integraa-select" [bindValue]="'id'">
+                </ng-select>
+                <!-- } Operator -->
+
                 <div class="border-bottom-dashed-black"></div>
-                <input type="date" disabled [(ngModel)]="subActivity.endDate" class="form-control form-control-sm integraa-input">
+
+                <!-- nextSaturdayStatus { -->
+                <input type="checkbox" [(ngModel)]="subActivity.nextSaturdayStatus" (change)="saveSubActivity(subActivity)" class="d-block m-auto">
+                <!-- } nextSaturdayStatus -->
+
               </div>
+
+              <div class="col-4">
+                <!-- Caps { -->
+                <ng-select placeholder="{{'home.modals.cre_activity.caps_plhold' | translate}}" (open)="loadCaps(subActivity)" [loading]="subActivity.isCapsLoading" #capsSelect
+                           [ngClass]="{'disabled': !subActivity.operators }"
+                           [disabled]="!subActivity.operators" [(ngModel)]="subActivity.caps" [items]="caps"
+                           (change)="capsChanged($event, subActivity)" (remove)="capRemoved($event, subActivity)" [bindLabel]="'name'" [clearable]="false" [multiple]="true" class="integraa-select"
+                           [bindValue]="'id'" (scrollToEnd)="loadCaps(subActivity, subActivity.capsPage + 1)">
+                </ng-select>
+                <!-- } Caps -->
+
+                <div class="border-bottom-dashed-black"></div>
+
+                <!-- Categories { -->
+                <ng-select placeholder="{{'home.modals.cre_activity.categories_plhold' | translate}}" (open)="loadCategories(subActivity)" [loading]="subActivity.isCategoriesLoading" #categoriesSelect
+                           [ngClass]="{'disabled': !subActivity.caps || !subActivity.caps.length || !subActivity.operators}"
+                           [disabled]="!subActivity.caps || !subActivity.caps.length || !subActivity.operators"
+                           [items]="categories" (change)="categoriesChanged(subActivity)" (remove)="categoryRemoved($event, subActivity)" [bindLabel]="'name'" [(ngModel)]="subActivity.categories"
+                           [multiple]="true" class="integraa-select" [bindValue]="'id'" (scrollToEnd)="loadCategories(subActivity, subActivity.categoriesPage + 1)">
+                </ng-select>
+                <!-- } Categories -->
+
+              </div>
+
+              <div class="col-1">
+
+                <!-- Quantity per day { -->
+                <input type="numer"
+                       [disabled]="!subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length || !subActivity.operators"
+                       [(ngModel)]="subActivity.qtyPerDay" (change)="productsPerDayChanged(subActivity)" class="form-control form-control-sm integraa-input text-center" placeholder="{{'home.modals.cre_activity.qty_per_day_plhold' | translate}}">
+                <!-- } Quantity per day -->
+
+                <div class="border-bottom-dashed-black"></div>
+
+                <!-- Total Quantity { -->
+                <div class="total-quantity text-center m-auto">{{subActivity.totalQuantity}}</div>
+                <!-- } Total Quantity -->
+
+              </div>
+
+              <div class="col-2">
+
+                <!-- Start Date { -->
+                <input type="date"
+                       [disabled]="disabled || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators"
+                       [(ngModel)]="subActivity.startDate" (change)="startDateChanged(subActivity)" class="form-control form-control-sm integraa-input">
+                <!-- } Start Date -->
+
+                <div class="border-bottom-dashed-black"></div>
+
+                <!-- End Date { -->
+                <input type="date" disabled [(ngModel)]="subActivity.endDate" class="form-control form-control-sm integraa-input">
+                <!-- } End Date -->
+              </div>
+
+
+              <div class="col-3">
+
+                <!-- Postmen { -->
+                <ng-select placeholder="{{'home.modals.cre_activity.postmen_plhold' | translate}}"
+                           [ngClass]="{'disabled': disabled || !subActivity.startDate || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators}"
+                           [disabled]="disabled || !subActivity.startDate || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators"
+                           [(ngModel)]="subActivity.postmen" (open)="loadPostmen(subActivity)"
+                           [items]="subActivity.postmenList" [bindLabel]="'full_name'" [multiple]="true"
+                           (change)="postmenChanged(subActivity)" class="integraa-select" [bindValue]="'id'">
+                </ng-select>
+                <!-- } Postmen -->
+                <div class="border-bottom-dashed-black"></div>
+                <!-- Postmen { -->
+                <ng-select placeholder="postmen"
+                           [ngClass]="{'disabled': disabled || !subActivity.startDate || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators}"
+                           [disabled]="disabled || !subActivity.startDate || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators"
+                           [(ngModel)]="subActivity.recommendedPostmen"
+                           (change)="recommendedPostmenChanged(subActivity)" (open)="loadRecommendedPostmen(subActivity)"
+                           [items]="subActivity.recommendedPostmenList" [bindLabel]="'full_name'" [multiple]="true"
+                           class="integraa-select" [bindValue]="'id'">
+                </ng-select>
+                <!-- } Postmen -->
+              </div>
+
               <!--<div class="col-1">-->
               <!--</div>-->
             </div>

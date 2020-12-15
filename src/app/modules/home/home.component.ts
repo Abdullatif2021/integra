@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {PreDispatchAddDirectComponent} from './modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
 import {StreetsLocatingService} from '../../service/locating/streets-locating.service';
 import { TranslateService } from '@ngx-translate/core';
 @Component({

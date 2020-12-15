@@ -31,20 +31,26 @@ export class ActivitiesService {
       return this.http.post(AppConfig.endpoints.createNewActivity, data, options);
   }
 
-  getAvailableCaps(activity, page = 1): Observable<any> {
+  getAvailableCaps(activity, page = 1, subActivityId): Observable<any> {
       const options = {params: new HttpParams(), headers: new HttpHeaders()};
       options.params = options.params.set('activity', activity);
       options.params = options.params.set('pageSize', '30');
+      if (subActivityId) {
+          options.params = options.params.set('subActivityId', subActivityId);
+      }
       options.params = options.params.set('page', `${page}`);
 
       return this.http.get(AppConfig.endpoints.getActivityAvailableCaps, options);
   }
 
-  getAvailableProductsCategories(activity, caps, page): Observable<any> {
+  getAvailableProductsCategories(activity, caps, subActivityId = null, page = 1): Observable<any> {
       const options = {params: new HttpParams(), headers: new HttpHeaders()};
       options.params = options.params.set('activity', activity);
       options.params = options.params.set('caps', caps);
       options.params = options.params.set('pageSize', '30000');
+      if (subActivityId) {
+          options.params = options.params.set('subActivityId', subActivityId);
+      }
       options.params = options.params.set('page', `${page}`);
       return this.http.get(AppConfig.endpoints.getActivityAvailableProductCategories, options);
   }
@@ -57,7 +63,10 @@ export class ActivitiesService {
       return this.http.get(AppConfig.endpoints.getActivityTotalProducts, options);
   }
 
-  getSubActivityEndDate(activity, startDate, postmen, caps, categories, qtyPerDay, nextSaturdayStatus): Observable<any>  {
+  getSubActivityEndDate(
+      activity, startDate, postmen, caps, categories, qtyPerDay, nextSaturdayStatus,
+      subActivityId = null): Observable<any>
+  {
       const options = {params: new HttpParams(), headers: new HttpHeaders()};
       options.params = options.params.set('activity', activity);
       options.params = options.params.set('startDate', startDate);
@@ -65,7 +74,10 @@ export class ActivitiesService {
       options.params = options.params.set('categories', categories);
       options.params = options.params.set('postmen', postmen);
       options.params = options.params.set('qtyPerDay', qtyPerDay);
-      options.params = options.params.set('nextSaturdayStatus', nextSaturdayStatus);
+      options.params = options.params.set('nextSaturdayStatus', !nextSaturdayStatus ? '0' : '1');
+      if (subActivityId) {
+          options.params = options.params.set('subActivityId', subActivityId);
+      }
       return this.http.get(AppConfig.endpoints.getActivitySubActivityEndDate, options);
   }
 
@@ -76,10 +88,23 @@ export class ActivitiesService {
       return this.http.get(AppConfig.endpoints.getActivitiesOperators, options);
   }
 
-  getPostmen(page = 1): Observable<any> {
+  getPostmen(
+      activityId, startDate, caps, categories, qtyPerDay, nextSaturdayStatus,
+      recommended = 0, page = 1, subActivityId = null
+  ): Observable<any> {
       const options = {params: new HttpParams(), headers: new HttpHeaders()};
       options.params = options.params.set('page', `${page}`);
+      options.params = options.params.set('activity', `${activityId}`);
+      options.params = options.params.set('startDate', startDate);
+      options.params = options.params.set('caps', caps);
+      options.params = options.params.set('categories', categories);
+      options.params = options.params.set('qtyPerDay', qtyPerDay);
+      options.params = options.params.set('nextSaturdayStatus', !nextSaturdayStatus ? '0' : '1');
+      options.params = options.params.set('recommended', `${recommended}`);
       options.params = options.params.set('pageSize', '30');
+      if (subActivityId) {
+          options.params = options.params.set('subActivityId', subActivityId);
+      }
       return this.http.get(AppConfig.endpoints.getActivityPostmen, options);
   }
 
@@ -91,7 +116,7 @@ export class ActivitiesService {
             caps: caps,
             categories: categories,
             qtyPerDay: qtyPerDay,
-            nextSaturdayStatus: nextSaturdayStatus,
+            nextSaturdayStatus: nextSaturdayStatus ? 1 : 0,
             startDate: startDate
         }
         return this.http.post(AppConfig.endpoints.createSubActivity, data);
@@ -105,7 +130,7 @@ export class ActivitiesService {
             caps: caps,
             categories: categories,
             qtyPerDay: qtyPerDay,
-            nextSaturdayStatus: nextSaturdayStatus,
+            nextSaturdayStatus: nextSaturdayStatus ? 1 : 0,
             startDate: startDate
         }
         return this.http.post(AppConfig.endpoints.updateSubActivity, data);

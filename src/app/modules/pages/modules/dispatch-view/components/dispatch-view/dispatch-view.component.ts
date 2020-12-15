@@ -9,6 +9,9 @@ import {SetStatusModalComponent} from '../../../../../../shared/modals/set-statu
 import {ActionsService} from '../../../../../../service/actions.service';
 import {PaginationService} from '../../../../../../service/pagination.service';
 import { TranslateService } from '@ngx-translate/core';
+import {AgenciesService} from '../../../../../../service/agencies.service';
+import {RecipientsService} from '../../../../../../service/recipients.service';
+import {CustomersService} from '../../../../../../service/customers.service';
 
 @Component({
     selector: 'app-dispatch-view',
@@ -40,10 +43,13 @@ export class DispatchViewComponent implements OnInit {
         private paginationService: PaginationService,
         private translate: TranslateService,
         private translateSelectorService: TranslateSelectorService,
+        protected recipientsService: RecipientsService,
+        private customersService: CustomersService,
+        private agenciesService: AgenciesService,
     ) {
         this.translateSelectorService.setDefaultLanuage();
-    this.dispatch = route.snapshot.params.id;
-      }
+        this.dispatch = route.snapshot.params.id;
+    }
 
     ngOnInit() {
         this.paginationService.updateLoadingState(false);
@@ -153,10 +159,10 @@ export class DispatchViewComponent implements OnInit {
         this.data = this.data.concat([{skeleton: true}, {skeleton: true}, {skeleton: true}]);
         const data = await this.dispatchViewService.getDispatchGroups(this.dispatch, this.page).catch(e => {});
         this.data.splice(-3);
-        if (!data || !data.length) { return ; }
+        if (!data || !data.groups || !data.groups.length) { return ; }
         this.loading = false;
-        this.data = this.data.concat(data);
-        if (data && data.length && data[0].state === 'prepared') {
+        this.data = this.data.concat(data.groups);
+        if (data && data.groups && data.groups.length && (data.state === 'prepared' || data.state === 'in_delivery')) {
             this.handleActions(true);
         }
     }

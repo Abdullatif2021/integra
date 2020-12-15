@@ -5,17 +5,20 @@ import {catchError} from 'rxjs/operators';
 import {AppConfig} from '../config/app.config';
 import {throwError} from 'rxjs';
 import {FilterInterface} from '../core/models/filter.interface';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FiltersService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+      private http: HttpClient,
+  ) { }
   // the filters was changed and the changes was committed
   filtersChanges = new EventEmitter<number>() ;
   // the filters was changed but the changes was not committed
-  cleared = new EventEmitter<number>() ;
+  cleared = new EventEmitter<any>() ;
   fields = new EventEmitter() ;
   placeholders;
   // the user had clicked on change view type button
@@ -195,12 +198,15 @@ export class FiltersService {
   }
 
   clear(keep: string = null) {
-      if (this._to_keep === keep) { return ; }
+      this.cleared.emit({keep: this._to_keep === keep});
+      if (this._to_keep === keep) {
+          return ;
+      }
       this.filters = [] ;
       this.specials = {} ;
       this.grouping = 'by_cap';
       this.clearBarcodFilter();
-      this.cleared.emit(1);
+      // this.cleared.emit(1);
   }
 
 }
