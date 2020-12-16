@@ -8,16 +8,17 @@ import {PaginationService} from '../../../../../service/pagination.service';
 import {takeUntil} from 'rxjs/internal/operators';
 
 
-@Injectable()
-export class ActivitiesService {
-
+@Injectable({
+    providedIn: 'root'
+})
+export class ActivitiessService {
     constructor(
         private http: HttpClient,
         private filtersService: FiltersService,
         private paginationService: PaginationService
     ) {
     }
-
+    selectactivity = [] ;
 
     getActivities() {
         const options = { params: new HttpParams() };
@@ -66,7 +67,15 @@ export class ActivitiesService {
             return resolve({}) ;
         });
     }
-
+    delete(ids, confirm = false) {
+        const data = {
+            ids: ids,
+            confirm: confirm
+        };
+        return this.http.post<any>(AppConfig.endpoints.activityDelete, data).pipe(
+            catchError(this.handleError)
+        );
+    }
 
     handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {

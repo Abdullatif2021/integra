@@ -1,18 +1,24 @@
+import { ProductService } from './../../../../../pages/modules/product-log/product.service';
 import {Component, OnDestroy, OnInit , Input} from '@angular/core';
 import {PaginationService} from '../../../../../../service/pagination.service';
 import {takeUntil} from 'rxjs/internal/operators';
-import {ActivitiesService} from '../../service/activities.service';
+import {ActivitiesService} from '../../../../service/activities.service';
+import {ActivitiessService} from '../../service/activities.service';
 import {Subject} from 'rxjs';
+import {ActionsService} from '../../../../../../service/actions.service';
+import {ActivityDeleteComponent} from '../../../../modals/activity-delete/activity-delete.component';
 import { TranslateService } from '@ngx-translate/core';
 import {FiltersService} from '../../../../../../service/filters.service';
 import {FilterConfig} from '../../../../../../config/filters.config';
 import {Router} from '@angular/router';
+import {ProductsService} from '../../../../../../service/products.service';
 import {RecipientsService} from '../../../../../../service/recipients.service';
 import {CustomersService} from '../../../../../../service/customers.service';
 import {AgenciesService} from '../../../../../../service/agencies.service';
 import {CategoriesService} from '../../../../../../service/categories.service';
 import {TranslateSelectorService} from '../../../../../../service/translate-selector-service';
 import { NgStyle } from '@angular/common';
+
 
 @Component({
   selector: 'app-activities',
@@ -21,16 +27,16 @@ import { NgStyle } from '@angular/common';
 })
 export class ActivitiesComponent implements OnInit, OnDestroy {
 
+    actions = [
+        {name: this.translate.instant('home.activities_action.remove.value'),modal: ActivityDeleteComponent}
+            ];
   tableConfig = {
       cols: [
           {title: 'home.modules.activities.tableConfig.name', field: 'activityName', value: 'name_value', valueDisplayLabel: 'name'},
           {title: 'home.modules.activities.tableConfig.operator', field: 'operator', valueDisplay: 'select', value: 'operator_value', valueDisplayLabel: 'name', multiple: false},
           {title: ['home.modules.activities.tableConfig.start_date', 'home.modules.activities.tableConfig.end_date'], field: ['startedAt' ,'endDate'] , separator: true , value_separator: 'dashed' },
-          {title: 'home.modules.activities.tableConfig.product',
-              field: 'productsCategories', valueDisplay: 'select', value: 'product_value',
-              valueDisplayLabel: 'name', multiple: true},
-          {title: 'home.modules.activities.tableConfig.quintity_per_day',
-              field: 'productsQty', valueDisplay: 'singleSelect'},
+          {title: 'home.modules.activities.tableConfig.product',field: 'productsCategories', valueDisplay: 'select', value: 'product_value', valueDisplayLabel: 'name', multiple: true},
+          {title: ['home.modules.activities.tableConfig.quintity','home.modules.activities.tableConfig.quintity_per_day'], field: ['productsQty' , 'productsQtyPerDay'] , separator: true , value_separator: 'dashed'},
           {title: 'home.modules.activities.tableConfig.expected_cap',
               field: 'caps', valueDisplay: 'select', value: 'caps_value',
               valueDisplayLabel: 'name', multiple: true},
@@ -38,8 +44,9 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
               value: 'postmen_value', valueDisplayLabel: 'full_name', multiple: true},
       ],
       theme: 'gray-white',
-      selectable: false
+      selectable: true
   };
+  
 
   data: any;
   unsubscribe: Subject<void> = new Subject();
@@ -47,9 +54,11 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   constructor(
       private paginationService: PaginationService,
       private activitiesService: ActivitiesService,
+      private activitiessService: ActivitiessService,
       public translate: TranslateService,
+      private actionsService: ActionsService,
       protected recipientsService: RecipientsService,
-      private customersService: CustomersService,
+      private productsService: ProductsService,
       private agenciesService: AgenciesService,
       private filtersService: FiltersService,
       private router: Router,
@@ -68,7 +77,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       this.filtersService.setFields(filtersConfig, this, 'products');
       this.filtersService.keep('products');
       this.filtersService.clear('products');
-
+      this.actionsService.setActions(this.actions);
       this.paginationService.rppValueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((rpp: number) => {
           this.loadData() ;
       });
@@ -98,7 +107,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
 
   async loadData() {
       const filledData = [] ;
-      this.activitiesService.getSubActivities().pipe(takeUntil(this.unsubscribe)).subscribe(
+      this.activitiessService.getSubActivities().pipe(takeUntil(this.unsubscribe)).subscribe(
           activities => {
               console.log(activities);
               activities.data.forEach(row => {
@@ -120,6 +129,9 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
           }
       );
   }
-
+  selectedItemsChanged(items) {
+    this.activitiesService.selectactivity = items ;
+    console.log(this.activitiesService.selectactivity);
+}
 
 }
