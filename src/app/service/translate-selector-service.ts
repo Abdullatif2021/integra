@@ -12,11 +12,11 @@ export interface FlagLanguage {
 export class TranslateSelectorService {
 
   // currentLang = 'Italy';
-  currentLang = localStorage.getItem('language') || 'Itl';
+  currentLang = localStorage.getItem('language') || 'It';
   translateService: TranslateService;
 
   setDefaultLanuage() {
-    if (!this.currentLang || this.currentLang == null) {this.currentLang = 'Itl'; }
+    if (!this.currentLang || this.currentLang == null) {this.currentLang = 'It'; }
     this.applyLanguage(this.currentLang);
   }
 
@@ -43,8 +43,8 @@ export class TranslateSelectorService {
 
   getLanguagesWithFlags(): FlagLanguage[] {
     const array: FlagLanguage[] = [];
-    const english: FlagLanguage = { label: 'Eng', flag: 'assets/images/uk.png' };
-    const italy: FlagLanguage = { label: 'Itl', flag: 'assets/images/itl.png' };
+    const english: FlagLanguage = { label: 'En', flag: 'assets/images/uk.png' };
+    const italy: FlagLanguage = { label: 'It', flag: 'assets/images/it.png' };
     array.push(english);
     array.push(italy);
     return array;

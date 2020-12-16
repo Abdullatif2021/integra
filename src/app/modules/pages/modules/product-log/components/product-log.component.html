@@ -2,9 +2,9 @@
   <div class="log-header">
     <div class="log-header-element log-more-col"></div>
     <div class="log-header-element log-date-col">{{'pages.product_log.data' | translate}}</div>
-    <div class="log-header-element log-operator-col">{{'pages.product_log.massege' | translate}}</div>
-    <div class="log-header-element log-state-col">{{'pages.product_log.status' | translate}}</div>
     <div class="log-header-element log-operator-col">{{'pages.product_log.operator' | translate}}</div>
+    <div class="log-header-element log-state-col">{{'pages.product_log.status' | translate}}</div>
+    <div class="log-header-element log-operator-col">{{'pages.product_log.massege' | translate}}</div>
   </div>
   <div class="log-data-container">
     <ng-container *ngFor="let item of log; let idx = index"  [ngTemplateOutlet]="log_row" [ngTemplateOutletContext]="{item:item, idx:idx}"></ng-container>
@@ -29,7 +29,7 @@
       <div class="log-col log-more-col"></div>
       <div class="log-col log-date-col">{{item.date}}</div>
       <div class="log-col log-state-col">{{subitem.code}}
-        <img (click)="showLog(subitem.id)" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="Visualizza">
+        <img (click)="showLog(subitem.id)" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="x`">
       </div>
     </div>
   </ng-container>
