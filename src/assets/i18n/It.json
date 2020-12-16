@@ -957,7 +957,13 @@
         "article_law": "Articolo Legge",
         "article_law_date": "Data Articolo Legge:",
         "acceptance_date": "Data Accettazione:",
-        "activity": "Attività"
+        "activity":  {
+            "value": "attività",
+            "select_value": "stato di attività",
+            "all": "Tutti",
+            "have": "avere attività",
+            "not_have": "non hanno attività"
+          }
 
       },
       "default_filters": {

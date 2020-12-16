@@ -1,3 +1,4 @@
+import { map } from 'rxjs/internal/operators';
 import { ActivitiessService } from '../../modules/activities/service/activities.service';
 import { browser } from 'protractor';
 import { TranslateService } from '@ngx-translate/core';
@@ -40,6 +41,7 @@ export class ActivityDeleteComponent extends ModalComponent implements OnInit {
   async run(modal) {
       modal.close();
       await this.activityaction.deleteActivity(this.items.map(item => item.id));
+      console.log(map)
   }
 
 }
