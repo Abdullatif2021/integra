@@ -46,7 +46,7 @@ export class ActivitiesService {
   getAvailableProductsCategories(activity, caps, subActivityId = null, page = 1): Observable<any> {
       const options = {params: new HttpParams(), headers: new HttpHeaders()};
       options.params = options.params.set('activity', activity);
-      options.params = options.params.set('caps', caps);
+      options.params = options.params.set('caps', caps.map(c => c.id));
       options.params = options.params.set('pageSize', '30000');
       if (subActivityId) {
           options.params = options.params.set('subActivityId', subActivityId);
@@ -58,8 +58,8 @@ export class ActivitiesService {
   getTotalProducts(activity, caps, categories): Observable<any> {
       const options = {params: new HttpParams(), headers: new HttpHeaders()};
       options.params = options.params.set('activity', activity);
-      options.params = options.params.set('caps', caps);
-      options.params = options.params.set('categories', categories);
+      options.params = options.params.set('caps', caps.map(c => c.id));
+      options.params = options.params.set('categories', categories.map(c => c.id));
       return this.http.get(AppConfig.endpoints.getActivityTotalProducts, options);
   }
 
@@ -70,9 +70,9 @@ export class ActivitiesService {
       const options = {params: new HttpParams(), headers: new HttpHeaders()};
       options.params = options.params.set('activity', activity);
       options.params = options.params.set('startDate', startDate);
-      options.params = options.params.set('caps', caps);
-      options.params = options.params.set('categories', categories);
-      options.params = options.params.set('postmen', postmen);
+      options.params = options.params.set('caps', caps.map(c => c.id));
+      options.params = options.params.set('categories', categories.map(c => c.id));
+      options.params = options.params.set('postmen', postmen ? postmen.map(p => p.id) : []);
       options.params = options.params.set('qtyPerDay', qtyPerDay);
       options.params = options.params.set('nextSaturdayStatus', !nextSaturdayStatus ? '0' : '1');
       if (subActivityId) {
@@ -96,8 +96,8 @@ export class ActivitiesService {
       options.params = options.params.set('page', `${page}`);
       options.params = options.params.set('activity', `${activityId}`);
       options.params = options.params.set('startDate', startDate);
-      options.params = options.params.set('caps', caps);
-      options.params = options.params.set('categories', categories);
+      options.params = options.params.set('caps', caps.map(c => c.id));
+      options.params = options.params.set('categories', categories.map(c => c.id));
       options.params = options.params.set('qtyPerDay', qtyPerDay);
       options.params = options.params.set('nextSaturdayStatus', !nextSaturdayStatus ? '0' : '1');
       options.params = options.params.set('recommended', `${recommended}`);
@@ -112,9 +112,9 @@ export class ActivitiesService {
         const data = {
             activity: activity,
             operator: operator,
-            postmen: postmen,
-            caps: caps,
-            categories: categories,
+            postmen: postmen.map(p => p.id),
+            caps: caps.map(c => c.id),
+            categories: categories.map(c => c.id),
             qtyPerDay: qtyPerDay,
             nextSaturdayStatus: nextSaturdayStatus ? 1 : 0,
             startDate: startDate
@@ -126,9 +126,9 @@ export class ActivitiesService {
         const data = {
             subActivity: subActivity,
             operator: operator,
-            postmen: postmen,
-            caps: caps,
-            categories: categories,
+            postmen: postmen.map(p => p.id),
+            caps: caps.map(c => c.id),
+            categories: categories.map(c => c.id),
             qtyPerDay: qtyPerDay,
             nextSaturdayStatus: nextSaturdayStatus ? 1 : 0,
             startDate: startDate
@@ -142,6 +142,10 @@ export class ActivitiesService {
           name: name
       }
       return this.http.post(AppConfig.endpoints.updateActivity, data);
+  }
+
+  deleteActivity(activity): Observable<any> {
+      return this.http.post(AppConfig.endpoints.deleteActivity(activity), {});
   }
 
 }

@@ -67,3 +67,23 @@
 .sub-activity-delete:hover {
     color: red;
 }
+.preview-item {
+    padding: 3px 10px;
+    font-size: 11px;
+    background: #fcda4b;
+    border-radius: 22px;
+    margin-left: 5px;
+    display: inline-block;
+}
+.show-more-preview {
+    cursor: pointer;
+}
+.preview-list {
+    margin-top: 10px;
+}
+.show-more-list {
+    padding: 20px 10px;
+}
+.show-more-item {
+    margin-bottom: 5px;
+}

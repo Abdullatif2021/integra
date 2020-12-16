@@ -126,7 +126,8 @@ export const AppConfig = {
         createSubActivity: `${api_url}/api/activity/sub/create`,
         updateSubActivity: `${api_url}/api/activity/sub/update`,
         updateActivity: `${api_url}/api/activity/update`,
-        getSummaryProductsByState: `${api_url}/api/products/getByState`
+        getSummaryProductsByState: `${api_url}/api/products/getByState`,
+        deleteActivity: (id) => `${api_url}/api/activity/${id}/delete`
     },
 
 };

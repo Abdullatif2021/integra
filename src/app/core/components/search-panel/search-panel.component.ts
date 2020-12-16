@@ -237,7 +237,7 @@ export class SearchPanelComponent implements OnInit {
             // check if there is any non committed filters
             if (Object.keys(this.filters).length !== Object.keys(this._active_filters).length) {
 
-                this.modalService.open(this.confirmUnAppliedFiltersModalRef, {backdrop: 'static' });
+                this.modalService.open(this.confirmUnAppliedFiltersModalRef, {backdrop: 'static', keyboard  : false});
                 return false;
             }
         }
@@ -247,7 +247,7 @@ export class SearchPanelComponent implements OnInit {
         const componentRef = viewContainerRef.createComponent(componentFactory);
         const instance = <any>componentRef.instance ;
         instance.data = this.active_action  ;
-        const modalOptions = Object.assign({ windowClass: 'animated slideInDown', backdrop: 'static' },
+        const modalOptions = Object.assign({ windowClass: 'animated slideInDown', backdrop: 'static', keyboard  : false},
             this.active_action.modalOptions ? this.active_action.modalOptions : {} );
         this.modalService.open(instance.modalRef, modalOptions) ;
     } else if ( this.active_action && typeof this.active_action.run === 'function' ) {

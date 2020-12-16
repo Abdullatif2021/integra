@@ -7,6 +7,7 @@ import {Subject} from 'rxjs';
 import {SnotifyService} from 'ng-snotify';
 import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-create-new-activity',
@@ -19,6 +20,8 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   subActivities: [any] = [{}];
   disabled = true ;
   @ViewChild('modalRef') modalRef ;
+  @ViewChild('showMoreModal') _showMoreModal;
+  @ViewChild('exitConfirmModal') _exit_confirm_modal;
   unsubscribe: Subject<void> = new Subject();
   activityId;
   operators = [] ;
@@ -33,12 +36,13 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   allCategoriesLoaded = false ;
   addCap ;
   addCategory ;
-
+  _show_more_items = [];
   constructor(
       private activitiesService: ActivitiesService,
       private snotifyService: SnotifyService,
       private translateSelectorService: TranslateSelectorService,
       private preDispatchActionsService: PreDispatchActionsService,
+      private modalService: NgbModal,
   ) {
     super();
     this.translateSelectorService.setDefaultLanuage();
@@ -251,10 +255,10 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   categoriesChanged(subActivity) {
+      this.loadTotalProducts(subActivity);
       if (!subActivity.categories || !subActivity.categories.length) {
           return this.isReady(subActivity);
       }
-      this.loadTotalProducts(subActivity);
       this.saveSubActivity(subActivity);
   }
 
@@ -388,6 +392,31 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
          if (!subActivity.created) {anyNotSaved = true ; }
       });
       this.anyNotSaved = anyNotSaved ;
+  }
+
+  openShowMoreModal(items, key) {
+      this._show_more_items = items.map(i => i[key]);
+      this.modalService.open(this._showMoreModal);
+  }
+
+  showExitConfirmModal() {
+      this.modalService.open(this._exit_confirm_modal);
+  }
+
+  confirmExit(do_delete) {
+      if (do_delete && this.activityId) {
+          this.activitiesService.deleteActivity(this.activityId).subscribe(
+              data => {
+                  this.preDispatchActionsService.reloadData.emit(true);
+              },
+              error => {
+                  console.log(error);
+              }
+          );
+      } else {
+          this.preDispatchActionsService.reloadData.emit(true);
+      }
+      this.modalService.dismissAll();
   }
 
   deleteLast() {
