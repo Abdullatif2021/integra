@@ -1,13 +1,12 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ModalComponent} from '../../../../shared/modals/modal.component';
-import {ActionsService} from '../../../../service/actions.service';
-import {ActivitiesService} from '../../service/activities.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {Subject} from 'rxjs';
 import {SnotifyService} from 'ng-snotify';
 import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ActivityCreateService} from '../../service/activity-create.service';
 
 @Component({
   selector: 'app-create-new-activity',
@@ -15,7 +14,6 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./create-new-activity.component.css']
 })
 export class CreateNewActivityComponent extends ModalComponent implements OnInit, OnDestroy {
-
 
   subActivities: [any] = [{}];
   disabled = true ;
@@ -38,7 +36,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   addCategory ;
   _show_more_items = [];
   constructor(
-      private activitiesService: ActivitiesService,
+      private activityCreateService: ActivityCreateService,
       private snotifyService: SnotifyService,
       private translateSelectorService: TranslateSelectorService,
       private preDispatchActionsService: PreDispatchActionsService,
@@ -53,7 +51,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   createActivity() {
-      this.activitiesService.createNewActivity(this.data.method).pipe(takeUntil(this.unsubscribe)).subscribe(
+      this.activityCreateService.createNewActivity(this.data.method).pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               if (data.statusCode !== 200) {
                   this.snotifyService.error(data.message, { showProgressBar: false, timeout: 4000 });
@@ -70,7 +68,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   loadPostmen(subActivity) {
-      this.activitiesService.getPostmen(
+      this.activityCreateService.getPostmen(
           this.activityId, subActivity.startDate, subActivity.caps, subActivity.categories,
           subActivity.qtyPerDay, subActivity.nextSaturdayStatus, 0, 1, subActivity.id
       ).pipe(takeUntil(this.unsubscribe)).subscribe(
@@ -83,7 +81,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   loadRecommendedPostmen(subActivity) {
-      this.activitiesService.getPostmen(
+      this.activityCreateService.getPostmen(
           this.activityId, subActivity.startDate, subActivity.caps, subActivity.categories,
           subActivity.qtyPerDay, subActivity.nextSaturdayStatus, 1, 1, subActivity.id
       ).pipe(takeUntil(this.unsubscribe)).subscribe(
@@ -100,7 +98,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   loadOperators() {
-      this.activitiesService.getOperators(1).pipe(takeUntil(this.unsubscribe)).subscribe(
+      this.activityCreateService.getOperators(1).pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               this.operators = data.data;
           }, error => {
@@ -117,7 +115,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       if (this.allCapsLoaded) { return ; }
       subActivity.capsPage = page ;
       subActivity.isCapsLoading = true ;
-      this.activitiesService.getAvailableCaps(this.activityId, page, subActivity.id)
+      this.activityCreateService.getAvailableCaps(this.activityId, page, subActivity.id)
           .pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               if (!data.data || !data.data.length) {
@@ -149,7 +147,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
 
   saveActivity(modal) {
       this.saving = true ;
-      this.activitiesService.updateActivity(this.activityId, this.activityName).subscribe(
+      this.activityCreateService.updateActivity(this.activityId, this.activityName).subscribe(
           data => {
               if (data.statusCode === 200) {
                   this.saving = false ;
@@ -172,7 +170,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       subActivity.isCategoriesLoading = true ;
       if (page === 1) { this.allCategoriesLoaded = false ; }
       if (this.allCategoriesLoaded) { return ; }
-      this.activitiesService.getAvailableProductsCategories(this.activityId, subActivity.caps, subActivity.id, 1)
+      this.activityCreateService.getAvailableProductsCategories(this.activityId, subActivity.caps, subActivity.id, 1)
           .pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               if (data.statusCode === 200) {
@@ -240,7 +238,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
 
   loadTotalProducts(subActivity) {
       if (!subActivity.categories || !subActivity.categories.length) { return  ; }
-      this.activitiesService.getTotalProducts(this.activityId, subActivity.caps, subActivity.categories)
+      this.activityCreateService.getTotalProducts(this.activityId, subActivity.caps, subActivity.categories)
           .pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               if (data.statusCode === 200) {
@@ -267,7 +265,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   loadEndDate(subActivity) {
-      this.activitiesService.getSubActivityEndDate(
+      this.activityCreateService.getSubActivityEndDate(
           this.activityId, subActivity.startDate, subActivity.postmen, subActivity.caps,
           subActivity.categories, subActivity.qtyPerDay, subActivity.nextSaturdayStatus, subActivity.id
       ).pipe(takeUntil(this.unsubscribe)).subscribe(
@@ -342,7 +340,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   createNewSubActivity(subActivity) {
-      this.activitiesService.createSubActivity(
+      this.activityCreateService.createSubActivity(
           this.activityId, subActivity.operators, subActivity.postmen, subActivity.caps, subActivity.categories,
           subActivity.qtyPerDay, subActivity.nextSaturdayStatus ? true : false, subActivity.startDate).pipe(takeUntil(this.unsubscribe))
           .subscribe(
@@ -367,7 +365,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   }
 
   updateSubActivity(subActivity) {
-      this.activitiesService.updateSubActivity(
+      this.activityCreateService.updateSubActivity(
           subActivity.id, subActivity.operators, subActivity.postmen, subActivity.caps, subActivity.categories,
           subActivity.qtyPerDay, subActivity.nextSaturdayStatus ? true : false, subActivity.startDate).pipe(takeUntil(this.unsubscribe))
           .subscribe(
@@ -405,7 +403,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
 
   confirmExit(do_delete) {
       if (do_delete && this.activityId) {
-          this.activitiesService.deleteActivity(this.activityId).subscribe(
+          this.activityCreateService.deleteActivity(this.activityId).subscribe(
               data => {
                   this.preDispatchActionsService.reloadData.emit(true);
               },

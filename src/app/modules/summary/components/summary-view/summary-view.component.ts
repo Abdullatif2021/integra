@@ -10,6 +10,7 @@ import {PaginationService} from '../../../../service/pagination.service';
 import {CustomersService} from '../../../../service/customers.service';
 import {AgenciesService} from '../../../../service/agencies.service';
 import {RecipientsService} from '../../../../service/recipients.service';
+import {CategoriesService} from '../../../../service/categories.service';
 
 @Component({
   selector: 'app-summary-view',
@@ -112,6 +113,7 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
       protected recipientsService: RecipientsService,
       private customersService: CustomersService,
       private agenciesService: AgenciesService,
+      protected categoriesService: CategoriesService,
   ) { }
 
   ngOnInit() {
@@ -135,7 +137,7 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
 
   handleGroupingDisplay(filters) {
       if (filters.grouping === 'show_activities') {
-          return this.router.navigate(['to-deliver/activities']);
+          return this.router.navigate(['activities']);
       }
       if (filters.grouping !== 'show_summary') {
           return this.router.navigate(['/']);

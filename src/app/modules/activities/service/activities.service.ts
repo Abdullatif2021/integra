@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {FiltersService} from '../../../../../service/filters.service';
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
+import {EventEmitter, Injectable} from '@angular/core';
+import {FiltersService} from '../../../service/filters.service';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
-import {AppConfig} from '../../../../../config/app.config';
+import {AppConfig} from '../../../config/app.config';
 import {throwError} from 'rxjs';
-import {PaginationService} from '../../../../../service/pagination.service';
+import {PaginationService} from '../../../service/pagination.service';
 
 
 @Injectable()
@@ -17,7 +17,9 @@ export class ActivitiesService {
         private paginationService: PaginationService
     ) {
     }
-    selectactivity = [] ;
+
+    selectactivities = [] ;
+    reload = new EventEmitter();
 
     getActivities() {
         const options = { params: new HttpParams() };
@@ -67,12 +69,12 @@ export class ActivitiesService {
         });
     }
 
-    delete(ids, confirm = false) {
+    deleteSubActivity(ids, confirm = false) {
         const data = {
             ids: ids,
             confirm: confirm
         };
-        return this.http.post<any>(AppConfig.endpoints.activityDelete, data).pipe(
+        return this.http.post<any>(AppConfig.endpoints.subActivityDelete, data).pipe(
             catchError(this.handleError)
         );
     }

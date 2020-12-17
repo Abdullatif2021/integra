@@ -1,14 +1,9 @@
-import { map } from 'rxjs/internal/operators';
-import { ActivitiessService } from '../../modules/activities/service/activities.service';
-import { browser } from 'protractor';
 import { TranslateService } from '@ngx-translate/core';
 import { Component, OnInit } from '@angular/core';
-import {ModalComponent} from '../modal.component';
-import { ActivitiesService } from '../../service/activities.service';
 import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 import {ActivityActionsService} from '../../service/activity-action.service';
-
-
+import {ActivitiesService} from '../../service/activities.service';
+import {ModalComponent} from '../../../../shared/modals/modal.component';
 
 @Component({
   selector: 'app-activity-delete',
@@ -22,10 +17,8 @@ export class ActivityDeleteComponent extends ModalComponent implements OnInit {
   constructor(
       private translate: TranslateService,
       private translateSelectorService: TranslateSelectorService,
-      private activitiessService: ActivitiessService,
       private activitiesService: ActivitiesService,
-
-      private activityaction: ActivityActionsService
+      private activityActionsService: ActivityActionsService
 
   ) {
     super();
@@ -34,14 +27,13 @@ export class ActivityDeleteComponent extends ModalComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.items = this.activitiesService.selectactivity;
-      console.log(this.items);
+      this.items = this.activitiesService.selectactivities;
   }
 
   async run(modal) {
       modal.close();
-      await this.activityaction.deleteActivity(this.items.map(item => item.id));
-      console.log(map)
+      await this.activityActionsService.deleteActivity(this.items.map(item => item.id));
+      this.activitiesService.reload.emit(true);
   }
 
 }

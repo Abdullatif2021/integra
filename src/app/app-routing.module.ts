@@ -8,6 +8,8 @@ const routes: Routes = [
     {path: 'pages', loadChildren: './modules/pages/pages.module#PagesModule'},
     {path: 'schedule/:id', loadChildren: './modules/schedule/schedule.module#ScheduleModule', data: { preload: '/pre-dispatch' }},
     {path: 'summary', loadChildren: './modules/summary/summary.module#SummaryModule'},
+    {path: 'activities', loadChildren: './modules/activities/activities.module#ActivitiesModule'},
+
     // {path: '404', component: E404Component},
     // {path: '**', redirectTo: '/404'}
 

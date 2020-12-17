@@ -236,6 +236,7 @@ export class InStockComponent implements OnInit, OnDestroy {
           return ;
       }
   }
+
   showLogModal(elm) {
     this.integraaModalService.open(`/pages/product/${elm.id}/log`,
         {width: 1000, height: 600, title: `Log: ${elm.barcode}`}, {});

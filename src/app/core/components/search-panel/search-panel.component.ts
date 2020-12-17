@@ -241,8 +241,10 @@ export class SearchPanelComponent implements OnInit {
                 return false;
             }
         }
+        console.log('one');
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.active_action.modal);
         const viewContainerRef = this.modalHost.viewContainerRef ;
+        console.log('two');
         viewContainerRef.clear() ;
         const componentRef = viewContainerRef.createComponent(componentFactory);
         const instance = <any>componentRef.instance ;

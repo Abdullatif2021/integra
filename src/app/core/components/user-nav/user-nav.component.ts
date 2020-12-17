@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateSelectorService } from '../../../service/translate-selector-service';
-import * as FriendCard from '../../../../assets/js/flag-dropdwopn.js';
 @Component({
   selector: 'app-user-nav',
   templateUrl: './user-nav.component.html',

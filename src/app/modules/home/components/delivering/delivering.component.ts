@@ -24,6 +24,7 @@ import {TranslateSelectorService} from '../../../../service/translate-selector-s
   styleUrls: ['./delivering.component.css']
 })
 export class DeliveringComponent implements OnInit, OnDestroy, AfterViewInit {
+
     dispatchTableConfig = TablesConfig.table.deliveringTable;
     postmenTableConfig = TablesConfig.simpleTable.postmenTable;
     unsubscribe: Subject<void> = new Subject();

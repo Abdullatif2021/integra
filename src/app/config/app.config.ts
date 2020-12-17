@@ -112,7 +112,7 @@ export const AppConfig = {
         getSetProductsAndPath: (id) => `${api_url}/api/set/${id}/products`,
         getActivities: `${api_url}/api/activity/get`,
         getSubActivities: `${api_url}/api/activity/sub/get`,
-        activityDelete: `${api_url}/api/activity/delete/sub`,
+        subActivityDelete: `${api_url}/api/activity/delete/sub`,
         getActivitiesPostmen: `${api_url}/api/activity/postmen/get`,
         getActivitiesOperators: `${api_url}/api/activity/operators/get`,
         getAvailableStatuses: `${api_url}/api/products/getAvailableStatus`,

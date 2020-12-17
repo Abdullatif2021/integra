@@ -206,7 +206,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
 
   handleGroupingDisplay(grouping, filters, placeholders) {
       if (grouping === 'show_activities') {
-          return this.router.navigate(['to-deliver/activities']);
+          return this.router.navigate(['activities']);
       }
       if (grouping === 'show_summary') {
           return this.router.navigate(['summary']);

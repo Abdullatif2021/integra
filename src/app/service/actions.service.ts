@@ -21,9 +21,6 @@ export class ActionsService {
 
   setActions(actions) {
     this.actions = actions ;
-    if (this.actions) {
-        this.actions = this.actions.map(action => action.name = this.translate.instant(action.name));
-    }
     this.actionsChanges.emit(actions);
   }
 

@@ -17,7 +17,6 @@ const routes: Routes = [
         {path: 'dispatch', component: DispatchComponent},
         {path: 'dispatch/calender', loadChildren: './modules/dispatch-calender/dispatch-calender.module#DispatchCalenderModule'},
         {path: 'delivering/calender', loadChildren: './modules/delivering-calender/delivering-calender.module#DeliveringCalenderModule'},
-        {path: 'to-deliver/activities', loadChildren: './modules/activities/activities.module#ActivitiesModule'},
         {path: 'in-stock', component: InStockComponent},
         {path: 'not-delivered', component: NotDeliveredComponent},
         {path: 'pre-dispatch', component: PreDispatchComponent},
