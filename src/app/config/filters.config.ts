@@ -273,17 +273,17 @@ export const FilterConfig = {
             {type: ['date', 'date'], label: 'filter_config.notdelivered.filter.date_time', group: true, key: ['fromDate', 'toDate']},
             {type: 'simpleText', label: 'filter_config.notdelivered.filter.article_law', key: 'articleLawName'},
             {type: ['date', 'date'], label: 'filter_config.notdelivered.filter.article_law_date',
-            group: true, key: ['fromArticleLawDate', 'toArticleLawDate']},
+                group: true, key: ['fromArticleLawDate', 'toArticleLawDate']},
             {type: ['date', 'date'], label: 'filter_config.notdelivered.filter.acceptance_date',
-             group: true, key: ['fromAcceptanceDate', 'toAcceptanceDate']},
-             {type: 'simpleText', label: 'filter_config.notdelivered.filter.activity', key: '', value: ''},
-             {type: 'ng-select', label: 'filter_config.products.filter.activity.select_value', labelVal: 'name', key: 'activityState',
-            items: [
-                {name: 'filter_config.products.filter.activity.all', id: 'null'},
-                {name: 'filter_config.products.filter.activity.have', id: '1'},
-                {name: 'filter_config.products.filter.activity.not_have', id: '0'}]
-            , unclearbale: true,
-                 selectedAttribute: {name: 'filter_config.products.filter.activity.all', id: 'null'}},
+                group: true, key: ['fromAcceptanceDate', 'toAcceptanceDate']},
+            {type: 'simpleText', label: 'filter_config.notdelivered.filter.activity', key: '', value: ''},
+            {type: 'ng-select', label: 'filter_config.products.filter.activity.select_value', labelVal: 'name', key: 'activityState',
+                items: [
+                    {name: 'filter_config.products.filter.activity.all', id: 'null'},
+                    {name: 'filter_config.products.filter.activity.have', id: '1'},
+                    {name: 'filter_config.products.filter.activity.not_have', id: '0'}]
+                , unclearbale: true,
+                selectedAttribute: {name: 'filter_config.products.filter.activity.all', id: 'null'}},
 
 
         ],
