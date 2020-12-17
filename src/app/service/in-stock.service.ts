@@ -24,7 +24,7 @@ export class InStockService {
        this.selectedProducts = products.id;
    }
    getSelectedProducts() {
-      return this.selectedProducts;
+    return this.selectedProducts.map((product) => product.id );
   }
    updateProductsStatusByProducts(products, status) {
       const options = {

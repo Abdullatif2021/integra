@@ -18,16 +18,18 @@ export class NotDeliveredService {
         private http: HttpClient,
         private filtersService: FiltersService,
         private paginationService: PaginationService,
+
     ) {
     }
 
+    // .map(p => p.id)
     selectedProducts = [];
     selectAllOnLoadEvent = new EventEmitter() ;
      setSelectedProducts(products) {
          this.selectedProducts = products.id;
      }
      getSelectedProducts() {
-        return this.selectedProducts;
+        return this.selectedProducts.map((product) => product.id );
     }
      updateProductsStatusByProducts(products, status) {
         const options = {

@@ -93,6 +93,13 @@
                 "load_products_by_scanner": "Carica prodotti da Scanner"
             }    
       },
+      "activities_action": {
+        "remove": {
+          "value": "Elimina attività",
+          "select": "Selezionati",
+          "by_filter": "Secondo i filtri applicati"
+        }
+      },
      
     "modals": {
       "not_delivered_actions": {
@@ -253,10 +260,12 @@
     "modules": {
       "activities":{
         "tableConfig":{
+          "name": "Nome",
           "operator": "Operatore",
           "start_date": "Data inizio distribuzione",
           "end_date": "Data fine distribuzione",
           "product": "Prodotti",
+          "quintity": "Q.ta di prodotti",
           "quintity_per_day": "Q.ta prevista per giorno",
           "expected_cap": "Cap previsti",
           "proposed_postman": "Postini proposti"
@@ -358,6 +367,7 @@
       }
     },
     "services":{
+      
       "dispatch_actions_service": {
         "delete": "Elimina in corso",
         "success_delete": "Distinte Elimina con successo",
@@ -381,6 +391,10 @@
         "pre_edit_suc": "Pre-Distinte Edit con successo",
         "pre_delet": "Elimina in corso",
         "pre_delet_suc": "Pre-Distinte Elimina con successo"
+      },
+      "activity_actions_service": {
+        "act_delet": "Elimina in corso",
+        "act_delet_suc": "Attività Elimina con successo"
       }
                 }
   },
@@ -943,7 +957,13 @@
         "article_law": "Articolo Legge",
         "article_law_date": "Data Articolo Legge:",
         "acceptance_date": "Data Accettazione:",
-        "activity": "Attività"
+        "activity":  {
+            "value": "attività",
+            "select_value": "stato di attività",
+            "all": "Tutti",
+            "have": "avere attività",
+            "not_have": "non hanno attività"
+          }
 
       },
       "default_filters": {
@@ -1232,3 +1252,4 @@
   "Itl": "IT",
   "Eng": "EN"
  }
+

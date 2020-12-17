@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import {FiltersService} from '../../../service/filters.service';
 import {ProductsService} from '../../../service/products.service';
 import {AppConfig} from '../../../config/app.config';
+import {throwError} from 'rxjs';
 import {Observable} from 'rxjs';
 
 @Injectable({
@@ -15,7 +16,7 @@ export class ActivitiesService {
       private filtersService: FiltersService,
       private productsService: ProductsService
   ) { }
-
+  selectactivity = [] ;
   createNewActivity(method, name = ''): Observable<any> {
       const data = <any>{} ;
       const options = {params: new HttpParams(), headers: new HttpHeaders()};
@@ -143,6 +144,15 @@ export class ActivitiesService {
       }
       return this.http.post(AppConfig.endpoints.updateActivity, data);
   }
+//
+// handleError(error: HttpErrorResponse) {
+//     if (error.error instanceof ErrorEvent) {
+//         console.error('An error occurred:', error.error.message);
+//     } else {
+//         console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
+//     }
+//     return throwError('');
+// }
 
   deleteActivity(activity): Observable<any> {
       return this.http.post(AppConfig.endpoints.deleteActivity(activity), {});

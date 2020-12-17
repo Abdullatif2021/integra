@@ -28,13 +28,17 @@ import {
     faCaretRight
 } from '@fortawesome/free-solid-svg-icons';
 import {PreDispatchActionsService} from './service/pre-dispatch-actions.service';
+import {ActivityActionsService} from './service//activity-action.service';
 import {DispatchActionsService} from './service/dispatch-actions.service';
 import {DispatchDeleteComponent} from './modals/dispatch-delete/dispatch-delete.component';
+import {ActivityDeleteComponent} from './modals/activity-delete/activity-delete.component';
 import { DispatchPrepareComponent } from './modals/dispatch-prepare/dispatch-prepare.component';
 import {CalenderService} from './service/calender.service';
 import { DispatchAssignComponent } from './modals/dispatch-assign/dispatch-assign.component';
 import { FormsModule } from '@angular/forms';
 import {ProductStatusService} from '../../service/product-status.service';
+import {ActivitiessService} from '../home/modules/activities/service/activities.service'; 
+import {ActivitiesService} from '../home/service/activities.service'; 
 import {NotDeliveredService} from '../../service/not-delivered.service';
 import { CreateNewActivityComponent } from './modals/create-new-activity/create-new-activity.component';
 import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
@@ -70,6 +74,7 @@ import {TranslateModule} from '@ngx-translate/core';
       PwsisbsConfirmModalComponent,
       PsbatpdwsiConfirmModalComponent,
       DispatchDeleteComponent,
+      ActivityDeleteComponent,
       DispatchPrepareComponent,
       DispatchAssignComponent,
       CreateNewActivityComponent,
@@ -82,8 +87,11 @@ import {TranslateModule} from '@ngx-translate/core';
   providers: [
       PreDispatchActionsService,
       DispatchActionsService,
+      ActivityActionsService,
       CalenderService,
       ProductStatusService,
+      ActivitiessService,
+      ActivitiesService,
       NotDeliveredService,
   ],
   entryComponents: [
@@ -96,6 +104,7 @@ import {TranslateModule} from '@ngx-translate/core';
       PreDispatchDeleteComponent,
       PwsisbsConfirmModalComponent,
       PsbatpdwsiConfirmModalComponent,
+      ActivityDeleteComponent,
       DispatchDeleteComponent,
       DispatchPrepareComponent,
       DispatchAssignComponent,

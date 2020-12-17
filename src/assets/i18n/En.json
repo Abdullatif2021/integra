@@ -93,6 +93,13 @@
               "load_products_by_scanner": "Load products from Scanner"
             }    
       },
+      "activities_action": {
+        "remove": {
+          "value": "Delete Activity",
+          "select": "Selected",
+          "by_filter": "According to the filters applied"
+        }
+      },
      
     "modals": {
       "not_delivered_actions": {
@@ -140,6 +147,12 @@
         "correct_quantity": " righe. Assicurati che la quantità sia corretta,altrimenti riprova o contatta l'assistenz. Premi su Conferma se non hai dubbi sull'operazione.",
         "select_continue": "You must select a user to continue!",
         "preper_bag": "Operatore che prepara la borsa"
+      },
+      "activity_delete": {
+        "delete": "Sei sicuro di voler cancellare le distinte selezionate? ",
+        "no_select": " Nessuna riga selezionata !",
+        "run": "Esegui",
+        "cancel": "Annulla"
       },
       "dispatch_delete": {
         "delete": "Sei sicuro di voler cancellare le distinte selezionate? ",
@@ -253,10 +266,12 @@
     "modules": {
       "activities":{
         "tableConfig":{
+          "name": "Name",
           "operator": "Operatore",
           "start_date": "Data inizio distribuzione",
           "end_date": "Data fine distribuzione",
           "product": "Prodotti",
+          "quintity": "Q.ta di prodotti",
           "quintity_per_day": "Q.ta prevista per giorno",
           "expected_cap": "Cap previsti",
           "proposed_postman": "Postini proposti"
@@ -381,6 +396,11 @@
         "pre_edit_suc": "Pre-Distinte Edit con successo",
         "pre_delet": "Elimina in corso",
         "pre_delet_suc": "Pre-Distinte Elimina con successo"
+      },
+      "activity_actions_service": {
+        "error": "No products selected",
+        "act_delet": "Delete in progress",
+        "act_delet_suc": "Activity Delete successfully"
       }
                 }
   },
@@ -943,7 +963,13 @@
         "article_law": "Articolo Legge",
         "article_law_date": "Data Articolo Legge:",
         "acceptance_date": "Data Accettazione:",
-        "activity": "Attività"
+        "activity":  {
+          "value": "Activity",
+          "select_value": "Activity state",
+          "all": "All",
+          "have": "Have activity",
+          "not_have": "Don't have activity"
+        }
 
       },
       "default_filters": {

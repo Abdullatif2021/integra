@@ -5,11 +5,11 @@ import {catchError} from 'rxjs/operators';
 import {AppConfig} from '../../../../../config/app.config';
 import {throwError} from 'rxjs';
 import {PaginationService} from '../../../../../service/pagination.service';
-import {takeUntil} from 'rxjs/internal/operators';
 
 
 @Injectable()
 export class ActivitiesService {
+
 
     constructor(
         private http: HttpClient,
@@ -17,7 +17,7 @@ export class ActivitiesService {
         private paginationService: PaginationService
     ) {
     }
-
+    selectactivity = [] ;
 
     getActivities() {
         const options = { params: new HttpParams() };
@@ -67,6 +67,15 @@ export class ActivitiesService {
         });
     }
 
+    delete(ids, confirm = false) {
+        const data = {
+            ids: ids,
+            confirm: confirm
+        };
+        return this.http.post<any>(AppConfig.endpoints.activityDelete, data).pipe(
+            catchError(this.handleError)
+        );
+    }
 
     handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
