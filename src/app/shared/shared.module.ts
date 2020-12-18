@@ -38,6 +38,7 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import { SetStatusModalComponent } from './modals/set-status-modal/set-status-modal.component';
 import {StatusesService} from './service/statuses.service';
 import { ColsBasedTableComponent } from './components/cols-based-table/cols-based-table.component';
+import { TimeBasedCalendarComponent } from './components/time-based-calendar/time-based-calendar.component';
 
 @NgModule({
   imports: [
@@ -65,7 +66,8 @@ import { ColsBasedTableComponent } from './components/cols-based-table/cols-base
       PostmenCalendarComponent,
       CommentsComponent,
       SetStatusModalComponent,
-      ColsBasedTableComponent
+      ColsBasedTableComponent,
+      TimeBasedCalendarComponent
   ],
   exports: [
       SearchBoxComponent,
@@ -80,7 +82,8 @@ import { ColsBasedTableComponent } from './components/cols-based-table/cols-base
       PostmenCalendarComponent,
       TranslateModule,
       SetStatusModalComponent,
-      ColsBasedTableComponent
+      ColsBasedTableComponent,
+      TimeBasedCalendarComponent
   ],
   providers: [
       PlacesAutocompleteService,
