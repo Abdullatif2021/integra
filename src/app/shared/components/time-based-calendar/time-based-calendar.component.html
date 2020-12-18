@@ -40,7 +40,7 @@
                   <div class="item-span">
                     <ng-container *ngFor="let span of item._days_fill; let idx = index">
                       <div class="item-span-cell empty" *ngIf="!span" [ngClass]="{'first': !idx}"></div>
-                      <div class="item-span-cell filled" *ngIf="span" [ngClass]="{'first': !idx}" ngbTooltip="{{item[config.text]}}">
+                      <div class="item-span-cell filled" *ngIf="span" [ngClass]="{'first': !idx}" ngbTooltip="{{item[config.text]}}" placement="bottom">
                           <img *ngIf="span == 2 || span > 3" src="{{config.icon}}" class="single-item-icon"/>
                           <div *ngIf="span == 2 || span > 3" class="single-item-label text-truncate">{{item[config.text]}}</div>
                           <div *ngIf="span > 2"  class="in-item-group-name text-truncate">{{group[config.group_name ? config.group_name : 'name']}}</div>
