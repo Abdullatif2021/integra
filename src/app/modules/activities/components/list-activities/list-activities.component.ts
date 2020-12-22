@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit, Input, ComponentFactoryResolver, ViewChild} from '@angular/core';
 import {PaginationService} from '../../../../service/pagination.service';
 import {takeUntil} from 'rxjs/internal/operators';
-import {Subject} from 'rxjs';
+import {from, Subject} from 'rxjs';
 import {ActionsService} from '../../../../service/actions.service';
 import {ActivityDeleteComponent} from '../../modals/activity-delete/activity-delete.component';
+import {ChangeSubActivityStatusModalComponent} from '../../modals/change-subactivity-status/change-subactivity-status.componant';
 import { TranslateService } from '@ngx-translate/core';
 import {FiltersService} from '../../../../service/filters.service';
 import {FilterConfig} from '../../../../config/filters.config';
@@ -23,8 +24,25 @@ import {ActivitiesService} from '../../service/activities.service';
 })
 export class ListActivitiesComponent implements OnInit, OnDestroy {
 
+    
     actions = [
-        {name: this.translate.instant('home.activities_action.remove.value'), modal: ActivityDeleteComponent}
+        {
+            name: this.translate.instant('home.modals.not_delivered_actions.action_name'), fields: [
+                { type: 'select', field: 'method', options: [
+                        {name: this.translate.instant('home.modals.not_delivered_actions.selected'), value: 'selected'},
+                        {name: this.translate.instant('home.modals.not_delivered_actions.by_filter'), value: 'filters'}
+                    ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
+                }
+            ],
+            modal: ChangeSubActivityStatusModalComponent,
+            modalData: {
+                selected: () => this.activitiesService.getSelectedSubActivities()
+                }
+                
+                
+     },
+        { name: this.translate.instant('home.activities_action.remove.value'), modal: ActivityDeleteComponent},
+
     ];
     tableConfig = {
         cols: [
@@ -43,6 +61,8 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
                 valueDisplayLabel: 'name', multiple: true},
             {title: 'home.modules.activities.tableConfig.proposed_postman', field: 'postmen', valueDisplay: 'select',
                 value: 'postmen_value', valueDisplayLabel: 'full_name', multiple: true},
+            {title: 'home.modules.activities.tableConfig.state', field: 'state',
+            value: 'state_value', valueDisplayLabel: 'full_name'},
         ],
         theme: 'gray-white',
         selectable: true
@@ -72,7 +92,7 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
     ngOnInit() {
 
         const filtersConfig = <any>{...FilterConfig.products};
-        filtersConfig.default_filters = {
+        filtersConfig.default_filters = { 
             'grouping': 'show_activities'
         };
         this.filtersService.setFields(filtersConfig, this, 'products');
@@ -140,6 +160,6 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
 
     selectedItemsChanged(items) {
         this.activitiesService.selectactivities = items ;
+        console.log(items)
     }
-
 }

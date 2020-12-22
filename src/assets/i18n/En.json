@@ -274,7 +274,8 @@
           "quintity": "Q.ta di prodotti",
           "quintity_per_day": "Q.ta prevista per giorno",
           "expected_cap": "Cap previsti",
-          "proposed_postman": "Postini proposti"
+          "proposed_postman": "Postini proposti",
+          "state": "Activity Status"
                       }
             },
       "delivering_calender": {
@@ -1122,6 +1123,35 @@
 
       }
       
+    },
+    "subactivity": {
+      "search": {
+        "sub_name": "Name",
+        "operator": "Operator",
+        "start_date": "Start date",
+        "end_date": "End date",
+        "product": "Product",
+        "quintity": "Total quintity",
+        "quintity_per_day": "Quintity per day",
+        "expected_cap": "Expected cap",
+        "proposed_postman": "Proposed postman",
+        "state": "Activity status"
+      },
+      "filter": {
+        "sub_name": "Activity Name",
+        "operator": "Operator",
+        "start_date": "Start date",
+        "end_date": "End date",
+        "product": "Product",
+        "quintity": "Total quintity",
+        "quintity_per_day": "Quintity per day",
+        "expected_cap": "Expected cap",
+        "proposed_postman": "Proposed postman",
+        "select_value": "Activity status",
+            "todo": "To do",
+            "doing": "Doing",
+            "done": "Done"
+      }
     }
   },
   "table_config": {

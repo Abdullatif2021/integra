@@ -377,5 +377,57 @@ export const FilterConfig = {
         default_filters: {'grouping': 'by_cap', 'fixed': 'null'}
     },
 
+    subactivity: {
+        search: (container, sp) => [
+        {type: 'ng-select', label: 'filter_config.products.search.client', key: 'customerId',
+         items:  sp.filters_data.customers, labelVal: 'name'},
+            {type: 'text', label: 'filter_config.subactivity.search.sub_name', key: 'customerName'},
+            {type: 'text', label: 'filter_config.subactivity.search.operator', key: 'dispatchCode'},
+            {type: 'date', label: 'filter_config.subactivity.search.start_date', key: 'barcode'},
+            {type: 'date', label: 'filter_config.subactivity.search.end_date', key: 'actCode'},
+            {type: 'text', label: 'filter_config.subactivity.search.product', key: 'recipientName'},
+            {type: 'text', label: 'filter_config.subactivity.search.quintity', key: 'actCode'},
+            {type: 'text', label: 'filter_config.subactivity.search.quintity_per_day', key: 'recipientName'},
+            {type: 'text', label: 'filter_config.subactivity.search.expected_cap', key: 'articleLawName'},
+            {type: 'text', label: 'filter_config.subactivity.search.proposed_postman', key: 'articleLawDate'},
+            {type: 'text', label: 'filter_config.subactivity.search.state', key: 'acceptanceDate'},
+         ,
+        ],
+        filters: (container, sp) => [
+            {type: 'simpleText', label: 'filter_config.subactivity.filter.sub_name', key: 'customerName'},
+            {type: 'auto-complete', label: 'filter_config.products.filter.client', key: 'customerId',
+                getMethod: (term) => container.customersService.getCustomersByName(term),
+                items:  sp.filters_data.customers, labelVal: 'name', value: '', _class: 'auto-complete'},
+            {type: 'auto-complete', label: 'filter_config.products.filter.agency',
+            getMethod: (term) => container.agenciesService.getAgenciesByName(term),
+                key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name', value: '', _class: 'auto-complete'},
+            {type: 'simpleText', label: 'filter_config.subactivity.filter.operator', key: 'dispatchCode'},
+            {type: 'simpleText', label: 'filter_config.products.search.bar_code', key: 'barcode'},
+            {type: 'simpleText', label: 'filter_config.products.search.act_code', key: 'actCode'},
+            {type: 'ng-select', label: 'filter_config.products.filter.product', key: 'productTypeNameId',
+            items: sp.filters_data.products_type, labelVal: 'type'},
+            {type: 'simpleText', label: 'filter_config.products.filter.recipient_name', key: 'recipientName', value: ''},
+            {type: 'auto-complete', label: 'filter_config.products.filter.address', key: 'recipientId', labelVal: 'name',
+                getMethod: (term) => container.recipientsService.getRecipientsByName(term),
+                items: sp.filters_data.recipient, _class: 'auto-complete'},
+            {type: 'auto-complete', label: 'filter_config.products.filter.recipient_postal_code',
+             key: 'recipientCap', items: sp.filters_data.caps_group,
+                labelVal: 'name', getMethod: (term) => container.recipientsService.getCapCity(term), _class: 'auto-complete'},
+            {type: 'simpleText', label: 'filter_config.products.filter.destination', key: 'destination'},
+            {type: 'simpleText', label: 'filter_config.subactivity.filter.quintity', key: 'actCode'},
+            {type: 'simpleText', label: 'filter_config.subactivity.filter.quintity_per_day', key: 'recipientName'},
+            {type: 'simpleText', label: 'filter_config.subactivity.filter.expected_cap', key: 'articleLawName'},
+            {type: 'simpleText', label: 'filter_config.subactivity.filter.proposed_postman', key: 'articleLawDate'},
+            {type: 'ng-select', label: 'filter_config.subactivity.filter.select_value', labelVal: 'name', key: 'activityState',
+            items: [
+                {name: 'filter_config.products.filter.activity.todo', id: 'null'},
+                {name: 'filter_config.products.filter.activity.doing', id: '1'},
+                {name: 'filter_config.products.filter.activity.done', id: '0'}]
+            , unclearbale: true,
+            selectedAttribute: {name: 'filter_config.products.filter.activity.todo', id: 'null'}},
 
+        ],
+        grouping: false,
+        default_filters: {'grouping': 'by_cap', 'fixed': 'null'}
+    },
 };

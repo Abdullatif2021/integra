@@ -5,6 +5,7 @@ import {catchError} from 'rxjs/operators';
 import {AppConfig} from '../../../config/app.config';
 import {throwError} from 'rxjs';
 import {PaginationService} from '../../../service/pagination.service';
+import {ApiResponseInterface} from '../../../core/models/api-response.interface';
 
 
 @Injectable()
@@ -40,7 +41,10 @@ export class ActivitiesService {
             catchError(this.handleError)
         );
     }
-
+    getSelectedSubActivities() {
+        return this.selectactivities.map((items) => items.code && items.id );
+        
+    }
     getPostmen() {
         return this.http.get<any>(AppConfig.endpoints.getActivitiesPostmen, {}).pipe(
             catchError(this.handleError)
@@ -68,7 +72,13 @@ export class ActivitiesService {
             return resolve({}) ;
         });
     }
-
+    ChangeSubActivityStatus(ids, status) {
+        const options = {
+            state: status,
+            filters : Object.assign({ids})
+        };
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeSubActivityStatus, options);
+    }
     deleteSubActivity(ids, confirm = false) {
         const data = {
             ids: ids,

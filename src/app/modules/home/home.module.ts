@@ -39,7 +39,6 @@ import {NotDeliveredService} from '../../service/not-delivered.service';
 import { CreateNewActivityComponent } from './modals/create-new-activity/create-new-activity.component';
 import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
 import {TranslateModule} from '@ngx-translate/core';
-import {ActivityDeleteComponent} from '../activities/modals/activity-delete/activity-delete.component';
 
 @NgModule({
   imports: [
