@@ -1242,7 +1242,7 @@
           "name": "Nome",
           "empty": "",
           "post_cspi": {
-            "postman": "Postino",
+            "postman": "Postman",
             "cspi": "CSPI"
           },
           "state_distinct": {
