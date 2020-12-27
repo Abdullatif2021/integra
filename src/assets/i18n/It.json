@@ -112,8 +112,8 @@
 
           "warning": { 
             "name_is_short": "Il nuovo nome è molto corto",
-            "select_first": "You have to select products first",
-            "no_filter_applied": "No Filters applied"
+            "select_first": "Devi prima selezionare i prodotti",
+            "no_filter_applied": "Nessun filtro applicato"
 
           }
       },
@@ -123,8 +123,10 @@
           "operator": "Operator",
           "postmen": "Postmen",
           "caps": "Caps",
+          "saturday_status": "Sabato Stato",
           "categories": "Categories",
           "qty_per_day": "Qty per day",
+          "recommended_postmen": "Postini consigliati",
           "total_qty": "Total Qty",
           "str_date": "Start Date",
           "end_date": "End Date",
@@ -296,7 +298,7 @@
         "category": "Categoria",
         "recipientName2": "Nominativo Destinatario",
         "recipientCap": "CAP Destinatario:",
-        "recipientAddress": "Indirizzo Destinatario:",
+        "recipientAddress": "Indirizzo Destinatario",
         "week": "settimana",
         "day": "giorno",
         "prepared2": "Borsa Pronta alla consegna",
@@ -343,7 +345,7 @@
         "category": "Categoria",
         "recipientName2": "Nominativo Destinatario",
         "recipientCap": "CAP Destinatario:",
-        "recipientAddress": "Indirizzo Destinatario:",
+        "recipientAddress": "Indirizzo Destinatario",
         "week": "settimana",
         "day": "giorno",
         "prepared2": "Borsa Pronta alla consegna",
@@ -942,22 +944,24 @@
         "category": "Categoria",
         "recipient_name": "Nominativo Destinatario",
         "address": "Destinatario",
-        "recipient_postal_code": "CAP Destinatario:",
-        "destination": "Indirizzo Destinatario:",
+        "recipient_postal_code": "CAP Destinatario",
+        "destination": "Indirizzo Destinatario",
         "grouping": {
-          "value": "Raggruppamento quantita:",
+          "value": "Quantità grouping",
           "quant_per_cap": "Quantità per CAP",
-          "quant_per_client": "Quantità per Cliente"
+          "quant_per_client": "Quantità per Cliente",
+          "show_activity": "Mosta attivita in corso",
+          "show_summary": "Mostra sintetico lavori"
         },
         "street_location": {
           "value": "Localizzazione strada",
           "all": "Tutti",
           "localize": "Localizzato"
         },
-        "date_time": "Data/Ora:",
+        "date_time": "Data/Ora",
         "article_law": "Articolo Legge",
-        "article_law_date": "Data Articolo Legge:",
-        "acceptance_date": "Data Accettazione:",
+        "article_law_date": "Data Articolo Legge",
+        "acceptance_date": "Data Accettazione",
         "activity":  {
             "value": "attività",
             "select_value": "stato di attività",
@@ -1030,8 +1034,8 @@
         "product": "Prodotto",
         "category": "Categoria",
         "recipient_name": "Nominativo Destinatario",
-        "recipient_postal_code": "CAP Destinatario:",
-        "recipient_address": "Indirizzo Destinatario:"
+        "recipient_postal_code": "CAP Destinatario",
+        "recipient_address": "Indirizzo Destinatario"
       }
     },
     "delivering": {
@@ -1061,7 +1065,7 @@
         "category": "Categoria",
         "recipient_name": "Nominativo Destinatario",
         "recipient_postal_code": "CAP Destinatario:",
-        "recipient_address": "Indirizzo Destinatario:"
+        "recipient_address": "Indirizzo Destinatario"
       }
     },
     "notdelivered": {
@@ -1097,8 +1101,8 @@
         "category": "Categoria",
         "recipient_name": "Nominativo Destinatario",
         "address": "Destinatario",
-        "recipient_postal_code": "CAP Destinatario:",
-        "destination": "Indirizzo Destinatario:",
+        "recipient_postal_code": "CAP Destinatario",
+        "destination": "Indirizzo Destinatario",
         "grouping": {
           "value": "Raggruppamento quantita",
           "quant_per_cap": "Quantità per CAP",
@@ -1109,10 +1113,10 @@
           "all": "Tutti",
           "localize": "Localizzato"
         },
-        "date_time": "Data/Ora:",
+        "date_time": "Data/Ora",
         "article_law": "Articolo Legge",
-        "article_law_date": "Data Articolo Legge:",
-        "acceptance_date": "Data Accettazione:",
+        "article_law_date": "Data Articolo Legge",
+        "acceptance_date": "Data Accettazione",
         "activity": "Attività"
 
       }

@@ -70,12 +70,12 @@
              }
         },
         "pre_dispatch_action": {
-          "merge_Pre_bills": "Unisci Pre-distinte",
-          "remove": "Elimina"
+          "merge_Pre_bills": "Merge Pre-Bills",
+          "remove": "Remove"
         },
       "to_delivered_action": {
             "create_one": {
-              "value": "Create new bisness",
+              "value": "Create new Activity",
               "select": "Selected",
               "by_filter": "According to the filters applied"
             },
@@ -95,7 +95,7 @@
       },
       "activities_action": {
         "remove": {
-          "value": "Delete Activity",
+          "value": "Delete activity",
           "select": "Selected",
           "by_filter": "According to the filters applied"
         }
@@ -103,15 +103,15 @@
      
     "modals": {
       "not_delivered_actions": {
-          "action_name": "Cambiare stato",
-          "selected": "Selezionati",
-          "by_filter": "Secondo i filtri applicati",
-          "action_name2": "Aggiungi a Pre-Distinta esistente",
-          "selected2": "Selezionati",
-          "by_filter2": "Secondo i filtri applicati",
+          "action_name": "Change state",
+          "selected": "Selected",
+          "by_filter": "According to the filters applied",
+          "action_name2": "Add to Existing Pre-Bill",
+          "selected2": "Selected",
+          "by_filter2": "According to the filters applied",
 
           "warning": { 
-            "name_is_short": "Il nuovo nome è molto corto",
+            "name_is_short": "The new name is very short",
             "select_first": "You have to select products first",
             "no_filter_applied": "No Filters applied"
 
@@ -123,8 +123,10 @@
           "operator": "Operator",
           "postmen": "Postmen",
           "caps": "Caps",
+          "saturday_status": "Saturday status",
           "categories": "Categories",
           "qty_per_day": "Qty per day",
+          "recommended_postmen": "Recommended Postmen",
           "total_qty": "Total Qty",
           "str_date": "Start Date",
           "end_date": "End Date",
@@ -180,7 +182,7 @@
         "about_try": "ATTENZIONE! Stai per processare",
         "correct_quantity": " righe. Assicurati che la quantità sia corretta,altrimenti riprova o contatta l'assistenz. Premi su Conferma se non hai dubbi sull'operazione.",
         "no_select": "Pre Dispatch is not selected",
-        "distinte": "Pre-distinte:",
+        "distinte": "Pre-distinte",
         "run": "Esegui",
         "go_out": "Esci",
         "used_products": "Questi prodotti sono stati già usati in un'altra pre-distinta",
@@ -281,7 +283,7 @@
       "delivering_calender": {
         "name": "",
         "agency": "Agenzia",
-        "productTypeName": "Nome Prodotto:",
+        "productTypeName": "Nome Prodotto",
         "recipientName": "Nominativo Destinatario",
         "client": "Cliente",
         "filteragency": "Agenzia",
@@ -293,17 +295,17 @@
         "docName": "Nome allegato",
         "states": "Stato Distinta ",
         "prepared": "Prepared",
-        "StartDataDistinta": "Start Data Distinta:",
-        "DataDistinta:": "Data Distinta:",
+        "StartDataDistinta": "Start Data Distinta",
+        "DataDistinta:": "Data Distinta",
         "barcode": "Codice Barre",
         "actCode": "Codice Atto",
         "setCode": "Set Code",
         "productTypeNameId": "Prodotto",
         "category": "Categoria",
         "recipientName2": "Nominativo Destinatario",
-        "recipientCap": "CAP Destinatario:",
-        "recipientAddress": "Indirizzo Destinatario:",
-        "week": "Weekzzz",
+        "recipientCap": "CAP Destinatario",
+        "recipientAddress": "Indirizzo Destinatario",
+        "week": "Week",
         "day": "Day",
         "prepared2": "Borsa Pronta alla consegna",
         "prepareDispatch": "selected",
@@ -340,19 +342,19 @@
         "docName": "Nome allegato",
         "states": "Stato Distinta ",
         "prepared": "Prepared",
-        "StartDataDistinta": "Start Data Distinta:",
-        "DataDistinta:": "Data Distinta:",
+        "StartDataDistinta": "Start Data Distinta",
+        "DataDistinta:": "Data Distinta",
         "barcode": "Codice Barre",
         "actCode": "Codice Atto",
         "setCode": "Set Code",
         "productTypeNameId": "Prodotto",
         "category": "Categoria",
         "recipientName2": "Nominativo Destinatario",
-        "recipientCap": "CAP Destinatario:",
-        "recipientAddress": "Indirizzo Destinatario:",
+        "recipientCap": "CAP Destinatario",
+        "recipientAddress": "Recipient address",
         "week": "Week",
         "day": "Day",
-        "prepared2": "Borsa Pronta alla consegna",
+        "prepared2": "Bag Ready for delivery",
         "prepareDispatch": "selected",
         "revisore": "revisore",
         "addNoteToSet": {
@@ -948,22 +950,24 @@
         "category": "Category",
         "recipient_name": "Recipient name",
         "address": "Address",
-        "recipient_postal_code": "Recipient postal code:",
-        "destination": "Recipient address:",
+        "recipient_postal_code": "Recipient postal code",
+        "destination": "Recipient address",
         "grouping": {
-          "value": "Raggruppamento quantita:",
-          "quant_per_cap": "Quantità per CAP",
-          "quant_per_client": "Quantità per Cliente"
+          "value": "Quantity grouping",
+          "quant_per_cap": "Quantity per CAP",
+          "quant_per_client": "Quantity per Client",
+          "show_activity": "Show activity in progress",
+          "show_summary": "Show summary works"
         },
         "street_location": {
           "value": "Street Location",
           "all": "All",
           "localize": "Localize"
         },
-        "date_time": "Data/Ora:",
+        "date_time": "Data/Ora",
         "article_law": "Articolo Legge",
-        "article_law_date": "Data Articolo Legge:",
-        "acceptance_date": "Data Accettazione:",
+        "article_law_date": "Data Articolo Legge",
+        "acceptance_date": "Data Accettazione",
         "activity":  {
           "value": "Activity",
           "select_value": "Activity state",
@@ -1011,7 +1015,7 @@
       "search": {
         "distinguished_name": "Nominativo Distinta",
         "agency": "Agenzia",
-        "product_name": "Nome Prodotto:",
+        "product_name": "Nome Prodotto",
         "recipient_name": "Nominativo Destinatario"
       },
       "filter": {
@@ -1028,7 +1032,7 @@
             "not_assigned": "Non assegnato",
             "bag_not_prepared": "Borsa non preparata"
                 },
-        "str_bill_date": "Start Data Distinta:",
+        "str_bill_date": "Start Data Distinta",
         "bill_date": "Data Distinta:",
         "bar_code": "Codice Barre",
         "act_code": "Codiceatto",
@@ -1036,8 +1040,8 @@
         "product": "Prodotto",
         "category": "Categoria",
         "recipient_name": "Nominativo Destinatario",
-        "recipient_postal_code": "CAP Destinatario:",
-        "recipient_address": "Indirizzo Destinatario:"
+        "recipient_postal_code": "CAP Destinatario",
+        "recipient_address": "Indirizzo Destinatario"
       }
     },
     "delivering": {
@@ -1058,7 +1062,7 @@
         "name_attachment": "Nome allegato",
         "status_distinguished": "Stato Distinta",
         "bag_prepared": "Borsa preparata",
-        "str_bill_date": "Start Data Distinta:",
+        "str_bill_date": "Start Data Distinta",
         "bill_date": "Data Distinta:",
         "bar_code": "Codice Barre",
         "act_code": "Codice Atto",
@@ -1066,8 +1070,8 @@
         "product": "Prodotto",
         "category": "Categoria",
         "recipient_name": "Nominativo Destinatario",
-        "recipient_postal_code": "CAP Destinatario:",
-        "recipient_address": "Indirizzo Destinatario:"
+        "recipient_postal_code": "CAP Destinatario",
+        "recipient_address": "Indirizzo Destinatario"
       }
     },
     "notdelivered": {
@@ -1103,10 +1107,10 @@
         "category": "Categoria",
         "recipient_name": "Nominativo Destinatario",
         "address": "Destinatario",
-        "recipient_postal_code": "CAP Destinatario:",
-        "destination": "Indirizzo Destinatario:",
+        "recipient_postal_code": "CAP Destinatario",
+        "destination": "Indirizzo Destinatario",
         "grouping": {
-          "value": "Raggruppamento quantita:",
+          "value": "Quantity grouping",
           "quant_per_cap": "Quantità per CAP",
           "quant_per_client": "Quantità per Cliente"
         },
@@ -1115,10 +1119,10 @@
           "all": "Tutti",
           "localize": "Localizzato"
         },
-        "date_time": "Data/Ora:",
+        "date_time": "Data/Ora",
         "article_law": "Articolo Legge",
-        "article_law_date": "Data Articolo Legge:",
-        "acceptance_date": "Data Accettazione:",
+        "article_law_date": "Data Articolo Legge",
+        "acceptance_date": "Data Accettazione",
         "activity": "Attività"
 
       }

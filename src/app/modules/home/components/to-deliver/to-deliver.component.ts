@@ -142,7 +142,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       this.activatedRoute.queryParams.subscribe(params => {
           if (params['actionsonly'] === 'addproductstopd') {
               this.actions = <any>{
-                  name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.value'), fields: [
+                  name: this.translate.instant(''), fields: [
                       { type: 'select', field: 'method', options: [
                               {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.select'), value: 'selected'},
                               {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.by_filter'),
