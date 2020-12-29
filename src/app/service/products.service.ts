@@ -18,15 +18,19 @@ export class ProductsService {
       private paginationService: PaginationService
   ) { }
 
-  selectedProducts = [];
+  selectState = 'products';
+  selectedProducts: any = [];
   selectAllOnLoadEvent = new EventEmitter() ;
-   setSelectedProducts(products) {
+
+  setSelectedProducts(products) {
        this.selectedProducts = products.id;
-   }
-   getSelectedProducts() {
+  }
+
+  getSelectedProducts() {
       return this.selectedProducts;
   }
-   updateProductsStatusByProducts(products, status) {
+
+  updateProductsStatusByProducts(products, status) {
       const options = {
           status: status,
           product_ids: products.id,

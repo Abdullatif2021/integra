@@ -130,6 +130,7 @@ export const AppConfig = {
         getSummaryProductsByState: `${api_url}/api/products/getByState`,
         deleteActivity: (id) => `${api_url}/api/activity/${id}/delete`,
         changeSubActivityStatus: `${api_url}/api/activity/sub/changeStatus`,
+        getProductsByGroupInfo: `${api_url}/api/products/getProductByGroupInfo`,
     },
 
 };

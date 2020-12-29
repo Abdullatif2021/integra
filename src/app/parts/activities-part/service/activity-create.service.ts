@@ -21,7 +21,18 @@ export class ActivityCreateService {
           options.params = this.filtersService.getHttpParams(options.params, true);
           data.filters = this.filtersService.getFilterObject(true);
       } else {
-          data.product_ids = this.productsService.selectedProducts.map(p => p.id);
+          if (this.productsService.selectState === 'products') {
+              data.product_ids = this.productsService.selectedProducts.map(p => p.id);
+          } else {
+              if (
+                  this.productsService.selectedProducts && this.productsService.selectedProducts.product_ids
+                  && this.productsService.selectedProducts.product_ids.length
+              ) {
+                  data.product_ids =  this.productsService.selectedProducts.product_ids;
+              }
+
+              data.groups = this.productsService.selectedProducts.groups ;
+          }
       }
       if (name) {
           options.params = options.params.set('name', name);

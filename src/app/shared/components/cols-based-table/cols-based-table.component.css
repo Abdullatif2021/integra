@@ -13,9 +13,9 @@
     display: flex;
     word-break: break-all;
 }
-.expand-label, .expand-value {
+.expand-value {
     flex: 1;
-    width: 50%;
+    margin-left: 6px;
 }
 .row-item.odd {
     background-color: #ffffff;
@@ -86,4 +86,17 @@
 }
 .col-table-content::-webkit-scrollbar {
     width: 4px;
+}
+
+.expanded-row-item-part {
+    padding: 5px;
+    border-left: 2px solid #222222;
+}
+.expand-item {
+    margin-top: 5px;
+}
+.load-more-item {
+    padding: 5px;
+    color: #222222;
+    cursor: pointer;
 }

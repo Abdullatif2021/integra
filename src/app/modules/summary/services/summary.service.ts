@@ -22,4 +22,15 @@ export class SummaryService {
       return <any>this.http.get(AppConfig.endpoints.getSummaryProductsByState, options);
   }
 
+  getProductsByGroupInfo(row, page = 1) {
+      const options = {params: new HttpParams()};
+      options.params = options.params.set('page', `${page}`);
+      options.params = options.params.set('city', row.city.id);
+      options.params = options.params.set('cap', row.cap.id);
+      options.params = options.params.set('category', row.category.id);
+      options.params = options.params.set('customer', row.recipient.id);
+      options.params = options.params.set('agency', row.agency.id);
+      return <any>this.http.get(AppConfig.endpoints.getProductsByGroupInfo, options);
+  }
+
 }

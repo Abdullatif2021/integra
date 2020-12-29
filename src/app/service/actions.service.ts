@@ -16,8 +16,10 @@ export class ActionsService {
       private preDispatchService: PreDispatchService,
       private translate: TranslateService,
   ) { }
+
   actionsChanges = new EventEmitter<number>() ;
   actions = [] ;
+  reload = new EventEmitter<boolean>();
 
   setActions(actions) {
     this.actions = actions ;

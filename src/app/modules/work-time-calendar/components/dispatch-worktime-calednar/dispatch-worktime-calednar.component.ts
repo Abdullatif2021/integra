@@ -11,7 +11,6 @@ export class DispatchWorktimeCalednarComponent implements OnInit {
 
   postmenTableConfig = TablesConfig.simpleTable.postmenTable;
   config = {
-      days: 7,
       icon: '/assets/images/postman-icon.png',
       text: 'name',
       group_name: 'state'

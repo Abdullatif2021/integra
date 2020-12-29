@@ -34,11 +34,11 @@ import {CalenderService} from './service/calender.service';
 import { DispatchAssignComponent } from './modals/dispatch-assign/dispatch-assign.component';
 import { FormsModule } from '@angular/forms';
 import {ProductStatusService} from '../../service/product-status.service';
-import {ActivityCreateService} from './service/activity-create.service';
+import {ActivityCreateService} from '../../parts/activities-part/service/activity-create.service';
 import {NotDeliveredService} from '../../service/not-delivered.service';
-import { CreateNewActivityComponent } from './modals/create-new-activity/create-new-activity.component';
 import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
 import {TranslateModule} from '@ngx-translate/core';
+import {ActivitiesPartModule} from '../../parts/activities-part/activities-part.module';
 
 @NgModule({
   imports: [
@@ -49,7 +49,8 @@ import {TranslateModule} from '@ngx-translate/core';
     NgSelectModule,
     FontAwesomeModule,
     FormsModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    ActivitiesPartModule
   ],
   declarations: [
       ToDeliverComponent,
@@ -71,7 +72,6 @@ import {TranslateModule} from '@ngx-translate/core';
       DispatchDeleteComponent,
       DispatchPrepareComponent,
       DispatchAssignComponent,
-      CreateNewActivityComponent,
   ],
   exports: [
       HomeComponent,
@@ -99,7 +99,6 @@ import {TranslateModule} from '@ngx-translate/core';
       DispatchDeleteComponent,
       DispatchPrepareComponent,
       DispatchAssignComponent,
-      CreateNewActivityComponent,
   ],
 
 })

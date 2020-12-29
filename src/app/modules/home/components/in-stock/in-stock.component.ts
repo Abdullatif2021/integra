@@ -15,7 +15,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {RecipientsService} from '../../../../service/recipients.service';
 import {Router} from '@angular/router';
-import {CreateNewActivityComponent} from '../../modals/create-new-activity/create-new-activity.component';
+import {CreateNewActivityComponent} from '../../../../parts/activities-part/modals/create-new-activity/create-new-activity.component';
 import {CategoriesService} from '../../../../service/categories.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../../shared/directives/modal.directive';

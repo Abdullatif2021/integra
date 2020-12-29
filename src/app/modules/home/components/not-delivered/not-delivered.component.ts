@@ -19,7 +19,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../../shared/directives/modal.directive';
 import {SnotifyService} from 'ng-snotify';
 import { TranslateService } from '@ngx-translate/core';
-import {CreateNewActivityComponent} from '../../modals/create-new-activity/create-new-activity.component';
+import {CreateNewActivityComponent} from '../../../../parts/activities-part/modals/create-new-activity/create-new-activity.component';
 import {SetStatusModalComponent} from '../../../../shared/modals/set-status-modal/set-status-modal.component';
 import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 import {TranslateSelectorService} from '../../../../service/translate-selector-service';

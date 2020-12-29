@@ -11,6 +11,11 @@ import {CustomersService} from '../../../../service/customers.service';
 import {AgenciesService} from '../../../../service/agencies.service';
 import {RecipientsService} from '../../../../service/recipients.service';
 import {CategoriesService} from '../../../../service/categories.service';
+import {CreateNewActivityComponent} from '../../../../parts/activities-part/modals/create-new-activity/create-new-activity.component';
+import {TranslateService} from '@ngx-translate/core';
+import {ActionsService} from '../../../../service/actions.service';
+import {SnotifyService} from 'ng-snotify';
+import {ProductsService} from '../../../../service/products.service';
 
 @Component({
   selector: 'app-summary-view',
@@ -19,6 +24,7 @@ import {CategoriesService} from '../../../../service/categories.service';
 })
 export class SummaryViewComponent implements OnInit, OnDestroy {
   unsubscribe: Subject<void> = new Subject();
+  selectedItems = [] ;
   @ViewChild('table') table: ColsBasedTableComponent;
   tableConfig = {
     cols: [
@@ -28,11 +34,22 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
             text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
                             ${row.cap.name} - ${row.productCount}`,
             selectable: true,
-            expand: [
-                {label: 'Product Count', value: 'productCount'},
-                {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
-            ],
+            expand: {
+                items: 'products',
+                display: (product) => product.barcode,
+                selectable: true,
+                loadMoreMethod: async (row, page, col) => {
+                    const data = await this.summaryService.getProductsByGroupInfo(row, page).toPromise();
+                    if (data.statusCode === 200) {
+                        return data.data ;
+                    } else {
+                        console.log('error');
+                        return [] ;
+                    }
+                }
+            },
             pagination: true,
+            itemId: (item) => `${item.city.id}-${item.cap.id}-${item.category.id}-${item.recipient.id}-${item.agency.id}`,
             load: (page) => this.getProductsByState(page, 'accepted')
         },
         {
@@ -41,11 +58,22 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
             text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
                             ${row.cap.name} - ${row.productCount}`,
             selectable: true,
-            expand: [
-                {label: 'Product Count', value: 'productCount'},
-                {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
-            ],
+            expand: {
+                items: 'products',
+                display: (product) => product.barcode,
+                selectable: true,
+                loadMoreMethod: async (row, page, col) => {
+                    const data = await this.summaryService.getProductsByGroupInfo(row, page).toPromise();
+                    if (data.statusCode === 200) {
+                        return data.data ;
+                    } else {
+                        console.log('error');
+                        return [] ;
+                    }
+                }
+            },
             pagination: true,
+            itemId: (item) => `${item.city.id}-${item.cap.id}-${item.category.id}-${item.recipient.id}-${item.agency.id}`,
             load: (page) => this.getProductsByState(page, 'to_be_delivered')
         },
         {
@@ -54,11 +82,22 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
             text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
                             ${row.cap.name} - ${row.productCount}`,
             selectable: true,
-            expand: [
-                {label: 'Product Count', value: 'productCount'},
-                {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
-            ],
+            expand: {
+                items: 'products',
+                display: (product) => product.barcode,
+                selectable: true,
+                loadMoreMethod: async (row, page, col) => {
+                    const data = await this.summaryService.getProductsByGroupInfo(row, page).toPromise();
+                    if (data.statusCode === 200) {
+                        return data.data ;
+                    } else {
+                        console.log('error');
+                        return [] ;
+                    }
+                }
+            },
             pagination: true,
+            itemId: (item) => `${item.city.id}-${item.cap.id}-${item.category.id}-${item.recipient.id}-${item.agency.id}`,
             load: (page) => this.getProductsByState(page, 'to_be_delivered_1')
         },
         {
@@ -67,11 +106,22 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
             text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
                             ${row.cap.name} - ${row.productCount}`,
             selectable: true,
-            expand: [
-                {label: 'Product Count', value: 'productCount'},
-                {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
-            ],
+            expand: {
+                items: 'products',
+                display: (product) => product.barcode,
+                selectable: true,
+                loadMoreMethod: async (row, page, col) => {
+                    const data = await this.summaryService.getProductsByGroupInfo(row, page).toPromise();
+                    if (data.statusCode === 200) {
+                        return data.data ;
+                    } else {
+                        console.log('error');
+                        return [] ;
+                    }
+                }
+            },
             pagination: true,
+            itemId: (item) => `${item.city.id}-${item.cap.id}-${item.category.id}-${item.recipient.id}-${item.agency.id}`,
             load: (page) => this.getProductsByState(page, 'to_be_delivered_2')
         },
         {
@@ -80,11 +130,22 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
             text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
                             ${row.cap.name} - ${row.productCount}`,
             selectable: true,
-            expand: [
-                {label: 'Product Count', value: 'productCount'},
-                {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
-            ],
+            expand: {
+                items: 'products',
+                display: (product) => product.barcode,
+                selectable: true,
+                loadMoreMethod: async (row, page, col) => {
+                    const data = await this.summaryService.getProductsByGroupInfo(row, page).toPromise();
+                    if (data.statusCode === 200) {
+                        return data.data ;
+                    } else {
+                        console.log('error');
+                        return [] ;
+                    }
+                }
+            },
             pagination: true,
+            itemId: (item) => `${item.city.id}-${item.cap.id}-${item.category.id}-${item.recipient.id}-${item.agency.id}`,
             load: (page) => this.getProductsByState(page, 'to_be_delivered_3')
         },
         {
@@ -93,15 +154,40 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
             text: (row) => `${row.agency.name} - ${row.city.name} - ${row.recipient.name} - ${row.category.name} -
                             ${row.cap.name} - ${row.productCount}`,
             selectable: true,
-            expand: [
-                {label: 'Product Count', value: 'productCount'},
-                {label: 'Barcodes', value: (row) => row.products.map(p => p.barcode).join(',')},
-            ],
+            expand: {
+                items: 'products',
+                display: (product) => product.barcode,
+                selectable: true,
+                loadMoreMethod: async (row, page, col) => {
+                    const data = await this.summaryService.getProductsByGroupInfo(row, page).toPromise();
+                    if (data.statusCode === 200) {
+                        return data.data ;
+                    } else {
+                        console.log('error');
+                        return [] ;
+                    }
+                }
+            },
             pagination: true,
             load: (page) => this.getProductsByState(page, 'not_delivered')
         },
     ],
   };
+
+  actions = [
+      {
+          name: this.translate.instant('home.to_delivered_action.create_one.value'), fields: [
+              { type: 'select', field: 'method', options: [
+                      {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'},
+                      {name: this.translate.instant('home.to_delivered_action.create_one.by_filter'), value: 'filters'}
+                  ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'}
+              }
+          ],
+          before_modal_open: (event) => this.createActivityCheck(event),
+          modal: CreateNewActivityComponent,
+          modalOptions: {size: 'xl'}
+      },
+  ]
 
   data = null ;
 
@@ -114,10 +200,14 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
       private customersService: CustomersService,
       private agenciesService: AgenciesService,
       protected categoriesService: CategoriesService,
+      private translate: TranslateService,
+      private actionsService: ActionsService,
+      private snotifyService: SnotifyService,
+      private productsService: ProductsService
   ) { }
 
   ngOnInit() {
-
+      this.actionsService.setActions(this.actions);
       const filtersConfig = <any>{...FilterConfig.products};
       filtersConfig.default_filters = {
           'grouping': 'show_summary'
@@ -155,6 +245,48 @@ export class SummaryViewComponent implements OnInit, OnDestroy {
              }
          );
       });
+  }
+
+  selectedItemsUpdated(event) {
+     this.selectedItems = event ;
+     this.productsService.selectedProducts = this.getGroupedSelectedItems();
+     this.productsService.selectState = 'groups' ;
+  }
+
+  createActivityCheck(event) {
+      if (event.method === 'selected' && (!this.selectedItems || !this.selectedItems.length)) {
+          this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+          return false;
+      } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
+          this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
+          return false;
+      }
+      return true;
+  }
+
+  getGroupedSelectedItems() {
+      let product_ids = [] ;
+      const groups = [] ;
+      this.selectedItems.forEach(item => {
+          if (item.selected && item.selected.length) {
+              product_ids = product_ids.concat(item.selected);
+          } else {
+              groups.push({
+                  city: item.item.city.id,
+                  cap: item.item.cap.id,
+                  category: item.item.category.id,
+                  customer: item.item.recipient.id,
+                  agency: item.item.agency.id,
+              });
+              if (item.except) {
+                  groups[groups.length - 1].without = item.except ;
+              }
+          }
+      });
+      return {
+          product_ids: product_ids,
+          groups: groups
+      };
   }
 
   ngOnDestroy() {

@@ -26,11 +26,10 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../../shared/directives/modal.directive';
 import {PwsisbsConfirmModalComponent} from '../../modals/pwsisbs-confirm-modal/pwsisbs-confirm-modal.component';
 import {PsbatpdwsiConfirmModalComponent} from '../../modals/psbatpdwsi-confirm-modal/psbatpdwsi-confirm-modal.component';
-import {StreetsLocatingService} from '../../../../service/locating/streets-locating.service';
 import {SnotifyService} from 'ng-snotify';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import { TranslateService } from '@ngx-translate/core';
-import {CreateNewActivityComponent} from '../../modals/create-new-activity/create-new-activity.component';
+import {CreateNewActivityComponent} from '../../../../parts/activities-part/modals/create-new-activity/create-new-activity.component';
 import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
@@ -193,7 +192,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
           this._citiesTable.reload();
       });
       this.actionsService.setActions(this.actions);
-      this.preDispatchActionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
+      this.actionsService.reload.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
           this.loadProducts(false) ;
           this._citiesTable.reload(true);
           this._streetsTable.reload(true);
@@ -279,6 +278,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
 
   selectedItemsChanged(items) {
       this.productsService.selectedProducts = items ;
+      this.productsService.selectState = 'products' ;
   }
 
   openModal(modal, data, options = {}) {

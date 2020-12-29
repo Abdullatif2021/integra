@@ -4,9 +4,9 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {Subject} from 'rxjs';
 import {SnotifyService} from 'ng-snotify';
 import {TranslateSelectorService} from '../../../../service/translate-selector-service';
-import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ActivityCreateService} from '../../service/activity-create.service';
+import {ActionsService} from '../../../../service/actions.service';
 
 @Component({
   selector: 'app-create-new-activity',
@@ -39,7 +39,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       private activityCreateService: ActivityCreateService,
       private snotifyService: SnotifyService,
       private translateSelectorService: TranslateSelectorService,
-      private preDispatchActionsService: PreDispatchActionsService,
+      private actionsService: ActionsService,
       private modalService: NgbModal,
   ) {
     super();
@@ -153,7 +153,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
                   this.saving = false ;
                   this.snotifyService.success('Activity Created Successfully', { showProgressBar: false, timeout: 4000 });
                   modal.close();
-                  this.preDispatchActionsService.reloadData.emit(true);
+                  this.actionsService.reload.emit(true);
                   return ;
               }
               this.saving = false ;
@@ -405,14 +405,14 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       if (do_delete && this.activityId) {
           this.activityCreateService.deleteActivity(this.activityId).subscribe(
               data => {
-                  this.preDispatchActionsService.reloadData.emit(true);
+                  this.actionsService.reload.emit(true);
               },
               error => {
                   console.log(error);
               }
           );
       } else {
-          this.preDispatchActionsService.reloadData.emit(true);
+          this.actionsService.reload.emit(true);
       }
       this.modalService.dismissAll();
   }

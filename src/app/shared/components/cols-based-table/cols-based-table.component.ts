@@ -9,16 +9,12 @@ export class ColsBasedTableComponent implements OnInit, OnChanges {
 
   @Input() config ;
   @Input() data = {};
-
-  selected = {} ;
-  all_selected_items = [] ;
-
   @Output() select = new EventEmitter();
   @Output() expand = new EventEmitter();
   @Output() minimize = new EventEmitter();
   @Output() loadMore = new EventEmitter();
   loading = {} ;
-
+  selected = [];
   constructor() { }
 
   ngOnInit() {
@@ -64,31 +60,90 @@ export class ColsBasedTableComponent implements OnInit, OnChanges {
       });
   }
 
-  selectItem(col, item) {
-    item.selected = !item.selected ;
-    if (item.selected) {
-        this.all_selected_items.push(item);
-        if (!this.selected[col.id]) {
-          this.selected[col.id] = [item];
-        } else { this.selected[col.id].push(item); }
-    } else {
-      this.all_selected_items = this.all_selected_items.filter(i => i.id !== item.id && i.__col_id === item.__col_id);
-      this.selected[col.id] = this.selected[col.id].filter(i => i.id !== item.id);
-    }
-    this.select.emit({
-        selected: this.selected,
-        all_selected_items: this.all_selected_items
-    });
+  selectItem(col, row) {
+      row.__selected = !row.__selected ;
+      row.__partially_selected = false ;
+      this.toggleChildesSelect(col, row, row.__selected);
+      this.updateSelected(row, col) ;
+  }
+
+  updateSelected(row, col) {
+      this.selected = this.selected.filter(i => i.id !== row.id);
+      if (row.__selected) {
+          if (row.__partially_selected && col.expand.items && row[col.expand.items]) {
+              this.selected.push({
+                  id: row.id,
+                  item: row,
+                  except: row[col.expand.items].filter( i => !i.__selected).map(i => i.id),
+                  selected: [],
+              });
+          } else {
+              this.selected.push({
+                  id: row.id,
+                  item: row,
+                  except: [],
+                  selected: [],
+              });
+          }
+      } else if (row.__partially_selected && col.expand.items && row[col.expand.items]) {
+          this.selected.push({
+              id: row.id,
+              item: row,
+              except: [],
+              selected: row[col.expand.items].filter( i => i.__selected).map(i => i.id),
+          });
+      }
+      this.select.emit(this.selected);
+  }
+
+  toggleChildesSelect(col, item, state) {
+      if (!col.expand || !col.expand.items || !item[col.expand.items]) {
+          return ;
+      }
+      item[col.expand.items] = item[col.expand.items].map(i => {i.__selected = state; return i ; } ) ;
+  }
+
+  selectSubItem(col, row, item) {
+      item.__selected = !item.__selected ;
+      this.checkIfRowIsPartiallySelected(col, row);
+      this.updateSelected(row, col);
+  }
+
+  checkIfRowIsPartiallySelected(col, row) {
+      if (!col.expand || !col.expand.items || !row[col.expand.items]) {
+          return ;
+      }
+      row.__partially_selected = false ;
+      row[col.expand.items].forEach(item => {
+          if ((row.__selected && !item.__selected) || (item.__selected && !row.__selected)) {
+              row.__partially_selected = true ;
+          }
+      });
+      return row.__partially_selected;
   }
 
   expandItem(col, item) {
-    if (!col.expand) { return ; }
-    item.__expanded = !item.__expanded ;
-    if (item.__expanded) {
-      this.expand.emit({item: item, col: col});
-    } else {
-      this.minimize.emit({item: item, col: col});
-    }
+      if (!col.expand) { return ; }
+      item.__expanded = !item.__expanded ;
+      if (item.__expanded) {
+          this.expand.emit({item: item, col: col});
+      } else {
+          this.minimize.emit({item: item, col: col});
+      }
+  }
+
+  async loadMoreSubItems(col, row) {
+      if (col.expand && typeof col.expand.loadMoreMethod !== 'function' || col.__all_loaded) {
+          return ;
+      }
+      row.__page = row.__page ? row.__page + 1 : 1 ;
+      row.__loading_sub_items = true ;
+      const moreItems = this.parseExpandItems(await col.expand.loadMoreMethod(row, row.__page, col), col, row.__selected) ;
+      row[col.expand.items] = row[col.expand.items].concat(moreItems);
+      if (!moreItems || !moreItems.length) {
+          row.__all_sub_items_loaded = true ;
+      }
+      row.__loading_sub_items = false ;
   }
 
   scrolled(col) {
@@ -127,23 +182,31 @@ export class ColsBasedTableComponent implements OnInit, OnChanges {
 
   parseRow(row, col) {
       row.__col_id = col.id ;
+      row.__col = col ;
+      if (col.itemId) {
+          if (typeof col.itemId === 'function') { row.id = col.itemId(row);
+          } else { row.id = row[col.itemId]; }
+      }
       if (typeof col.text === 'function') {
           row.__text = col.text(row) ;
       } else {
           row.__text = row[col.text] ;
       }
-      if (col.expand) {
-          let expand_id = -1 ;
-          col.expand.forEach(expand => {
-              ++expand_id;
-              expand._id = expand_id;
-              if (typeof expand.value === 'function') {
-                  row[`__expand_${expand_id}`] = expand.value(row);
-              } else {
-                  row[`__expand_${expand_id}`] = row[expand.value];
-              }
-          });
+      if (col.expand && col.expand.items && row[col.expand.items]) {
+          row[col.expand.items] = this.parseExpandItems(row[col.expand.items], col);
       }
+  }
+
+  parseExpandItems(items, col, selected = false) {
+      return items.map((item) => {
+          item.__selected = selected;
+          if (typeof col.expand.display === 'function') {
+              item.__display = col.expand.display(item);
+          } else {
+              item.__display = item[col.expand.display];
+          }
+          return item ;
+      });
   }
 
 }

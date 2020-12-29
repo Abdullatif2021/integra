@@ -5,13 +5,15 @@ import { SummaryRoutingModule } from './summary-routing.module';
 import { SummaryComponent } from './summary.component';
 import {SharedModule} from '../../shared/shared.module';
 import {CoreModule} from '../../core/core.module';
+import {ActivitiesPartModule} from '../../parts/activities-part/activities-part.module';
 
 @NgModule({
   imports: [
     CommonModule,
     SummaryRoutingModule,
     SharedModule,
-    CoreModule
+    CoreModule,
+    ActivitiesPartModule
   ],
   declarations: [SummaryViewComponent, SummaryComponent]
 })
