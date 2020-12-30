@@ -254,7 +254,7 @@
 <!-- Templates -->
 <ng-template #data_set let-data="data" let-more='more' let-day='day' let-klass="klass" let-title="title">
     <div class="data-set occupied-set">
-        <div class="data-set-header">{{title |translate}}</div>
+        <div class="data-set-header">{{title}}</div>
         <div class="data-set-body">
             <ng-container *ngFor="let row of data; let idx = index">
                 <div *ngIf="row.skeleton"><div class="rect-loading-skeleton mt-2 w-90 h-30"></div></div>

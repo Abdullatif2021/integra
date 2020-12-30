@@ -65,9 +65,8 @@
         },
           "operator_prepar":{
             "value": "Operatore che prepara la borsa",
-            "select": "Selezionati",
-            "by_filter": "Secondo i filtri applicati",
-            "remove": "Elimina"
+          "select": "Selezionati",
+          "by_filter": "Secondo i filtri applicati"
              }
         },
         "pre_dispatch_action": {
@@ -454,10 +453,7 @@
           "select_status": "Devi selezionare uno stato",
           "status_req": "Lo stato è obbligatorio",
           "success_massege": "Status changed successfully",
-          "wrong_massege": "Some thing Went wrong",
-          "todo":"fare",
-          "doing":"facendo",
-          "done":"fatto"
+          "wrong_massege": "Some thing Went wrong"
         }
       }
     },

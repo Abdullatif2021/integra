@@ -23,6 +23,7 @@ export class ChangeSubActivityStatusModalComponent extends ModalComponent implem
     confirmed = false ; // the confirmation status, used to check if user had agreed to the warning message.
     unsubscribe: Subject<void> = new Subject(); // used to kill subscriptions.
     stats = [];
+    _title=[];
     selectedStatus = null ;
     selectedItems = [] ;
     selected = [] ;
@@ -94,9 +95,9 @@ export class ChangeSubActivityStatusModalComponent extends ModalComponent implem
     loadStats() {
      
           this.stats = [
-          {title: this.translate.instant('pages.dispatch_view.modals.set_status.todo'), value:'todo'},
-          {title: this.translate.instant('pages.dispatch_view.modals.set_status.doing'), value:'doing'},
-          {title: this.translate.instant('pages.dispatch_view.modals.set_status.done'), value:'done'}
+          {_title: 'pages.dispatch_view.modals.set_status.wrong_massege', value:'todo'},
+          {_title: 'pages.dispatch_view.modals.set_status.wrong_massege', value:'doing'},
+          {_title: 'pages.dispatch_view.modals.set_status.wrong_massege', value:'done'}
         ];  
   }
     confirm() {

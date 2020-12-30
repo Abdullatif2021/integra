@@ -454,10 +454,7 @@
           "select_status": "Devi selezionare uno stato",
           "status_req": "Lo stato è obbligatorio",
           "success_massege": "Status changed successfully",
-          "wrong_massege": "Some thing Went wrong",
-          "todo":"fare",
-          "doing":"facendo",
-          "done":"fatto"
+          "wrong_massege": "Some thing Went wrong"
         }
       }
     },

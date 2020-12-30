@@ -134,7 +134,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
       Object.keys(this.data_sizes).forEach(key => {
           this.data_sizes[key] = new Array(this.data_sizes[key]).fill(0, 0, this.data_sizes[key]);
       });
-      console.log(this.data);
+    //   console.log(this.data);
   }
 
   openEditPostmanNoteModal(event, postman, day) {
@@ -247,7 +247,6 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
 
   resetStatusSelect() {
       this.details.status = null;
-    //   console.log(status)
   }
 
   async addSetNote(event, type) {

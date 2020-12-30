@@ -263,6 +263,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
       } else if (type === 'postman_note') {
           this.details.postmanNotes = [note.data, ...this.details.postmanNotes];
       }
+      console.log(event.file)
   }
 
   async displayedPostman(postman, day, emit = true) {

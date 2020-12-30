@@ -21,7 +21,7 @@
           <div class="col-8 align-self-center">
             <label>{{'pages.dispatch_view.modals.set_status.status_req' | translate}}</label>
             <ng-select [(ngModel)]="selectedStatus">
-              <ng-option *ngFor="let item of stats" [value]="item.value">{{item.title}}</ng-option>
+              <option *ngFor="let item of stats" [value]="item.value">{{item.title}}</option>
             </ng-select>
           </div>
         </div>

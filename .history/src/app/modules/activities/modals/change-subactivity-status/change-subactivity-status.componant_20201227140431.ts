@@ -71,7 +71,7 @@ export class ChangeSubActivityStatusModalComponent extends ModalComponent implem
             let selected = this.data.modalData.selected;
             if (typeof this.data.modalData.selected === 'function') {
                 selected = this.data.modalData.selected();
-                this.filtersService.updateFilters(this.run) ;
+
             }
             this.activityservice.ChangeSubActivityStatus(selected, this.selectedStatus).subscribe(
                 data => {
@@ -93,11 +93,7 @@ export class ChangeSubActivityStatusModalComponent extends ModalComponent implem
     }
     loadStats() {
      
-          this.stats = [
-          {title: this.translate.instant('pages.dispatch_view.modals.set_status.todo'), value:'todo'},
-          {title: this.translate.instant('pages.dispatch_view.modals.set_status.doing'), value:'doing'},
-          {title: this.translate.instant('pages.dispatch_view.modals.set_status.done'), value:'done'}
-        ];  
+          this.stats = ['todo', 'doing', 'done'];  
   }
     confirm() {
         this.confirmed = true ;

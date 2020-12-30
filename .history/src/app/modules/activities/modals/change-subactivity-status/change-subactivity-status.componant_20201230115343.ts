@@ -94,9 +94,9 @@ export class ChangeSubActivityStatusModalComponent extends ModalComponent implem
     loadStats() {
      
           this.stats = [
-          {title: this.translate.instant('pages.dispatch_view.modals.set_status.todo'), value:'todo'},
-          {title: this.translate.instant('pages.dispatch_view.modals.set_status.doing'), value:'doing'},
-          {title: this.translate.instant('pages.dispatch_view.modals.set_status.done'), value:'done'}
+          {title: 'pages.dispatch_view.modals.set_status.wrong_massege', value:'todo'},
+          {title: 'pages.dispatch_view.modals.set_status.wrong_massege', value:'doing'},
+          {title: 'pages.dispatch_view.modals.set_status.wrong_massege', value:'done'}
         ];  
   }
     confirm() {

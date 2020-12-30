@@ -51,7 +51,7 @@ export class DispatchCalenderComponent implements OnInit, OnDestroy {
 
     filter_config = {
         search: (container, sp) => [
-            {type: 'text    ', label: this.translate.instant('home.modules.dispatch_calender.name'), key: 'name'},
+            {type: 'text', label: this.translate.instant('home.modules.dispatch_calender.name'), key: 'name'},
             {type: 'ng-select', label: this.translate.instant('home.modules.dispatch_calender.agency'),
              key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name'},
             {type: 'text', label: this.translate.instant('home.modules.dispatch_calender.productTypeName'),

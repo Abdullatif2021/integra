@@ -247,7 +247,6 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
 
   resetStatusSelect() {
       this.details.status = null;
-    //   console.log(status)
   }
 
   async addSetNote(event, type) {

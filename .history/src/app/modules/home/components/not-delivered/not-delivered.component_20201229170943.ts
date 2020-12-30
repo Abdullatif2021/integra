@@ -152,7 +152,7 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       this.current_streets = event ;
       this.loadProducts(true);
       this.filtersService.setSpecialFilter('streets', event);
-      console.log(event);
+    //   console.log(event);
   }
 
   loadProducts(reset: boolean) {

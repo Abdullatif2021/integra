@@ -455,9 +455,9 @@
           "status_req": "Lo stato è obbligatorio",
           "success_massege": "Status changed successfully",
           "wrong_massege": "Some thing Went wrong",
-          "todo":"fare",
-          "doing":"facendo",
-          "done":"fatto"
+          "todo":"To do",
+          "doing":"Doing",
+          "done":"Done"
         }
       }
     },

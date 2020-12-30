@@ -152,7 +152,6 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       this.current_streets = event ;
       this.loadProducts(true);
       this.filtersService.setSpecialFilter('streets', event);
-      console.log(event);
   }
 
   loadProducts(reset: boolean) {
@@ -223,7 +222,6 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
               return ;
           }
           const promise = this.streetsService.renameStreet(event.item, event.inputValue);
-          console.log(event.item)
           this.snotifyService.async('Re-localizza', promise, { showProgressBar: true, timeout: 4000 });
           return ;
       }

@@ -255,13 +255,19 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
           return ;
       }
       const note = await this.setNoteUpdateMethod(event.text, type, this.displayed_postman, event.file);
+      console.log(event.file)
+
       if (!note) {
           return ;
       }
       if (type === 'internal_note') {
           this.details.internalNotes = [note.data, ...this.details.internalNotes];
+          console.log(event.file)
+
       } else if (type === 'postman_note') {
           this.details.postmanNotes = [note.data, ...this.details.postmanNotes];
+          console.log(event.file)
+
       }
   }
 
