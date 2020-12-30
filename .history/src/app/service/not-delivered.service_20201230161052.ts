@@ -19,8 +19,10 @@ export class NotDeliveredService {
         private filtersService: FiltersService,
         private paginationService: PaginationService,
 
-    ) {}
+    ) {
+    }
 
+    // .map(p => p.id)
     selectedProducts = [];
     selectAllOnLoadEvent = new EventEmitter() ;
      setSelectedProducts(products) {
@@ -30,7 +32,13 @@ export class NotDeliveredService {
      getSelectedProducts() {
         return this.selectedProducts.map(p => p.id);
     }
-
+    //  updateProductsStatusByProducts(products, status) {
+    //     const options = {
+    //         status: status,
+    //         product_ids: products.id,
+    //     };
+    //     return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, options);
+    // }
     getNotDeliverProducts(cities, streets, order_field = null, order_method = '1') {
         const options = { params: new HttpParams()
                 .set('page', this.paginationService.current_page)

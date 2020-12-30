@@ -1,9 +1,7 @@
-
 import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { CitiesService } from '../../../../service/cities.service';
 import { TablesConfig } from '../../../../config/tables.config';
 import {StreetsService} from '../../../../service/streets.service';
-import {ProductsService} from '../../../../service/products.service';
 import {PaginationService} from '../../../../service/pagination.service';
 import {ApiResponseInterface} from '../../../../core/models/api-response.interface';
 import {FiltersService} from '../../../../service/filters.service';
@@ -11,28 +9,30 @@ import {TableComponent} from '../../../../shared/components/table/table.componen
 import {ActionsService} from '../../../../service/actions.service';
 import {SimpleTableComponent} from '../../../../shared/components/simple-table/simple-table.component';
 import {FilterConfig} from '../../../../config/filters.config';
+import {NotDeliveredService} from '../../../../service/not-delivered.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {RecipientsService} from '../../../../service/recipients.service';
-import {Router} from '@angular/router';
-import {CreateNewActivityComponent} from '../../modals/create-new-activity/create-new-activity.component';
+import {PreloadingStrategy , Router} from '@angular/router';
 import {CategoriesService} from '../../../../service/categories.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../../shared/directives/modal.directive';
 import {SnotifyService} from 'ng-snotify';
 import { TranslateService } from '@ngx-translate/core';
+import {CreateNewActivityComponent} from '../../modals/create-new-activity/create-new-activity.component';
 import {SetStatusModalComponent} from '../../../../shared/modals/set-status-modal/set-status-modal.component';
 import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 import {TranslateSelectorService} from '../../../../service/translate-selector-service';
-import { InStockService } from './../../../../service/in-stock.service';
-@Component({
-  selector: 'app-in-stock',
-  templateUrl: './in-stock.component.html',
-  styleUrls: ['./in-stock.component.css']
-})
-export class InStockComponent implements OnInit, OnDestroy {
+import {ProductsService} from '../../../../service/products.service';
 
-  instockTable = TablesConfig.table.instockTable ;
+@Component({
+  selector: 'app-not-delivered',
+  templateUrl: './not-delivered.component.html',
+  styleUrls: ['./not-delivered.component.css']
+})
+export class NotDeliveredComponent implements OnInit, OnDestroy {
+
+  notDeliveredTable = TablesConfig.table.notDeliveredTable ;
   citiesTable = TablesConfig.simpleTable.citiesTable ;
   streetsTable = TablesConfig.simpleTable.streetsTable ;
   products: any ;
@@ -59,13 +59,14 @@ export class InStockComponent implements OnInit, OnDestroy {
                 ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'}
             }
         ],
-        before_modal_open: (event) => this.SelectedCheck(event),
+        before_modal_open: (event) => this.createActivityCheck(event),
         modal: CreateNewActivityComponent,
         modalOptions: {size: 'xl'}
     },
     
+    
+    
     {
-
         name: this.translate.instant('home.modals.not_delivered_actions.action_name'), fields: [
             { type: 'select', field: 'method', options: [
                     {name: this.translate.instant('home.modals.not_delivered_actions.selected'), value: 'selected'},
@@ -73,38 +74,38 @@ export class InStockComponent implements OnInit, OnDestroy {
                 ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ],
-        before_modal_open: (event) => this.SelectedCheck(event),
+        before_modal_open: (event) => this.createActivityCheck(event),
         modal: SetStatusModalComponent,
         modalData: {
-            selected: () => this.instockservice.getSelectedProducts(),
-            state: 'in_stock' }
+            selected: () => this.notdeliveredService.getSelectedProducts(),
+            state: 'not_delivered' }
  }];
 
-  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getInStockCities(page, rpp, name, order);
-  streetsGetMethod = (page, rpp, name, order) => this.streetsService.getInStockStreets(page, rpp, name, this.current_cities, order);
+  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getNotDeliveredCities(page, rpp, name, order);
+  streetsGetMethod = (page, rpp, name, order) => this.streetsService.getNotDeliveredStreets(page, rpp, name, this.current_cities, order);
 
   constructor(
       private citiesService: CitiesService,
       private streetsService: StreetsService,
-      private productsService: ProductsService,
       private paginationService: PaginationService,
       private filtersService: FiltersService,
+      private productsService: ProductsService,
       private integraaModalService: IntegraaModalService,
       private actionsService: ActionsService,
       protected recipientsService: RecipientsService,
+      private notdeliveredService: NotDeliveredService,
       protected categoriesService: CategoriesService,
       private componentFactoryResolver: ComponentFactoryResolver,
       private modalService: NgbModal,
       private snotifyService: SnotifyService,
       private router: Router,
-      private instockservice: InStockService,
       private translate: TranslateService,
       private translateSelectorService: TranslateSelectorService,
       ) {
       this.translateSelectorService.setDefaultLanuage();
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
-  }
+      }
 
   ngOnInit() {
       this.citiesTable.title = this.translate.instant('table_config.simpletable.cities_table.value');
@@ -133,10 +134,10 @@ export class InStockComponent implements OnInit, OnDestroy {
           this._citiesTable.reload();
       });
       this.actionsService.setActions(this.actions);
-      this.productsService.selectAllOnLoadEvent.pipe(takeUntil(this.unsubscribe)).subscribe((state: boolean) => {
+      this.notdeliveredService.selectAllOnLoadEvent.pipe(takeUntil(this.unsubscribe)).subscribe((state: boolean) => {
           this.selectAllOnLoad = state ;
       });
-      this.filtersService.setFields(FilterConfig.instock, this);
+      this.filtersService.setFields(FilterConfig.notdelivered, this);
   }
 
   cityChanged(event) {
@@ -152,6 +153,7 @@ export class InStockComponent implements OnInit, OnDestroy {
       this.current_streets = event ;
       this.loadProducts(true);
       this.filtersService.setSpecialFilter('streets', event);
+      console.log(event);
   }
 
   loadProducts(reset: boolean) {
@@ -170,7 +172,7 @@ export class InStockComponent implements OnInit, OnDestroy {
           this.paginationService.updateLoadingState(true);
           this._productsTable.resetSelected();
       }
-      this.subscription = this.instockservice.getInStockProducts(
+      this.subscription = this.notdeliveredService.getNotDeliverProducts(
           this.current_cities,
           this.current_streets,
           this.order_field,
@@ -188,25 +190,14 @@ export class InStockComponent implements OnInit, OnDestroy {
       });
   }
 
-  createActivityCheck(event) {
-    if (event.method === 'selected' && !this.instockservice.selectedProducts.length) {
-        this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'), { showProgressBar: false, timeout: 2000 });
-        return false;
-    } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
-        this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'), { showProgressBar: false, timeout: 2000 });
-        return false;
-    }
-    return true;
-}
-
   changeOrder(event) {
         this.order_field = event.field;
         this.order_method = event.order === 'DESC' ? '1' : '2';
         this.loadProducts(false);
   }
 
-   selectedItemsChanged(items) {
-    this.instockservice.selectedProducts = items ;
+  selectedItemsChanged(product) {
+    this.productsService.selectedProducts = product.push() ;
 
   }
 
@@ -233,11 +224,11 @@ export class InStockComponent implements OnInit, OnDestroy {
               return ;
           }
           const promise = this.streetsService.renameStreet(event.item, event.inputValue);
+          console.log(event.item)
           this.snotifyService.async('Re-localizza', promise, { showProgressBar: true, timeout: 4000 });
           return ;
       }
   }
-
   showLogModal(elm) {
     this.integraaModalService.open(`/pages/product/${elm.id}/log`,
         {width: 1000, height: 600, title: `Log: ${elm.barcode}`}, {});
@@ -245,7 +236,7 @@ export class InStockComponent implements OnInit, OnDestroy {
         }
 
   createActivity(event) {
-      if (event.method === 'selected' && !this.instockservice.selectedProducts.length) {
+      if (event.method === 'selected' && !this.notdeliveredService.selectedProducts.length) {
           return this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'),
            { showProgressBar: false, timeout: 2000 });
       } else if (event.method === 'filters' && !Object.keys(this.filtersService.filters).length
@@ -253,19 +244,22 @@ export class InStockComponent implements OnInit, OnDestroy {
           return this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'),
            { showProgressBar: false, timeout: 2000 });
       }
-      this.router.navigate(['in-stock/activities']);
+      this.router.navigate(['not-delivered/activities']);
   }
-  SelectedCheck(event) {
-    if (event.method === 'selected' && !this.instockservice.selectedProducts.length) {
+
+  createActivityCheck(event) {
+    if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
         this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
         return false;
     } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
         this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
         return false;
     }
+    console.log(event)
     return true;
    
 }
+
   ngOnDestroy() {
       this.unsubscribe.next();
       this.unsubscribe.complete();

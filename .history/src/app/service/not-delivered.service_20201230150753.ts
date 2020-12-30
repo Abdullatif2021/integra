@@ -19,18 +19,28 @@ export class NotDeliveredService {
         private filtersService: FiltersService,
         private paginationService: PaginationService,
 
-    ) {}
+    ) {
+    }
+    product_ids=[];
 
+    // .map(p => p.id)
     selectedProducts = [];
     selectAllOnLoadEvent = new EventEmitter() ;
      setSelectedProducts(products) {
          this.selectedProducts = products.id;
      }
-   
-     getSelectedProducts() {
-        return this.selectedProducts.map(p => p.id);
+    getSelectedProducts() {
+        
+        this.product_ids = this.selectedProducts.map(p => p.id);
+        return this.product_ids;
     }
-
+     updateProductsStatusByProducts(products, status) {
+        const options = {
+            status: status,
+            product_ids: products.id,
+        };
+        return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, options);
+    }
     getNotDeliverProducts(cities, streets, order_field = null, order_method = '1') {
         const options = { params: new HttpParams()
                 .set('page', this.paginationService.current_page)

@@ -379,7 +379,7 @@ export const FilterConfig = {
 
 
     subactivity: {
-        search: (sp) => [
+        search: (container, sp) => [
         {type: 'ng-select', label: 'filter_config.products.search.client', key: 'customerId',
          items:  sp.filters_data.customers, labelVal: 'name'},
             {type: 'text', label: 'filter_config.subactivity.search.sub_name', key: 'customerName'},
@@ -430,5 +430,68 @@ export const FilterConfig = {
         ],
        
     },
+    // subactivity: {
+    //     search: (container, sp) => [
+    //     {type: 'ng-select', label: 'filter_config.products.search.client', key: 'customerId',
+    //      items:  sp.filters_data.customers, labelVal: 'name'},
+    //         {type: 'text', label: 'filter_config.products.search.client_name', key: 'customerName'},
+    //         {type: 'text', label: 'filter_config.products.search.postal_distinction', key: 'dispatchCode'},
+    //         {type: 'text', label: 'filter_config.products.search.bar_code', key: 'barcode'},
+    //         {type: 'text', label: 'filter_config.products.search.act_code', key: 'actCode'},
+    //         {type: 'text', label: 'filter_config.products.search.recipient_name', key: 'recipientName'},
+    //         {type: 'ng-select', label: 'filter_config.products.search.address', key: 'recipientId', labelVal: 'name',
+    //             getMethod: (term) => container.recipientsService.getRecipientsByName(term), items: sp.filters_data.recipient},
+        
+    //         {type: 'ng-select', label: 'filter_config.products.search.category',
+    //          key: 'categoryId', items: sp.filters_data.categories, labelVal: 'name'},
+    //         {type: 'ng-select', label: 'filter_config.products.search.agency',
+    //          key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name'},
+    //         {type: 'ng-select', label: 'filter_config.products.search.product_type',
+    //          key: 'typeId', items: sp.filters_data.products_type, labelVal: 'type'},
+    //         {type: 'text', label: 'filter_config.products.search.note', key: 'note'}
+    //     ],
+    //     filters: (container, sp) => [
+    //         {type: 'simpleText', label: 'filter_config.products.filter.Customer_name', key: 'customerName', value: ''},
+    //         {type: 'auto-complete', label: 'filter_config.products.filter.client', key: 'customerId',
+    //             getMethod: (term) => container.customersService.getCustomersByName(term),
+    //             items:  sp.filters_data.customers, labelVal: 'name', value: '', _class: 'auto-complete'},
+
+           
+    //         {type: 'auto-complete', label: 'filter_config.products.filter.category', key: 'categoryId', items: sp.filters_data.categories,
+    //             labelVal: 'name', value: '', getMethod: (term) => container.categoriesService.getCategoriesByName(term),
+    //             _class: 'auto-complete'},
+    //         {type: 'simpleText', label: 'filter_config.products.filter.recipient_name', key: 'recipientName', value: ''},
+    //         {type: 'auto-complete', label: 'filter_config.products.filter.address', key: 'recipientId', labelVal: 'name',
+    //             getMethod: (term) => container.recipientsService.getRecipientsByName(term),
+    //             items: sp.filters_data.recipient, _class: 'auto-complete'},
+    //         {type: 'auto-complete', label: 'filter_config.products.filter.recipient_postal_code',
+    //          key: 'recipientCap', items: sp.filters_data.caps_group,
+    //             labelVal: 'name', getMethod: (term) => container.recipientsService.getCapCity(term), _class: 'auto-complete'},
    
+    //         {type: 'ng-select', label: 'filter_config.products.filter.street_location.value', labelVal: 'name', key: 'fixed',
+    //             items: [
+    //                 {name: 'filter_config.products.filter.street_location.value', id: 'null'},
+    //                 {name: 'filter_config.products.filter.street_location.localize', id: '1'},
+    //                 {name: 'filter_config.products.filter.street_location.all', id: '0'}]
+    //             , unclearbale: true,
+    //             selectedAttribute: {name: 'filter_config.products.filter.street_location.localize', id: 'null'}},
+    //         {type: ['date', 'date'], label: 'filter_config.products.filter.date_time', group: true, key: ['fromDate', 'toDate']},
+    //         {type: 'simpleText', label: 'filter_config.products.filter.article_law', key: 'articleLawName'},
+    //         {type: ['date', 'date'], label: 'filter_config.products.filter.article_law_date',
+    //         group: true, key: ['fromArticleLawDate', 'toArticleLawDate']},
+    //         {type: ['date', 'date'], label: 'filter_config.products.filter.acceptance_date',
+    //          group: true, key: ['fromAcceptanceDate', 'toAcceptanceDate']},
+    //         {type: 'simpleText', label: 'filter_config.products.filter.activity.value', key: '', value: ''},
+    //         {type: 'ng-select', label: 'filter_config.products.filter.activity.select_value', labelVal: 'name', key: 'activityState',
+    //         items: [
+    //             {name: 'filter_config.products.filter.activity.all', id: 'null'},
+    //             {name: 'filter_config.products.filter.activity.have', id: '1'},
+    //             {name: 'filter_config.products.filter.activity.not_have', id: '0'}]
+    //         , unclearbale: true,
+    //         selectedAttribute: {name: 'filter_config.products.filter.activity.all', id: 'null'}},
+
+    //     ],
+    //     grouping: false,
+    //     default_filters: {'grouping': 'by_cap', 'fixed': 'null'}
+    // },
 };

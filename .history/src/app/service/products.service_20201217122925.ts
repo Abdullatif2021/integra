@@ -10,7 +10,7 @@ import {PaginationService} from './pagination.service';
 @Injectable({
   providedIn: 'root'
 })
-export class InStockService {
+export class ProductsService {
 
   constructor(
       private http: HttpClient,
@@ -24,13 +24,20 @@ export class InStockService {
        this.selectedProducts = products.id;
    }
    getSelectedProducts() {
-    return this.selectedProducts.map((product) => product.id );
+      return this.selectedProducts;
   }
-  getInStockProducts(cities, streets, order_field = null, order_method = '1') {
+   updateProductsStatusByProducts(products, status) {
+      const options = {
+          status: status,
+          product_ids: products.id,
+      };
+      return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, options);
+  }
+  getToDeliverProducts(cities, streets, order_field = null, order_method = '1') {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)
               .set('pageSize', this.paginationService.rpp)
-              .set('statusType', 'in_stock')};
+              .set('statusType', 'to_be_delivered')};
       const citiesType = this.filtersService.getGrouping();
       if (citiesType === 'by_client') {
           options.params = options.params.set('by_clients_Filter', '1');
@@ -82,6 +89,19 @@ export class InStockService {
       );
   }
 
+
+  getPreDispatchProducts(id) {
+      const options = { params: new HttpParams()
+              .set('page', this.paginationService.current_page)
+              .set('pageSize', this.paginationService.rpp)
+              .set('pre_dispatch_id', id)
+      };
+      options.params = this.filtersService.getHttpParams(options.params) ;
+      return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getPreDispatchProducts, options).pipe(
+          catchError(this.handleError)
+      );
+  }
+
   selectAllOnLoad(val) {
       this.selectAllOnLoadEvent.emit(val);
   }
@@ -93,7 +113,7 @@ export class InStockService {
           on_create: on_create,
           page: page,
           per_page: per_page,
-      };
+      }
       return this.http.post<ApiResponseInterface>(AppConfig.endpoints.getProductByCategory, options);
   }
   handleError(error: HttpErrorResponse) {

@@ -189,7 +189,7 @@ export class InStockComponent implements OnInit, OnDestroy {
   }
 
   createActivityCheck(event) {
-    if (event.method === 'selected' && !this.instockservice.selectedProducts.length) {
+    if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
         this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'), { showProgressBar: false, timeout: 2000 });
         return false;
     } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
@@ -245,7 +245,7 @@ export class InStockComponent implements OnInit, OnDestroy {
         }
 
   createActivity(event) {
-      if (event.method === 'selected' && !this.instockservice.selectedProducts.length) {
+      if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
           return this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'),
            { showProgressBar: false, timeout: 2000 });
       } else if (event.method === 'filters' && !Object.keys(this.filtersService.filters).length

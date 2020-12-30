@@ -26,6 +26,13 @@ export class InStockService {
    getSelectedProducts() {
     return this.selectedProducts.map((product) => product.id );
   }
+   updateProductsStatusByProducts(products, status) {
+      const options = {
+          status: status,
+          product_ids: products.id,
+      };
+      return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, options);
+  }
   getInStockProducts(cities, streets, order_field = null, order_method = '1') {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)
