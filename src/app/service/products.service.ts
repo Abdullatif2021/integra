@@ -37,6 +37,7 @@ export class ProductsService {
       };
       return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, options);
   }
+
   getToDeliverProducts(cities, streets, order_field = null, order_method = '1') {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)

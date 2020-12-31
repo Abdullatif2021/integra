@@ -23,7 +23,6 @@ import {CreateNewActivityComponent} from '../../../../parts/activities-part/moda
 import {SetStatusModalComponent} from '../../../../shared/modals/set-status-modal/set-status-modal.component';
 import {IntegraaModalService} from '../../../../service/integraa-modal.service';
 import {TranslateSelectorService} from '../../../../service/translate-selector-service';
-import {ProductsService} from '../../../../service/products.service';
 
 @Component({
   selector: 'app-not-delivered',
@@ -74,6 +73,7 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
                 ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ],
+        before_modal_open: (event) => this.createActivityCheck(event),
         modal: SetStatusModalComponent,
         modalData: {
             selected: () => this.notdeliveredService.getSelectedProducts(),
@@ -88,7 +88,6 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       private streetsService: StreetsService,
       private paginationService: PaginationService,
       private filtersService: FiltersService,
-      private productsService: ProductsService,
       private integraaModalService: IntegraaModalService,
       private actionsService: ActionsService,
       protected recipientsService: RecipientsService,
@@ -152,6 +151,7 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
       this.current_streets = event ;
       this.loadProducts(true);
       this.filtersService.setSpecialFilter('streets', event);
+      console.log(event);
   }
 
   loadProducts(reset: boolean) {
@@ -194,9 +194,9 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
         this.loadProducts(false);
   }
 
-  selectedItemsChanged(items) {
-    this.productsService.selectedProducts = items ;
-
+  selectedItemsChanged(product) {
+    this.notdeliveredService.selectedProducts = product ;
+    console.log(product);
   }
 
   getCategoriesByName(name) {
@@ -222,6 +222,7 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
               return ;
           }
           const promise = this.streetsService.renameStreet(event.item, event.inputValue);
+          console.log(event.item)
           this.snotifyService.async('Re-localizza', promise, { showProgressBar: true, timeout: 4000 });
           return ;
       }
@@ -245,15 +246,18 @@ export class NotDeliveredComponent implements OnInit, OnDestroy {
   }
 
   createActivityCheck(event) {
-    if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
+    if (event.method === 'selected' && !this.notdeliveredService.selectedProducts.length) {
         this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
         return false;
     } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
         this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
         return false;
     }
+    console.log(event)
     return true;
+   
 }
+
   ngOnDestroy() {
       this.unsubscribe.next();
       this.unsubscribe.complete();

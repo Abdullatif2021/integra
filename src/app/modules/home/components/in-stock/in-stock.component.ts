@@ -59,7 +59,7 @@ export class InStockComponent implements OnInit, OnDestroy {
                 ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'}
             }
         ],
-        before_modal_open: (event) => this.createActivityCheck(event),
+        before_modal_open: (event) => this.SelectedCheck(event),
         modal: CreateNewActivityComponent,
         modalOptions: {size: 'xl'}
     },
@@ -73,6 +73,7 @@ export class InStockComponent implements OnInit, OnDestroy {
                 ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ],
+        before_modal_open: (event) => this.SelectedCheck(event),
         modal: SetStatusModalComponent,
         modalData: {
             selected: () => this.instockservice.getSelectedProducts(),
@@ -188,11 +189,11 @@ export class InStockComponent implements OnInit, OnDestroy {
   }
 
   createActivityCheck(event) {
-    if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
-        this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+    if (event.method === 'selected' && !this.instockservice.selectedProducts.length) {
+        this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'), { showProgressBar: false, timeout: 2000 });
         return false;
     } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
-        this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
+        this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'), { showProgressBar: false, timeout: 2000 });
         return false;
     }
     return true;
@@ -205,7 +206,7 @@ export class InStockComponent implements OnInit, OnDestroy {
   }
 
    selectedItemsChanged(items) {
-    this.productsService.selectedProducts = items ;
+    this.instockservice.selectedProducts = items ;
 
   }
 
@@ -244,7 +245,7 @@ export class InStockComponent implements OnInit, OnDestroy {
         }
 
   createActivity(event) {
-      if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
+      if (event.method === 'selected' && !this.instockservice.selectedProducts.length) {
           return this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'),
            { showProgressBar: false, timeout: 2000 });
       } else if (event.method === 'filters' && !Object.keys(this.filtersService.filters).length
@@ -254,7 +255,17 @@ export class InStockComponent implements OnInit, OnDestroy {
       }
       this.router.navigate(['in-stock/activities']);
   }
-
+  SelectedCheck(event) {
+    if (event.method === 'selected' && !this.instockservice.selectedProducts.length) {
+        this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+        return false;
+    } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
+        this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
+        return false;
+    }
+    return true;
+   
+}
   ngOnDestroy() {
       this.unsubscribe.next();
       this.unsubscribe.complete();

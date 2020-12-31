@@ -91,11 +91,8 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
-        const filtersConfig = <any>{...FilterConfig.products};
-        filtersConfig.default_filters = { 
-            'grouping': 'show_activities'
-        };
-        this.filtersService.setFields(filtersConfig, this, 'products');
+       
+        this.filtersService.setFields(FilterConfig.subactivity, this, 'products');
         this.filtersService.keep('products');
         this.filtersService.clear('products');
         this.actionsService.setActions(this.actions);
@@ -117,6 +114,7 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
         );
 
         this.loadData();
+        
     }
 
     handleGroupingDisplay(filters) {
@@ -124,7 +122,7 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
             return this.router.navigate(['/summary']);
         }
         if (filters.grouping !== 'show_activities') {
-            return this.router.navigate(['/']);
+            return this.router.navigate(['/activities']);
         }
     }
 
