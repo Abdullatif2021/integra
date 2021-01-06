@@ -49,6 +49,9 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
     ];
     tableConfig = {
         cols: [
+            {title: 'table_config.table.dispatch_table.cols.action', field: false, actions: [
+                // {action: 'calender_view', click: (elm, container) => {container.goToCalender(elm)}}
+            ]},
             {title: 'home.modules.activities.tableConfig.name',
                 field: 'activityName', value: 'name_value', valueDisplayLabel: 'name'},
             {title: 'home.modules.activities.tableConfig.operator',

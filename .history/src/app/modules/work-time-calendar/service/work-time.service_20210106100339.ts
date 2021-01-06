@@ -17,11 +17,10 @@ export class WorkTimeService {
         private filtersService: FiltersService
     ) {}
     selected_Activity = [];
-    items = [] ;
+    items = [];
     
     getSelectedActivity(){
-        const array = this.selected_Activity as any;
-        return array.items;
+        return this.selected_Activity.map(item => item.id);
         
     }
 
