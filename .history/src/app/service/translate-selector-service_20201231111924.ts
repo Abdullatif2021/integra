@@ -12,7 +12,7 @@ export interface FlagLanguage {
 export class TranslateSelectorService {
 
   // currentLang = 'Italy';
-  currentLang = localStorage.getItem('language' || 'It');
+  currentLang = localStorage.getItem('language') || 'It';
   translateService: TranslateService;
 
   setDefaultLanuage() {
@@ -25,7 +25,7 @@ export class TranslateSelectorService {
     localStorage.setItem('language', language);
     this.applyLanguage(this.currentLang);
   }
-  public applyLanguage(language) {
+  private applyLanguage(language) {
     this.translateService.use(language);
   }
   getLanguages() {

@@ -105,7 +105,7 @@ export class DispatchWorktimeCalednarComponent implements OnInit {
     this.filtersService.keep('products');
     this.filtersService.clear('products');
     this.actionsService.setActions(this.actions);
-    this.loadData()
+   this.loadData()
   }
   loadData(){
     this.worktimeservice.getSubActivityCalender( this.calender_current_week ,this.worktimeservice.getSelectedActivity()).pipe(takeUntil(this.unsubscribe)).subscribe(
@@ -118,7 +118,6 @@ export class DispatchWorktimeCalednarComponent implements OnInit {
   }
   changeCalenderWeekIndex(event) {
     this.calender_current_week = event;
-    this.loadData();
 }
 changeActivity(event) {
   this.selected_Activity = event;
