@@ -426,9 +426,11 @@ export const FilterConfig = {
                 {name: 'filter_config.products.filter.activity.done', id: 'done'}]
             , unclearbale: true,
             selectedAttribute: {name: 'filter_config.products.filter.activity.todo', id: 'null'}},
+            
 
         ],
-       
+        grouping: false, 
+        changeViewButton: {icon: '/assets/images/calendar.png', route: ['/dispatch/calender']}
     },
     // subactivity: {
     //     search: (container, sp) => [

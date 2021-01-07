@@ -1,0 +1,64 @@
+<div class="time-based-calendar">
+  <div class="time-based-calendar-header">
+    {{title}} {{('months.' + work_month)| translate}} {{work_year}}
+  </div>
+
+  <div class="time-based-calendar-body">
+
+    <!-- Days Labels -->
+    <div class="tbc-days">
+      <div class="first-day-blank"></div>
+      <ng-container *ngFor="let day of _days; let i = index">
+        <div class="day-col day-label" [ngClass]="{'first-day-col': !i, 'last-day-col': i == 6}">
+          <span class="day-name">{{('days.' + day.split('/').reverse().join('-')) | translate}}</span>
+          <span>{{day + 1}}</span>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Cols Background -->
+    <div class="tbc-main">
+      <div class="tbc-bg">
+        <ng-container *ngFor="let day of _days; let i = index">
+          <div class="day-col bg-col" [ngClass]="{'last-day-col': i == 6}"></div>
+        </ng-container>
+      </div>
+
+      <!-- Actual Data -->
+      <div class="tbc-groups">
+
+        <ng-container *ngFor="let group of data">
+
+          <div class="tbc-group">
+            <div class="tbc-group-name">
+              {{group[config.group_name ? config.group_name : 'name']}}
+            </div>
+
+            <div class="tbc-group-items">
+              <ng-container *ngFor="let item of group.items; let i = index">
+                <div class="item" [ngClass]="{'even': i%2}">
+                  <div class="item-span">
+                    <ng-container *ngFor="let span of item._days_fill; let idx = index">
+                      <div class="item-span-cell empty" *ngIf="!span" [ngClass]="{'first': !idx}"></div>
+                      <div class="item-span-cell filled" *ngIf="span" [ngClass]="{'first': !idx}" ngbTooltip="{{item[config.text]}}" placement="bottom">
+                          <img *ngIf="span == 2 || span > 3" src="{{config.icon}}" class="single-item-icon"/>
+                          <div *ngIf="span == 2 || span > 3" class="single-item-label text-truncate">{{item[config.text]}}</div>
+                          <div *ngIf="span > 2"  class="in-item-group-name text-truncate">{{group[config.group_name ? config.group_name : 'name']}}</div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+        </ng-container>
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
