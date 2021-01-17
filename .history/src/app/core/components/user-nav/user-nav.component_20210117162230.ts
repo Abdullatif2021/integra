@@ -33,4 +33,12 @@ export class UserNavComponent implements OnInit {
     this.selectedLanguageFlag = event.flag;
     this.selectConf.setSelectedLanguage(this.selectedLanguage);
   }
+  reloadLanguage(language: string) {
+    this.translateService.use(language);
+    this.translateService.setDefaultLang(language);
+    const prev = this.router.url;
+    this.router.navigate(['/']).then(data => {
+      this.router.navigate([prev]);
+    });
+  }
 }

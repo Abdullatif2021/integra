@@ -163,7 +163,7 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
     }
     Check(event) {
         if (event.method === 'selected' && !this.activitiesService.selectactivities.length) {
-            this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+            this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'), { showProgressBar: false, timeout: 2000 });
             return false;
         } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
             this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });

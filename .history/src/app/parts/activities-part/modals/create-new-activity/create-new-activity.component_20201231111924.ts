@@ -1,4 +1,3 @@
-import { FiltersService } from './../../../../service/filters.service';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ModalComponent} from '../../../../shared/modals/modal.component';
 import {takeUntil} from 'rxjs/internal/operators';
@@ -39,7 +38,6 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
   constructor(
       private activityCreateService: ActivityCreateService,
       private snotifyService: SnotifyService,
-      private filtersService: FiltersService,
       private translateSelectorService: TranslateSelectorService,
       private actionsService: ActionsService,
       private modalService: NgbModal,
@@ -156,7 +154,6 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
                   this.snotifyService.success('Activity Created Successfully', { showProgressBar: false, timeout: 4000 });
                   modal.close();
                   this.actionsService.reload.emit(true);
-                  this.filtersService.updateFilters(this.saveActivity) ;
                   return ;
               }
               this.saving = false ;

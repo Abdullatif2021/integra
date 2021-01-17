@@ -177,5 +177,6 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
     
     selectedItemsChanged(items) {
         this.activitiesService.selectactivities = items ;
+        console.log(items)
     }
 }

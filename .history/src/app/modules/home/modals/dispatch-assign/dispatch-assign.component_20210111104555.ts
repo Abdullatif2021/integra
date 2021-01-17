@@ -25,7 +25,7 @@ export class DispatchAssignComponent extends ModalComponent implements OnInit, O
     selected = null ;
     error = null ;
     confirmed = false;
-
+    
     constructor(
         private filtersService: FiltersService,
         private paginationService: PaginationService,
@@ -75,6 +75,7 @@ export class DispatchAssignComponent extends ModalComponent implements OnInit, O
         this.dispatchActionsService.assignToUser(this.data.method, this.selected.id, this.items ? this.items.map(item => item.id) : null);
         modal.close();
     }
+
 
     ngOnDestroy() {
         this.unsubscribe.next();

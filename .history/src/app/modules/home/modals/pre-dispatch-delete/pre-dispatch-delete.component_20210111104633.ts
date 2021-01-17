@@ -40,6 +40,8 @@ export class PreDispatchDeleteComponent extends ModalComponent implements OnInit
             this.items = this.preDispatchService.selectedPreDispatches;
         }
     }
+
+
     
     async run(modal, confirmModal, hasSomeRunningItemsModal) {
         const ids = [];

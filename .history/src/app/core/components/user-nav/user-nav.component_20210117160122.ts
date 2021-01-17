@@ -1,6 +1,8 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateSelectorService } from '../../../service/translate-selector-service';
+
 @Component({
   selector: 'app-user-nav',
   templateUrl: './user-nav.component.html',
@@ -12,7 +14,7 @@ export class UserNavComponent implements OnInit {
   selectedLanguageFlag = '';
   selectflag = [];
 
-  constructor(private translate: TranslateService, selectConf: TranslateSelectorService) {
+  constructor(private translateService: TranslateService, selectConf: TranslateSelectorService, private router: Router) {
     this.selectConf = selectConf;
     this.selectConf.setUpConf();
 
@@ -33,4 +35,5 @@ export class UserNavComponent implements OnInit {
     this.selectedLanguageFlag = event.flag;
     this.selectConf.setSelectedLanguage(this.selectedLanguage);
   }
+
 }

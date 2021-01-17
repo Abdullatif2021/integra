@@ -33,4 +33,5 @@ export class UserNavComponent implements OnInit {
     this.selectedLanguageFlag = event.flag;
     this.selectConf.setSelectedLanguage(this.selectedLanguage);
   }
+
 }

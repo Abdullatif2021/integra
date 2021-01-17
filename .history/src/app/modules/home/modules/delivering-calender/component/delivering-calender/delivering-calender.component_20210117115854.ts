@@ -138,11 +138,11 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     calenderRevisorGetMethod = (page, rpp, name, order) => {
         return this.subViewType === 'week' ?
             this.dispatchService.getCalenderWeeklyPostmen(
-                page, rpp, name, order, this.calender_current_week, 'PREAPERED', this.loadDate, this.translate.instant
+                page, rpp, name, order, this.calender_current_week, 'NOT_PREAPERED', this.loadDate, this.translate.instant
                 ('home.modules.delivering_calender.revisore')
             ) :
             this.dispatchService.getCalenderDailyPostmen(
-                page, rpp, name, order, this.calender_current_day, 'PREAPERED', this.loadDate, this.translate.instant
+                page, rpp, name, order, this.calender_current_day, 'NOT_PREAPERED', this.loadDate, this.translate.instant
                 ('home.modules.delivering_calender.revisore')
             );
     }

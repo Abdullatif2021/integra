@@ -1,4 +1,3 @@
-import { SnotifyService } from 'ng-snotify';
 import {Component, ComponentFactoryResolver, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {TablesConfig} from '../../../../config/tables.config';
 import {ApiResponseInterface} from '../../../../core/models/api-response.interface';
@@ -36,9 +35,9 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   @ViewChild('imodal') imodal ;
   @ViewChild(ModalDirective) modalHost: ModalDirective;
   actions = [
-      {name: this.translate.instant('home.to_delivered_action.create_one.value'),before_modal_open: (event) => this.SelectedCheck(event), modal: PreDispatchMergeComponent},
-      {name: this.translate.instant('home.pre_dispatch_action.remove'),before_modal_open: (event) => this.SelectedCheck(event), modal: PreDispatchDeleteComponent, modalOptions: {}},
-            ] ;
+      {name: this.translate.instant('home.to_delivered_action.create_one.value'), modal: PreDispatchMergeComponent},
+      {name: this.translate.instant('home.pre_dispatch_action.remove'), modal: PreDispatchDeleteComponent, modalOptions: {}},
+  ] ;
   unsubscribe: Subject<void> = new Subject();
   order_field = null ;
   order_method = '1' ;
@@ -54,7 +53,6 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
       private componentFactoryResolver: ComponentFactoryResolver,
       private modalService: NgbModal,
       public router: Router,
-      private snotifyService: SnotifyService,
       public backProcessingService: BackProcessingService,
       public preDispatchGlobalActionsService: PreDispatchGlobalActionsService,
       private translate: TranslateService,
@@ -142,18 +140,6 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
           {location: 'schedule', id: elm.id}
           );
   }
-  SelectedCheck(event) {
-    if (event.method === 'selected' && !this.preDispatchService.selectedPreDispatches.length) {
-        this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'), { showProgressBar: false, timeout: 2000 });
-        return false;
-    } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
-        this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'), { showProgressBar: false, timeout: 2000 });
-        return false;
-    }
-    console.log(event)
-    return true;
-   
-}
 
   openAddProductsModal(elm) {
       this.integraaModalService.open(

@@ -76,7 +76,6 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
           this.selected = [...this.list];
           this.list.forEach(item => item.selected = true );
       }
-      console.log(this.selected);
   }
 
   onDrop(event, item) {

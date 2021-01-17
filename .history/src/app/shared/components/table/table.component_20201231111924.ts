@@ -91,7 +91,6 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
             this.selectedProducts = this.items ;
         }
         this.selected.emit(this.selectedProducts);
-        console.log(this.selectedProducts)
     }
 
     resetSelected() {

@@ -76,6 +76,7 @@ export class DispatchAssignComponent extends ModalComponent implements OnInit, O
         modal.close();
     }
 
+
     ngOnDestroy() {
         this.unsubscribe.next();
         this.unsubscribe.complete();

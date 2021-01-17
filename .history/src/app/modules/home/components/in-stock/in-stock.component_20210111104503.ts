@@ -207,8 +207,8 @@ export class InStockComponent implements OnInit, OnDestroy {
 
    selectedItemsChanged(items) {
     this.instockservice.selectedProducts = items ;
-    this.productsService.selectedProducts = items
- }
+
+  }
 
   getCategoriesByName(name) {
       return this.categoriesService.getCategoriesByName(name);
@@ -257,10 +257,10 @@ export class InStockComponent implements OnInit, OnDestroy {
   }
   SelectedCheck(event) {
     if (event.method === 'selected' && !this.instockservice.selectedProducts.length) {
-        this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'), { showProgressBar: false, timeout: 2000 });
+        this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
         return false;
     } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
-        this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'), { showProgressBar: false, timeout: 2000 });
+        this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
         return false;
     }
     return true;

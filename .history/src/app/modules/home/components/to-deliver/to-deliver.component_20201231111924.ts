@@ -312,10 +312,10 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
 
   createActivityCheck(event) {
       if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
-          this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'), { showProgressBar: false, timeout: 2000 });
+          this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
           return false;
       } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
-          this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'), { showProgressBar: false, timeout: 2000 });
+          this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
           return false;
       }
       return true;

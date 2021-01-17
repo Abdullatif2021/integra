@@ -38,7 +38,7 @@ export class PreDispatchComponent implements OnInit, OnDestroy {
   actions = [
       {name: this.translate.instant('home.to_delivered_action.create_one.value'),before_modal_open: (event) => this.SelectedCheck(event), modal: PreDispatchMergeComponent},
       {name: this.translate.instant('home.pre_dispatch_action.remove'),before_modal_open: (event) => this.SelectedCheck(event), modal: PreDispatchDeleteComponent, modalOptions: {}},
-            ] ;
+  ] ;
   unsubscribe: Subject<void> = new Subject();
   order_field = null ;
   order_method = '1' ;
