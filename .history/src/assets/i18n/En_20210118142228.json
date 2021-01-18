@@ -137,15 +137,7 @@
           "postmen_plhold": "postmen",
           "caps_plhold": "caps",
           "categories_plhold": "categories",
-          "qty_per_day_plhold": "quantity per day",
-          "more": "More",
-          "cancel": "Cancel",
-          "close": "Close",
-          "massege": "Do you want to save the changes",
-          "yes": "Yes",
-          "no": "No"
-
-
+          "qty_per_day_plhold": "quantity per day"
 
       },
       "dispatch_assign": {
@@ -320,7 +312,6 @@
         "prepareDispatch": "selected",
         "revisore": "Revisore",
         "addNoteToSet": {
-          "success1": "Activity Created Successfully",
           "success": "Node Added Successfuly",
           "error": "Something went wrong"
         },

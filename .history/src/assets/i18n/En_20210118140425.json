@@ -137,15 +137,7 @@
           "postmen_plhold": "postmen",
           "caps_plhold": "caps",
           "categories_plhold": "categories",
-          "qty_per_day_plhold": "quantity per day",
-          "more": "More",
-          "cancel": "Cancel",
-          "close": "Close",
-          "massege": "Do you want to save the changes",
-          "yes": "Yes",
-          "no": "No"
-
-
+          "qty_per_day_plhold": "quantity per day"
 
       },
       "dispatch_assign": {
@@ -320,7 +312,6 @@
         "prepareDispatch": "selected",
         "revisore": "Revisore",
         "addNoteToSet": {
-          "success1": "Activity Created Successfully",
           "success": "Node Added Successfuly",
           "error": "Something went wrong"
         },
@@ -340,7 +331,7 @@
       "dispatch_calender": {
         "name": "",
         "agency": "Agency",
-        "productTypeName": "Product name",
+        "productTypeName": "Name Product",
         "recipientName": "Recipient name",
         "client": "Client",
         "filteragency": "Agency",
@@ -1028,7 +1019,7 @@
       "search": {
         "distinguished_name": "Distinguished name",
         "agency": "Agency",
-        "product_name": "Product name",
+        "product_name": "Name Product",
         "recipient_name": "Recipient name"
       },
       "filter": {
@@ -1090,53 +1081,53 @@
     "notdelivered": {
       "search": {
         "client": "Client",
-        "client_name": "Client name",
-        "postal_distinction": "Postal Distinction",
-        "bar_code": "Bar code",
+        "client_name": "Nominativo Client",
+        "postal_distinction": "Distinita Postale",
+        "bar_code": "Barcode",
         "act_code": "Act code",
         "recipient_name": "Recipient name",
-        "address": "Recipient",
-        "date_time": "Data/time",
-        "article_law_name": "Article Law",
-        "article_law_date": "Date Article Law",
-        "acceptance_date": "Acceptance Date",
-        "attempts": "Attempts",
-        "sender_name": "Sender name",
-        "sender": "Sender",
+        "address": "Destinatario",
+        "date_time": "Data/Ora",
+        "article_law_name": "Articolo Legge",
+        "article_law_date": "Data Articolo Legge",
+        "acceptance_date": "Data Accettazione",
+        "attempts": "TENTATIVI",
+        "sender_name": "Nominativo MITTENTE",
+        "sender": "MITTENTE",
         "category": "Category",
         "agency": "Agency",
         "product_type": "Product Type",
         "note": "Note"
       },
       "filter": {
-        "Customer_name": "Client name",
+        "Customer_name": "Nominativo Client",
         "client": "Client",
         "agency": "Agency",
-        "postal_distinction": "Postal Distinction",
-        "bar_code": "Bar code",
+        "postal_distinction": "Distinita Postale",
+        "bar_code": "Barcode",
         "act_code": "Act code",
-        "product_name": "Product name",
+        "product_name": "Nome Product",
         "product": "Product",
         "category": "Category",
         "recipient_name": "Recipient name",
         "address": "Destinatario",
         "recipient_postal_code": "Recipient postal code",
-        "destination": "Recipient address",
+        "destination": "Address Destinatario",
         "grouping": {
           "value": "Quantity grouping",
-          "quant_per_cap": "Quantity per Cap",
-          "quant_per_client": "Quantity per Client"
+          "quant_per_cap": "Quantità per CAP",
+          "quant_per_client": "Quantità per Client"
         },
         "street_location": {
           "value": "Street Location",
-          "all": "All",
-          "localize": "Localize"
+          "all": "Tutti",
+          "localize": "Localizzato"
         },
         "date_time": "Data/Ora",
-        "article_law": "Article Law",
-        "article_law_date": "Date Article Law",
-        "acceptance_date": "Acceptance Date",
-        "activity": "Activity"
+        "article_law": "Articolo Legge",
+        "article_law_date": "Data Articolo Legge",
+        "acceptance_date": "Data Accettazione",
+        "activity": "Attività"
 
       }
       
@@ -1185,12 +1176,12 @@
         "all": "All"
       },
       "postmen_table": {
-        "value": "Expected postman",
-        "plhold": "Search postman expected"
+        "value": "Atteso postino",
+        "plhold": "Search postino previsto"
       },
       "activity_table": {
         "value": "Activity",
-        "plhold": "Search Activity"
+        "plhold": "Cerca Activity"
       },
       "custom_postmen_table": {
         "value": "Postmen",
@@ -1214,7 +1205,7 @@
       },
       "sub_settings_table": {
         "value": "Map Provider",
-        "plhold": "Search"
+        "plhold": "search"
       }
     },
     "table": {
@@ -1222,14 +1213,14 @@
         "cols": {
           "action": "Actions",
           "bar_code": "Bar code",
-          "act": "Actv code",
+          "act": "Act",
           "product_list": {
             "product": "Product",
             "list": "DISTINCT"
           },
           "status": "State",
           "data": {
-            "data_time": "Data/Time",
+            "data_time": "DATA/Time",
             "quanti": "Qty",
             "attempts": "Attempts"
           },
@@ -1242,25 +1233,25 @@
       },
       "pre_dispatch_table": {
         "cols": {
-          "action": "Action",
-          "name_distinct": "Distinct name",
-          "distincta": "Distinct",
-          "stat_outcome": "State/Result",
-          "quint": "Qty",
+          "action": "Azioni",
+          "name_distinct": "NOME DISTINTA",
+          "distincta": "DISTINTA",
+          "stat_outcome": "State / ESITO",
+          "quint": "Qty’",
           "data": "DATA",
           "opera": "OPERAZIONE"
         },
         "collapsed_actions": {
-          "Plan": "Plan",
-          "place_in_delivery": "Place in Delivery",
-          "add_products": "Add Products",
-          "delete": "Remove"
+          "Plan": "Pianifica",
+          "place_in_delivery": "Metti in Consegna",
+          "add_products": "Aggiungi Products",
+          "delete": "Elimina"
                             }
       },
       "dispatch_table": {
         "cols": {
-          "action": "Action",
-          "name": "Name",
+          "action": "Azioni",
+          "name": "Nome",
           "empty": "",
           "post_cspi": {
             "postman": "Postman",
@@ -1268,41 +1259,41 @@
           },
           "state_distinct": {
             "state": "Status Distinguished",
-            "distinct": "Distinct",
-            "not_prepare": "Bag not prepared",
-            "not_assigned": "Not assigned",
-            "prepared": "Bag prepared"
+            "distinct": "Distinta",
+            "not_prepare": "Borsa non preparata",
+            "not_assigned": "Non assegnato ",
+            "prepared": "Borsa preparata"
           },
-          "quint": "Qty",
+          "quint": "Q.tà",
           "delivery_start_date": {
-            "t1": "Delivery start date",
-            "t2": "Creation date"
+            "t1": "Data inizio consegna",
+            "t2": "Data creazione"
           },
-          "note": "Note"
+          "note": "Nota"
         }
 
       },
       "delivering_table": {
-        "action": "Action",
-        "name": "Name",
+        "action": "Azioni",
+        "name": "Nome",
         "empty": "",
         "post_cspi": {
-          "postman": "Postman",
+          "postman": "Postino",
           "cspi": "CSPI"
                      },
         "state_distinct": {
           "state": "Status Distinguished",
-          "distinct": "Distinct",
-          "not_prepare": "Bag not prepared",
-          "not_assigned": "Not assigned",
-          "prepared": "Bag prepared"
+          "distinct": "Distinta",
+          "not_prepare": "Borsa non preparata",
+          "not_assigned": "Non assegnato ",
+          "prepared": "Borsa preparata"
         },
-        "quint": "Qty",
+        "quint": "Q.tà",
         "delivery_start_date": {
-          "t1": "Delivery start date",
+          "t1": "Data inizio consegna",
           "t2": "Data creazione"
         },
-        "note": "Note"
+        "note": "Nota"
       }
     }
   },

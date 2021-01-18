@@ -71,7 +71,7 @@
                   <ng-container *ngFor="let cap of subActivity.caps; let idx = index">
                     <div class="cap-item preview-item" *ngIf="idx < 3" >{{cap.name}}</div>
                   </ng-container>
-                  <div class="show-more-preview preview-item" *ngIf="subActivity.caps.length > 3" (click)="openShowMoreModal(subActivity.caps, 'name')">{{'home.modals.cre_activity.more' | translate}}</div>
+                  <div class="show-more-preview preview-item" *ngIf="subActivity.caps.length > 3" (click)="openShowMoreModal(subActivity.caps, 'name')">More</div>
                 </div>
                 <!-- } Caps -->
 
@@ -140,7 +140,7 @@
                   <ng-container *ngFor="let postman of subActivity.postmen; let idx = index">
                     <div class="postman-item preview-item" *ngIf="idx < 1" >{{postman.full_name}}</div>
                   </ng-container>
-                  <div class="show-more-preview preview-item" *ngIf="subActivity.postmen.length > 1" (click)="openShowMoreModal(subActivity.postmen, 'full_name')">{{'home.modals.cre_activity.more' | translate}}</div>
+                  <div class="show-more-preview preview-item" *ngIf="subActivity.postmen.length > 1" (click)="openShowMoreModal(subActivity.postmen, 'full_name')">More</div>
                 </div>
                 <!-- } Postmen -->
                 <div class="border-bottom-dashed-black"></div>
@@ -169,7 +169,7 @@
           <div class="left"></div>
           <div class="right">
             <div class="new-sub-activity-button-container">
-              <button class="btn btn-light mr-2 new-sub-activity-button" (click)="showExitConfirmModal()">{{'home.modals.cre_activity.cancel' | translate}}</button>
+              <button class="btn btn-light mr-2 new-sub-activity-button" (click)="showExitConfirmModal()">Cancel</button>
               <button class="btn btn-success new-sub-activity-button" [disabled]="disabled || !subActivities || !subActivities.length || hasConflict || !activityName || anyNotSaved" (click)="saveActivity(modal)">{{'home.modals.cre_activity.save_activity' | translate}}</button>
             </div>
           </div>
@@ -195,7 +195,7 @@
       </div>
 
       <div class="btns-container mt-3">
-        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'home.modals.cre_activity.close' | translate}}</button>
+        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Close</button>
         <div class="clear-both"></div>
       </div>
     </div>
@@ -206,11 +206,11 @@
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
       <br>
-      <h5>{{'home.modals.cre_activity.massege' | translate}}</h5>
+      <h5>Do you want to save the changes</h5>
       <br>
       <div class="btns-container mt-3">
-        <button type="button" class="integraa-btn bg-danger float-right" (click)="modal.close();confirmExit(true)">{{'home.modals.cre_activity.no' | translate}}</button>
-        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close();confirmExit(false)">{{'home.modals.cre_activity.yes' | translate}}</button>
+        <button type="button" class="integraa-btn bg-danger float-right" (click)="modal.close();confirmExit(true)">No</button>
+        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close();confirmExit(false)">Yes</button>
         <div class="clear-both"></div>
       </div>
     </div>
