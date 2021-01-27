@@ -8,7 +8,7 @@
           <button class="btn schedule-nav-btn schedule-nav-left-btn" [ngClass]="{'active': '/schedule/'+preDispatch === router.url}" routerLink="/schedule/{{preDispatch}}">{{'schedule.schedule1.addresses' | translate}}</button>
           <button class="btn schedule-nav-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/toPlan' === router.url}" routerLink="/schedule/{{preDispatch}}/toPlan">{{'schedule.schedule1.to_plan' | translate}}</button>
           <button class="btn schedule-nav-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/parameters' === router.url}" routerLink="/schedule/{{preDispatch}}/parameters">{{'schedule.schedule1.parameters' | translate}}</button>
-          <button class="btn schedule-nav-btn schedule-nav-right-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/result' === router.url}" [disabled]="!can_open" routerLink="/schedule/{{preDispatch}}/result">{{'schedule.schedule1.result' | translate}}</button>
+          <button class="btn schedule-nav-btn schedule-nav-right-btn" [ngClass]="{'active': '/schedule/'+preDispatch+'/result' === router.url}" routerLink="/schedule/{{preDispatch}}/result">{{'schedule.schedule1.result' | translate}}</button>
         </div>
       </div>
       <div class="mt-2 router-container">
