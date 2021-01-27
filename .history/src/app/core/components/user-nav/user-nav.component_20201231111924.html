@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-lg navbar-light planner-nav z-depth-1">
+  <a class="navbar-brand" routerLink="/"><img src="assets/images/logo-Integraa.jpg"> </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#usreNav" aria-controls="usreNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="usreNav">
+    <div class="mr-auto mt-2 mt-lg-0"></div>
+    <div class="my-2 my-lg-0">
+      <!-- User Drop {  -->
+      <div class="dropdown float-right">
+        <div class="dropdown-toggle user-dropdown" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+          <span class="user-name">{{'core.user_nav.user_name' | translate}}</span>
+          <i class="drop-arrow"></i>
+          <img src="assets/images/Avatar.png" class="user-img rounded-circle">
+        </div>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">{{'core.user_nav.action1' | translate}}</a>
+          <a class="dropdown-item" href="#">{{'core.user_nav.action2' | translate}}</a>
+          <a class="dropdown-item" href="#">{{'core.user_nav.action3' | translate}}</a>
+        </div>
+      </div>
+      <!-- } User Drop -->
+      <!-- Settings Area { -->
+      <div class="settings-area float-right">
+        <span class="settings-icon" routerLink="/settings"><fa-icon [icon]="['fa','cogs']"></fa-icon></span>
+        <span class="bell-icon"><fa-icon [icon]="['far','bell']"></fa-icon></span>
+    <div class="dropdown"> 
+      <div class="dropbtn"> 
+        <img [src]="selectedLanguageFlag"> {{selectedLanguage}}
+      </div> 
+      <div class="dropdown-content"> 
+          <a href="#" *ngFor="let lang of selectflag" (click)="selectChanged(lang)">
+            <img [src]="lang.flag" width="20" height="20"> {{lang.label}} 
+          </a>
+      </div> 
+  </div> 
+    </div>
+      <!-- } Settings Area -->
+    </div>
+  </div>
+</nav>
