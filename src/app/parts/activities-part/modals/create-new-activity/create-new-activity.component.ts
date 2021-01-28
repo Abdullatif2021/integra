@@ -251,7 +251,7 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
 
   loadTotalProducts(subActivity) {
       if (!subActivity.categories || !subActivity.categories.length) { return  ; }
-      this.activityCreateService.getTotalProducts(this.activityId, subActivity.caps, subActivity.categories)
+      this.activityCreateService.getTotalProducts(this.activityId, subActivity.caps, subActivity.categories, subActivity.id)
           .pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               if (data.statusCode === 200) {
@@ -266,12 +266,12 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       );
   }
 
-  categoriesChanged(subActivity) {
-      this.loadTotalProducts(subActivity);
+  async categoriesChanged(subActivity) {
       if (!subActivity.categories || !subActivity.categories.length) {
           return this.isReady(subActivity);
       }
-      this.saveSubActivity(subActivity);
+      await this.saveSubActivity(subActivity);
+      this.loadTotalProducts(subActivity);
   }
 
   postmenChanged(subActivity) {
@@ -341,63 +341,72 @@ export class CreateNewActivityComponent extends ModalComponent implements OnInit
       this.hasConflict = hasConflict ;
   }
 
-  saveSubActivity(subActivity) {
+  async saveSubActivity(subActivity) {
       if (this.isReadyToGetEndDate(subActivity)) {
           this.loadEndDate(subActivity);
           this.resetAll();
       }
       if (this.isReady(subActivity)) {
           if (subActivity.created) {
-              return this.updateSubActivity(subActivity);
+              return await this.updateSubActivity(subActivity);
           }
-          return this.createNewSubActivity(subActivity);
+          return await this.createNewSubActivity(subActivity);
       }
   }
 
   createNewSubActivity(subActivity) {
-      this.activityCreateService.createSubActivity(
-          this.activityId, subActivity.operators, subActivity.postmen, subActivity.caps, subActivity.categories,
-          subActivity.qtyPerDay, subActivity.nextSaturdayStatus ? true : false, subActivity.startDate).pipe(takeUntil(this.unsubscribe))
-          .subscribe(
-              data => {
-                  if (data.statusCode === 200) {
-                      subActivity.created = true ;
-                      subActivity.id = data.data.id;
-                      this.addCap = null ;
-                      this.addCategory = null ;
+      return new Promise((resolve) => {
+          this.activityCreateService.createSubActivity(
+              this.activityId, subActivity.operators, subActivity.postmen, subActivity.caps, subActivity.categories,
+              subActivity.qtyPerDay, subActivity.nextSaturdayStatus ? true : false, subActivity.startDate).pipe(takeUntil(this.unsubscribe))
+              .subscribe(
+                  data => {
+                      if (data.statusCode === 200) {
+                          subActivity.created = true ;
+                          subActivity.id = data.data.id;
+                          this.addCap = null ;
+                          this.addCategory = null ;
+                          this.checkIfAnyNotSaved();
+                          return resolve({data: data, error: 0});
+                      }
                       this.checkIfAnyNotSaved();
-                      return ;
+                      this.snotifyService.error(data.message, { showProgressBar: false, timeout: 4000 });
+                      return resolve({data: data, error: 1})
+                  }, error => {
+                      subActivity.created = true ;
+                      subActivity.id = 1;
+                      this.checkIfAnyNotSaved();
+                      this.snotifyService.error(this.translate.instant
+                      ('home.modules.delivering_calender.addNoteToSet.error'), { showProgressBar: false, timeout: 4000 });
+                      return resolve({data: null, error: 1});
                   }
-                  this.checkIfAnyNotSaved();
-                  this.snotifyService.error(data.message, { showProgressBar: false, timeout: 4000 });
-              }, error => {
-                  subActivity.created = true ;
-                  subActivity.id = 1;
-                  this.checkIfAnyNotSaved();
-                  this.snotifyService.error(this.translate.instant
-                    ('home.modules.delivering_calender.addNoteToSet.error'), { showProgressBar: false, timeout: 4000 });
-              }
-          );
+              );
+      });
   }
 
   updateSubActivity(subActivity) {
-      this.activityCreateService.updateSubActivity(
-          subActivity.id, subActivity.operators, subActivity.postmen, subActivity.caps, subActivity.categories,
-          subActivity.qtyPerDay, subActivity.nextSaturdayStatus ? true : false, subActivity.startDate).pipe(takeUntil(this.unsubscribe))
-          .subscribe(
-              data => {
-                  if (data && data.statusCode === 200) {
-                      subActivity.created = true ;
-                      this.addCap = null ;
-                      this.addCategory = null ;
-                      return this.checkIfAnyNotSaved();
+      return new Promise((resolve) => {
+          this.activityCreateService.updateSubActivity(
+              subActivity.id, subActivity.operators, subActivity.postmen, subActivity.caps, subActivity.categories,
+              subActivity.qtyPerDay, subActivity.nextSaturdayStatus ? true : false, subActivity.startDate).pipe(takeUntil(this.unsubscribe))
+              .subscribe(
+                  data => {
+                      if (data && data.statusCode === 200) {
+                          subActivity.created = true ;
+                          this.addCap = null ;
+                          this.addCategory = null ;
+                          this.checkIfAnyNotSaved();
+                          return resolve({data: data, error: 0});
+                      }
+                      this.snotifyService.error(data.message, { showProgressBar: false, timeout: 4000 });
+                      return resolve({data: data, error: 1});
+                  }, error => {
+                      this.snotifyService.error(this.translate.instant
+                      ('home.modules.delivering_calender.addNoteToSet.error'), { showProgressBar: false, timeout: 4000 });
+                      return resolve({data: null,  error: error});
                   }
-                  this.snotifyService.error(data.message, { showProgressBar: false, timeout: 4000 });
-              }, error => {
-                  this.snotifyService.error(this.translate.instant
-                    ('home.modules.delivering_calender.addNoteToSet.error'), { showProgressBar: false, timeout: 4000 });
-              }
-          );
+              );
+      });
   }
 
   checkIfAnyNotSaved() {

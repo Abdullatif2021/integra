@@ -450,8 +450,6 @@ export class ResultComponent implements OnInit, OnDestroy {
 
   dropProduct(event, target, index) {
       const result = this.dragAndDropService.drop(index, this.preDispatch);
-
-
       const list = result.list;
       if (!list) { return ; }
 
@@ -464,7 +462,7 @@ export class ResultComponent implements OnInit, OnDestroy {
           }
       });
       target.children = target.children.filter(c => !trash.filter(i => i === c.id).length);
-      target.children.splice(index, 0, {address: 'loading...', productsCount: list.length, products: []});
+      target.children.splice(index, 0, {address: 'loading...', productsCount: list.length, products: [], parent: {}});
 
       if (Array.isArray(result.items)) {
           result.items.forEach(item => {
@@ -473,20 +471,21 @@ export class ResultComponent implements OnInit, OnDestroy {
       } else {
           result.items.parent.productsCount--;
       }
-
+        console.log('xx', Object.assign({}, target.children));
       this.resultsService.createNewGroup(this.preDispatch, list, index).pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               target.children[index] = {
                   id: data.data.id,
                   address: data.data.address[0] ,
                   loaded: false,
-                  parent: parent,
+                  parent: target,
                   type: 'building',
                   addressId: data.data.id,
                   products: data.data.products,
                   priority: data.data.mapPriority,
                   productsCount: data.data.productsCount
               };
+              console.log('here we go', target.children);
           }
       );
   }
@@ -639,22 +638,22 @@ export class ResultComponent implements OnInit, OnDestroy {
            { showProgressBar: false, timeout: 1500 });
       });
       if (!data) { return ; }
-
-      this.selected.forEach(item => {
-          if (item._type === 'set') {
-              if (!this.scheduleResults) { return ; }
-              this.scheduleResults.forEach(day => {
-                  day.sets = day.sets.filter(_set => _set.id !== item.id);
-                  if (!day.sets.length) {
-                      this.scheduleResults = this.scheduleResults.filter(ix => ix.day === day.day);
-                  }
-              });
-          } else {
-              item.parent[item._type === 'group' ? 'children' : 'products'] =
-                  item.parent[item._type === 'group' ? 'children' : 'products'].filter(i => item.id !== i.id);
-          }
-      });
+      // this.selected.forEach(item => {
+      //     if (item._type === 'set') {
+      //         if (!this.scheduleResults) { return ; }
+      //         this.scheduleResults.forEach(day => {
+      //             day.sets = day.sets.filter(_set => _set.id !== item.id);
+      //             if (!day.sets.length) {
+      //                 this.scheduleResults = this.scheduleResults.filter(ix => ix.day === day.day);
+      //             }
+      //         });
+      //     } else {
+      //         item.parent[item._type === 'group' ? 'children' : 'products'] =
+      //             item.parent[item._type === 'group' ? 'children' : 'products'].filter(i => item.id !== i.id);
+      //     }
+      // });
       this.selected = [] ;
+      this.changeActiveFilteringTab(this.scheduleResultsDisplayedTab);
       return this.snotifyService.success(this.translate.instant('schedule.result.sendMoveToRequest.success'),
        { showProgressBar: false, timeout: 1500 });
   }

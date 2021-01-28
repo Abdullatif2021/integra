@@ -64,11 +64,14 @@ export class ActivityCreateService {
       return this.http.get(AppConfig.endpoints.getActivityAvailableProductCategories, options);
   }
 
-  getTotalProducts(activity, caps, categories): Observable<any> {
+  getTotalProducts(activity, caps, categories, subActivityId = null): Observable<any> {
       const options = {params: new HttpParams(), headers: new HttpHeaders()};
       options.params = options.params.set('activity', activity);
       options.params = options.params.set('caps', caps.map(c => c.id));
       options.params = options.params.set('categories', categories.map(c => c.id));
+      if (subActivityId) {
+          options.params = options.params.set('subActivityId', subActivityId);
+      }
       return this.http.get(AppConfig.endpoints.getActivityTotalProducts, options);
   }
 

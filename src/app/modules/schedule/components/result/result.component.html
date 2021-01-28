@@ -126,7 +126,7 @@
         <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
       </ng-container>
       <ng-container  *ngIf="!child.skeleton;">
-        <div class="street-item" [ngClass]="{'danger-bg': child.fromNotFixed, 'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" [dndDraggable]="{item: 1}" [dndDisableIf]="child.fromNotFixed || child.parent.status !== 'not_assigned'" [dndEffectAllowed]="'move'"
+        <div class="street-item" [ngClass]="{'danger-bg': child.fromNotFixed, 'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" [dndDraggable]="{item: 1}" [dndDisableIf]="child.fromNotFixed || (child.parent && child.parent.status !== 'not_assigned')" [dndEffectAllowed]="'move'"
              (dndStart)="onDragStart($event, child)" class="{{getStatusClass(child)}}">
           <div class="d-flex">
             <div class="col-1 wide-col d-flex">

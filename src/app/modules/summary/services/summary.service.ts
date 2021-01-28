@@ -23,6 +23,7 @@ export class SummaryService {
   }
 
   getProductsByGroupInfo(row, page = 1) {
+      console.log(row);
       const options = {params: new HttpParams()};
       options.params = options.params.set('page', `${page}`);
       options.params = options.params.set('city', row.city.id);
@@ -30,6 +31,8 @@ export class SummaryService {
       options.params = options.params.set('category', row.category.id);
       options.params = options.params.set('customer', row.recipient.id);
       options.params = options.params.set('agency', row.agency.id);
+      options.params = options.params.set('tab', row.__col_id);
+      options.params = this.filtersService.getHttpParams(options.params) ;
       return <any>this.http.get(AppConfig.endpoints.getProductsByGroupInfo, options);
   }
 
