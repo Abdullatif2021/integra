@@ -23,7 +23,7 @@ export class SummaryService {
   }
 
   getProductsByGroupInfo(row, page = 1) {
-      ++page // start from page 2 and so on.
+      ++page ; // start from page 2 and so on.
       const options = {params: new HttpParams()};
       options.params = options.params.set('page', `${page}`);
       options.params = options.params.set('city', row.city.id);
