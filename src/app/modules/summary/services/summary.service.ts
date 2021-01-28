@@ -23,7 +23,6 @@ export class SummaryService {
   }
 
   getProductsByGroupInfo(row, page = 1) {
-      console.log(row);
       const options = {params: new HttpParams()};
       options.params = options.params.set('page', `${page}`);
       options.params = options.params.set('city', row.city.id);

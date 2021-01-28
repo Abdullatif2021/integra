@@ -150,7 +150,7 @@ export const TablesConfig = {
                     }},
                     {action: 'print', click: (elm) => { console.log('print . '); }},
                     {action: 'excel_export', click: (elm) => {
-                        window.open(AppConfig.endpoints.exportPreDispatches + '?pre_dispatch_id=' + elm.id);
+                        window.open(AppConfig.endpoints.exportPreDispatches + '/' + elm.id);
                     }},
                     {action: 'view', click: (elm, container) => {
                         container.integraaModalService.open('/pages/pre-dispatch/' + elm.id + '/products', {width: 1250, height: 650});
