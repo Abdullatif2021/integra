@@ -66,13 +66,13 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         this.preDispatch = this.route.snapshot.params.id;
         this.preDispatchData = this.route.snapshot.data.data;
         this.exportResultsLink = AppConfig.endpoints.exportPreDispatchResults(this.preDispatchData.id);
-          }
+    }
 
     latitude = 40.8440337;
     longitude = 14.3435834;
     zoom = 11;
     can_plan = false;
-    can_open = false;
+    can_go_to_results = false;
 
     paths = [] ;
     @ViewChild(PageDirective) pageHost: PageDirective;
@@ -142,14 +142,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         );
     }
 
-    async checkStatus(){
-        this.preDispatchService.getPreDispatchData(this.preDispatch, true).pipe(takeUntil(this.unsubscribe)).subscribe(
-            data => {
-                if(data.data.status === 'drawing_paths')
-                this.can_open =true;
-            }
-        )
-    } 
     async runNextAction() {
         window.parent.postMessage({runPreDispatch: this.preDispatchData}, '*');
         // this.preDispatchGlobalActionsService.startPreDispatchAction(this.preDispatchData);
