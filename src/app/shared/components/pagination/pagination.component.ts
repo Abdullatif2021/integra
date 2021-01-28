@@ -23,7 +23,7 @@ export class PaginationComponent implements OnInit {
       {key: 500, value: 500},
       {key: 1000, value: 1000},
       {key: 'Tutto', value: 9000000},
-  ]
+  ];
 
   constructor(
       private paginationService: PaginationService,

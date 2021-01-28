@@ -1,22 +1,27 @@
 import { TranslateService } from '@ngx-translate/core';
-import { FiltersService } from './../../../../service/filters.service';
-import { ActionsService } from './../../../../service/actions.service';
-import { ActivitiesService } from './../../../activities/service/activities.service';
-import {Component , OnInit} from '@angular/core';
-import {TablesConfig} from '../../../../config/tables.config';
-import {WorkTimeService} from '../../service/work-time.service';
+import { FiltersService } from '../../../../../../service/filters.service';
+import { ActionsService } from '../../../../../../service/actions.service';
+import { ActivitiesService } from '../../../../service/activities.service';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {TablesConfig} from '../../../../../../config/tables.config';
+import {SubActivitiesCalendarService} from '../../service/sub-activities-calendar.service';
 import { takeUntil, map } from 'rxjs/internal/operators';
-import {Subject} from 'rxjs';
-import {FilterConfig} from '../../../../config/filters.config';
+import {Observable, Subject} from 'rxjs';
+import {FilterConfig} from '../../../../../../config/filters.config';
+import {PaginationService} from '../../../../../../service/pagination.service';
+import {RecipientsService} from '../../../../../../service/recipients.service';
+import {AgenciesService} from '../../../../../../service/agencies.service';
+import {CustomersService} from '../../../../../../service/customers.service';
 
 @Component({
-  selector: 'app-dispatch-worktime-calednar',
-  templateUrl: './dispatch-worktime-calednar.component.html',
-  styleUrls: ['./dispatch-worktime-calednar.component.css']
+  selector: 'app-sub-activities-calendar-page',
+  templateUrl: './sub-activities-calendar-page.component.html',
+  styleUrls: ['./sub-activities-calendar-page.component.css']
 })
-export class DispatchWorktimeCalednarComponent implements OnInit {
+export class SubActivitiesCalendarPageComponent implements OnInit, OnDestroy {
   unsubscribe: Subject<void> = new Subject();
   selected_Activity = null;
+  loadDataSubscription;
   actions = [];
   activityTableConfig = TablesConfig.simpleTable.activity;
   config = {
@@ -24,12 +29,13 @@ export class DispatchWorktimeCalednarComponent implements OnInit {
       text: 'activityName',
       group_name: 'state'
   };
-
+  @ViewChild('activity') _activityTable ;
+  @ViewChild('timeBasedCalendar') _timeBasedCalendar ;
   data = [];
   baseDate = 0;
   calender_current_week = 0;
   filter_config = {
-    search: (container, sp) => [
+      search: (container, sp) => [
           {type: 'text', label: 'filter_config.subactivity.search.sub_name', key: 'customerName'},
           {type: 'text', label: 'filter_config.subactivity.search.operator', key: 'dispatchCode'},
           {type: 'date', label: 'filter_config.subactivity.search.start_date', key: 'startDate'},
@@ -47,6 +53,7 @@ export class DispatchWorktimeCalednarComponent implements OnInit {
           , unclearbale: true,
           selectedAttribute: {name: 'filter_config.products.filter.activity.todo', id: 'null'}}
       ],
+
       filters: (container, sp) => [
           {type: 'simpleText', label: 'filter_config.subactivity.filter.sub_name', key: 'name'},
           {type: 'auto-complete', label: 'filter_config.products.filter.client', key: 'customerId',
@@ -75,26 +82,30 @@ export class DispatchWorktimeCalednarComponent implements OnInit {
           {type: 'simpleText', label: 'filter_config.subactivity.filter.proposed_postman', key: ''},
           {type: 'ng-select', label: 'filter_config.subactivity.filter.select_value', labelVal: 'name', key: 'state',
           items: [
-              {name: 'filter_config.products.filter.activity.todo', id: 'todo'},
-              {name: 'filter_config.products.filter.activity.doing', id: 'doing'},
-              {name: 'filter_config.products.filter.activity.done', id: 'done'}]
+              {name: 'filter_config.subactivity.filter.todo', id: 'todo'},
+              {name: 'filter_config.subactivity.filter.doing', id: 'doing'},
+              {name: 'filter_config.subactivity.filter.done', id: 'done'}]
           , unclearbale: true,
           selectedAttribute: {name: 'filter_config.products.filter.activity.todo', id: 'null'}},
 
       ],
     grouping: false,
     changeViewButton: {icon: '/assets/images/table.png', route: ['/activities']},
-};
+  };
 
 
-  activityGetMethod = () => this.activitiesService.getSubActivities();
+  activityGetMethod = () => this.activitiesService.getSubActivities(this.calender_current_week);
 
   constructor(
-    private worktimeservice: WorkTimeService,
+    private subActivitiesCalendarService: SubActivitiesCalendarService,
     private activitiesService: ActivitiesService,
     private actionsService: ActionsService,
+    private paginationService: PaginationService,
     private filtersService: FiltersService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public recipientsService: RecipientsService,
+    public agenciesService: AgenciesService,
+    public customersService: CustomersService
      ) { }
 
   ngOnInit() {
@@ -102,28 +113,46 @@ export class DispatchWorktimeCalednarComponent implements OnInit {
     this.filtersService.keep('products');
     this.filtersService.clear('products');
     this.actionsService.setActions(this.actions);
-    this.loadData()
+    this.paginationService.updateResultsCount(-1);
+    this.paginationService.updateLoadingState(false)
+    this.loadData();
+    this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filtersData: any) => {
+        this.subActivitiesCalendarService.selected_Activity = null ;
+        this.loadData();
+        this._activityTable.reload();
+    });
   }
-  loadData(){
-    this.worktimeservice.getSubActivityCalender( this.calender_current_week ,this.worktimeservice.getSelectedActivity()).pipe(takeUntil(this.unsubscribe)).subscribe(
+
+  loadData() {
+    if (this.loadDataSubscription) {
+        this.loadDataSubscription.unsubscribe();
+    }
+    this._timeBasedCalendar.setLoadingSate(true);
+    this.loadDataSubscription = this.subActivitiesCalendarService.getSubActivityCalender(
+        this.calender_current_week,
+        this.subActivitiesCalendarService.getSelectedActivity()
+    ).pipe(takeUntil(this.unsubscribe)).subscribe(
       data => {
+          this._timeBasedCalendar.setLoadingSate(false);
           this.data = data.data.data;
           this.baseDate = data.data.baseDate.split('/').reverse().join('-');
-          
       });
   }
+
   changeCalenderWeekIndex(event) {
     this.calender_current_week = event;
     this.loadData();
-}
-changeActivity(event) {
-  this.selected_Activity = event;
-  this.worktimeservice.selected_Activity = this.selected_Activity
-  this.loadData();
-}
+    this._activityTable.reload();
+  }
+
+  changeActivity(event) {
+      this.selected_Activity = event;
+      this.subActivitiesCalendarService.selected_Activity = this.selected_Activity;
+      this.loadData();
+  }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-}
+  }
 }

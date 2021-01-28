@@ -436,8 +436,8 @@ export const FilterConfig = {
 
         ],
         grouping: false,
-        changeViewButton: {icon: '/assets/images/calendar.png', route: ['/wtc/dispatch']},
+        changeViewButton: {icon: '/assets/images/calendar.png', route: ['/activities/calendar']},
         lock: true
     },
-   
+
 };

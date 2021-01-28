@@ -1,5 +1,5 @@
 import {Component, Input, EventEmitter , Output, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {WorkTimeService} from '../../../modules/work-time-calendar/service/work-time.service';
+import {SubActivitiesCalendarService} from '../../../modules/activities/modules/sub-activities-calendar/service/sub-activities-calendar.service';
 
 @Component({
   selector: 'app-time-based-calendar',
@@ -17,7 +17,8 @@ export class TimeBasedCalendarComponent implements OnInit, OnChanges {
   work_year ;
   current_week_index = 0 ;
   _days = [] ;
-  constructor(private worktimecalender: WorkTimeService) { }
+  loading = true ;
+  constructor(private worktimecalender: SubActivitiesCalendarService) { }
 
   ngOnInit() {
   }
@@ -25,6 +26,7 @@ export class TimeBasedCalendarComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data) {
       this.formatData() ;
+      if (this.data) {this.loading = false;}
     }
     if (changes.baseDate) {
         this.tableTitle();
@@ -38,7 +40,8 @@ export class TimeBasedCalendarComponent implements OnInit, OnChanges {
       this.work_month = end.getMonth();
       this.work_year = end.getFullYear();
       this.title = `${start.getDate()} - ${end.getDate()}`;
-      for (let i = 0; i < 7; ++i) {
+      this._days[0] = start.getDay();
+      for (let i = 1; i < 7; ++i) {
           start.setDate(start.getDate() + 1);
           this._days[i] = start.getDay();
       }
@@ -68,9 +71,14 @@ export class TimeBasedCalendarComponent implements OnInit, OnChanges {
       });
     });
   }
+
   changeWeekIndex(direction) {
     this.current_week_index += direction;
     this.weekIndexChanged.emit(this.current_week_index);
-}
+  }
+
+  setLoadingSate(state) {
+      this.loading = state;
+  }
 
 }

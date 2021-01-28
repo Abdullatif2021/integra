@@ -15,8 +15,8 @@
       "button": {
         "continue": "Continua",
         "cancel": "Annulla"
-                }
-      },
+      }
+    },
     "main_nav": {
       "to_be_delivered":  "Da consegnare",
       "pre_bill":  "Pre-Distinta",
@@ -24,13 +24,13 @@
       "bills_in_delivery":  "Distinte in consegna",
       "in_stock":  "In giacenza",
       "non_consegnati":  "Non consegnati"
-               },
+    },
     "search_panal": {
       "search": {
         "button1": "Cerca",
         "place_holder": "Cerca",
         "place_holder2": "Nel Campo"
-            },
+      },
       "filter": {
         "button1": "Filtra",
         "btn_reset": "Azzera",
@@ -46,7 +46,7 @@
         "run": "Applica ed Esegui",
         "close": "Chiudi",
         "no_result": "Nessun risultato"
-                       }
+      }
     },
     "user_nav": {
       "user_name": "Adnan Kharboutli",
@@ -58,92 +58,92 @@
   "home": {
 
     "dispatch_action": {
-          "bag_prepared":{ "value": "Borsa preparata",
-          "select": "Selezionati",
-          "by_filter": "Secondo i filtri applicati",
-          "remove": "Elimina"
-        },
-          "operator_prepar":{
-            "value": "Operatore che prepara la borsa",
-            "select": "Selezionati",
-            "by_filter": "Secondo i filtri applicati",
-            "remove": "Elimina"
-             }
-        },
-        "pre_dispatch_action": {
-          "merge_Pre_bills": "Unisci Pre-distinte",
-          "remove": "Elimina"
-        },
-      "to_delivered_action": {
-            "create_one": {
-              "value": "Crea nuova attivita",
-              "select": "Selezionati",
-              "by_filter": "Secondo i filtri applicati"
-            },
-            "cre_pre_dispatch": {
-              "value": "Crea nuova Pre-Distinta",
-              "select": "Selezionati",
-              "by_filter": "Secondo i filtri applicati",
-              "show_activity": "Mosta attivita in corso"
-            },
-            "add_to_existing_pre_bill": {
-              "value": "Aggiungi a Pre-Distinta esistente",
-              "select": "Selezionati",
-              "by_filter": "Secondo i filtri applicati",
-               "import_products": "Importa Prodotti da Codici a Barre",
-                "load_products_by_scanner": "Carica prodotti da Scanner"
-            }    
+      "bag_prepared":{ "value": "Borsa preparata",
+        "select": "Selezionati",
+        "by_filter": "Secondo i filtri applicati",
+        "remove": "Elimina"
       },
-      "activities_action": {
-        "remove": {
-          "value": "Elimina attività",
-          "select": "Selezionati",
-          "by_filter": "Secondo i filtri applicati"
-        }
+      "operator_prepar":{
+        "value": "Operatore che prepara la borsa",
+        "select": "Selezionati",
+        "by_filter": "Secondo i filtri applicati",
+        "remove": "Elimina"
+      }
+    },
+    "pre_dispatch_action": {
+      "merge_Pre_bills": "Unisci Pre-distinte",
+      "remove": "Elimina"
+    },
+    "to_delivered_action": {
+      "create_one": {
+        "value": "Crea nuova attivita",
+        "select": "Selezionati",
+        "by_filter": "Secondo i filtri applicati"
       },
-     
+      "cre_pre_dispatch": {
+        "value": "Crea nuova Pre-Distinta",
+        "select": "Selezionati",
+        "by_filter": "Secondo i filtri applicati",
+        "show_activity": "Mosta attivita in corso"
+      },
+      "add_to_existing_pre_bill": {
+        "value": "Aggiungi a Pre-Distinta esistente",
+        "select": "Selezionati",
+        "by_filter": "Secondo i filtri applicati",
+        "import_products": "Importa Prodotti da Codici a Barre",
+        "load_products_by_scanner": "Carica prodotti da Scanner"
+      }
+    },
+    "activities_action": {
+      "remove": {
+        "value": "Elimina attività",
+        "select": "Selezionati",
+        "by_filter": "Secondo i filtri applicati"
+      }
+    },
+
     "modals": {
       "not_delivered_actions": {
-          "action_name": "Cambiare stato",
-          "selected": "Selezionati",
-          "by_filter": "Secondo i filtri applicati",
-          "action_name2": "Aggiungi a Pre-Distinta esistente",
-          "selected2": "Selezionati",
-          "by_filter2": "Secondo i filtri applicati",
+        "action_name": "Cambiare stato",
+        "selected": "Selezionati",
+        "by_filter": "Secondo i filtri applicati",
+        "action_name2": "Aggiungi a Pre-Distinta esistente",
+        "selected2": "Selezionati",
+        "by_filter2": "Secondo i filtri applicati",
 
-          "warning": { 
-            "name_is_short": "Il nuovo nome è molto corto",
-            "select_first": "Devi prima selezionare i prodotti",
-            "no_filter_applied": "Nessun filtro applicato"
+        "warning": {
+          "name_is_short": "Il nuovo nome è molto corto",
+          "select_first": "Devi prima selezionare i prodotti",
+          "no_filter_applied": "Nessun filtro applicato"
 
-          }
+        }
       },
       "cre_activity": {
-          "cre_new_activity": "Crea nuova attività",
-          "new_sub_ativity": "Nuova attività secondaria",
-          "operator": "Operator",
-          "postmen": "Postmen",
-          "caps": "Caps",
-          "saturday_status": "Sabato Stato",
-          "categories": "categorie",
-          "qty_per_day": "Qtà",
-          "recommended_postmen": "Postini consigliati",
-          "total_qty": "Qtà totale",
-          "str_date": "Start Date",
-          "end_date": "End Date",
-          "save_activity": "Salva attività",
-          "activ_nam_plhold": "Nome attività",
-          "oper_plhold": "operator",
-          "postmen_plhold": "postini",
-          "caps_plhold": "Caps",
-          "categories_plhold": "categorie",
-          "qty_per_day_plhold": "quantità al giorno",
-          "more": "Di Più",
-          "cancel": "Annulla",
-          "close": "Vicina",
-          "massege": "Vuoi salvare le modifiche",
-          "yes": "Si",
-          "no": "No"
+        "cre_new_activity": "Crea nuova attività",
+        "new_sub_ativity": "Nuova attività secondaria",
+        "operator": "Operator",
+        "postmen": "Postmen",
+        "caps": "Caps",
+        "saturday_status": "Sabato Stato",
+        "categories": "categorie",
+        "qty_per_day": "Qtà",
+        "recommended_postmen": "Postini consigliati",
+        "total_qty": "Qtà totale",
+        "str_date": "Start Date",
+        "end_date": "End Date",
+        "save_activity": "Salva attività",
+        "activ_nam_plhold": "Nome attività",
+        "oper_plhold": "operator",
+        "postmen_plhold": "postini",
+        "caps_plhold": "Caps",
+        "categories_plhold": "categorie",
+        "qty_per_day_plhold": "quantità al giorno",
+        "more": "Di Più",
+        "cancel": "Annulla",
+        "close": "Vicina",
+        "massege": "Vuoi salvare le modifiche",
+        "yes": "Si",
+        "no": "No"
 
       },
       "dispatch_assign": {
@@ -196,7 +196,7 @@
         "ok": "Ok",
         "options": {"pre_name": "Il nome della Pre-distinta","pre_code": "N° della Predistinta" }
       },
-        
+
       "pre_direct": {
         "filter_applied": "ATTENZIONE! Non è stato applicato nessun filtro, sei sicuro di voler eseguire?",
         "run": "Esegui",
@@ -270,7 +270,7 @@
         "ad": "Address",
         "value1": "Continua",
         "value2": "Annulla"
-                  }
+      }
     },
     "modules": {
       "activities":{
@@ -285,8 +285,8 @@
           "expected_cap": "Cap previsti",
           "proposed_postman": "Postini proposti",
           "state": "Stato dell'attività"
-                      }
-            },
+        }
+      },
       "delivering_calender": {
         "name": "",
         "agency": "Agenzia",
@@ -333,7 +333,7 @@
         "updatePostmanDayNote":{
           "success": "Postman Note Updated Successfuly",
           "error": "Something went wrong"
-        }          
+        }
       },
       "dispatch_calender": {
         "name": "",
@@ -373,18 +373,18 @@
           "success": "Set Assigned Successfully",
           "error": "Something went wrong"
         },
-         "updateDayNote": {
+        "updateDayNote": {
           "success": "Note Updated Successfuly",
           "error": "Something went wrong"
         },
         "updatePostmanDayNote":{
           "success": "Postman Note Updated Successfuly",
           "error": "Something went wrong"
-        }          
+        }
       }
     },
     "services":{
-      
+
       "dispatch_actions_service": {
         "delete": "Elimina in corso",
         "success_delete": "Distinte Elimina con successo",
@@ -413,7 +413,7 @@
         "act_delet": "Elimina in corso",
         "act_delet_suc": "Attività Elimina con successo"
       }
-                }
+    }
   },
   "pages": {
     "dispatch_log": {
@@ -586,80 +586,80 @@
 
       }
 
-        },
+    },
     "parameters": {
-        "general_settings": "Impostazioni Generali",
-        "departure_day": "Giorno di Partenza",
-        "wrong_value": "Valore errato",
-        "time_of_departure": "Ora di Partenza",
-        "service_time_s": "Tempo di Servizio (singolo)",
-        "service_time_m": "Tempo di Servizio (multiplo)",
-        "break_time": "Tempo di pausa",
-        "give_her:": "Dalle :",
-        "at": "Alle :",
-        "travel_arrangements": "Modalità di viaggio",
-        "multiple_postmen": "Postini multipli",
-        "number_of_postmen": "Numero di Postini",
-        "hours_of_work_per_day": "Ore di lavoro al gg.",
-        "maximum_of_products_per_day": "Massimo di prodotti al gg",
-        "products": "prodotti.",
-        "allow_diversion": "Consenti deviazione",
-        "optimization_options": "Opzioni di Ottimizzazione",
-        "target": "Obiettivo",
-        "cities_mixed": "Città mischiati",
-        "departure": "Partenza",
-        "print": "Operazione/Stampa",
-        "print_oper": "Prendere in considerazione lavorazione di Stampa",
-        "ques_res": "Vuoi far uscire sulla stessa via gli esiti degli assenti e non assenti per fare i passaggi successivi nella stessa distinta?",
-        "predistinct_planned": "Predistinte pianificate",
-        "plan": "Pianifica",
-        "options": { 
-          "default": "Default",
-          "time1": "5 Minuti",
-          "time2": "10 Minuti",
-          "time3": "15 Minuti",
-          "time4": "20 Minuti",
-          "time5": "30 Minuti",
-          "travelModes": {
-            "moto": "Moto",
-            "auto": "Auto"
-          },
-          "target":  {
-            "shorter_route": "Percorso più corto",
-            "less_time": "Tempo minore"
-          },
-          "mixedCities":{ 
-            "allowed": "Consentito",
-            "not_allowed": "Non consentito"
-          },
-          "pathStart":{
-            "from_start_to_end": "Dal più vicino al più lontano",
-            "from_end_to_start": "Dal più lontano al più vicino"
-          }
-              },
-          "view": {
-            "1": "Secondo i parametri impostati",
-            "2": "Secondo predistinta pianificata"
-          },
-          "getPreDispatchData": {
-            "error": "Qualcosa è andato storto!!"
-          },
-          "validateAll": {
-            "warning": "already in planning !"
-          },
-          "saveParameters": {
-            "warning": "Per iniziare la pianificazione, è necessario localizzare questa pre-distinta",
-            "buttons": {
-              "close": "Close",
-              "locolize": "Localize",
-              "return": "Successo"
-              }
-          },
-          "can_plan": { 
-            "error": "Nessun oggetto da pianificare!",
-            "return": "Successo"
-          }
-            },
+      "general_settings": "Impostazioni Generali",
+      "departure_day": "Giorno di Partenza",
+      "wrong_value": "Valore errato",
+      "time_of_departure": "Ora di Partenza",
+      "service_time_s": "Tempo di Servizio (singolo)",
+      "service_time_m": "Tempo di Servizio (multiplo)",
+      "break_time": "Tempo di pausa",
+      "give_her:": "Dalle :",
+      "at": "Alle :",
+      "travel_arrangements": "Modalità di viaggio",
+      "multiple_postmen": "Postini multipli",
+      "number_of_postmen": "Numero di Postini",
+      "hours_of_work_per_day": "Ore di lavoro al gg.",
+      "maximum_of_products_per_day": "Massimo di prodotti al gg",
+      "products": "prodotti.",
+      "allow_diversion": "Consenti deviazione",
+      "optimization_options": "Opzioni di Ottimizzazione",
+      "target": "Obiettivo",
+      "cities_mixed": "Città mischiati",
+      "departure": "Partenza",
+      "print": "Operazione/Stampa",
+      "print_oper": "Prendere in considerazione lavorazione di Stampa",
+      "ques_res": "Vuoi far uscire sulla stessa via gli esiti degli assenti e non assenti per fare i passaggi successivi nella stessa distinta?",
+      "predistinct_planned": "Predistinte pianificate",
+      "plan": "Pianifica",
+      "options": {
+        "default": "Default",
+        "time1": "5 Minuti",
+        "time2": "10 Minuti",
+        "time3": "15 Minuti",
+        "time4": "20 Minuti",
+        "time5": "30 Minuti",
+        "travelModes": {
+          "moto": "Moto",
+          "auto": "Auto"
+        },
+        "target":  {
+          "shorter_route": "Percorso più corto",
+          "less_time": "Tempo minore"
+        },
+        "mixedCities":{
+          "allowed": "Consentito",
+          "not_allowed": "Non consentito"
+        },
+        "pathStart":{
+          "from_start_to_end": "Dal più vicino al più lontano",
+          "from_end_to_start": "Dal più lontano al più vicino"
+        }
+      },
+      "view": {
+        "1": "Secondo i parametri impostati",
+        "2": "Secondo predistinta pianificata"
+      },
+      "getPreDispatchData": {
+        "error": "Qualcosa è andato storto!!"
+      },
+      "validateAll": {
+        "warning": "already in planning !"
+      },
+      "saveParameters": {
+        "warning": "Per iniziare la pianificazione, è necessario localizzare questa pre-distinta",
+        "buttons": {
+          "close": "Close",
+          "locolize": "Localize",
+          "return": "Successo"
+        }
+      },
+      "can_plan": {
+        "error": "Nessun oggetto da pianificare!",
+        "return": "Successo"
+      }
+    },
     "result": {
       "not_assigned": "Non assegnati",
       "assigned": "Assegnati",
@@ -686,41 +686,41 @@
       "run": "Esegui",
       "stop": "Fermare",
       "scheduleResults": {
-        "success": "Postino assegnato", 
+        "success": "Postino assegnato",
         "error": "Qualcosa è andato storto!!"
-       },
-       "makeDispatchesVisible": {
+      },
+      "makeDispatchesVisible": {
         "warning": "Nessuna distinta selezionata",
         "warning2": "Some sets does not have name",
         "success": "Distinta è stata creata con successo!",
         "error": "Qualcosa è andato storto!!"
-       },
-       "add_start_and_end_points": {
-         "start_end": "Start/End",
-         "start": "Start",
-         "end": "End"
-       },
-       "updateItemsMarkers": "Some Items was not saved, are you sure you want to exit",
-       "saveMovedNotFixed": {
-        "success": "Prodotti spostati con successo", 
+      },
+      "add_start_and_end_points": {
+        "start_end": "Start/End",
+        "start": "Start",
+        "end": "End"
+      },
+      "updateItemsMarkers": "Some Items was not saved, are you sure you want to exit",
+      "saveMovedNotFixed": {
+        "success": "Prodotti spostati con successo",
         "error": "Qualcosa è andato storto spostando il prodotto"
-       },
-       "moveSelectedTo": {
-         "warning": "Nessun prodotto selezionato",
-          "warning2": "Non puoi spostare prodotti assegnati"
-        },
-      "sendMoveToRequest": { 
+      },
+      "moveSelectedTo": {
+        "warning": "Nessun prodotto selezionato",
+        "warning2": "Non puoi spostare prodotti assegnati"
+      },
+      "sendMoveToRequest": {
         "error": "Impossibile spostare i prodotti" ,
         "success": "Dati spostati correttamente"
       }
-         },
+    },
     "to_plan": {
-        "quint": "Q.ta",
-        "reload": "Reload",
-        "moveToInPlanning": "Items moved successfully"
+      "quint": "Q.ta",
+      "reload": "Reload",
+      "moveToInPlanning": "Items moved successfully"
     },
 
-    "fixed_tree": { 
+    "fixed_tree": {
       "address": "Indirizzo",
       "deliver": "Consegne",
       "time_of_arrival": "Ora d’arrivo",
@@ -734,159 +734,159 @@
       "success2": "Cap spostato con successo"
     },
     "schedule1": {
-        "addresses": "Indirizzi",
-        "to_plan": "Da pianificare",
-        "parameters": "Parametri",
-        "result": "Risultato",
-        "locate": "Localizza",
-        "move_to_plan": "Sposta in da pianificare",
-        "move_to_addresses": "Sposta in indirizzi",
-        "move_to": "Sposta in",
-        "addresses2": "Indirizzi",
-        "to_plan2": "Da pianificare",
-        "export": "Esporta",
-        "plan": "Pianifica",
-        "system_unable_to_locate": "Il sistema non è riuscito a localizzare gli indirizzo sotto indicati",
-        "chang_adres": "Modifica indirizzo",
-        "invalid_building_address": "Invalid Building Address",
-        "enter_loc": "Inserisci Posizione",
-        "plhold_latitude": "Latitudine",
-        "plhold_longitude": "Longitudine",
-        "run": "Esegui",
-        "skip": "Salta",
-        "addresses_not_found": "Ci sono alcuni indirizzo non trovati, Sicuro do voler procedere?",
-        "run2": "Esegui",
-        "close": "Close"
+      "addresses": "Indirizzi",
+      "to_plan": "Da pianificare",
+      "parameters": "Parametri",
+      "result": "Risultato",
+      "locate": "Localizza",
+      "move_to_plan": "Sposta in da pianificare",
+      "move_to_addresses": "Sposta in indirizzi",
+      "move_to": "Sposta in",
+      "addresses2": "Indirizzi",
+      "to_plan2": "Da pianificare",
+      "export": "Esporta",
+      "plan": "Pianifica",
+      "system_unable_to_locate": "Il sistema non è riuscito a localizzare gli indirizzo sotto indicati",
+      "chang_adres": "Modifica indirizzo",
+      "invalid_building_address": "Invalid Building Address",
+      "enter_loc": "Inserisci Posizione",
+      "plhold_latitude": "Latitudine",
+      "plhold_longitude": "Longitudine",
+      "run": "Esegui",
+      "skip": "Salta",
+      "addresses_not_found": "Ci sono alcuni indirizzo non trovati, Sicuro do voler procedere?",
+      "run2": "Esegui",
+      "close": "Close"
 
     }
-    },
+  },
   "settings": {
-      "subSettings": {
-        "general": {"service_time": "Tempo di servizio",
-                    "pagination_options": "Pagination Options"
-                    },
-        "settings": {"general": "General",
-                     "map_provider": "Map Provider"
-                     }
+    "subSettings": {
+      "general": {"service_time": "Tempo di servizio",
+        "pagination_options": "Pagination Options"
       },
-      "header": {
-        "back": "Indietro",
-        "add_new_key": "Aggiungi nuova chiave"
-      },
-      "pagination": { 
-        "streets_layout": "Impaginazione strade",
-        "tree_layout": "Impaginazione albero",
-        "result_per_page": "Risultati per pagina"
-      },
-      "service_time": {
-        "product": "Prodotto",
-        "s_service_time": "Tempo di servizio singolo",
-        "s_service_time2": "Tempo di servizio singolo",
-        "min": "Min",
-        "min2": "Min"
-      },
-      "maps": {
-        "api_key": "API key",
-        "daily_limit": "Limite giornaliero",
-        "monthly_limit": "Limite mensile"
+      "settings": {"general": "General",
+        "map_provider": "Map Provider"
       }
+    },
+    "header": {
+      "back": "Indietro",
+      "add_new_key": "Aggiungi nuova chiave"
+    },
+    "pagination": {
+      "streets_layout": "Impaginazione strade",
+      "tree_layout": "Impaginazione albero",
+      "result_per_page": "Risultati per pagina"
+    },
+    "service_time": {
+      "product": "Prodotto",
+      "s_service_time": "Tempo di servizio singolo",
+      "s_service_time2": "Tempo di servizio singolo",
+      "min": "Min",
+      "min2": "Min"
+    },
+    "maps": {
+      "api_key": "API key",
+      "daily_limit": "Limite giornaliero",
+      "monthly_limit": "Limite mensile"
+    }
   },
   "shared": {
-      "address_input_plhold": "Inserisci Indirizzo",
-      "comments": {
-        "browse_files": "Browse Files",
-        "save": "Salva"
+    "address_input_plhold": "Inserisci Indirizzo",
+    "comments": {
+      "browse_files": "Browse Files",
+      "save": "Salva"
 
-        
+
+    },
+    "loading": {
+      "hide": "Hide"
+    },
+    "pagination": {
+      "result_per_page": "Risultati per pagina"
+    },
+    "postmen_calendar": {
+      "postman_available": "Postman disponibili",
+      "busy_postman": "Postman occupati",
+      "reviewers_available": "Revisori disponibili",
+      "busy_auditors": "Revisori occupati",
+      "more": "Più",
+      "create_data": "Data creazione",
+      "processing_date": "Data lavorazione",
+      "postman": "Postino",
+      "quantity_of_products": "Quantita prodotti",
+      "product2": "prodotti",
+      "specific_delivery": "Specifica Consegna",
+      "delivered": "Consegnati",
+      "not_delivered": "Non Consegnati",
+      "product_specification": "Specifica Prodotti",
+      "distribution_specification": "Specifica Distribuzione",
+      "product": "Prodotti",
+      "preparing_bag": "Operatore che prepara la borsa",
+      "preparation_outcome": "Esito preparazione borsa",
+      "note_title": "Note interne",
+      "notifiction_postman": "Notifica per postino",
+      "ngbTooltip_openEditPostmanNoteModal": "Nota distinta",
+      "postman_note": "Set Postman Note",
+      "postman_note_plhold": "Note",
+      "continue": "Continua",
+      "cancel": "Annulla",
+      "note": "Note",
+      "set_day": "Set Day",
+      "plhold": "Note",
+      "attachment": "Attachment",
+      "drop_file_here": "Drop file here",
+      "browse_files": "Browse Files",
+      "mailmen_available": "Postini disponibili",
+      "ok": "OK",
+      "bags_ready": "Sei sicuro che le borse sono pronte?",
+      "run": "Esegui",
+      "assign_bill": "Sei sicuro di voler assegnare la/e distinta/e a questo operatore?",
+      "busy_postman_title": "Postman occupati",
+      "postman_available_title": "Postman disponibili",
+      "busy_evisers_title": "Revisori occupati",
+      "days": {
+        "monday": "Lunedi",
+        "tuesday": "Martedi",
+        "wednesday": "Mercoledi",
+        "thursday": "Giovedi",
+        "friday": "Venerdi",
+        "saturday": "Sabato",
+        "sunday": "Domenica"
       },
-      "loading": {
-        "hide": "Hide"
-          }, 
-      "pagination": {
-        "result_per_page": "Risultati per pagina"
-                },
-      "postmen_calendar": {
-        "postman_available": "Postman disponibili",
-        "busy_postman": "Postman occupati",
-        "reviewers_available": "Revisori disponibili",
-        "busy_auditors": "Revisori occupati",
-        "more": "Più",
-        "create_data": "Data creazione",
-        "processing_date": "Data lavorazione",
-        "postman": "Postino",
-        "quantity_of_products": "Quantita prodotti",
-        "product2": "prodotti",
-        "specific_delivery": "Specifica Consegna",
-        "delivered": "Consegnati",
-        "not_delivered": "Non Consegnati",
-        "product_specification": "Specifica Prodotti",
-        "distribution_specification": "Specifica Distribuzione",
-        "product": "Prodotti",
-        "preparing_bag": "Operatore che prepara la borsa",
-        "preparation_outcome": "Esito preparazione borsa",
-        "note_title": "Note interne",
-        "notifiction_postman": "Notifica per postino",
-        "ngbTooltip_openEditPostmanNoteModal": "Nota distinta",
-        "postman_note": "Set Postman Note",
-        "postman_note_plhold": "Note",
-        "continue": "Continua",
-        "cancel": "Annulla",
-        "note": "Note",
-        "set_day": "Set Day",
-        "plhold": "Note",
-        "attachment": "Attachment",
-        "drop_file_here": "Drop file here",
-        "browse_files": "Browse Files",
-        "mailmen_available": "Postini disponibili",
-        "ok": "OK",
-        "bags_ready": "Sei sicuro che le borse sono pronte?",
-        "run": "Esegui",
-        "assign_bill": "Sei sicuro di voler assegnare la/e distinta/e a questo operatore?",
-        "busy_postman_title": "Postman occupati",
-        "postman_available_title": "Postman disponibili",
-        "busy_evisers_title": "Revisori occupati",
-        "days": {
-          "monday": "Lunedi",
-          "tuesday": "Martedi",
-          "wednesday": "Mercoledi",
-          "thursday": "Giovedi",
-          "friday": "Venerdi",
-          "saturday": "Sabato",
-          "sunday": "Domenica"
-                  },
-        "months": {
-          "january": "Gennaio",
-          "february": "febbraio",
-          "march": "marzo",
-          "april": "Aprile",
-          "may": "Maggio",
-          "june": "Giugno",
-          "july": "Luglio",
-          "august": "agosto",
-          "september": "settembre",
-          "october": "ottobre",
-          "november": "novembre",
-          "december": "dicembre"
-        },
-        "error_massege": "Something went wrong"
-                },
-      "table": {
-        "ngbTooltip": {
-          "view": "Visualizza",
-          "print": "Stampa",
-          "export": "Esporta",
-          "edit": "Modifica",
-          "distinct_note": "Nota distinta",
-          "dayNote": "Nota giorno",
-          "upload_file": "Carica file",
-          "calender": "Calender",
-          "resume": "Riprendi",
-          "pause": "Pausa",
-          "remove": "Elimina",
-          "more": "Di Più",
-          "less": "Di meno"
-        }
+      "months": {
+        "january": "Gennaio",
+        "february": "febbraio",
+        "march": "marzo",
+        "april": "Aprile",
+        "may": "Maggio",
+        "june": "Giugno",
+        "july": "Luglio",
+        "august": "agosto",
+        "september": "settembre",
+        "october": "ottobre",
+        "november": "novembre",
+        "december": "dicembre"
+      },
+      "error_massege": "Something went wrong"
+    },
+    "table": {
+      "ngbTooltip": {
+        "view": "Visualizza",
+        "print": "Stampa",
+        "export": "Esporta",
+        "edit": "Modifica",
+        "distinct_note": "Nota distinta",
+        "dayNote": "Nota giorno",
+        "upload_file": "Carica file",
+        "calender": "Calender",
+        "resume": "Riprendi",
+        "pause": "Pausa",
+        "remove": "Elimina",
+        "more": "Di Più",
+        "less": "Di meno"
       }
+    }
   },
   "services":{
     "google_service": {"alert": "Google Maps Keys are invalid, this provider will be ignored"},
@@ -895,38 +895,38 @@
       "emit_massege": "initializing...",
       "emit_massege2": "initializing...",
       "success": "Tutti gli indirizzo sono localizzati!"
-         },
-      "streets_locating_service": {
-        "snotifyService_info": "Some streets are being localized!"
-                    },
+    },
+    "streets_locating_service": {
+      "snotifyService_info": "Some streets are being localized!"
+    },
 
-      "planning_service": {
-        "moving_items": "Moving Items",
-        "error": "Something went wrong",
-        "save": "Saving",
-        "return": "Pre-Dispatches was matched"
-      },
-      "pre_dispatch_global_actions_service": {
-        "ultimatePause": {
-          "error": "Qualcosa è andato storto, controlla le impostazioni...",
-          "error2": "Process Aborted"
-        }
-      },
-      "pre_dispatch_service": {
-        "translateStatus":{
-          "in_localize": "In localizzazione",
-          "notPlanned": "Non Pianificato",
-          "planned": "Pianificata",
-          "inPlanning": "In Pianificazione",
-          "localized": "Localizzato",
-          "in_grouping": "Ragruppamento",
-          "in_divide": "In Divisione",
-          "in_drawing": "Percoso in disegnamento",
-          "drawing_paths": "Disegno percorso"
-        }
+    "planning_service": {
+      "moving_items": "Moving Items",
+      "error": "Something went wrong",
+      "save": "Saving",
+      "return": "Pre-Dispatches was matched"
+    },
+    "pre_dispatch_global_actions_service": {
+      "ultimatePause": {
+        "error": "Qualcosa è andato storto, controlla le impostazioni...",
+        "error2": "Process Aborted"
       }
+    },
+    "pre_dispatch_service": {
+      "translateStatus":{
+        "in_localize": "In localizzazione",
+        "notPlanned": "Non Pianificato",
+        "planned": "Pianificata",
+        "inPlanning": "In Pianificazione",
+        "localized": "Localizzato",
+        "in_grouping": "Ragruppamento",
+        "in_divide": "In Divisione",
+        "in_drawing": "Percoso in disegnamento",
+        "drawing_paths": "Disegno percorso"
+      }
+    }
   },
-  
+
   "filter_config": {
     "products": {
       "search": {
@@ -980,12 +980,12 @@
         "article_law_date": "Data Articolo Legge",
         "acceptance_date": "Data Accettazione",
         "activity":  {
-            "value": "attività",
-            "select_value": "stato di attività",
-            "all": "Tutti",
-            "have": "avere attività",
-            "not_have": "non hanno attività"
-          }
+          "value": "attività",
+          "select_value": "stato di attività",
+          "all": "Tutti",
+          "have": "avere attività",
+          "not_have": "non hanno attività"
+        }
 
       },
       "default_filters": {
@@ -1039,10 +1039,10 @@
         "note_different": "Note distinta",
         "name_attachment": "Nome allegato",
         "status_distinguished": {
-            "value": "Stato Distinta",
-            "not_assigned": "Non assegnato",
-            "bag_not_prepared": "Borsa non preparata"
-                },
+          "value": "Stato Distinta",
+          "not_assigned": "Non assegnato",
+          "bag_not_prepared": "Borsa non preparata"
+        },
         "str_bill_date": "Start Data Distinta",
         "bill_date": "Data Distinta",
         "bar_code": "Codice Barre",
@@ -1137,7 +1137,7 @@
         "activity": "Attività"
 
       }
-      
+
     },
     "subactivity": {
       "search": {
@@ -1163,9 +1163,9 @@
         "expected_cap": "Cap previsti",
         "proposed_postman": "Postini proposti",
         "select_value": "stato di attività",
-            "todo": "fare",
-            "doing": "facendo",
-            "done": "fatta"
+        "todo": "Fare",
+        "doing": "Facendo",
+        "done": "Fatta"
       }
     }
   },
@@ -1253,7 +1253,7 @@
           "place_in_delivery": "Metti in Consegna",
           "add_products": "Aggiungi Prodotti",
           "delete": "Elimina"
-                            }
+        }
       },
       "dispatch_table": {
         "cols": {
@@ -1287,7 +1287,7 @@
         "post_cspi": {
           "postman": "Postino",
           "cspi": "CSPI"
-                     },
+        },
         "state_distinct": {
           "state": "Stato distinta",
           "distinct": "Distinta",
@@ -1307,7 +1307,6 @@
   "Itl": "IT",
   "Eng": "EN",
   "months": {
-    "x": "xxx",
     "0": "Gennaio",
     "1": "Febbraio",
     "2": "Marzo",
@@ -1322,13 +1321,13 @@
     "11": "Dicembre"
   },
   "days": {
-    "0": "Lunedì",
-    "1": "Martedì",
-    "2": "Mercoledì",
-    "3": "Giovedì",
-    "4": "Venerdì",
-    "5": "Sabato",
-    "6": "Domenica"
+    "0": "Domenica",
+    "1": "Lunedì",
+    "2": "Martedì",
+    "3": "Mercoledì",
+    "4": "Giovedì",
+    "5": "Venerdì",
+    "6": "Sabato"
   }
- }
+}
 

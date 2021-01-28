@@ -26,7 +26,7 @@ import {SnotifyService} from 'ng-snotify';
 })
 export class ListActivitiesComponent implements OnInit, OnDestroy {
 
-    
+
     actions = [
         {
             name: this.translate.instant('home.modals.not_delivered_actions.action_name'), fields: [
@@ -36,36 +36,32 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
                     ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
                 }
             ],
-            before_modal_open: (event) => this.SelectedCheck(event),
+            before_modal_open: (event) => this.selectedCheck(event),
             modal: ChangeSubActivityStatusModalComponent,
             modalData: {
                 selected: () => this.activitiesService.getSelectedSubActivities()
                 }
-                
-                
-     },
+        },
         { name: this.translate.instant('home.activities_action.remove.value'), modal: ActivityDeleteComponent },
 
     ];
     tableConfig = {
         cols: [
-            {title: 'home.modules.activities.tableConfig.name',
-                field: 'activityName', value: 'name_value', valueDisplayLabel: 'name'},
-            {title: 'home.modules.activities.tableConfig.operator',
-                field: 'operator', valueDisplay: 'select', value: 'operator_value', valueDisplayLabel: 'name', multiple: false},
+            {title: 'home.modules.activities.tableConfig.name', field: 'activityName',
+                value: 'name_value', valueDisplayLabel: 'name'},
+            {title: 'home.modules.activities.tableConfig.operator', field: 'operator',
+                valueDisplay: 'select', value: 'operator_value', valueDisplayLabel: 'name', multiple: false},
             {title: ['home.modules.activities.tableConfig.start_date', 'home.modules.activities.tableConfig.end_date'],
                 field: ['startedAt' , 'endDate'] , separator: true , value_separator: 'dashed' },
             {title: 'home.modules.activities.tableConfig.product', field: 'productsCategories',
                 valueDisplay: 'select', value: 'product_value', valueDisplayLabel: 'name', multiple: true},
             {title: ['home.modules.activities.tableConfig.quintity', 'home.modules.activities.tableConfig.quintity_per_day'],
                 field: ['productsQty' , 'productsQtyPerDay'] , separator: true , value_separator: 'dashed'},
-            {title: 'home.modules.activities.tableConfig.expected_cap',
-                field: 'caps', valueDisplay: 'select', value: 'caps_value',
-                valueDisplayLabel: 'name', multiple: true},
+            {title: 'home.modules.activities.tableConfig.expected_cap', field: 'caps', valueDisplay: 'select',
+                value: 'caps_value', valueDisplayLabel: 'name', multiple: true},
             {title: 'home.modules.activities.tableConfig.proposed_postman', field: 'postmen', valueDisplay: 'select',
                 value: 'postmen_value', valueDisplayLabel: 'full_name', multiple: true},
-            {title: 'home.modules.activities.tableConfig.state', field: 'state',
-            value: 'state_value', valueDisplayLabel: 'full_name'},
+            {title: 'home.modules.activities.tableConfig.state', field: 'state', value: 'state_value', valueDisplayLabel: 'full_name'},
         ],
         theme: 'gray-white',
         selectable: true
@@ -75,6 +71,8 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
     unsubscribe: Subject<void> = new Subject();
     @Input() parent: any ;
     @ViewChild('activitiesTable') _activitiesTable ;
+
+
     constructor(
         private paginationService: PaginationService,
         private activitiesService: ActivitiesService,
@@ -94,8 +92,6 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-
-       
         this.filtersService.setFields(FilterConfig.subactivity, this, 'products');
         this.filtersService.keep('products');
         this.filtersService.clear('products');
@@ -118,7 +114,6 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
         );
 
         this.loadData();
-        
     }
 
     handleGroupingDisplay(filters) {
@@ -159,22 +154,28 @@ export class ListActivitiesComponent implements OnInit, OnDestroy {
             }
         );
     }
-    SelectedCheck(event) {
+
+    selectedCheck(event) {
         if (event.method === 'selected' && !this.activitiesService.selectactivities.length) {
-            this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'), { showProgressBar: false, timeout: 2000 });
+            this.snotifyService.warning(
+                this.translate.instant('home.modals.not_delivered_actions.warning.select_first'),
+                { showProgressBar: false, timeout: 2000 }
+            );
             return false;
         } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
-            this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'), { showProgressBar: false, timeout: 2000 });
+            this.snotifyService.warning(
+                this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'),
+                { showProgressBar: false, timeout: 2000 }
+            );
             return false;
         }
-        console.log(event)
         return true;
-       
     }
+
     goToCalender(elm) {
-        this.router.navigate(['/wtc/dispatch']);
+        this.router.navigate(['/activities/calendar']);
     }
-    
+
     selectedItemsChanged(items) {
         this.activitiesService.selectactivities = items ;
     }

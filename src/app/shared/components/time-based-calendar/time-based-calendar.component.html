@@ -5,8 +5,11 @@
 
   <div class="date-value">
     <div class="single-day-date-switch-left" (click)="changeWeekIndex(-1)"><fa-icon [icon]="['fa', 'chevron-left']"></fa-icon></div>
-    <div class="m-auto">
+    <div class="m-auto" *ngIf="!loading">
       {{title}} {{('months.' + work_month)| translate}} {{work_year}}
+    </div>
+    <div class="m-auto" *ngIf="loading">
+      <div class="rect-loading-skeleton h-30"></div>
     </div>
     <div class="single-day-date-switch-right" (click)="changeWeekIndex(1)"><fa-icon [icon]="['fa', 'chevron-right']"></fa-icon></div>
 </div>
@@ -17,8 +20,13 @@
       <div class="first-day-blank"></div>
       <ng-container *ngFor="let day of _days; let i = index">
         <div class="day-col day-label" [ngClass]="{'first-day-col': !i, 'last-day-col': i == 6}">
-          <span class="day-name">{{('days.' + day) | translate}}</span>
-          <span>{{day + 1}}</span>
+          <ng-container *ngIf="!loading">
+            <span class="day-name">{{('days.' + day) | translate}}</span>
+            <span>{{day + 1}}</span>
+          </ng-container>
+          <ng-container *ngIf="loading">
+            <div class="rect-loading-skeleton h-30"></div>
+          </ng-container>
         </div>
       </ng-container>
     </div>
@@ -46,12 +54,18 @@
                 <div class="item" [ngClass]="{'even': i%2}">
                   <div class="item-span">
                     <ng-container *ngFor="let span of item._days_fill; let idx = index">
-                      <div class="item-span-cell empty" *ngIf="!span" [ngClass]="{'first': !idx}"></div>
-                      <div class="item-span-cell filled" *ngIf="span" [ngClass]="{'first': !idx}" ngbTooltip="{{item[config.text]}}" placement="bottom">
+                      <ng-container *ngIf="!loading">
+                        <div class="item-span-cell empty" *ngIf="!span" [ngClass]="{'first': !idx}"></div>
+                        <div class="item-span-cell filled" *ngIf="span" [ngClass]="{'first': !idx}" ngbTooltip="{{item[config.text]}}" placement="bottom">
                           <img *ngIf="span == 2 || span > 3" src="{{config.icon}}" class="single-item-icon"/>
                           <div *ngIf="span == 2 || span > 3" class="single-item-label text-truncate">{{item[config.text]}}</div>
                           <div *ngIf="span > 2"  class="in-item-group-name text-truncate">{{group[config.group_name ? config.group_name : 'name']}}</div>
-                      </div>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="loading">
+                        <div class="item-span-cell empty" *ngIf="!span" [ngClass]="{'first': !idx}"></div>
+                        <div *ngIf="span" class="rect-loading-skeleton h-30 mt-2"></div>
+                      </ng-container>
                     </ng-container>
                   </div>
                 </div>

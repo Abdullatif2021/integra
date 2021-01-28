@@ -7,7 +7,8 @@ import {ListActivitiesComponent} from './components/list-activities/list-activit
 
 const routes: Routes = [
     {path: '', component: ActivitiesComponent, children: [
-            {path: '', component: ListActivitiesComponent}
+        {path: '', component: ListActivitiesComponent},
+        {path: 'calendar', loadChildren: './modules/sub-activities-calendar/sub-activities-calendar.module#SubActivitiesCalendarModule'},
     ]}
 ];
 

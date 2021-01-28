@@ -10,8 +10,6 @@ const routes: Routes = [
     {path: 'schedule/:id', loadChildren: './modules/schedule/schedule.module#ScheduleModule', data: { preload: '/pre-dispatch' }},
     {path: 'summary', loadChildren: './modules/summary/summary.module#SummaryModule'},
     {path: 'activities', loadChildren: './modules/activities/activities.module#ActivitiesModule'},
-    {path: 'wtc', loadChildren: './modules/work-time-calendar/work-time-calendar.module#WorkTimeCalendarModule'},
-
     // {path: '404', component: E404Component},
     // {path: '**', redirectTo: '/404'}
 

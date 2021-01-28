@@ -32,10 +32,11 @@ export class ActivitiesService {
         );
     }
 
-    getSubActivities() {
+    getSubActivities(dateIndex = 0) {
         const options = { params: new HttpParams() };
         options.params = options.params.set('page', `${this.paginationService.current_page}`);
         options.params = options.params.set('pageSize', `${this.paginationService.rpp}`);
+        options.params = options.params.set('dateIndex', `${dateIndex}`);
         options.params = this.filtersService.getHttpParams(options.params);
         return this.http.get<any>(AppConfig.endpoints.getSubActivities, options).pipe(
             catchError(this.handleError)
@@ -43,7 +44,6 @@ export class ActivitiesService {
     }
     getSelectedSubActivities() {
         return this.selectactivities.map((items) => items.code && items.id );
-        
     }
     getPostmen() {
         return this.http.get<any>(AppConfig.endpoints.getActivitiesPostmen, {}).pipe(
@@ -72,6 +72,7 @@ export class ActivitiesService {
             return resolve({}) ;
         });
     }
+
     ChangeSubActivityStatus(ids, status) {
         const options = {
             state: status,
