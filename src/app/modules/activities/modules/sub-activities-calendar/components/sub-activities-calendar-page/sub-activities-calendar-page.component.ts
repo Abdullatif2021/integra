@@ -78,7 +78,7 @@ export class SubActivitiesCalendarPageComponent implements OnInit, OnDestroy {
           {type: 'date', label: 'filter_config.subactivity.search.end_date', key: 'endDate'},
           {type: 'simpleText', label: 'filter_config.products.filter.destination', key: 'destination'},
           {type: 'simpleText', label: 'filter_config.subactivity.filter.quintity', key: 'totalQuantity'},
-          {type: 'simpleText', label: 'filter_config.subactivity.filter.quintity_per_day', key: 'qtyPerDay'},
+          {type: 'number', label: 'filter_config.subactivity.filter.quintity_per_day', key: 'qtyPerDay'},
           {type: 'simpleText', label: 'filter_config.subactivity.filter.proposed_postman', key: ''},
           {type: 'ng-select', label: 'filter_config.subactivity.filter.select_value', labelVal: 'name', key: 'state',
           items: [
@@ -94,7 +94,7 @@ export class SubActivitiesCalendarPageComponent implements OnInit, OnDestroy {
   };
 
 
-  activityGetMethod = () => this.activitiesService.getSubActivities(this.calender_current_week);
+  activityGetMethod = () => this.activitiesService.getActivities(this.calender_current_week);
 
   constructor(
     private subActivitiesCalendarService: SubActivitiesCalendarService,
