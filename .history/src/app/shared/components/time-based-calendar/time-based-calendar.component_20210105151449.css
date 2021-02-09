@@ -1,0 +1,140 @@
+.time-based-calendar {
+    background: white;
+    margin: 3px;
+    border-radius: 4px;
+    height: 100%;
+    padding: 5px 2px;
+}
+.time-based-calendar-header {
+    padding: 10px;
+    text-align: center;
+}
+.tbc-days {
+    display: flex;
+    border-bottom: 1px solid #f0f0f0;
+}
+.day-col {
+    max-width: 14.28%;
+    min-width: 14.28%;
+    word-break: break-all;
+    line-break: strict;
+    padding: 5px;
+    display: flex;
+}
+.first-day-col {
+    max-width: calc(14.28% - 25px) !important;
+    min-width: calc(14.28% - 25px) !important;
+}
+.last-day-col {
+    border-right: 0px !important;
+}
+.day-label {
+    border-right: 1px solid #f0f0f0;
+}
+
+/*.time-based-calendar-body {*/
+    /*border: 1px solid #f0f0f0;*/
+    /*height: calc(100vh - 200px);*/
+/*}*/
+
+.tbc-main {
+    position: relative;
+    height: 100%;
+    height: calc(100vh - 360px);
+}
+.tbc-bg {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    position: absolute;
+    z-index: 0;
+    display: flex;
+}
+.date-value {
+    text-align: center;
+    font-size: 14px;
+    padding: 5px 0px 15px 0px;
+    display: flex;
+}
+.bg-col {
+    height: 100%;
+    border-right: 1px solid #f0f0f0;
+    max-width: 14.28%;
+    min-width: 14.28%;
+    word-break: break-all;
+    line-break: strict;
+}
+.tbc-groups {
+    display: flex;
+    flex-direction: column;
+    z-index: 99;
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.tbc-group {
+    display: flex;
+    flex: 1;
+    border-bottom: 1px solid #f0f0f0;
+}
+.tbc-group-name {
+    width: 25px;
+    border-right: 1px solid #f0f0f0;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    text-align: center;
+}
+.tbc-group-items {
+    flex: 1;
+    padding: 2px 0px;
+}
+.first-day-blank {
+    width: 25px;
+    border-right: 1px solid #f0f0f0;
+}
+.item{
+    display: flex;
+}
+.single-day-date-switch-left, .single-day-date-switch-right {
+    margin: auto;
+    cursor: pointer;
+}
+.item-span {
+    width: 100%;
+    display: flex;
+}
+.item-span-cell {
+    display: flex;
+    max-width: calc(14.28% + 5.5px);
+    min-width: calc(14.28% + 5.5px);
+    padding: 5px;
+}
+.item > .item-span > .item-span-cell.first {
+    max-width: calc(14.28% - 19px) !important;
+    min-width: calc(14.28% - 19px) !important;
+}
+
+.item > .item-span > .item-span-cell.filled {
+    background: #f1f1f1;
+}
+.item.even > .item-span > .item-span-cell.filled {
+    background: #dfdfdf !important;
+}
+.in-item-group-name {
+    flex: 1;
+    text-align: right;
+    font-size: 13px;
+    margin: auto;
+    padding-left: 5px;
+}
+.single-item-label {
+    font-size: 13px;
+    margin: auto;
+}
+.day-name {
+    flex: 1;
+}
