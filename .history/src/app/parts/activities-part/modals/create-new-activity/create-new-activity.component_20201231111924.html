@@ -1,0 +1,221 @@
+<ng-template #modalRef let-modal>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h5 class="modal-title">{{'home.modals.cre_activity.cre_new_activity' | translate}}</h5>
+      <div type="button" class="close" (click)="showExitConfirmModal()" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </div>
+    </div>
+    <div class="modal-body">
+      <ng-container *ngIf="!saving">
+        <div class="row">
+          <div class="activity-name-input col-4">
+            <input placeholder="{{'home.modals.cre_activity.activ_nam_plhold' | translate}}" [(ngModel)]="activityName" class="form-control integraa-input activity-name-input"/>
+          </div>
+        </div>
+
+        <div class="actions-container">
+
+          <div class="left"></div>
+          <div class="right">
+            <div class="new-sub-activity-button-container">
+              <button class="btn btn-primary new-sub-activity-button" (click)="addNewSubActivity()" [disabled]="disabled || (subActivities && subActivities.length && !subActivities[subActivities.length - 1].created)">{{'home.modals.cre_activity.new_sub_ativity' | translate}}</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="sub-activities-container container-fluid">
+          <div class="sub-activity-header row">
+            <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.operator' | translate}}</div> <div>{{'home.modals.cre_activity.saturday_status' | translate}}</div></div> </div>
+            <div class="col-4 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.caps' | translate}}</div> <div>{{'home.modals.cre_activity.categories' | translate}}</div></div></div>
+            <div class="col-1 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.qty_per_day' | translate}}</div> <div>{{'home.modals.cre_activity.total_qty' | translate}}</div></div></div>
+            <div class="col-2 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.str_date' | translate}}</div> <div> {{'home.modals.cre_activity.end_date' | translate}}</div></div></div>
+            <div class="col-3 d-flex"><div class="w-100 text-center"><div class="border-bottom-dashed">{{'home.modals.cre_activity.postmen' | translate}}</div> <div>{{'home.modals.cre_activity.recommended_postmen' | translate}}</div></div></div>
+            <!--<div class="col-1 d-flex"><div class="m-auto"></div></div>-->
+          </div>
+          <ng-container *ngFor="let subActivity of subActivities">
+            <!-- Sub activity view {  -->
+
+
+
+
+            <div class="sub-activity-container row z-depth-1" [ngClass]="{'disabled': disabled || (hasConflict && !( subActivity.created && !subActivity.ready )), 'created': subActivity.created, 'not-ready': subActivity.created && !subActivity.ready}">
+              <div class="sub-activity-delete" *ngIf="!subActivity.created" (click)="deleteLast()">×</div>
+
+              <div class="col-2">
+
+                <!-- Operator { -->
+                <ng-select placeholder="{{'home.modals.cre_activity.oper_plhold' | translate}}" [(ngModel)]="subActivity.operators" [items]="operators" [bindLabel]="'name'"
+                           (change)="saveSubActivity(subActivity)" class="integraa-select" [bindValue]="'id'">
+                </ng-select>
+                <!-- } Operator -->
+
+                <div class="border-bottom-dashed-black"></div>
+
+                <!-- nextSaturdayStatus { -->
+                <input type="checkbox" [(ngModel)]="subActivity.nextSaturdayStatus" (change)="saveSubActivity(subActivity)" class="d-block m-auto">
+                <!-- } nextSaturdayStatus -->
+
+              </div>
+
+              <div class="col-4">
+                <!-- Caps { -->
+                <ng-select placeholder="{{'home.modals.cre_activity.caps_plhold' | translate}}" (open)="loadCaps(subActivity)" [loading]="subActivity.isCapsLoading" #capsSelect
+                           [ngClass]="{'disabled': !subActivity.operators }"
+                           [disabled]="!subActivity.operators" [(ngModel)]="subActivity.caps" [items]="caps"
+                           (change)="capsChanged($event, subActivity)" (remove)="capRemoved($event, subActivity)" [bindLabel]="'name'" [clearable]="false" [multiple]="true" class="integraa-select"
+                           (scrollToEnd)="loadCaps(subActivity, subActivity.capsPage + 1)">
+                </ng-select>
+                <div class="caps-list preview-list" *ngIf="subActivity.caps">
+                  <ng-container *ngFor="let cap of subActivity.caps; let idx = index">
+                    <div class="cap-item preview-item" *ngIf="idx < 3" >{{cap.name}}</div>
+                  </ng-container>
+                  <div class="show-more-preview preview-item" *ngIf="subActivity.caps.length > 3" (click)="openShowMoreModal(subActivity.caps, 'name')">More</div>
+                </div>
+                <!-- } Caps -->
+
+                <div class="border-bottom-dashed-black"></div>
+
+                <!-- Categories { -->
+                <ng-select placeholder="{{'home.modals.cre_activity.categories_plhold' | translate}}" (open)="loadCategories(subActivity)" [loading]="subActivity.isCategoriesLoading" #categoriesSelect
+                           [ngClass]="{'disabled': !subActivity.caps || !subActivity.caps.length || !subActivity.operators}"
+                           [disabled]="!subActivity.caps || !subActivity.caps.length || !subActivity.operators"
+                           [items]="categories" (change)="categoriesChanged(subActivity)" (remove)="categoryRemoved($event, subActivity)" [bindLabel]="'name'" [(ngModel)]="subActivity.categories"
+                           [multiple]="true" class="integraa-select" (scrollToEnd)="loadCategories(subActivity, subActivity.categoriesPage + 1)">
+                </ng-select>
+                <div class="category-list preview-list" *ngIf="subActivity.categories">
+                  <ng-container *ngFor="let category of subActivity.categories; let idx = index">
+                    <div class="category-item preview-item" *ngIf="idx < 1" >{{category.name}}</div>
+                  </ng-container>
+                  <div class="show-more-preview preview-item" *ngIf="subActivity.categories.length > 1" (click)="openShowMoreModal(subActivity.categories, 'name')">More</div>
+                </div>
+                <!-- } Categories -->
+
+              </div>
+
+              <div class="col-1">
+
+                <!-- Quantity per day { -->
+                <input type="numer"
+                       [disabled]="!subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length || !subActivity.operators"
+                       [(ngModel)]="subActivity.qtyPerDay" (change)="productsPerDayChanged(subActivity)" class="form-control form-control-sm integraa-input text-center" placeholder="{{'home.modals.cre_activity.qty_per_day_plhold' | translate}}">
+                <!-- } Quantity per day -->
+
+                <div class="border-bottom-dashed-black"></div>
+
+                <!-- Total Quantity { -->
+                <div class="total-quantity text-center m-auto">{{subActivity.totalQuantity}}</div>
+                <!-- } Total Quantity -->
+
+              </div>
+
+              <div class="col-2">
+
+                <!-- Start Date { -->
+                <input type="date"
+                       [disabled]="disabled || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators"
+                       [(ngModel)]="subActivity.startDate" (change)="startDateChanged(subActivity)" class="form-control form-control-sm integraa-input">
+                <!-- } Start Date -->
+
+                <div class="border-bottom-dashed-black"></div>
+
+                <!-- End Date { -->
+                <input type="date" disabled [(ngModel)]="subActivity.endDate" class="form-control form-control-sm integraa-input">
+                <!-- } End Date -->
+              </div>
+
+
+              <div class="col-3">
+
+                <!-- Postmen { -->
+                <ng-select placeholder="{{'home.modals.cre_activity.postmen_plhold' | translate}}"
+                           [ngClass]="{'disabled': disabled || !subActivity.startDate || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators}"
+                           [disabled]="disabled || !subActivity.startDate || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators"
+                           [(ngModel)]="subActivity.postmen" (open)="loadPostmen(subActivity)"
+                           [items]="subActivity.postmenList" [bindLabel]="'full_name'" [multiple]="true"
+                           (change)="postmenChanged(subActivity)" class="integraa-select" >
+                </ng-select>
+                <div class="postmen-list preview-list" *ngIf="subActivity.postmen">
+                  <ng-container *ngFor="let postman of subActivity.postmen; let idx = index">
+                    <div class="postman-item preview-item" *ngIf="idx < 1" >{{postman.full_name}}</div>
+                  </ng-container>
+                  <div class="show-more-preview preview-item" *ngIf="subActivity.postmen.length > 1" (click)="openShowMoreModal(subActivity.postmen, 'full_name')">More</div>
+                </div>
+                <!-- } Postmen -->
+                <div class="border-bottom-dashed-black"></div>
+                <!-- Postmen { -->
+                <ng-select placeholder="postmen"
+                           [ngClass]="{'disabled': disabled || !subActivity.startDate || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators}"
+                           [disabled]="disabled || !subActivity.startDate || !subActivity.qtyPerDay || subActivity.qtyPerDay === '0' || !subActivity.categories || !subActivity.categories.length || !subActivity.caps || !subActivity.caps.length  || !subActivity.operators"
+                           [(ngModel)]="subActivity.recommendedPostmen"
+                           (change)="recommendedPostmenChanged(subActivity)" (open)="loadRecommendedPostmen(subActivity)"
+                           [items]="subActivity.recommendedPostmenList" [bindLabel]="'full_name'" [multiple]="true"
+                           class="integraa-select">
+                </ng-select>
+                <!-- } Postmen -->
+              </div>
+
+              <!--<div class="col-1">-->
+              <!--</div>-->
+            </div>
+            <!-- } Sub activity view -->
+          </ng-container>
+
+        </div>
+
+        <div class="actions-container">
+
+          <div class="left"></div>
+          <div class="right">
+            <div class="new-sub-activity-button-container">
+              <button class="btn btn-light mr-2 new-sub-activity-button" (click)="showExitConfirmModal()">Cancel</button>
+              <button class="btn btn-success new-sub-activity-button" [disabled]="disabled || !subActivities || !subActivities.length || hasConflict || !activityName || anyNotSaved" (click)="saveActivity(modal)">{{'home.modals.cre_activity.save_activity' | translate}}</button>
+            </div>
+          </div>
+
+        </div>
+      </ng-container>
+      <ng-container *ngIf="saving">
+        <div class="d-flex loading-container">
+          <div class="lds-ellipsis m-auto"><div></div><div></div><div></div><div></div></div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template  #showMoreModal let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <div class="show-more-list">
+        <ng-container *ngFor="let item of _show_more_items">
+          <div class="show-more-item preview-item">{{item}}</div>
+        </ng-container>
+      </div>
+
+      <div class="btns-container mt-3">
+        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Close</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template  #exitConfirmModal let-modal>
+  <div class="modal-container nFoundItemModal">
+    <div class="modal-body">
+      <br>
+      <h5>Do you want to save the changes</h5>
+      <br>
+      <div class="btns-container mt-3">
+        <button type="button" class="integraa-btn bg-danger float-right" (click)="modal.close();confirmExit(true)">No</button>
+        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close();confirmExit(false)">Yes</button>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+

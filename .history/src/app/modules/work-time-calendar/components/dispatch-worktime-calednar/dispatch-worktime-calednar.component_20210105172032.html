@@ -1,0 +1,8 @@
+<div class="d-flex tables-area full-width">
+    <div class="medium-table v-wide-col">
+        <app-simple-table #postmenTable (changed)="changePostman($event)" [getMethod]="activityGetMethod" [table]="activityTableConfig"></app-simple-table>
+    </div>
+    <div class="v-large-table v-wide-col">
+        <app-time-based-calendar (weekIndexChanged)="changeCalenderWeekIndex($event)" [config]="config" [data]="data" [baseDate]="baseDate"></app-time-based-calendar>
+    </div>
+</div>

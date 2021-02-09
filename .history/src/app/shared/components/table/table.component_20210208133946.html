@@ -1,0 +1,208 @@
+<ng-container *ngIf="!isLoading;else skeleton">
+    <!-- Table Sticky Header {  -->
+    <table class="w-100">
+        <!-- Table Head { -->
+        <thead class="table-head">
+        <tr *ngIf="cells_size.length">
+            <!-- Select item col { -->
+            <th class="table-head-item" [ngStyle]="{width:cells_size[0] + 'px'}" *ngIf="selectable">
+                <div class="select-row rounded-circle" (click)="selectAll()">
+                    <div class="selected" *ngIf="this.selectedProducts.length === this.items.length"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                    <div class="selected" *ngIf="this.selectedProducts.length && (this.selectedProducts.length !== this.items.length)"><fa-icon [icon]="['fa','minus']"></fa-icon></div>
+                </div>
+            </th>
+
+            <!-- } Select item com -->
+            <!-- Create the other cells using table data -->
+            <!-- Table cols loop {  -->
+            <ng-container *ngFor="let col of (table.cols);let idx = index">
+
+                <th scope="col" class="table-head-item border-left-white" [ngStyle]="{width:cells_size[(idx + (selectable ? 1 : 0))] + 'px'}" *ngIf="typeof(col.title) === 'string'">
+                    {{col.title | translate}}
+                    <ng-container *ngIf="col.order">
+                        <div class="order-container">
+                            <div (click)="changeOrder(col.order,'ASC')" [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-desc order-btn"></div>
+                            <div (click)="changeOrder(col.order,'DESC')" [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-asc order-btn"></div>
+                        </div>
+                    </ng-container>
+                </th>
+                <!-- if the col contains more than one field, print every one of them -->
+                <th scope="col" class="table-head-item border-left-white" [ngStyle]="{width: cells_size[idx + (selectable ? 1 : 0)] + 'px'}" *ngIf="typeof(col.title) === 'object'">
+                    <ng-container *ngFor="let title of col.title; let i = index">
+                        <div class="position-relative">
+                            <!-- print col separator if needed -->
+                            <div class="separator" *ngIf="i && col.separator"></div>
+                            <div>{{title | translate}}</div>
+                            <div class="order-container multiple-order" *ngIf="col.order && col.order[i]">
+                                <div (click)="changeOrder(col.order[i],'ASC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-desc order-btn"></div>
+                                <div (click)="changeOrder(col.order[i],'DESC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-asc order-btn"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                </th>
+            </ng-container>
+            <!-- } table cols loop -->
+        </tr>
+        </thead>
+        <!-- } Table Head -->
+    </table>
+    <!-- } Table Sticky Header -->
+
+    <!-- Real Table { -->
+    <div class="table-container {{klass}}" (window:resize)="updateTableHeaderSize()">
+        <table class="table-sm real-table w-100 {{table.theme}}">
+            <!-- -->
+            <thead class="hidden-head" >
+            <tr *ngIf="cells_size.length">
+                <!-- Select item col { -->
+                <th class="table-head-item" [ngStyle]="{width:cells_size[0] + 'px'}" *ngIf="selectable">
+                    <div class="select-row rounded-circle"></div>
+                </th>
+                <!-- } Select item com -->
+                <!-- Create the other cells using table data -->
+                <!-- Table cols loop {  -->
+                <ng-container *ngFor="let col of (table.cols);let idx = index">
+
+
+                    <th scope="col" class="table-head-item border-left-white"  *ngIf="typeof(col.title) === 'string'">
+                        {{col.title | translate}}
+                    </th>
+                    <!-- if the col contains more than one field, print every one of them -->
+                    <th scope="col" class="table-head-item border-left-white" *ngIf="typeof(col.title) === 'object'">
+                        <ng-container *ngFor="let title of col.title; let idx = index">
+                            <!-- print col separator if needed -->
+                            <div class="separator" *ngIf="idx && col.separator"></div>
+                            <div>{{title | translate}}</div>
+                        </ng-container>
+                    </th>
+                </ng-container>
+                <!-- } table cols loop -->
+            </tr>
+            </thead>
+            <!-- Table Body { -->
+            <tbody class="table-body">
+
+            <!-- print table items -->
+            <ng-container *ngFor="let item of items; let idx = index; trackBy: trackItems">
+                <!-- row item {  -->
+                <tr #tableRow class="table-item" (click)="selectItem(item)" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx, 'selected-row':isSelectedRow(item)}">
+                    <!-- select row item <static item > {  -->
+                    <td class="table-item-cell select-cell"  *ngIf="selectable">
+                        <ng-container *ngIf="table.mark && table.mark.field && item[table.mark.field] && item[table.mark.field] != '-'">
+                            <img [src]="table.mark.icon" class="row-mark" placement="right" tooltipClass="show-more-tooltip" ngbTooltip="{{ table.mark.prefix | translate }}  {{ item[table.mark.field] }}" >
+                        </ng-container>
+                        <div class="select-row rounded-circle" (click)="$event.stopPropagation();selectItem(item)">
+                            <div class="selected" *ngIf="isSelectedRow(item)"><fa-icon [icon]="['fa','check']"></fa-icon></div>
+                        </div>
+                    </td>
+                    <!-- } select row item  -->
+                    <!-- print item cells loop {  -->
+                    <ng-container *ngFor="let col of (table.cols)">
+                        <!-- item cell {  -->
+                        <td class="table-item-cell justify-content-center">
+                            <ng-container *ngIf="col.valueDisplay; else DisplayCell">
+                                <ng-select class="integraa-select" [multiple]="col.multiple" *ngIf="col.valueDisplay === 'select'" [items]="item[col.field]" [bindValue]="'id'" [(ngModel)]="item[col.value]" [bindLabel]="col.valueDisplayLabel"></ng-select>
+                                <input type="date" class="integraa-select-a-like" *ngIf="col.valueDisplay === 'dateSelect'" [value]="item[col.field]">
+                                <div class="integraa-select-a-like integraa-select-div-a-like" *ngIf="col.valueDisplay === 'singleSelect'">{{item[col.field]}}
+                                </div>
+                            </ng-container>
+                            <ng-template #DisplayCell>
+                                <span *ngIf="item[col.field] && typeof(col.field) === 'string'" [ngClass]="col.classes !== undefined ? (col.classes[col.field] ? col.classes[col.field] : '') : ''">{{item[col.field]}}</span>
+                                <span *ngIf="typeof(col.field) === 'function'" [ngClass]="col.classes !== undefined ? (col.classes[col.field] ? col.classes[col.field] : '') : ''">{{col.field(item, parent)}}</span>
+                                <!-- if the cell contains many fields then print them all  -->
+                                <span *ngIf="typeof(col.field) === 'object'">
+                                    <ng-container *ngFor="let field of col.field; let idx = index">
+                                        <div class="separator" *ngIf="idx && col.value_separator == 'dashed'"></div>
+                                        <div class="line-separator" *ngIf="idx && col.value_separator == 'line'"></div>
+                                        <div *ngIf="typeof(field) === 'string'"><span [ngClass]="col.classes !== undefined ? (col.classes[field] ? col.classes[field] : '') : ''">{{item[field]}}</span></div>
+                                        <div *ngIf="typeof(field) === 'function'"><span [ngClass]="col.classes !== undefined ? (col.classes[idx] ? col.classes[idx] : '') : ''" [innerHTML]="field(item, parent)|translate"></span></div>
+                                    </ng-container>
+                                </span>
+                            </ng-template>
+                            <ng-container *ngFor="let action of col.actions">
+                                <ng-container *ngIf="action.action=='view'" [ngTemplateOutlet]="view" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='book'" [ngTemplateOutlet]="book" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='progress'" [ngTemplateOutlet]="progress" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='pPlay'" [ngTemplateOutlet]="pPlay" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='pPause'" [ngTemplateOutlet]="pPause" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='pDelete'" [ngTemplateOutlet]="pDelete" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='print'" [ngTemplateOutlet]="print" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='excel_export'" [ngTemplateOutlet]="excel_export" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='edit'" [ngTemplateOutlet]="edit" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <ng-container *ngIf="action.action=='more'" [ngTemplateOutlet]="more" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container>
+                                <!-- <ng-container *ngIf="action.action=='calender_view'" [ngTemplateOutlet]="calender_view" [ngTemplateOutletContext]="{action:action, item:item}"></ng-container> -->
+                            </ng-container>
+                        </td>
+                        <!-- } item cell  -->
+
+                    </ng-container>
+                    <!-- } print item cells loop -->
+                </tr>
+                <tr [ngbCollapse]="!isCollapsed[item.id]" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx}">
+                    <td [colSpan]="table.cols.length + (selectable ? 1 : 0)" class="collapse-actions-container">
+                        <ng-container *ngFor="let action of table.collapsedActions ">
+                            <button class="integraa-btn collapse-action-btn z-depth-1 {{action._class}}" (click)="action.click && action.click(item, parent)">{{action.label | translate}}</button>
+                        </ng-container>
+                    </td>
+                </tr>
+                <!-- } row item -->
+            </ng-container>
+
+            </tbody>
+            <!-- } Table Body -->
+        </table>
+        <!-- Table footer -->
+    </div>
+    <!-- }  Real Table  -->
+    <div class="pagination-footer animated fadeIn"> &nbsp;
+        <!--<app-pagination [theme]="'dark'" [current_page]="page" [results_count]="pagination.tolal" ></app-pagination>-->
+    </div>
+</ng-container>
+
+<ng-template #skeleton>
+    <div class="table-skeleton-loading">
+        <div class="table-head full-width h-39 rect-black-loading-skeleton"></div>
+        <div class="table-skeleton-container">
+            <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45 mt-2"></div></div>
+            <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
+            <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
+            <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
+            <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
+            <div class="animated flipInX full-width"><div class="rect-loading-skeleton border-radius-0 h-45"></div></div>
+        </div>
+    </div>
+
+</ng-template>
+
+
+<!-- TODO complete this thing -->
+<!--  Actions templates { -->
+<ng-template #view let-action="action" let-item="item">
+    <div class="action-icon-container"><img (click)="$event.stopPropagation(); action.click && action.click(item, parent)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.view' | translate}}"></div>
+</ng-template>
+<ng-template #book><div class="action-icon-container"><img src="assets/images/notepad.svg" class="action-icon"></div></ng-template>
+<ng-template #print><div class="action-icon-container"><img src="assets/images/printer.svg" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.print' | translate}}"></div></ng-template>
+<ng-template #excel_export let-action="action" let-item="item"><div class="action-icon-container"><img (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/excel.svg" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.export' | translate}}"></div></ng-template>
+<ng-template #edit let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/edit.svg" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.edit' | translate}}"></div></ng-template>
+<ng-template #calender_view let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/calender.png" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.calender' | translate}}"></div></ng-template>
+<ng-template #pPlay let-action="action" let-item="item">
+    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/play.svg" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.resume' | translate}}" class="action-icon play-pause-icon"></div>
+</ng-template>
+<ng-template #pPause let-action="action" let-item="item">
+    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/pause.svg" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.pause' | translate}}" class="action-icon play-pause-icon"></div>
+</ng-template>
+<ng-template #pDelete let-action="action" let-item="item">
+    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/delete.x.png" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.remove' | translate}}" class="action-icon"></div>
+</ng-template>
+<ng-template #progress let-action="action" let-item="item">
+    <div class="action-icon-container"><div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': itemsProgressWarning[item.id]}" [ngStyle]="{width:item[action.field]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz {{action.status ? action.status(item) : ''}}">{{item[action.field]}} %</div></div></div>
+</ng-template>
+<ng-template #more let-item="item" let-action="action">
+    <div class="action-icon-container"><span class="collapse-arrow action-icon">
+        <fa-icon *ngIf="!isCollapsed[item.id]" (click)="$event.stopPropagation(); isCollapsed[item.id] = !isCollapsed[item.id];" [icon]="['fa','chevron-right']" placement="bottom" tooltipClass="show-more-tooltip" ngbTooltip="{{'shared.table.ngbTooltip.more' | translate}}"></fa-icon>
+        <fa-icon *ngIf="isCollapsed[item.id]" (click)="$event.stopPropagation(); isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-up']"  placement="bottom" tooltipClass="show-more-tooltip" ngbTooltip="{{'shared.table.ngbTooltip.less' | translate}}"></fa-icon>
+    </span></div>
+</ng-template>
+
+<!-- } Actions templates -->
