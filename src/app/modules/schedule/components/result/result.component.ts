@@ -14,8 +14,6 @@ import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {NotFixedTreeComponent} from '../../parts-components/not-fixed-tree/not-fixed-tree.component';
 import {BackProcessingService} from '../../../../service/back-processing.service';
-import { TranslateService } from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-result',
@@ -34,12 +32,8 @@ export class ResultComponent implements OnInit, OnDestroy {
       private mapService: MapService,
       protected preDispatchService: PreDispatchService,
       private modalService: NgbModal,
-      private backProcessingService: BackProcessingService,
-      private translate: TranslateService,
-      private translateSelectorService: TranslateSelectorService,
-
-      ) {
-      this.translateSelectorService.setDefaultLanuage();
+      private backProcessingService: BackProcessingService
+  ) {
       this.preDispatchData = this.route.snapshot.parent.data.data ;
       this.preDispatch = this.route.snapshot.parent.params.id;
       this.scheduleResults = this.route.snapshot.data.data.scheduleResults;
@@ -126,12 +120,10 @@ export class ResultComponent implements OnInit, OnDestroy {
                       });
                   });
               }
-              this.snotifyService.success(this.translate.instant('schedule.result.scheduleResults.success'),
-               { showProgressBar: false, timeout: 1500 });
+              this.snotifyService.success('Postino assegnato', { showProgressBar: false, timeout: 1500 });
           },
           error => {
-              this.snotifyService.error(this.translate.instant('schedule.result.scheduleResults.error'),
-               { showProgressBar: false, timeout: 1500 });
+              this.snotifyService.error('Qualcosa è andato storto!!', { showProgressBar: false, timeout: 1500 });
           }
       );
       this.filterPostmen(day) ;
@@ -169,8 +161,7 @@ export class ResultComponent implements OnInit, OnDestroy {
           item.children = [{skeleton: true}];
           item.loaded = true ;
           const result = await <any>this.resultsService.getSetGroups(item).catch(
-              error => this.snotifyService.error(this.translate.instant('schedule.result.scheduleResults.error'),
-               { showProgressBar: false, timeout: 1500 })
+              error => this.snotifyService.error('Qualcosa è andato storto!!', { showProgressBar: false, timeout: 1500 })
           );
           item.children =  result;
           item.loaded = false ;
@@ -189,8 +180,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       item.page = item.page ? ++item.page : 2 ;
       item.loaded = true ;
       const result = await <any>this.resultsService.getSetGroups(item).catch(
-          error => this.snotifyService.error(this.translate.instant('schedule.result.scheduleResults.error'),
-           { showProgressBar: false, timeout: 1500 })
+          error => this.snotifyService.error('Qualcosa è andato storto!!', { showProgressBar: false, timeout: 1500 })
       );
       item.children.pop();
       if (!result.length) {
@@ -218,11 +208,10 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.selected_sets = this.collectSelectedSets();
 
       if (!this.selected_sets.length) {
-          return this.snotifyService.warning(this.translate.instant('schedule.result.makeDispatchesVisible.warning'),
-           { showProgressBar: false, timeout: 1500 });
+          return this.snotifyService.warning('Nessuna distinta selezionata', { showProgressBar: false, timeout: 1500 });
       }
 
-      this.errors.sets = {};
+      this.errors.sets = {}
       this.selected_sets.forEach(set => {
           if (!set.name) {
               this.errors.sets[set.id] = 1;
@@ -230,14 +219,12 @@ export class ResultComponent implements OnInit, OnDestroy {
       });
 
       if (Object.keys(this.errors.sets).length) {
-          return this.snotifyService.warning(this.translate.instant('schedule.result.makeDispatchesVisible.warning2'),
-           {showProgressBar: false});
+          return this.snotifyService.warning('Some sets does not have name', {showProgressBar: false});
       }
       this.resultsService.makeDispatchesVisible(this.preDispatch, this.selected_sets).subscribe(
           data => {
               if (data.success) {
-                  this.snotifyService.success(this.translate.instant('schedule.result.makeDispatchesVisible.success'),
-                    { showProgressBar: false, timeout: 1500 });
+                  this.snotifyService.success('Distinta è stata creata con successo!',  { showProgressBar: false, timeout: 1500 });
                   this.selected.forEach(item => {
                       if ( item._type === 'set' ) { item.is_distenta_created = true; item.parent.sets_that_are_not_distintas--; }
                   });
@@ -255,8 +242,7 @@ export class ResultComponent implements OnInit, OnDestroy {
                   }
               }
           }, error => {
-              this.snotifyService.error(this.translate.instant('schedule.result.makeDispatchesVisible.error'),
-               { showProgressBar: false, timeout: 1500 });
+              this.snotifyService.error('Qualcosa è andato storto!!',  { showProgressBar: false, timeout: 1500 });
           }
       );
   }
@@ -320,7 +306,7 @@ export class ResultComponent implements OnInit, OnDestroy {
           markers.push({
               lat: this.preDispatchData.startPoint.lat,
               lng: this.preDispatchData.startPoint.long,
-              label: this.translate.instant('schedule.result.add_start_and_end_points.start_end'),
+              label: 'Start/End',
               title: this.preDispatchData.startPoint.text,
               id: 'start+end+point',
               icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
@@ -331,7 +317,7 @@ export class ResultComponent implements OnInit, OnDestroy {
           markers.push({
               lat: this.preDispatchData.startPoint.lat,
               lng: this.preDispatchData.startPoint.long,
-              label: this.translate.instant('schedule.result.makeDispatchesVisible.start'),
+              label: 'Start',
               title: this.preDispatchData.startPoint.text,
               id: 'start+point',
               icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
@@ -341,7 +327,7 @@ export class ResultComponent implements OnInit, OnDestroy {
           markers.push({
               lat: this.preDispatchData.endPoint.lat,
               lng: this.preDispatchData.endPoint.long,
-              label: this.translate.instant('schedule.result.makeDispatchesVisible.end'),
+              label: 'End',
               title: this.preDispatchData.startPoint.text,
               id: 'end+point',
               icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
@@ -412,9 +398,9 @@ export class ResultComponent implements OnInit, OnDestroy {
             target.children.splice(index, 0, single);
             this.movedNotFixedStorage = this.movedNotFixedStorage.filter(ix => ix.id !== single.id);
             this.movedNotFixedStorage.push({id: single.id, set: target.id, index: index});
-        });
+        })
         this.updateItemsMarkers(target);
-        this.backProcessingService.blockExit(this.translate.instant('schedule.result.updateItemsMarkers'));
+        this.backProcessingService.blockExit('Some Items was not saved, are you sure you want to exit');
     }
 
   updateItemsMarkers(set) {
@@ -434,22 +420,22 @@ export class ResultComponent implements OnInit, OnDestroy {
           this.backProcessingService.unblockExit();
           // remove the new Item
           this.movedNotFixedStorage = this.movedNotFixedStorage.concat(save);
-          this.snotifyService.error(this.translate.instant('schedule.result.saveMovedNotFixed.error'),
-           { showProgressBar: false, timeout: 1500 });
+          this.snotifyService.error('Qualcosa è andato storto spostando il prodotto', { showProgressBar: false, timeout: 1500 });
       } else {
           if (this.dragAndDropService.readyToShowMap) {
               this.notFixedProductsTableShown = false ;
               this.scheduleService.showRightSideMap();
           }
           this.backProcessingService.unblockExit();
-          this.snotifyService.success(this.translate.instant('schedule.result.saveMovedNotFixed.success'),
-           { showProgressBar: false, timeout: 1500 });
+          this.snotifyService.success('Prodotti spostati con successo', { showProgressBar: false, timeout: 1500 });
           this.changeActiveFilteringTab(this.scheduleResultsDisplayedTab);
       }
   }
 
   dropProduct(event, target, index) {
       const result = this.dragAndDropService.drop(index, this.preDispatch);
+
+
       const list = result.list;
       if (!list) { return ; }
 
@@ -462,7 +448,7 @@ export class ResultComponent implements OnInit, OnDestroy {
           }
       });
       target.children = target.children.filter(c => !trash.filter(i => i === c.id).length);
-      target.children.splice(index, 0, {address: 'loading...', productsCount: list.length, products: [], parent: {}});
+      target.children.splice(index, 0, {address: 'loading...', productsCount: list.length, products: []});
 
       if (Array.isArray(result.items)) {
           result.items.forEach(item => {
@@ -471,21 +457,20 @@ export class ResultComponent implements OnInit, OnDestroy {
       } else {
           result.items.parent.productsCount--;
       }
-        console.log('xx', Object.assign({}, target.children));
+
       this.resultsService.createNewGroup(this.preDispatch, list, index).pipe(takeUntil(this.unsubscribe)).subscribe(
           data => {
               target.children[index] = {
                   id: data.data.id,
                   address: data.data.address[0] ,
                   loaded: false,
-                  parent: target,
+                  parent: parent,
                   type: 'building',
                   addressId: data.data.id,
                   products: data.data.products,
                   priority: data.data.mapPriority,
                   productsCount: data.data.productsCount
               };
-              console.log('here we go', target.children);
           }
       );
   }
@@ -592,12 +577,10 @@ export class ResultComponent implements OnInit, OnDestroy {
   moveSelectedTo(to) {
 
       if (!this.selected.length) {
-          return this.snotifyService.warning(this.translate.instant('schedule.result.moveSelectedTo.warning'),
-           { showProgressBar: false, timeout: 1500 });
+          return this.snotifyService.warning('Nessun prodotto selezionato', { showProgressBar: false, timeout: 1500 });
       }
       if (this.scheduleResultsDisplayedTab === 'assigned') {
-          return this.snotifyService.warning(this.translate.instant('schedule.result.moveSelectedTo.warning2'),
-           { showProgressBar: false, timeout: 1500 });
+          return this.snotifyService.warning('Non puoi spostare prodotti assegnati', { showProgressBar: false, timeout: 1500 });
       }
 
       let warning = false ;
@@ -634,28 +617,26 @@ export class ResultComponent implements OnInit, OnDestroy {
 
   async sendMoveToRequest() {
       const data = await this.resultsService.moveResultsTo(this.toBeMovedTo, this.toBeMoved, this.preDispatch).toPromise().catch(e => {
-          this.snotifyService.error(this.translate.instant('schedule.result.sendMoveToRequest.error'),
-           { showProgressBar: false, timeout: 1500 });
+          this.snotifyService.error('Impossibile spostare i prodotti', { showProgressBar: false, timeout: 1500 });
       });
       if (!data) { return ; }
-      // this.selected.forEach(item => {
-      //     if (item._type === 'set') {
-      //         if (!this.scheduleResults) { return ; }
-      //         this.scheduleResults.forEach(day => {
-      //             day.sets = day.sets.filter(_set => _set.id !== item.id);
-      //             if (!day.sets.length) {
-      //                 this.scheduleResults = this.scheduleResults.filter(ix => ix.day === day.day);
-      //             }
-      //         });
-      //     } else {
-      //         item.parent[item._type === 'group' ? 'children' : 'products'] =
-      //             item.parent[item._type === 'group' ? 'children' : 'products'].filter(i => item.id !== i.id);
-      //     }
-      // });
+
+      this.selected.forEach(item => {
+          if (item._type === 'set') {
+              if (!this.scheduleResults) { return ; }
+              this.scheduleResults.forEach(day => {
+                  day.sets = day.sets.filter(_set => _set.id !== item.id);
+                  if (!day.sets.length) {
+                      this.scheduleResults = this.scheduleResults.filter(ix => ix.day === day.day);
+                  }
+              });
+          } else {
+              item.parent[item._type === 'group' ? 'children' : 'products'] =
+                  item.parent[item._type === 'group' ? 'children' : 'products'].filter(i => item.id !== i.id);
+          }
+      });
       this.selected = [] ;
-      this.changeActiveFilteringTab(this.scheduleResultsDisplayedTab);
-      return this.snotifyService.success(this.translate.instant('schedule.result.sendMoveToRequest.success'),
-       { showProgressBar: false, timeout: 1500 });
+      return this.snotifyService.success('Dati spostati correttamente', { showProgressBar: false, timeout: 1500 });
   }
 
   changeDispatchName(event, item) {

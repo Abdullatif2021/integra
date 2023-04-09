@@ -8,8 +8,6 @@ import {BuildingLocationInterface} from './core/models/building.interface';
 import {GoogleApiService} from './shared/service/google.api.service';
 import {PreDispatchService} from './service/pre-dispatch.service';
 
-
-
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -17,6 +15,7 @@ import {PreDispatchService} from './service/pre-dispatch.service';
     providers: [{provide: NgbDateParserFormatter, useClass: NgbDateITParserFormatter}]
 })
 export class AppComponent {
+
     constructor(
         private backProcessingService: BackProcessingService,
         private locatingService: LocatingService,

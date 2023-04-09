@@ -4,7 +4,6 @@ import {LocatingService} from './locating/locating.service';
 import {PlanningService} from './planning/planning.service';
 import {SnotifyService} from 'ng-snotify';
 import {PreDispatchService} from './pre-dispatch.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
     providedIn: 'root'
@@ -17,8 +16,7 @@ export class PreDispatchGlobalActionsService {
         private planningService: PlanningService,
         private snotifyService: SnotifyService,
         private preDispatchService: PreDispatchService,
-        private translate: TranslateService,
-        ) {}
+    ) {}
     planningErrors = new EventEmitter();
     handles = {} ;
     handleCreated = new EventEmitter();
@@ -26,7 +24,7 @@ export class PreDispatchGlobalActionsService {
     locatingServiceClones = {} ;
 
     getOrCreateLocatingServiceClone(id) {
-        if (this.locatingServiceClones[id]) { return this.locatingServiceClones[id] ; }
+        if (this.locatingServiceClones[id]) { return this.locatingServiceClones[id] ;}
         this.locatingServiceClones[id] = Object.assign(
             Object.create( Object.getPrototypeOf(this.locatingService)), this.locatingService
         );
@@ -70,18 +68,16 @@ export class PreDispatchGlobalActionsService {
         } else {
             sets = await planningService.divideToDistenta(preDispatchData.id, force).toPromise().catch(e => {
                 this.backProcessingService.ultimatePause(preDispatchData.id);
-                this.snotifyService.error(this.translate.instant('services.pre_dispatch_global_actions_service.ultimatePause.error'),
-                {showProgressBar: false, });
+                this.snotifyService.error('Qualcosa è andato storto, controlla le impostazioni...', {showProgressBar: false, });
                 this.planningErrors.emit('error');
             });
-            let checkResult: any = false;
+            let checkResult: any = false
             if (sets.statusCode === 480) {
                 // show confirm modal
                 checkResult = await this.preDispatchService.showConfirmPlanningModal(preDispatchData.id);
                 sets = await planningService.divideToDistenta(preDispatchData.id, checkResult).toPromise().catch(e => {
                     this.backProcessingService.ultimatePause(preDispatchData.id);
-                    this.snotifyService.error(this.translate.instant('services.pre_dispatch_global_actions_service.ultimatePause.error'),
-                     {showProgressBar: false, });
+                    this.snotifyService.error('Qualcosa è andato storto, controlla le impostazioni...', {showProgressBar: false, });
                     this.planningErrors.emit('error');
                 });
             }
@@ -91,16 +87,12 @@ export class PreDispatchGlobalActionsService {
                     .showConfirmPlanningAddProductsModal(preDispatchData.id, sets.data);
                 if (!checkAddProductsResult) {
                     this.backProcessingService.ultimatePause(preDispatchData.id);
-                    return this.snotifyService.error(this.translate.instant
-                        ('services.pre_dispatch_global_actions_service.ultimatePause.error2'),
-                    {showProgressBar: false, });
+                    return this.snotifyService.error('Process Aborted', {showProgressBar: false, });
                 }
                 sets = await planningService.divideToDistenta(preDispatchData.id, checkResult, checkAddProductsResult).toPromise()
                     .catch(e => {
                         this.backProcessingService.ultimatePause(preDispatchData.id);
-                        this.snotifyService.error(this.translate.instant
-                            ('services.pre_dispatch_global_actions_service.ultimatePause.error'),
-                         {showProgressBar: false, });
+                        this.snotifyService.error('Qualcosa è andato storto, controlla le impostazioni...', {showProgressBar: false, });
                         this.planningErrors.emit('error');
                 });
             }
@@ -113,7 +105,7 @@ export class PreDispatchGlobalActionsService {
     async runLocating(preDispatchData, handle) {
         this.backProcessingService.ignoreOne(`locating-${preDispatchData.id}`);
         preDispatchData.localize_status = 'play';
-        const locatingService =  this.getOrCreateLocatingServiceClone(preDispatchData.id);
+        const locatingService =  this.getOrCreateLocatingServiceClone(preDispatchData.id)
         await locatingService.startLocating(preDispatchData.id, handle, preDispatchData, false);
     }
 

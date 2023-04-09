@@ -15,8 +15,6 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {FiltersService} from '../../../../service/filters.service';
 import {CategoriesService} from '../../../../service/categories.service';
 import {Router} from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-delivering',
@@ -24,7 +22,6 @@ import {TranslateSelectorService} from '../../../../service/translate-selector-s
   styleUrls: ['./delivering.component.css']
 })
 export class DeliveringComponent implements OnInit, OnDestroy, AfterViewInit {
-
     dispatchTableConfig = TablesConfig.table.deliveringTable;
     postmenTableConfig = TablesConfig.simpleTable.postmenTable;
     unsubscribe: Subject<void> = new Subject();
@@ -56,12 +53,9 @@ export class DeliveringComponent implements OnInit, OnDestroy, AfterViewInit {
         protected agenciesService: AgenciesService,
         protected recipientsService: RecipientsService,
         private categoriesService: CategoriesService,
-        private router: Router,
-        private translate: TranslateService,
-        private translateSelectorService: TranslateSelectorService,
-        ) {
-            this.translateSelectorService.setDefaultLanuage();
-        }
+        private router: Router
+    ) {
+    }
 
     ngOnInit() {
         this.actionsService.setActions(this.actions);

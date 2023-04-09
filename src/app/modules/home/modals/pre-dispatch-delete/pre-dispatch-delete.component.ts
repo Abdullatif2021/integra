@@ -4,8 +4,6 @@ import {PreDispatchService} from '../../../../service/pre-dispatch.service';
 import {BackProcessingService} from '../../../../service/back-processing.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
-import {TranslateService} from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
     selector: 'app-pre-dispatch-delete',
@@ -18,14 +16,11 @@ export class PreDispatchDeleteComponent extends ModalComponent implements OnInit
         private preDispatchActionsService: PreDispatchActionsService,
         private preDispatchService: PreDispatchService,
         private backProcessingService: BackProcessingService,
-        private modalService: NgbModal,
-        private translate: TranslateService,
-        private translateSelectorService: TranslateSelectorService,
+        private modalService: NgbModal
+    ) {
+        super();
+    }
 
-        ) {
-          super();
-          this.translateSelectorService.setDefaultLanuage();
-        }
     error = null;
     items = [];
     needsToConfirmPreDispatches = [];
@@ -39,8 +34,10 @@ export class PreDispatchDeleteComponent extends ModalComponent implements OnInit
         } else {
             this.items = this.preDispatchService.selectedPreDispatches;
         }
+
     }
-    
+
+
     async run(modal, confirmModal, hasSomeRunningItemsModal) {
         const ids = [];
         this.items.forEach((item) => {

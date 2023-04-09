@@ -1,0 +1,36 @@
+<ng-template #modalRef let-modal>
+  <div class="modal-container">
+    <div class="modal-body">
+      <ng-container *ngIf="data.method === 'filters' &&  !filtersCount && !confirmed; else ActualModal" >
+        <div class="no-filters-warning-message">
+          ATTENZIONE! Non è stato applicato nessun filtro, sei sicuro di voler eseguire?
+        </div>
+        <div class="btns-container mt-3">
+          <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="confirm()">Esegui</button>
+          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
+          <div class="clear-both"></div>
+        </div>
+      </ng-container>
+      <ng-template #ActualModal>
+        <h6>Crea nuova Pre-Distinta</h6>
+        <div class="selected-count-confirm">
+          ATTENZIONE! Stai per processare <b *ngIf="data.method === 'selected'" >{{selectedCount}}</b><b *ngIf="data.method === 'filters'" >{{filteredProductsCount}}</b> righe. Assicurati che la quantità sia corretta,
+          altrimenti riprova o contatta l'assistenz. Premi su Conferma se non hai dubbi sull'operazione.
+        </div>
+        <div class="row mt-4">
+          <div class="col-12 text-danger mb-2" *ngIf="error===1">You have to select a status</div>
+          <div class="col-8 align-self-center">
+            <label>Status is required</label>
+            <ng-select bindLabel="status" [items]="stats" bindValue="id" [(ngModel)]="selectedStatus"></ng-select>
+          </div>
+        </div>
+
+        <div class="btns-container mt-3">
+          <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">Esegui</button>
+          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
+          <div class="clear-both"></div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>

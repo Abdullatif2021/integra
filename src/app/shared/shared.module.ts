@@ -34,24 +34,18 @@ import {faChevronLeft} from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { CommentsComponent } from './components/comments/comments.component';
 import {FormsModule} from '@angular/forms';
 import {faDownload} from '@fortawesome/free-solid-svg-icons/faDownload';
-import {TranslateModule} from '@ngx-translate/core';
-import { SetStatusModalComponent } from './modals/set-status-modal/set-status-modal.component';
-import {StatusesService} from './service/statuses.service';
-import { ColsBasedTableComponent } from './components/cols-based-table/cols-based-table.component';
-import { TimeBasedCalendarComponent } from './components/time-based-calendar/time-based-calendar.component';
 
 @NgModule({
   imports: [
-      CommonModule,
-      NgbModule,
-      FontAwesomeModule,
-      NgSelectModule,
-      InfiniteScrollModule,
-      RouterModule,
-      GooglePlaceModule,
-      NgxFileDropModule,
-      FormsModule,
-      TranslateModule
+    CommonModule,
+    NgbModule,
+    FontAwesomeModule,
+    NgSelectModule,
+    InfiniteScrollModule,
+    RouterModule,
+    GooglePlaceModule,
+    NgxFileDropModule,
+    FormsModule
   ],
   declarations: [
       SearchBoxComponent,
@@ -64,10 +58,7 @@ import { TimeBasedCalendarComponent } from './components/time-based-calendar/tim
       AddressInputComponent,
       IframeComponent,
       PostmenCalendarComponent,
-      CommentsComponent,
-      SetStatusModalComponent,
-      ColsBasedTableComponent,
-      TimeBasedCalendarComponent
+      CommentsComponent
   ],
   exports: [
       SearchBoxComponent,
@@ -79,20 +70,12 @@ import { TimeBasedCalendarComponent } from './components/time-based-calendar/tim
       LoadingComponent,
       AddressInputComponent,
       IframeComponent,
-      PostmenCalendarComponent,
-      TranslateModule,
-      SetStatusModalComponent,
-      ColsBasedTableComponent,
-      TimeBasedCalendarComponent
+      PostmenCalendarComponent
   ],
   providers: [
       PlacesAutocompleteService,
-      GoogleApiService,
-      StatusesService,
+      GoogleApiService
   ],
-  entryComponents: [
-      SetStatusModalComponent
-  ]
 })
 export class SharedModule {
 

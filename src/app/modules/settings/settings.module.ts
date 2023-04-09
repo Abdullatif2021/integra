@@ -9,9 +9,6 @@ import { SettingsHeaderComponent } from './components/_shared/settings-header/se
 import {NgSelectModule} from '@ng-select/ng-select';
 import { MapsComponent } from './components/map/maps/maps.component';
 import { PaginationOptionsComponent } from './components/general/pagination-options/pagination-options.component';
-import {TranslateModule, TranslateLoader , TranslatePipe} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import { HttpClientModule , HttpClient} from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -19,8 +16,7 @@ import { HttpClientModule , HttpClient} from '@angular/common/http';
     SharedModule,
     CoreModule,
     SettingsRoutingModule,
-    NgSelectModule,
-    TranslateModule.forChild()
+    NgSelectModule
   ],
   declarations: [
       SettingsComponent,

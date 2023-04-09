@@ -3,8 +3,6 @@ import {SettingsService} from '../../../../../service/settings.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/internal/operators';
 import {ApiResponseInterface} from '../../../../../core/models/api-response.interface';
-import { TranslateService } from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-pagination-options',
@@ -17,13 +15,8 @@ export class PaginationOptionsComponent implements OnInit, OnDestroy {
   loading = true ;
   unsubscribe: Subject<void> = new Subject();
   data;
-  constructor(
-    private settingsService: SettingsService ,
-    private translate: TranslateService,
-    private translateSelectorService: TranslateSelectorService,
-    ) {
-        this.translateSelectorService.setDefaultLanuage();
-    }
+  constructor(private settingsService: SettingsService) { }
+
   ngOnInit() {
     this.settingsService.getPaginationOptions().pipe(takeUntil(this.unsubscribe)).subscribe((res: any) => {
             if (res.success) {

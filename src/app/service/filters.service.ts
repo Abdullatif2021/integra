@@ -5,22 +5,19 @@ import {catchError} from 'rxjs/operators';
 import {AppConfig} from '../config/app.config';
 import {throwError} from 'rxjs';
 import {FilterInterface} from '../core/models/filter.interface';
-import {TranslateService} from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FiltersService {
 
-  constructor(
-      private http: HttpClient,
-  ) { }
+  constructor(private http: HttpClient) { }
   // the filters was changed and the changes was committed
   filtersChanges = new EventEmitter<number>() ;
   // the filters was changed but the changes was not committed
-  cleared = new EventEmitter<any>() ;
+  cleared = new EventEmitter<number>() ;
   fields = new EventEmitter() ;
-  placeholders;
+
   // the user had clicked on change view type button
   changeViewButtonClicked = new EventEmitter() ;
   changeViewTabsChanges = new EventEmitter<string>() ;
@@ -28,7 +25,6 @@ export class FiltersService {
   specials: any = {};
   barcodes = [];
   grouping = 'by_cap';
-  _to_keep = null ;
 
   getFiltersData() {
       return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getFiltersData).pipe(
@@ -37,10 +33,10 @@ export class FiltersService {
   }
 
   updateFilters(filters, placeholders = {}) {
+      console.log('updated', filters);
     const grouping = filters.grouping;
     this.grouping =  grouping ? grouping : 'by_cap' ;
     this.filters = Object.assign({}, filters) ;
-    this.placeholders = placeholders ;
       // fix filters
     Object.keys(this.filters).forEach(key => {
         if (typeof this.filters[key] === 'object' && !Array.isArray(this.filters[key])) {
@@ -55,7 +51,7 @@ export class FiltersService {
       return this.grouping;
   }
 
-  getHttpParams(options: HttpParams, includeSpecial = false) {
+  getHttpParams(options: HttpParams) {
     let applied = false ;
     // if there is no filters return the original options
     if ( typeof this.filters !== 'object') {return options ; }
@@ -66,39 +62,9 @@ export class FiltersService {
       // if a filter is valid, set applied to true
       applied = true ;
     });
-
-    if (includeSpecial && typeof this.specials === 'object') {
-        Object.keys(this.specials).forEach(key => {
-            options = options.set(key, this.specials[key].items) ;
-        });
-    }
     // if any filter was applied set withFilter param to true
     if (applied) { options = options.set('withFilter', '1') ; }
     return options ;
-  }
-
-  getFilterObject(includeSpecial = false) {
-      let applied = false ;
-      // if there is no filters return the original options
-      if ( typeof this.filters !== 'object' && !includeSpecial) { return {} ; }
-      const filters = {} ;
-      // loop through all filters and add them if there value was not empty string or null
-      Object.keys(typeof this.filters === 'object' ? this.filters : {}).forEach((filterKey) => {
-          if (!this.filters[filterKey] || this.filters[filterKey] === '') { return ; }
-          filters[filterKey] = this.filters[filterKey] ;
-          // if a filter is valid, set applied to true
-          applied = true ;
-      });
-
-      if (includeSpecial && typeof this.specials === 'object') {
-          Object.keys(this.specials).forEach(key => {
-              filters[key] = this.specials[key].items;
-          });
-      }
-
-      // if any filter was applied set withFilter param to true
-      if (applied) { filters['withFilter'] = 1 ; }
-      return filters ;
   }
 
   getFiltersObject() {
@@ -158,36 +124,14 @@ export class FiltersService {
       return throwError('');
   }
 
-
-  /**
-   * Sets filters fields.
-   * @param fields
-   * @param container
-   * @param keep is used to check if the filters needs to keep filtered values.
-   */
-  setFields(fields, container, keep: string = null) {
-      if (keep && this._to_keep !== keep) {
-          keep = null ;
-      }
-      this._to_keep = null ;
-      this.fields.emit({fields: fields, container: container, keep: keep});
-  }
-
-  /**
-   * Tells the system that this filters values might be retrived somewhere else on the system using a keep key
-   * @param to_keep
-   */
-  keep(to_keep) {
-      this._to_keep = to_keep ;
+  setFields(fields, container) {
+      this.fields.emit({fields: fields, container: container});
   }
 
   setSpecialFilter(key, value) {
       this.specials[key] = value ;
   }
 
-  getPlaceholders() {
-      return this.placeholders;
-  }
 
   clickChangeViewButton(data) {
       this.changeViewButtonClicked.emit(data);
@@ -197,16 +141,12 @@ export class FiltersService {
       this.changeViewTabsChanges.emit(data);
   }
 
-  clear(keep: string = null) {
-      this.cleared.emit({keep: this._to_keep === keep});
-      if (this._to_keep === keep) {
-          return ;
-      }
+  clear() {
       this.filters = [] ;
       this.specials = {} ;
       this.grouping = 'by_cap';
       this.clearBarcodFilter();
-      // this.cleared.emit(1);
+      this.cleared.emit(1);
   }
 
 }

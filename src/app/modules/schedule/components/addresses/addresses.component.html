@@ -4,7 +4,7 @@
     <!-- The location,add btn, edit btn -->
     <div class="departure">
       <div class="location-container">
-        <label class="d-block departure-label">{{'schedule.address.departure' | translate}}</label>
+        <label class="d-block departure-label">Partenza</label>
         <!--Corso Italia 591, A - 80010 Villaricca (NA)-->
         <input type="text" #startPointTextInput class="location-input" value="{{preDispatchData.startPoint.text}}">
         <div class="location-actions">
@@ -18,19 +18,19 @@
     <div class="groups mt-2">
       <div class="float-left group-cb found-cb">
         <input type="checkbox" (change)="filterChanged($event, 0)" class="integraa-checkbox">
-        <label>{{'schedule.address.found_yourself'|translate}} ({{preDispatchData.fixedProductCount}})</label>
+        <label>Trovati ({{preDispatchData.fixedProductCount}})</label>
       </div>
       <div class="float-left group-cb not-found-cb">
         <input type="checkbox" (change)="filterChanged($event, 1)" class="integraa-checkbox">
-        <label>{{'schedule.address.not_found'|translate}} ({{preDispatchData.notFixedProductCount}})</label>
+        <label>Non Trovati ({{preDispatchData.notFixedProductCount}})</label>
       </div>
       <div class="float-left group-cb no-house-number-cb">
         <input type="checkbox" (change)="filterChanged($event, 2)" class="integraa-checkbox">
-        <label>{{'schedule.address.without_house_num'|translate}} ({{preDispatchData.withOutHouseNumber}})</label>
+        <label>Senza numero civico ({{preDispatchData.withOutHouseNumber}})</label>
       </div>
 
       <div class="create-btn float-right">
-        <button class="integraa-btn">{{'schedule.address.create_new_group'|translate}}</button>
+        <button class="integraa-btn">Crea nuovo gruppo</button>
       </div>
 
       <div class="clear-both"></div>
@@ -39,7 +39,7 @@
 
     <!-- Search -->
     <div class="search-container">
-      <app-search-box placeholder="{{'schedule.address.search_address_plhold' | translate}}" (changed)="searchTree($event)"></app-search-box>
+      <app-search-box [placeholder]="'Cerca indirizzo'" (changed)="searchTree($event)"></app-search-box>
     </div>
 
   </div>
@@ -57,7 +57,7 @@
     <!-- Arrivo -->
     <div class="arrival">
       <div class="location-container">
-        <label class="d-block departure-label">{{'schedule.address.arrival'|translate}}</label>
+        <label class="d-block departure-label">Arrivo</label>
         <input #endPointTextInput type="text" class="location-input" value="{{preDispatchData.endPoint.text}}">
         <div class="location-actions">
           <img src="/assets/images/edit.svg" (click)="openChangeEndPointModal($event, ChangeEndPintModalRef)">
@@ -103,13 +103,13 @@
               <div class="rename-input" #itemNameInput><input type="text" value="{{item.text}}" (change)="nameChanged($event, item, itemText, itemNameInput)"></div>
               <div class="right-side">
                 <div class="warning" *ngIf="item.warning">!</div>
-                <div class="qta" *ngIf="item.qta">{{'schedule.address.quant'|translate}} {{item.qta}}</div>
+                <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
                 <div class="small-more" *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'"  id="actions-dropdown-f" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
                 <div *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'" class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
-                  <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">{{'schedule.address.rename'|translate}}</a>
-                  <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">{{'schedule.address.another_street'|translate}}</a>
-                  <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingAddressContainer, [EditBuildingLatLngContainer])">{{'schedule.address.chang_address'|translate}}</a>
-                  <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="changeLocationOnMap(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">{{'schedule.address.edit_loc'|translate}}</a>
+                  <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rinominare</a>
+                  <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">Sposta in un altra strada</a>
+                  <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingAddressContainer, [EditBuildingLatLngContainer])">Change Address</a>
+                  <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="changeLocationOnMap(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">Edit Location</a>
                 </div>
               </div>
               <div class="clear-both"></div>
@@ -123,8 +123,8 @@
               <div #EditBuildingLatLngContainer class="hidden">
                 <div class="edit-building-address-container">
                   <div class="edit-building-address-input d-flex">
-                    <input type="text" #EditBuildingLatInput placeholder="{{'schedule.address.lat_plhold' | translate}}" class="edit-location-lat-input">
-                    <input type="text" #EditBuildingLngInput placeholder="{{'schedule.address.lng_plhold' | translate}}" class="edit-location-lng-input">
+                    <input type="text" #EditBuildingLatInput placeholder="Lat" class="edit-location-lat-input">
+                    <input type="text" #EditBuildingLngInput placeholder="Lng" class="edit-location-lng-input">
                   </div>
                   <div class="edit-building-address-submit"><fa-icon class="small-circle-btn" (click)="editBuildingLocation(EditBuildingLatInput, EditBuildingLngInput, item, EditBuildingLatLngContainer)" [icon]="['fa','check-circle']"></fa-icon></div>
                 </div>
@@ -165,13 +165,13 @@
             <div class="rename-input" #itemNameInput><input type="text" value="{{item.text}}" (change)="nameChanged($event, item, itemText, itemNameInput)"></div>
             <div class="right-side">
               <div class="warning" *ngIf="item.warning">!</div>
-              <div class="qta" *ngIf="item.qta">{{'schedule.address.quant'|translate}} {{item.qta}}</div>
+              <div class="qta" *ngIf="item.qta">Q.ta {{item.qta}}</div>
               <div class="small-more" *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="['fa','sort-down']"></fa-icon></div>
               <div *ngIf="item.type == 'cityId' || item.type == 'streetId' || item.type == 'building'" class="dropdown-menu pointy-drop-down" aria-labelledby="actions-dropdown">
-                <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">{{'schedule.address.rename'|translate}}</a>
-                <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">{{'schedule.address.another_street'|translate}}</a>
-                <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingAddressContainer, [EditBuildingLatLngContainer])">{{'schedule.address.chang_address'|translate}}</a>
-                <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="changeLocationOnMap(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">{{'schedule.address.edit_loc'|translate}}</a>
+                <a class="dropdown-item" *ngIf="item.type === 'cityId' || item.type === 'streetId'" (click)="rename(itemText, itemNameInput)">Rinominare</a>
+                <a class="dropdown-item" *ngIf="item.type === 'streetId'" (click)="openMergeStreetsModal(item, MergeStreetsMosal)">Sposta in un altra strada</a>
+                <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="showElement(EditBuildingAddressContainer, [EditBuildingLatLngContainer])">Change Address</a>
+                <a class="dropdown-item" *ngIf="item.type === 'building'" (click)="changeLocationOnMap(EditBuildingLatLngContainer, [EditBuildingAddressContainer])">Edit Location</a>
               </div>
             </div>
             <div class="clear-both"></div>
@@ -185,8 +185,8 @@
             <div #EditBuildingLatLngContainer class="hidden">
               <div class="edit-building-address-container">
                 <div class="edit-building-address-input d-flex">
-                  <input type="text" #EditBuildingLatInput placeholder="{{'schedule.address.lat_plhold' | translate}}" class="edit-location-lat-input">
-                  <input type="text" #EditBuildingLngInput placeholder="{{'schedule.address.lng_plhold' | translate}}" class="edit-location-lng-input">
+                  <input type="text" #EditBuildingLatInput placeholder="Lat" class="edit-location-lat-input">
+                  <input type="text" #EditBuildingLngInput placeholder="Lng" class="edit-location-lng-input">
                 </div>
                 <div class="edit-building-address-submit"><fa-icon class="small-circle-btn" (click)="editBuildingLocation(EditBuildingLatInput, EditBuildingLngInput, item, EditBuildingLatLngContainer)" [icon]="['fa','check-circle']"></fa-icon></div>
               </div>
@@ -211,13 +211,13 @@
   <ng-template contextMenuItem [visible]="isMovable" (execute)="openMoveItemModal($event, MoveItemModalRef)">
     <div class="context-menu-item">
       <fa-icon class="text-warning modal-icon" [icon]="['fa','allergies']"></fa-icon>
-      <span> {{'schedule.address.move_products' | translate}} </span>
+      <span> Sposta prodotti </span>
     </div>
   </ng-template>
   <ng-template contextMenuItem  (execute)="reloadNode($event)">
     <div class="context-menu-item">
       <fa-icon class="text-warning" [icon]="['fa','sync']"></fa-icon>
-      <span> {{'schedule.address.reload' | translate}} </span>
+      <span> Ricarica </span>
     </div>
   </ng-template>
 </context-menu>
@@ -227,17 +227,17 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','allergies']"></fa-icon>
-        {{'schedule.address.move_products_to' | translate}}
+        Sposta prodotti a
       </h6>
       <div class="mt-3">
         <div class="form-group">
-          <label class="modal-label">{{'schedule.address.change_address2' | translate}}</label>
-          <ng-select #moveToSelect [clearable]="false" [bindLabel]="'name'" [items]="move_to_items" placeholder="{{'schedule.address.Select_target_plhold' | translate}}"></ng-select>
+          <label class="modal-label">Change address</label>
+          <ng-select #moveToSelect [clearable]="false" [bindLabel]="'name'" [items]="move_to_items" placeholder="Select Target"></ng-select>
         </div>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close();submitMoveItem(moveToSelect)" class="integraa-btn ml-2 float-right" >{{'schedule.address.run' | translate}}</button>
-        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.address.go_out' | translate}}</button>
+        <button type="button" (click)="modal.close();submitMoveItem(moveToSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
         <div class="clear-both"></div>
       </div>
     </div>
@@ -248,16 +248,16 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','allergies']"></fa-icon>
-        {{'schedule.address.merge_roads_with' | translate}}
+        Unisci strade con
       </h6>
       <div class="mt-3">
         <div class="form-group">
-          <ng-select #mergeWithSelect [clearable]="false" [bindLabel]="'name'" [items]="merge_data.targets" placeholder="{{'schedule.address.select_street_plhold' | translate}}"></ng-select>
+          <ng-select #mergeWithSelect [clearable]="false" [bindLabel]="'name'" [items]="merge_data.targets" placeholder="Select Street"></ng-select>
         </div>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close();submitMergeStreets(mergeWithSelect)" class="integraa-btn ml-2 float-right" >{{'schedule.address.run' | translate}}</button>
-        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.address.go_out' | translate}}</button>
+        <button type="button" (click)="modal.close();submitMergeStreets(mergeWithSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
         <div class="clear-both"></div>
       </div>
     </div>
@@ -269,32 +269,32 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marker-alt']"></fa-icon>
-        {{'schedule.address.chang_strpoint_prelist' | translate}}
+        Cambia punto d'inizio della pre-distinta
       </h6>
       <div class="mt-3">
         <div class="form-group" *ngIf="!editingPoint['startPoint']">
-          <label class="modal-label">{{'schedule.address.chang_strpoint' | translate}}</label>
+          <label class="modal-label">Cambia punto d'inizio</label>
           <div class="flex-container">
-            <ng-select #StartPointSelect class="change-start-end-point-input" [clearable]="false" [bindLabel]="'text'" [items]="all_start_points" placeholder="{{'schedule.address.select_strpoint_plhold' | translate}}"></ng-select>
+            <ng-select #StartPointSelect class="change-start-end-point-input" [clearable]="false" [bindLabel]="'text'" [items]="all_start_points" placeholder="Select Start Point"></ng-select>
             <div class="edit-start-end-point-btn"><img src="/assets/images/edit.svg" (click)="editPoint('startPoint', StartPointSelect)"></div>
           </div>
           <div class="btns-container mt-3">
-            <button type="button" (click)="modal.close();submitChangeStartPoint(StartPointSelect)" class="integraa-btn ml-2 float-right" >{{'schedule.address.run' | translate}}</button>
-            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.address.go_out' | translate}}</button>
+            <button type="button" (click)="modal.close();submitChangeStartPoint(StartPointSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
             <div class="clear-both"></div>
           </div>
         </div>
         <div class="form-group" *ngIf="editingPoint['startPoint']">
-          <label class="modal-label">{{'schedule.address.edit_strpoint' | translate}}</label>
-          <p class="small-note">{{'schedule.address.modi_strpoint_involve_prelist' | translate}}</p>
+          <label class="modal-label">Modifica punto d'inizio</label>
+          <p class="small-note">la modifica di questo punto iniziale comporterà la modifica su tutte le pre-distinte</p>
           <div class="flex-container">
             <div class="edit-start-end-point-input"><app-address-input [point]="editingPoint['startPoint']" #EditStartPointInput ></app-address-input></div>
-            <div class="cancel-edit-start-end-point-btn" (click)="cancelEditPoint('startPoint')">{{'schedule.address.x' | translate}}</div>
+            <div class="cancel-edit-start-end-point-btn" (click)="cancelEditPoint('startPoint')">X</div>
           </div>
           <div *ngIf="errors['editStartPoint']" class="error-msg">{{errors['editStartPoint']}}</div>
           <div class="btns-container mt-3">
-            <button type="button" (click)="submitEditStartPoint(EditStartPointInput)" class="integraa-btn ml-2 float-right" >{{'schedule.address.run' | translate}}</button>
-            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.address.go_out' | translate}}</button>
+            <button type="button" (click)="submitEditStartPoint(EditStartPointInput)" class="integraa-btn ml-2 float-right" >Esegui</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
             <div class="clear-both"></div>
           </div>
         </div>
@@ -308,32 +308,32 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marker-alt']"></fa-icon>
-        {{'schedule.address.chang_endpoint_prelist' | translate}}
+        Cambia punto di fine della pre-distinta
       </h6>
       <div class="mt-3">
         <div class="form-group" *ngIf="!editingPoint['endPoint']">
-          <label class="modal-label">{{'schedule.address.chang_endpoint' | translate}}</label>
+          <label class="modal-label">Cambia punto di fine</label>
           <div class="flex-container">
-            <ng-select #EndPointSelect class="change-start-end-point-input" [clearable]="false" [bindLabel]="'text'" [items]="all_end_points" placeholder="{{'schedule.address.select_arriv_point_plhold' | translate}}"></ng-select>
+            <ng-select #EndPointSelect class="change-start-end-point-input" [clearable]="false" [bindLabel]="'text'" [items]="all_end_points" placeholder="Select End Point"></ng-select>
             <div class="edit-start-end-point-btn"><img src="/assets/images/edit.svg" (click)="editPoint('endPoint', EndPointSelect)"></div>
           </div>
           <div class="btns-container mt-3">
-            <button type="button" (click)="modal.close();submitChangeEndPoint(EndPointSelect)" class="integraa-btn ml-2 float-right" >{{'schedule.address.run' | translate}}</button>
-            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.address.go_out' | translate}}</button>
+            <button type="button" (click)="modal.close();submitChangeEndPoint(EndPointSelect)" class="integraa-btn ml-2 float-right" >Esegui</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
             <div class="clear-both"></div>
           </div>
         </div>
         <div class="form-group" *ngIf="editingPoint['endPoint']">
-          <label class="modal-label">{{'schedule.address.edit_strpoint2' | translate}}</label>
-          <p class="small-note">{{'schedule.address.modi_strpoint_involve_prelist2' | translate}}</p>
+          <label class="modal-label">Modifica punto di fine</label>
+          <p class="small-note">la modifica di questo punto di fine comporterà la modifica su tutte le pre-distinte</p>
           <div class="flex-container">
             <div class="edit-start-end-point-input"><app-address-input [point]="editingPoint['endPoint']" #EditEndPointInput ></app-address-input></div>
             <div class="cancel-edit-start-end-point-btn" (click)="cancelEditPoint('endPoint')">X</div>
           </div>
           <div *ngIf="errors['editEndPoint']" class="error-msg">{{errors['editEndPoint']}}</div>
           <div class="btns-container mt-3">
-            <button type="button" (click)="submitEditEndPoint(EditEndPointInput)" class="integraa-btn ml-2 float-right" >{{'schedule.address.run' | translate}}</button>
-            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.address.go_out' | translate}}</button>
+            <button type="button" (click)="submitEditEndPoint(EditEndPointInput)" class="integraa-btn ml-2 float-right" >Esegui</button>
+            <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Esci</button>
             <div class="clear-both"></div>
           </div>
         </div>
@@ -347,19 +347,17 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marked-alt']"></fa-icon>
-        {{'schedule.address.create_strpoint' | translate}}
+        Crea punto d'inizio
       </h6>
       <div class="mt-3">
         <div class="form-group">
-          <label class="modal-label">{{'schedule.address.strpoint_address' | translate}}</label>
+          <label class="modal-label">Indirizzo punto d'inizio</label>
           <app-address-input #StartPontAddressInput></app-address-input>
           <div *ngIf="errors['createStartPoint']" class="error-msg">{{errors['createStartPoint']}}</div>
         </div>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" (click)="createStartPoint(StartPontAddressInput)" class="integraa-btn ml-2 float-right" >{{'schedule.address.run' | translate}}</button>
-        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.address.go_out' | translate}}</button>
-
+        <button type="button" (click)="createStartPoint(StartPontAddressInput)" class="integraa-btn ml-2 float-right" >Esegui</button>
         <div class="clear-both"></div>
       </div>
     </div>
@@ -371,18 +369,17 @@
     <div class="modal-body">
       <h6>
         <fa-icon class="text-warning modal-icon" [icon]="['fa','map-marked-alt']"></fa-icon>
-        {{'schedule.address.create_strpoint2' | translate}}
+        Crea punto di fine
       </h6>
       <div class="mt-3">
         <div class="form-group">
-          <label class="modal-label">{{'schedule.address.strpoint_address2' | translate}}</label>
+          <label class="modal-label">Indirizzo punto di fine</label>
           <app-address-input #EndPontAddressInput></app-address-input>
           <div *ngIf="errors['createEndPoint']" class="error-msg">{{errors['createEndPoint']}}</div>
         </div>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" (click)="createEndPoint(EndPontAddressInput)" class="integraa-btn ml-2 float-right" >{{'schedule.address.run' | translate}}</button>
-        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'schedule.address.go_out' | translate}}</button>
+        <button type="button" (click)="createEndPoint(EndPontAddressInput)" class="integraa-btn ml-2 float-right" >Esegui</button>
         <div class="clear-both"></div>
       </div>
     </div>

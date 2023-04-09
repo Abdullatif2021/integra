@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule , HttpClient} from '@angular/common/http';
 import { UserNavComponent } from './components/user-nav/user-nav.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -26,8 +25,6 @@ import {AngularDraggableModule} from 'angular2-draggable';
 import { GlobalModalsComponent } from './components/global-modals/global-modals.component';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {faCalendarDay} from '@fortawesome/free-solid-svg-icons/faCalendarDay';
-import {TranslateModule} from '@ngx-translate/core';
-
 
 @NgModule({
   imports: [
@@ -40,9 +37,7 @@ import {TranslateModule} from '@ngx-translate/core';
     SharedModule,
     RouterModule,
     AngularDraggableModule,
-    AutocompleteLibModule,
-    HttpClientModule,
-    TranslateModule.forChild(),
+    AutocompleteLibModule
   ],
   declarations: [
       UserNavComponent,
@@ -56,8 +51,7 @@ import {TranslateModule} from '@ngx-translate/core';
     MainNavComponent,
     SearchPanelComponent,
     IntegraaModalComponent,
-    GlobalModalsComponent,
-    TranslateModule
+    GlobalModalsComponent
   ],
 })
 export class CoreModule {
@@ -77,4 +71,3 @@ export class CoreModule {
         library.add(faCalendarWeek);
     }
 }
-

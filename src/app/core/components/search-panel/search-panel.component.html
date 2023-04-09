@@ -6,44 +6,37 @@
     <ng-container *ngIf="isCollapsed && !_has_active_filters">
       <!-- easy search input { -->
       <div class="col-lg-2 wide-col" >
-        <app-search-box *ngIf="!_search" placeholder= "{{'core.search_panal.search.place_holder'| translate}}" [style]="'thin'" [value]="search_value" ></app-search-box>
+        <app-search-box *ngIf="!_search" [placeholder]="'Cerca'" [style]="'thin'" [value]="search_value" ></app-search-box>
         <ng-container *ngFor="let field of searchFields">
           <ng-container *ngIf="field.type === 'text'">
-            <app-search-box (changed)="search_value = $event" *ngIf="_search && _search.key == field.key" placeholder= "{{'core.search_panal.search.place_holder' | translate}}" [style]="'thin'" ></app-search-box>
+            <app-search-box (keydown)="checkSearchSubmit($event)" (changed)="search_value = $event" *ngIf="_search && _search.key == field.key" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
           </ng-container>
           <ng-container *ngIf="field.type === 'number'">
-            <input type="number" class="search-number-input" *ngIf="_search && _search.key == field.key" [(ngModel)]="search_value" placeholder= "{{'core.search_panal.search.place_holder' | translate}}">
+            <input (keydown)="checkSearchSubmit($event)" type="number" class="search-number-input" *ngIf="_search && _search.key == field.key" [(ngModel)]="search_value" [placeholder]="'Cerca'">
           </ng-container>
           <ng-container *ngIf="field.type === 'ng-select' && _search && _search.key == field.key">
-            <ng-select [bindValue]="'id'" [clearable]="false" [loading]="_search.loadingState" (search)="getFieldRemoteData($event,_search)" [(ngModel)]="search_value" *ngIf="field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="{{'core.search_panal.search.place_holder' | translate}}">
-              <ng-template ng-label-tmp="" let-item="item"><span>{{item[_search.labelVal] | translate}}</span></ng-template>
-              <ng-template ng-option-tmp="" let-item="item"><span>{{item[_search.labelVal] | translate}}</span></ng-template>
-            </ng-select>
-            <ng-select [bindValue]="'id'" [clearable]="false" [(ngModel)]="search_value" *ngIf="!field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="{{'core.search_panal.search.place_holder' | translate}}">
-              <ng-template ng-label-tmp="" let-item="item"><span>{{item[_search.labelVal] | translate}}</span></ng-template>
-              <ng-template ng-option-tmp="" let-item="item"><span>{{item[_search.labelVal] | translate}}</span></ng-template>
-            </ng-select>
+            <ng-select (keydown)="checkSearchSubmit($event)" [bindValue]="'id'" [clearable]="false" [loading]="_search.loadingState" (search)="getFieldRemoteData($event,_search)" [(ngModel)]="search_value" *ngIf="field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
+            <ng-select (keydown)="checkSearchSubmit($event)" [bindValue]="'id'" [clearable]="false" [(ngModel)]="search_value" *ngIf="!field.getMethod" class="integraa-select" [bindLabel]="_search.labelVal" [items]="_search.items" placeholder="Cerca"></ng-select>
           </ng-container>
           <ng-container *ngIf="field.type === 'date'">
-            <input [(ngModel)]="search_value" *ngIf="_search && _search.key == field.key" #searchDateInput type="date" class="date-select">
+            <input (keydown)="checkSearchSubmit($event)" [(ngModel)]="search_value" *ngIf="_search && _search.key == field.key" #searchDateInput type="date" class="date-select">
           </ng-container>
         </ng-container>
       </div>
       <!-- } easy search input -->
       <!-- easy search field select { -->
       <div class="col-lg-2 wide-col">
-        <ng-select [(ngModel)]="_search" (change)="searchFieldChanged($event)" [items]="searchFields" class="integraa-select" placeholder="{{'core.search_panal.search.place_holder2' | translate}}"></ng-select>
+        <ng-select [(ngModel)]="_search" (change)="searchFieldChanged($event)" [items]="searchFields" class="integraa-select" placeholder="Nel Campo"></ng-select>
       </div>
       <!-- } easy search field select  -->
       <!-- easy search submit { -->
-      <div class="col-lg-3" >
-        <button class="integraa-btn" *ngIf="_search" (click)="clearsearch()">{{'core.search_panal.filter.btn_reset' | translate}}</button>
-        <button type="button" id="search" (click)="search()" class="integraa-btn">{{'core.search_panal.search.button1' | translate}}</button>
+      <div class="col-lg-3">
+        <button type="button" (click)="search()" class="integraa-btn">Cerca</button>
       </div>
       <!-- } easy search submit -->
     </ng-container>
     <!-- } easy search  -->
-    <div class="col-lg-10" *ngIf="isCollapsed && _has_active_filters">
+    <div class="col-lg-9" *ngIf="isCollapsed && _has_active_filters">
       <div class="search-inputs-container row">
         <ng-container *ngFor="let field of filtersFields; let idx = index;">
           <ng-container *ngIf="_active_filters[field.key]" [ngTemplateOutlet]="searchItem" [ngTemplateOutletContext]="{input: field, idx: idx}"></ng-container>
@@ -51,9 +44,9 @@
       </div>
     </div>
     <!-- expanded search expand btn { -->
-    <div class="" [ngClass]="{'offset-9':!isCollapsed, 'offset-2':!_has_active_filters, 'col-lg-2': isCollapsed && _has_active_filters, 'col-lg-3': !isCollapsed || !_has_active_filters}">
+    <div class="col-lg-3" [ngClass]="{'offset-9':!isCollapsed, 'offset-2':!_has_active_filters}">
       <button type="button" class="integraa-btn search-panel-collapse-btn float-right" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="isCollapsed" aria-controls="searchCollapse">
-        <span class="mr-1">{{'core.search_panal.filter.button1' | translate}}</span>
+        <span class="mr-1">Filtra</span>
         <ng-container *ngIf="isCollapsed; else collapseArrowUp">
           <fa-icon [icon]="['fa','chevron-down']"></fa-icon>
         </ng-container>
@@ -63,9 +56,9 @@
       <a [routerLink]="fieldsData.fields.changeViewButton.route" *ngIf="fieldsData && fieldsData.fields.changeViewButton" type="button" class="change-view-button float-right" (click)="changeViewButtonClicked(fieldsData.fields.changeViewButton.route)">
         <img src="{{fieldsData.fields.changeViewButton.icon}}">
       </a>
-      
+
       <div class="change-view-tabs-container" *ngIf="fieldsData && fieldsData.fields.changeViewTabs">
-        <div class="change-view-tab" *ngFor="let tab of fieldsData.fields.changeViewTabs.tabs" (click)="clickHelperButton(tab)" [ngClass]="{'active-view-tab': tab.active}" >
+        <div class="change-view-tab" *ngFor="let tab of fieldsData.fields.changeViewTabs.tabs" (click)="clickHelperButton(tab)" [ngClass]="{'active-view-tab': tab.active, 'disabled-view-tab': fieldsData.fields.changeViewTabs.lock}" >
           <fa-icon *ngIf="tab.icon" [icon]="tab.icon"></fa-icon>
           {{tab.text}}
         </div>
@@ -88,8 +81,8 @@
 
       <!-- expanded search buttons { -->
       <div class="row mt-2">
-        <button class="integraa-btn" (click)="clearFilters()">{{'core.search_panal.filter.btn_reset' | translate}}</button>
-        <button class="integraa-btn ml-2" (click)="filter()">{{'core.search_panal.filter.btn_research' | translate}}</button>
+        <button class="integraa-btn" (click)="clearFilters()">Azzera</button>
+        <button class="integraa-btn ml-2" (click)="filter()">Ricerca</button>
       </div>
       <!-- } expanded search buttons -->
 
@@ -103,10 +96,7 @@
     <!-- Actions area {  -->
     <!-- Action select {  -->
     <div class="col-lg-2 col-md-10" *ngIf="actions">
-      <ng-select [items]="actions" [(ngModel)]="_m_active_action" (change)="changeActiveAction($event)" [bindLabel]="'name'" class="integraa-select" placeholder="{{'core.search_panal.action_select.plhold' | translate}}">
-        <ng-template ng-label-tmp="" let-item="item"><span>{{item.name | translate}}</span></ng-template>
-        <ng-template ng-option-tmp="" let-item="item"><span>{{item.name | translate}}</span></ng-template>
-      </ng-select>
+      <ng-select [items]="actions" [(ngModel)]="_m_active_action" (change)="changeActiveAction($event)" notFoundText='Nessun record trovato' [bindLabel]="'name'" class="integraa-select" placeholder="Scegli un'operazione"></ng-select>
     </div>
     <!-- } Action select -->
     <ng-container *ngIf="active_action">
@@ -114,10 +104,7 @@
       <ng-container *ngFor="let field of active_action.fields" >
         <ng-container *ngIf="field.type == 'select'">
           <div class="col-lg-2 col-md-10" >
-            <ng-select [clearable]="false" (change)="changeActiveAction(active_action,field,$event)" class="integraa-select" [items]="field.options" [bindLabel]="'name'" [(ngModel)]="field.selectedAttribute">
-              <ng-template ng-label-tmp="" let-item="item"><span>{{item.name | translate}}</span></ng-template>
-              <ng-template ng-option-tmp="" let-item="item"><span>{{item.name | translate}}</span></ng-template>
-            </ng-select>
+            <ng-select [clearable]="false" (change)="changeActiveAction(active_action,field,$event)" class="integraa-select" [items]="field.options" [bindLabel]="'name'" notFoundText='Nessun record trovato' [(ngModel)]="field.selectedAttribute"></ng-select>
           </div>
         </ng-container>
         <ng-container *ngIf="field.type == 'text'">
@@ -127,14 +114,14 @@
         </ng-container>
         <ng-container *ngIf="field.type == 'button'">
           <div class="col-lg-1 col-md-10" >
-            <button type="submit" (click)="field.click(active_action)" class="integraa-btn integraa-light-btn">{{ field.label | translate }}</button>
+            <button type="submit" (click)="field.click(active_action)" class="integraa-btn integraa-light-btn">{{ field.label }}</button>
           </div>
         </ng-container>
       </ng-container>
     </ng-container>
     <!-- Action submit btn {  -->
     <div class="col-lg-2 col-md-2">
-      <button type="button" (click)="runAction()" class="integraa-btn">{{'core.search_panal.action_select.button' | translate}}</button>
+      <button type="button" (click)="runAction()" class="integraa-btn">Esegui</button>
     </div>
     <!-- } Action submit btn  -->
     <!-- } Actions area -->
@@ -151,25 +138,19 @@
 <ng-template #searchItem let-input="input" let-idx="idx">
   <ng-container *ngIf="!input.group">
     <div class="search-input col-2 wide-col">
-      <label>{{input.label |translate}}</label>
+      <label>{{input.label}}</label>
       <ng-container *ngIf="input.type === 'text'">
-        <app-search-box [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" class="{{input._class}}" (changed)="changeFiltersValue($event, input.key, input.type, idx)" placeholder= "{{'core.search_panal.search.place_holder' | translate}}" [style]="'thin'" ></app-search-box>
+        <app-search-box [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" class="{{input._class}}" (changed)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'" [style]="'thin'" ></app-search-box>
       </ng-container>
       <ng-container *ngIf="input.type === 'simpleText'">
-        <input value="{{input.value}}" [(ngModel)]="filters[input.key]" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" placeholder= "{{'core.search_panal.search.place_holder' | translate}}">
+        <input (keydown)="checkFilterSubmit($event)" value="{{input.value}}" [(ngModel)]="filters[input.key]" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
       </ng-container>
       <ng-container *ngIf="input.type === 'number'">
-        <input value="{{input.value}}" [(ngModel)]="filters[input.key]"  type="number" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" placeholder= "{{'core.search_panal.search.place_holder' | translate}}">
+        <input (keydown)="checkFilterSubmit($event)" value="{{input.value}}" [(ngModel)]="filters[input.key]"  type="number" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" class="form-control {{input._class}}" (change)="changeFiltersValue($event, input.key, input.type, idx)" [placeholder]="'Cerca'">
       </ng-container>
       <ng-container *ngIf="input.type === 'ng-select'">
-        <ng-select  [(ngModel)]="filters[input.key]" [bindValue]="'id'" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" [loading]="input.loadingState" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="{{'core.search_panal.search.place_holder' | translate}}">
-          <ng-template ng-label-tmp="" let-item="item"><span>{{item[input.labelVal] | translate}}</span></ng-template>
-          <ng-template ng-option-tmp="" let-item="item"><span>{{item[input.labelVal] | translate}}</span></ng-template>
-        </ng-select>
-        <ng-select  [(ngModel)]="filters[input.key]" [bindValue]="'id'" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="{{'core.search_panal.search.place_holder' | translate}}">
-          <ng-template ng-label-tmp="" let-item="item"><span>{{item[input.labelVal] | translate}}</span></ng-template>
-          <ng-template ng-option-tmp="" let-item="item"><span>{{item[input.labelVal] | translate}}</span></ng-template>
-        </ng-select>
+        <ng-select (keydown)="checkFilterSubmit($event)" [(ngModel)]="filters[input.key]" [bindValue]="'id'" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" [loading]="input.loadingState" (search)="getFieldRemoteData($event,input)" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
+        <ng-select (keydown)="checkFilterSubmit($event)" [(ngModel)]="filters[input.key]" [bindValue]="'id'" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" *ngIf="!input.getMethod" class="filters-select-input {{input._class}}" [bindLabel]="input.labelVal" [items]="input.items" placeholder="Cerca"></ng-select>
       </ng-container>
       <ng-container *ngIf="input.type === 'auto-complete'">
         <ng-autocomplete
@@ -184,15 +165,16 @@
                 [itemTemplate]="itemTemplate"
                 [notFoundTemplate]="notFoundTemplate"
                 [minQueryLength]="3"
-                placeHolder= "{{'core.search_panal.search.place_holder' | translate}}"
+                [placeHolder]="'Cerca'"
+                (keydown)="checkFilterSubmit($event)"
         >
         </ng-autocomplete>
       </ng-container>
       <ng-container *ngIf="input.type === 'tag'">
-        <ng-select [(ngModel)]="filters[input.key]" [addTag]="'any'" [multiple]="true" notFoundText="Add Item" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" class="filters-select-input {{input._class}}" [items]="input.items" placeholder="{{'core.search_panal.search.place_holder' | translate}}"></ng-select>
+        <ng-select (keydown)="checkFilterSubmit($event)"  [(ngModel)]="filters[input.key]" [addTag]="'any'" [multiple]="true" notFoundText="Add Item" [clearable]="!input.unclearbale" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" class="filters-select-input {{input._class}}" [items]="input.items" placeholder="Cerca"></ng-select>
       </ng-container>
       <ng-container *ngIf="input.type === 'date'">
-        <input [(ngModel)]="filters[input.key]" (ngModelChange)="filters[input.key] = $event" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" type="date" class="date-select {{input._class}}">
+        <input (keydown)="checkFilterSubmit($event)" [(ngModel)]="filters[input.key]" (ngModelChange)="filters[input.key] = $event" [ngClass]="{'active-filter':_active_filters[input.key], 'filled-filter':_changed_filters[input.key]}" (change)="changeFiltersValue($event, input.key, input.type, idx)" type="date" class="date-select {{input._class}}">
       </ng-container>
     </div>
   </ng-container>
@@ -200,12 +182,12 @@
     <div class="search-input-group col-2">
       <div class="row">
         <div class="col-12 wide-col">
-          <label>{{input.label |translate}}</label>
+          <label>{{input.label}}</label>
         </div>
         <ng-container *ngFor="let subInputType of input.type; let subIdx = index ,first as isFirst">
           <!-- TODO handle all types -->
           <div class="search-input col-6 wide-col" [ngClass]="{'pl-1':!isFirst}">
-            <input [(ngModel)]="filters[input.key[subIdx]]"  value="{{  input.value ? input.value[input.key[subIdx]] : '' | translate}}" [ngClass]="{'active-filter':_active_filters[input.key[subIdx]], 'filled-filter':_changed_filters[input.key[subIdx]]}" (change)="changeFiltersValue($event, input.key[subIdx], subInputType, idx)" type="date" class="form-control date-select">
+            <input (keydown)="checkFilterSubmit($event)" [(ngModel)]="filters[input.key[subIdx]]"  value="{{  input.value ? input.value[input.key[subIdx]] : ''}}" [ngClass]="{'active-filter':_active_filters[input.key[subIdx]], 'filled-filter':_changed_filters[input.key[subIdx]]}" (change)="changeFiltersValue($event, input.key[subIdx], subInputType, idx)" type="date" class="form-control date-select">
           </div>
         </ng-container>
       </div>
@@ -218,11 +200,11 @@
 <ng-template  #confirmUnAppliedFiltersModalRef let-modal>
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
-      <h6 class="text-center">{{'core.search_panal.filters_changed.value' | translate}}</h6>
+      <h6 class="text-center">ATTENZIONE! Alcuni filtri sono stati cambiati e non applicati, sei sicuro di voler eseguire ?</h6>
       <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close();runAction(true)" class="integraa-btn ml-2 float-right" >{{'core.search_panal.filters_changed.without_applying' | translate}}</button>
-        <button type="button" (click)="modal.close();filter();runAction(true)" class="integraa-btn ml-2 float-right integraa-btn-confirm" >{{'core.search_panal.filters_changed.run' | translate}}</button>
-        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >{{'core.search_panal.filters_changed.close' | translate}}</button>
+        <button type="button" (click)="modal.close();runAction(true)" class="integraa-btn ml-2 float-right" >Esegui senza Applicare</button>
+        <button type="button" (click)="modal.close();filter();runAction(true)" class="integraa-btn ml-2 float-right integraa-btn-confirm" >Applica ed Esegui</button>
+        <button type="button" (click)="modal.close();" class="integraa-btn integraa-btn-dark ml-2 float-right" >Chiudi</button>
         <div class="clear-both"></div>
       </div>
     </div>
@@ -235,5 +217,5 @@
 </ng-template>
 
 <ng-template #notFoundTemplate let-notFound>
-  <div class="bg-white" >{{'core.search_panal.filters_changed.no_result' | translate}}</div>
+  <div class="bg-white" >Nessun risultato</div>
 </ng-template>

@@ -10,8 +10,6 @@ import {TableComponent} from '../../../../../../shared/components/table/table.co
 import {FilterConfig} from '../../../../../../config/filters.config';
 import {ApiResponseInterface} from '../../../../../../core/models/api-response.interface';
 import {CategoriesService} from '../../../../../../service/categories.service';
-import { TranslateService } from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../../../../service/translate-selector-service';
 
 @Component({
     selector: 'app-pre-dispatch-products',
@@ -27,13 +25,9 @@ export class PreDispatchProductsComponent implements OnInit, AfterViewChecked {
         private filtersService: FiltersService,
         private actionsService: ActionsService,
         private recipientsService: RecipientsService,
-        private categoriesService: CategoriesService,
-        private translate: TranslateService,
-        private translateSelectorService: TranslateSelectorService,
-
-        ) {
-            this.translateSelectorService.setDefaultLanuage();
-          }
+        private categoriesService: CategoriesService
+    ) {
+    }
 
     id: number;
     table = TablesConfig.table.productsTable;

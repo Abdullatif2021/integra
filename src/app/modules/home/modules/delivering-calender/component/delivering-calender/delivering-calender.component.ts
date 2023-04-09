@@ -14,8 +14,7 @@ import {CategoriesService} from '../../../../../../service/categories.service';
 import {AgenciesService} from '../../../../../../service/agencies.service';
 import {RecipientsService} from '../../../../../../service/recipients.service';
 import {CustomersService} from '../../../../../../service/customers.service';
-import {TranslateSelectorService} from '../../../../../../service/translate-selector-service';
-import {TranslateService} from '@ngx-translate/core';
+
 @Component({
   selector: 'app-delivering-calender',
   templateUrl: './delivering-calender.component.html',
@@ -48,60 +47,50 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
 
     calendar_data = null;
     subViewType = 'week';
+
     filter_config = {
         search: (container, sp) => [
-            {type: 'text', label: this.translate.instant('home.modules.delivering_calender.name'), key: 'name'},
-            {type: 'ng-select', label: this.translate.instant('home.modules.delivering_calender.agency'),
-             key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name'},
-            {type: 'text', label: this.translate.instant('home.modules.delivering_calender.productTypeName'),
-             key: 'productTypeName', value: ''},
-            {type: 'text', label: this.translate.instant('home.modules.delivering_calender.recipientName'), key: 'recipientName'},
+            {type: 'text    ', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'ng-select', label: 'Agenzia', key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name'},
+            {type: 'text', label: 'Nome Prodotto:', key: 'productTypeName', value: ''},
+            {type: 'text', label: 'Nominativo Destinatario', key: 'recipientName'},
 
         ],
         filters: (container, sp) => [
-            {type: 'auto-complete', label: this.translate.instant('home.modules.delivering_calender.client'), key: 'customerId',
+            {type: 'auto-complete', label: 'Cliente', key: 'customerId',
                 getMethod: (term) => container.customersService.getCustomersByName(term),
                 items:  sp.filters_data.customers, labelVal: 'name', value: '', _class: 'auto-complete'},
-            {type: 'auto-complete', label: this.translate.instant('home.modules.delivering_calender.filteragency'),
-             getMethod: (term) => container.agenciesService.getAgenciesByName(term),
+            {type: 'auto-complete', label: 'Agenzia', getMethod: (term) => container.agenciesService.getAgenciesByName(term),
                 key: 'agencyId', items: sp.filters_data.agencies, labelVal: 'name', value: '', _class: 'auto-complete'},
-            {type: 'simpleText', label: this.translate.instant('home.modules.delivering_calender.filtername'), key: 'name'},
-            {type: 'simpleText', label: this.translate.instant('home.modules.delivering_calender.dayNote'), key: 'dayNote'},
-            {type: 'simpleText', label: this.translate.instant('home.modules.delivering_calender.setNote'), key: 'setNote'},
-            {type: 'simpleText', label: this.translate.instant('home.modules.delivering_calender.postmanNote'), key: 'postmanNote'},
-            {type: 'simpleText', label: this.translate.instant('home.modules.delivering_calender.postmanDayNote'), key: 'postmanDayNote'},
-            {type: 'simpleText', label: this.translate.instant('home.modules.delivering_calender.docName'), key: 'docName'},
-            {type: 'ng-select', label: this.translate.instant('home.modules.delivering_calender.states'), key: 'states', items:  [
-                    {name: this.translate.instant('home.modules.delivering_calender.prepared'), id: 'prepared'},
+            {type: 'simpleText', label: 'Nominativo Distinta', key: 'name'},
+            {type: 'simpleText', label: 'Nota giorno', key: 'dayNote'},
+            {type: 'simpleText', label: 'Note interne', key: 'setNote'},
+            {type: 'simpleText', label: 'Notifiche postino', key: 'postmanNote'},
+            {type: 'simpleText', label: 'Note distinta', key: 'postmanDayNote'},
+            {type: 'simpleText', label: 'Nome allegato', key: 'docName'},
+            {type: 'ng-select', label: 'Stato Distinta ', key: 'states', items:  [
+                    {name: 'Prepared', id: 'prepared'},
                 ], labelVal: 'name'},
-            {type: ['date', 'date'], label: this.translate.instant('home.modules.delivering_calender.StartDataDistinta'),
-             group: true, key: ['startedFrom', 'startedTo']},
-            {type: ['date', 'date'], label: this.translate.instant('home.modules.delivering_calender.DataDistinta'),
-             group: true, key: ['createFrom', 'createTo']},
-            {type: 'tag', label: this.translate.instant('home.modules.delivering_calender.barcode'), key: 'barcode'},
-            {type: 'simpleText', label: this.translate.instant('home.modules.delivering_calender.actCode'), key: 'actCode', value: ''},
-            {type: 'simpleText', label: this.translate.instant('home.modules.delivering_calender.setCode'), key: 'setCode', value: ''},
-            {type: 'ng-select', label: this.translate.instant('home.modules.delivering_calender.productTypeNameId'),
-             key: 'productTypeNameId  ',
+            {type: ['date', 'date'], label: 'Start Data Distinta:', group: true, key: ['startedFrom', 'startedTo']},
+            {type: ['date', 'date'], label: 'Data Distinta:', group: true, key: ['createFrom', 'createTo']},
+            {type: 'tag', label: 'Codice Barre', key: 'barcode'},
+            {type: 'simpleText', label: 'Codice Atto', key: 'actCode', value: ''},
+            {type: 'simpleText', label: 'Set Code', key: 'setCode', value: ''},
+            {type: 'ng-select', label: 'Prodotto', key: 'productTypeNameId  ',
                 items: sp.filters_data.products_type, labelVal: 'type'},
-            {type: 'auto-complete', label: this.translate.instant('home.modules.delivering_calender.category'),
-             key: 'category', items: sp.filters_data.categories,
+            {type: 'auto-complete', label: 'Categoria', key: 'category', items: sp.filters_data.categories,
                 labelVal: 'name', value: '', getMethod: (term) => container.getCategoriesByName(term), _class: 'auto-complete'},
-            {type: 'simpleText', label: this.translate.instant('home.modules.delivering_calender.recipientName2'), key: 'recipientName'},
-            {type: 'auto-complete', label: this.translate.instant('home.modules.delivering_calender.recipientCap'),
-             key: 'recipientCap', items: sp.filters_data.caps_group,
+            {type: 'simpleText', label: 'Nominativo Destinatario', key: 'recipientName'},
+            {type: 'auto-complete', label: 'CAP Destinatario:', key: 'recipientCap', items: sp.filters_data.caps_group,
                 labelVal: 'name', getMethod: (term) => container.recipientsService.getCapCity(term), _class: 'auto-complete'},
-            {type: 'simpleText', label: this.translate.instant('home.modules.delivering_calender.recipientAddress'),
-            key: 'recipientAddress'},
+            {type: 'simpleText', label: 'Indirizzo Destinatario:', key: 'recipientAddress'},
         ],
         grouping: false,
         changeViewButton: {icon: '/assets/images/table.png', route: ['/delivering']},
         changeViewTabs: {
             tabs: [
-                {text: this.translate.instant('home.modules.delivering_calender.week'),
-                 value: 'week', active: true, icon: ['fa', 'calendar-week']},
-                {text: this.translate.instant('home.modules.delivering_calender.day'),
-                 value: 'day', active: false, icon: ['fa', 'calendar-day']},
+                {text: 'Week', value: 'week', active: true, icon: ['fa', 'calendar-week']},
+                {text: 'Day', value: 'day', active: false, icon: ['fa', 'calendar-day']},
             ],
             lock: true
         },
@@ -109,17 +98,14 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
 
     detailsStatuses = [
         {
-            id: 'prepared', name: this.translate.instant('home.modules.delivering_calender.prepared2'),
-            handler: async (item) => await this.dispatchActionsService.prepareDispatch(this.translate.instant
-                ('home.modules.delivering_calender.prepareDispatch'),
-             [item.id])
+            id: 'prepared', name: 'Borsa Pronta alla consegna',
+            handler: async (item) => await this.dispatchActionsService.prepareDispatch('selected', [item.id])
         }
     ];
 
     loadMoreMethods = {
         availablePostmen: (day, page) => this.dispatchService.getCalenderAvailablePostmen(day, page),
-        availableRevisore: (day, page) => this.dispatchService.getCalenderAvailablePostmen(day, page, this.translate.instant
-            ('home.modules.delivering_calender.revisore')),
+        availableRevisore: (day, page) => this.dispatchService.getCalenderAvailablePostmen(day, page, 'revisore'),
     };
 
     actions = [];
@@ -138,12 +124,10 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     calenderRevisorGetMethod = (page, rpp, name, order) => {
         return this.subViewType === 'week' ?
             this.dispatchService.getCalenderWeeklyPostmen(
-                page, rpp, name, order, this.calender_current_week, 'PREAPERED', this.loadDate, this.translate.instant
-                ('home.modules.delivering_calender.revisore')
+                page, rpp, name, order, this.calender_current_week, 'NOT_PREAPERED', this.loadDate, 'revisore'
             ) :
             this.dispatchService.getCalenderDailyPostmen(
-                page, rpp, name, order, this.calender_current_day, 'PREAPERED', this.loadDate, this.translate.instant
-                ('home.modules.delivering_calender.revisore')
+                page, rpp, name, order, this.calender_current_day, 'NOT_PREAPERED', this.loadDate, 'revisore'
             );
     }
 
@@ -165,11 +149,9 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     addNoteToSet = (note, type, set, file = null) => {
         const result = this.dispatchService.addNoteToSet(set, note, type, file).toPromise().catch(e => {});
         if (result) {
-            this.snotifyService.success(this.translate.instant
-                ('home.modules.delivering_calender.addNoteToSet.success'), {showProgressBar: false});
+            this.snotifyService.success('Node Added Successfuly', {showProgressBar: false});
         } else {
-            this.snotifyService.error(this.translate.instant
-                ('home.modules.delivering_calender.addNoteToSet.error'), {showProgressBar: false});
+            this.snotifyService.error('Something went wrong', {showProgressBar: false});
         }
         return result ;
     }
@@ -189,12 +171,8 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
         protected customersService: CustomersService,
         protected agenciesService: AgenciesService,
         protected recipientsService: RecipientsService,
-        private translate: TranslateService,
-        private translateSelectorService: TranslateSelectorService,
-
-        ) {
-          this.translateSelectorService.setDefaultLanuage();
-        }
+    ) {
+    }
 
     ngOnInit() {
         this.actionsService.setActions(this.actions);
@@ -228,8 +206,7 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
             'PREPARED'
         ).toPromise().catch(e => {});
         if (!data) {
-            return this.snotifyService.error(this.translate.instant
-                ('home.modules.delivering_calender.addNoteToSet.error'), {showProgressBar: false});
+            return this.snotifyService.error('Something went wrong', {showProgressBar: false});
         }
         this.filter_config.changeViewTabs.lock = false ;
         this.calendar_data = <any>(data).data;
@@ -348,12 +325,10 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     assignSetToUser(event) {
         this.dispatchService.assignToUser(event.sets, event.user).pipe(takeUntil(this.unsubscribe)).subscribe(
             data => {
-                this.snotifyService.success(this.translate.instant
-                    ('home.modules.delivering_calender.assignToUser.success'), {showProgressBar: false});
+                this.snotifyService.success('Set Assigned Successfully', {showProgressBar: false});
             },
             error => {
-                this.snotifyService.error(this.translate.instant
-                    ('home.modules.delivering_calender.assignToUser.error'), {showProgressBar: false});
+                this.snotifyService.error('Something went wrong', {showProgressBar: false});
             }
         );
     }
@@ -368,12 +343,10 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     updateDayNote(event) {
         this.dispatchService.updateDayNote(event.day, event.note).subscribe(
             data => {
-                this.snotifyService.success(this.translate.instant
-                    ('home.modules.delivering_calender.updateDayNote.success'), {showProgressBar: false});
+                this.snotifyService.success('Note Updated Successfuly', {showProgressBar: false});
             },
             error => {
-                this.snotifyService.error(this.translate.instant
-                    ('home.modules.delivering_calender.updateDayNote.error'), {showProgressBar: false});
+                this.snotifyService.error('Something went wrong', {showProgressBar: false});
             }
         );
     }
@@ -382,12 +355,10 @@ export class DeliveringCalenderComponent implements OnInit, OnDestroy {
     updatePostmanDayNote(event) {
         this.dispatchService.updatePostmanDayNote(event.postman, event.day, event.note).subscribe(
             data => {
-                this.snotifyService.success(this.translate.instant
-                    ('home.modules.delivering_calender.updatePostmanDayNote.success'), {showProgressBar: false});
+                this.snotifyService.success('Postman Note Updated Successfuly', {showProgressBar: false});
             },
             error => {
-                this.snotifyService.error(this.translate.instant
-                    ('home.modules.delivering_calender.updatePostmanDayNote.error'), {showProgressBar: false});
+                this.snotifyService.error('Something went wrong', {showProgressBar: false});
             }
         );
     }

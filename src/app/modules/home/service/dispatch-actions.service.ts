@@ -1,4 +1,3 @@
-import { TranslateService } from '@ngx-translate/core';
 import {EventEmitter, Injectable} from '@angular/core';
 import {SnotifyService} from 'ng-snotify';
 import {ActionsService} from '../../../service/actions.service';
@@ -10,21 +9,21 @@ export class DispatchActionsService {
     constructor(
         private actionsService: ActionsService,
         private snotifyService: SnotifyService,
-        private dispatchService: DispatchService,
-        private translate: TranslateService,
-        ) {}
+        private dispatchService: DispatchService
+    ) {
+    }
 
     reloadData = new EventEmitter();
 
     deleteDispatch(ids, confirm = false): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const method = this.dispatchService.delete(ids, confirm);
-            this.actionsService.run(method, this.translate.instant('home.services.dispatch_actions_service.delete'), (result) => {
+            this.actionsService.run(method, 'Elimina in corso', (result) => {
                 setTimeout(() => {
                     this.reloadData.emit(true);
                 }, 500);
                 resolve(result);
-                return this.translate.instant('home.services.dispatch_actions_service.success_delete');
+                return 'Distinte Elimina con successo';
             }, (error) => {
                 reject(error);
                 setTimeout(() => {
@@ -43,16 +42,16 @@ export class DispatchActionsService {
             } else {
                 method = this.dispatchService.prepareWithFilters(confirm);
             }
-            this.actionsService.run(method, this.translate.instant('home.services.dispatch_actions_service.prepare'), (result) => {
+            this.actionsService.run(method, 'Prepare in corso', (result) => {
                 setTimeout(() => {
                     this.reloadData.emit(true);
                 }, 500);
                 resolve(result);
-                return this.translate.instant('home.services.dispatch_actions_service.prepare_delete');
+                return 'Distinte Prepared successfully';
             }, (error) => {
                 reject(error);
                 if (error.statusCode === 421) {
-                    return this.translate.instant('home.services.dispatch_actions_service.bag_not_preperd');
+                    return 'La borsa non è preparata deve prima essere abbinata ad un operatore';
                 }
                 return error.error ? error.error.message : (error.message ? error.message : 'Error');
             });
@@ -62,10 +61,9 @@ export class DispatchActionsService {
     uploadDayAttachment(day, attachment) {
         return new Promise<any>((resolve, reject) => {
             const method = this.dispatchService.uploadDayAttachment(day, attachment);
-            this.actionsService.run(method, this.translate.instant('home.services.dispatch_actions_service.upload_attachement'),
-             (result) => {
+            this.actionsService.run(method, 'Caricamento allegato', (result) => {
                 resolve(result);
-                return this.translate.instant('home.services.dispatch_actions_service.upload_attachement_success');
+                return 'L\'allegato è stato caricato con successo';
             }, (error) => {
                 reject(error);
                 return error.error ? error.error.message : (error.message ? error.message : 'Error');
@@ -81,10 +79,10 @@ export class DispatchActionsService {
             } else {
                 method = this.dispatchService.assignToUserByFilters(user);
             }
-            this.actionsService.run(method, this.translate.instant('home.services.dispatch_actions_service.assigment'), (result) => {
+            this.actionsService.run(method, 'Assegnazione di Distinta', (result) => {
                 this.reloadData.emit(true);
                 resolve(result);
-                return this.translate.instant('home.services.dispatch_actions_service.assigment_success');
+                return 'Distinta assegnata con successo';
             }, (error) => {
                 reject(error);
                 return error.error ? error.error.message : (error.message ? error.message : 'Error');

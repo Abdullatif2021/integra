@@ -13,9 +13,9 @@
                   <div class="d-flex">
                     <div class="col-1"></div>
                     <div class="col-1"></div>
-                    <div class="col-4 wide-col"><div class="street-items-header-cell">{{'pages.dispatch_view.address' | translate}}</div></div>
-                    <div class="col-3 text-center"><div class="street-items-header-cell">{{'pages.dispatch_view.deliver' | translate}}</div></div>
-                    <div class="col-3 wide-col pl-1"><div class="street-items-header-cell">{{'pages.dispatch_view.time_of_arrival' | translate}}</div></div>
+                    <div class="col-4 wide-col"><div class="street-items-header-cell">Indirizzo</div></div>
+                    <div class="col-3 text-center"><div class="street-items-header-cell">Consegne</div></div>
+                    <div class="col-3 wide-col pl-1"><div class="street-items-header-cell">Ora d’arrivo</div></div>
                   </div>
                 </div>
                 <div class="street-items" dndDropzone [dndHorizontal]="false" (dndDrop)="onDrop($event)" [ngClass]="{'drop-location': dragging && dragging.type === 'building'}" infiniteScrollDistance="30">
@@ -37,7 +37,7 @@
                           </div>
                           <div class="col-1 wide-col d-flex">
 
-                            <div class="select-container" (click)="select(group, 'address' )">
+                            <div class="select-container" (click)="select(group, 'address')">
                               <div class="selected" *ngIf="group.selected === 1"><fa-icon [icon]="['fa','check']"></fa-icon></div>
                               <div class="selected" *ngIf="group.selected === 2"><fa-icon [icon]="['fa','minus']"></fa-icon></div>
                               <div class="not-selected" *ngIf="group.selected === 0 || !group.selected "><fa-icon [icon]="['fa','check']"></fa-icon></div>
@@ -54,15 +54,15 @@
                         <div class="product-items-header" *ngIf="data">
                           <div class="d-flex">
                             <div class="col-1 d-flex"><div class="m-auto"></div></div>
-                            <div class="col-6 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">{{'pages.dispatch_view.destinatario' | translate}}</div></div><div class="m-auto">{{'pages.dispatch_view.product' | translate}}</div></div>
-                            <div class="col-5 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">{{'pages.dispatch_view.barcode' | translate}}</div></div><div class="m-auto">{{'pages.dispatch_view.act_code' | translate}}</div></div>
+                            <div class="col-6 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Destinatario</div></div><div class="m-auto">Prodotto</div></div>
+                            <div class="col-5 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Codice a Barre</div></div><div class="m-auto">Codice Atto</div></div>
                           </div>
                         </div>
                         <div class="product-items-body">
                           <ng-container *ngFor="let product of group.products; let i = index">
                             <div [ngClass]="{'odd-bg': (idx + i)%2, 'even-bg': !((idx + i)%2)}" class="d-flex">
                               <div class="col-1 d-flex v-wide-col">
-                                  <div class="select-container" (click)="select(product, 'product' )">
+                                  <div class="select-container" (click)="select(product, 'product')">
                                     <div class="selected" *ngIf="product.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
                                     <div class="not-selected" *ngIf="!product.selected"><fa-icon [icon]="['fa','check']"></fa-icon></div>
                                   </div>

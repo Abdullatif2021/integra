@@ -3,30 +3,31 @@
     <div class="modal-body">
       <ng-container *ngIf="data.method === 'filters' &&  !filtersCount && !confirmed" >
         <div class="no-filters-warning-message">
-          {{'home.modals.dispatch_prepare.filter_applied' | translate}}
+          ATTENZIONE! Non è stato applicato nessun filtro, sei sicuro di voler eseguire?
         </div>
         <div class="btns-container mt-3">
-          <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="confirmed = true">{{'home.modals.dispatch_prepare.run' | translate}}</button>
-          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'home.modals.dispatch_prepare.go_out' | translate}}</button>
+          <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="confirmed = true">Esegui</button>
+          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
           <div class="clear-both"></div>
         </div>
       </ng-container>
       <ng-container *ngIf="data.method === 'selected' && (!items || !items.length)">
         <div class="row mt-2">
           <div class="col-12 align-self-center" >
-            <h5 class="no-items-msg">{{'home.modals.dispatch_prepare.no_select' | translate}}</h5>
+            <h5 class="no-items-msg">No Items Selected !</h5>
           </div>
         </div>
         <div class="btns-container mt-3">
-          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'home.modals.dispatch_prepare.go_out' | translate}}</button>
+          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
           <div class="clear-both"></div>
         </div>
       </ng-container>
       <ng-container *ngIf="((data.method === 'selected' && items && items.length) || (data.method === 'filters' && filtersCount) || (data.method === 'filters' && !filtersCount && confirmed))">
         <div class="selected-count-confirm">
-          {{'home.modals.dispatch_prepare.about_try' | translate}} <b *ngIf="data.method === 'selected'" >{{items.length}}</b><b *ngIf="data.method === 'filters'" >{{filteredProductsCount}}</b>  {{'home.modals.dispatch_prepare.correct_quantity' | translate}}
+          ATTENZIONE! Stai per processare <b *ngIf="data.method === 'selected'" >{{items.length}}</b><b *ngIf="data.method === 'filters'" >{{filteredProductsCount}}</b> righe. Assicurati che la quantità sia corretta,
+          altrimenti riprova o contatta l'assistenz. Premi su Conferma se non hai dubbi sull'operazione.
         </div>
-        <h6 class="mt-3"> <img src="/assets/images/prepare.png" class="prepare-icon mr-2">{{'home.modals.dispatch_prepare.bag_ready' | translate}}</h6>
+        <h6 class="mt-3"> <img src="/assets/images/prepare.png" class="prepare-icon mr-2">Sei sicuro che le borse sono pronte?</h6>
 
         <!--<ng-container *ngIf="items && items.length">-->
           <!--<h6> <img src="/assets/images/prepare.png" class="prepare-icon mr-2">Sei sicuro che le borse sono pronte?</h6>-->
@@ -41,8 +42,8 @@
         <!--</ng-container>-->
 
         <div class="btns-container mt-3">
-          <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">{{'home.modals.dispatch_prepare.run' | translate}}</button>
-          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'home.modals.dispatch_prepare.go_out' | translate}}</button>
+          <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">Esegui</button>
+          <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
           <div class="clear-both"></div>
         </div>
       </ng-container>

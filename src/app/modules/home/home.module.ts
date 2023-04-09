@@ -32,14 +32,6 @@ import {DispatchDeleteComponent} from './modals/dispatch-delete/dispatch-delete.
 import { DispatchPrepareComponent } from './modals/dispatch-prepare/dispatch-prepare.component';
 import {CalenderService} from './service/calender.service';
 import { DispatchAssignComponent } from './modals/dispatch-assign/dispatch-assign.component';
-import { FormsModule } from '@angular/forms';
-import {ProductStatusService} from '../../service/product-status.service';
-import {ActivityCreateService} from '../../parts/activities-part/service/activity-create.service';
-import {NotDeliveredService} from '../../service/not-delivered.service';
-import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
-import {TranslateModule} from '@ngx-translate/core';
-import {ActivitiesPartModule} from '../../parts/activities-part/activities-part.module';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -47,10 +39,7 @@ import {ActivitiesPartModule} from '../../parts/activities-part/activities-part.
     SharedModule,
     HomeRoutingModule,
     NgSelectModule,
-    FontAwesomeModule,
-    FormsModule,
-    TranslateModule.forChild(),
-    ActivitiesPartModule
+    FontAwesomeModule
   ],
   declarations: [
       ToDeliverComponent,
@@ -81,10 +70,7 @@ import {ActivitiesPartModule} from '../../parts/activities-part/activities-part.
   providers: [
       PreDispatchActionsService,
       DispatchActionsService,
-      CalenderService,
-      ProductStatusService,
-      ActivityCreateService,
-      NotDeliveredService,
+      CalenderService
   ],
   entryComponents: [
       PreDispatchAddComponent,
@@ -98,7 +84,7 @@ import {ActivitiesPartModule} from '../../parts/activities-part/activities-part.
       PsbatpdwsiConfirmModalComponent,
       DispatchDeleteComponent,
       DispatchPrepareComponent,
-      DispatchAssignComponent,
+      DispatchAssignComponent
   ],
 
 })
@@ -106,6 +92,5 @@ export class HomeModule {
     constructor() {
         library.add(faCaretLeft);
         library.add(faCaretRight);
-        library.add(faTrash);
     }
 }

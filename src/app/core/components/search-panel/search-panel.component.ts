@@ -5,7 +5,7 @@ import {RecipientsService} from '../../../service/recipients.service';
 import {ActionsService} from '../../../service/actions.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../shared/directives/modal.directive';
-import { TranslateService , TranslatePipe } from '@ngx-translate/core';
+import {FilterConfig} from '../../../config/filters.config';
 
 @Component({
   selector: 'app-search-panel',
@@ -20,10 +20,8 @@ export class SearchPanelComponent implements OnInit {
       private recipientsService: RecipientsService,
       private actionsService: ActionsService,
       private componentFactoryResolver: ComponentFactoryResolver,
-      private modalService: NgbModal,
-      private translate: TranslateService
-  ) {
-  }
+      private modalService: NgbModal
+  ) {}
 
   isCollapsed = true ;
   _search: any ;
@@ -70,35 +68,28 @@ export class SearchPanelComponent implements OnInit {
               this.active_action = actions;
           }
       });
-      this.filtersService.cleared.subscribe((event) => {
+      this.filtersService.cleared.subscribe(() => {
+          this._active_filters = this.fieldsData && this.fieldsData.fields &&
+            this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {} ;
           this._m_active_action = null ;
           this.active_action = null ;
-          if (event.keep) {
-              return ;
-          }
-          this._active_filters = this.fieldsData && this.fieldsData.fields &&
-          this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {} ;
           this._search = null ;
           this.filters = this.fieldsData && this.fieldsData.fields &&
               this.fieldsData.fields.default_filters ? Object.assign({}, this.fieldsData.fields.default_filters) : {};
-          this._has_active_filters = this._active_filters && Object.keys(this._active_filters) >
-              Object.keys(this.fieldsData && this.fieldsData.fields && this.fieldsData.fields.default_filters ? this.fieldsData.fields.default_filters : {});
+          this._has_active_filters = false ;
           this.isCollapsed = true ;
           this._changed_filters = {};
       });
       this.filtersService.fields.subscribe((data) => {
           this.fieldsData = data ;
-          if (data.keep) {
-              this.isCollapsed = true ;
-              this.filters = Object.assign(this.filtersService.filters, data.fields.default_filters);
-          } else {
-              this.filters = Object.assign({}, data.fields.default_filters);
-          }
-          this._active_filters = Object.assign({}, this.filters) ;
+          console.log(this.fieldsData);
+          this.filters = Object.assign({}, data.fields.default_filters);
+          this._active_filters = Object.assign({}, data.fields.default_filters);
           if ( this.loaded ) {
               this.initFields() ;
           }
       });
+
   }
 
   searchFieldChanged(event) {
@@ -119,38 +110,30 @@ export class SearchPanelComponent implements OnInit {
       this._active_filters = {} ;
   }
 
-  clearsearch() {
-    this.search_value = null ;
-    this._search = null ;
-    this.filtersService.updateFilters(this.search) ;
-  }
-
   changeFiltersValue(event, key, type, idx) {
-    setTimeout(() => {
-        // if filters has action that needs to run on change, run it.
-        if (typeof this.filtersFields[idx].change === 'function') {
-            return this.filtersFields[idx].change(event) ;
-        }
+      // if filters has action that needs to run on change, run it.
+      if (typeof this.filtersFields[idx].change === 'function') {
+          return this.filtersFields[idx].change(event) ;
+      }
 
-        // remove the active filter
-        delete this._active_filters[key];
-        this._changed_filters[key] = 1;
+      // remove the active filter
+      delete this._active_filters[key];
+      this._changed_filters[key] = 1;
 
-        if (this.filters[key] && typeof this.filters[key] === 'object' ?
-            (Array.isArray(this.filters[key]) ? !this.filters[key].length : false) : !this.filters[key]) {
-            delete this.filters[key];
-        }
+      if (this.filters[key] && typeof this.filters[key] === 'object' ?
+          (Array.isArray(this.filters[key]) ? !this.filters[key].length : false) : !this.filters[key]) {
+          delete this.filters[key];
+      }
 
-        // changes the filterField value, required in some filters, (the once with remote data loading.).
-        if (typeof this.filtersFields[idx].key === 'string') {
-            this.filtersFields[idx].value = this.filters[key] ;
-        } else {
-            if (!this.filtersFields[idx].value) {
-                this.filtersFields[idx].value = {} ;
-            }
-            this.filtersFields[idx].value[key] = this.filters[key] ;
-        }
-    });
+      // changes the filterField value, required in some filters, (the once with remote data loading.).
+      if (typeof this.filtersFields[idx].key === 'string') {
+          this.filtersFields[idx].value = this.filters[key] ;
+      } else {
+          if (!this.filtersFields[idx].value) {
+              this.filtersFields[idx].value = {} ;
+          }
+          this.filtersFields[idx].value[key] = this.filters[key] ;
+      }
   }
 
   filter() {
@@ -228,28 +211,21 @@ export class SearchPanelComponent implements OnInit {
 
   runAction(force = false) {
     if ( this.active_action && this.active_action.modal ) {
-        if (typeof this.active_action.before_modal_open === 'function') {
-            if (!this.active_action.before_modal_open(this.active_action)) {
-                return ;
-            }
-        }
         if (!force && this.active_action.method && this.active_action.method === 'filters') {
             // check if there is any non committed filters
             if (Object.keys(this.filters).length !== Object.keys(this._active_filters).length) {
 
-                this.modalService.open(this.confirmUnAppliedFiltersModalRef, {backdrop: 'static', keyboard  : false});
+                this.modalService.open(this.confirmUnAppliedFiltersModalRef, {backdrop: 'static' });
                 return false;
             }
         }
-        console.log('one');
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.active_action.modal);
         const viewContainerRef = this.modalHost.viewContainerRef ;
-        console.log('two');
         viewContainerRef.clear() ;
         const componentRef = viewContainerRef.createComponent(componentFactory);
         const instance = <any>componentRef.instance ;
         instance.data = this.active_action  ;
-        const modalOptions = Object.assign({ windowClass: 'animated slideInDown', backdrop: 'static', keyboard  : false},
+        const modalOptions = Object.assign({ windowClass: 'animated slideInDown', backdrop: 'static' },
             this.active_action.modalOptions ? this.active_action.modalOptions : {} );
         this.modalService.open(instance.modalRef, modalOptions) ;
     } else if ( this.active_action && typeof this.active_action.run === 'function' ) {
@@ -263,11 +239,24 @@ export class SearchPanelComponent implements OnInit {
       }
   }
 
+  checkFilterSubmit(event) {
+      if (event.code === 'Enter') {
+          setTimeout(() => this.filter());
+      }
+  }
+
+  checkSearchSubmit(event) {
+      if (event.code === 'Enter') {
+          setTimeout(() => this.search());
+      }
+  }
+
   changeViewButtonClicked(value) {
       this.filtersService.clickChangeViewButton(value);
   }
 
   clickHelperButton(tab) {
+      if (this.fieldsData.fields.changeViewTabs.lock) {return ;}
       this.fieldsData.fields.changeViewTabs.tabs.forEach((_tab) => _tab.active = false);
       tab.active = true ;
       this.filtersService.changeViewTabsChanged(tab.value);
@@ -275,14 +264,10 @@ export class SearchPanelComponent implements OnInit {
 
   initFields() {
       if (!this.fieldsData || !this.fieldsData.fields) {
-          this.filtersFields = null;
-          this.searchFields = null;
           return ;
       }
       this.filtersFields = this.fieldsData.fields.filters( this.fieldsData.container, this);
       this.searchFields = this.fieldsData.fields.search( this.fieldsData.container, this);
-      this._has_active_filters = this._active_filters && Object.keys(this._active_filters) >
-          Object.keys(this.fieldsData.fields && this.fieldsData.fields.default_filters ? this.fieldsData.fields.default_filters : {});
   }
 
 }

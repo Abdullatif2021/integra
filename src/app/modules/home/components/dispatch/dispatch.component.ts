@@ -18,8 +18,6 @@ import {RecipientsService} from '../../../../service/recipients.service';
 import {CategoriesService} from '../../../../service/categories.service';
 import {DispatchAssignComponent} from '../../modals/dispatch-assign/dispatch-assign.component';
 import {Router} from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
     selector: 'app-dispatch',
@@ -44,21 +42,21 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     filtersConfig = null;
     actions = [
-        {name: this.translate.instant('home.dispatch_action.bag_prepared.value'), fields: [
+        {name: 'Borsa preparata', fields: [
                 { type: 'select', field: 'method', options: [
-                        {name: this.translate.instant('home.dispatch_action.bag_prepared.select'), value: 'selected'},
-                        {name: this.translate.instant('home.dispatch_action.bag_prepared.by_filter'), value: 'filters'}
-                    ], selectedAttribute: {name: this.translate.instant('home.dispatch_action.bag_prepared.select'), value: 'selected'}
+                        {name: 'Selezionati', value: 'selected'},
+                        {name: 'Secondo i filtri applicati', value: 'filters'}
+                    ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
                 }
             ], modal: DispatchPrepareComponent},
-        {name: this.translate.instant('home.dispatch_action.operator_prepar.value'), fields: [
+        {name: 'Operatore che prepara la borsa', fields: [
             { type: 'select', field: 'method', options: [
-                    {name: this.translate.instant('home.dispatch_action.operator_prepar.select'), value: 'selected'},
-                    {name: this.translate.instant('home.dispatch_action.operator_prepar.by_filter'), value: 'filters'}
-                ], selectedAttribute: {name: this.translate.instant('home.dispatch_action.operator_prepar.select'), value: 'selected'}
+                    {name: 'Selezionati', value: 'selected'},
+                    {name: 'Secondo i filtri applicati', value: 'filters'}
+                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ], modal: DispatchAssignComponent},
-        {name: this.translate.instant('home.dispatch_action.operator_prepar.remove'), modal: DispatchDeleteComponent},
+        {name: 'Elimina', modal: DispatchDeleteComponent},
     ];
 
 
@@ -75,12 +73,9 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
         protected agenciesService: AgenciesService,
         protected recipientsService: RecipientsService,
         private categoriesService: CategoriesService,
-        private router: Router,
-        private translate: TranslateService,
-        private translateSelectorService: TranslateSelectorService,
-        ) {
-            this.translateSelectorService.setDefaultLanuage();
-        }
+        private router: Router
+    ) {
+    }
 
     ngOnInit() {
         this.actionsService.setActions(this.actions);

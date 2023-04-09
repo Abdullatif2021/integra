@@ -1,6 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {PaginationService} from '../../../service/pagination.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-pagination',
@@ -23,22 +22,18 @@ export class PaginationComponent implements OnInit {
       {key: 500, value: 500},
       {key: 1000, value: 1000},
       {key: 'Tutto', value: 9000000},
-  ];
+  ]
 
-  constructor(
-      private paginationService: PaginationService,
-      private translate: TranslateService
-  ) {}
+  constructor(private paginationService: PaginationService) { }
 
   ngOnInit() {
-    this.loading = this.paginationService.pagination_loading_state ;
-    this.results_count = this.paginationService.resultsCount;
     this.paginationService.resultsCountChanges.subscribe((results: number) => {
       this.results_count = results ;
       this.updatePages();
     });
     this.paginationService.loadingStateChanges.subscribe((state: boolean) => {
       this.loading = state ;
+      console.log(this.loading);
       this.current_page = this.paginationService.current_page ;
     });
     this.paginationService.currentPageChanges.subscribe((page: number) => {

@@ -2,8 +2,8 @@
 <div class="results-container hidden-scroll" #ResultsContainer>
   <div class="items mt-2" #itemContainer>
     <div class="results-tabs-filtering-container">
-      <div class="results-tab-filtering" [ngClass]="{'active': scheduleResultsDisplayedTab === 'not_assigned'}" (click)="changeActiveFilteringTab('not_assigned')">{{'schedule.result.not_assigned' | translate}}</div>
-      <div class="results-tab-filtering" [ngClass]="{'active': scheduleResultsDisplayedTab === 'assigned'}" (click)="changeActiveFilteringTab('assigned')">{{'schedule.result.assigned' | translate}}</div>
+      <div class="results-tab-filtering" [ngClass]="{'active': scheduleResultsDisplayedTab === 'not_assigned'}" (click)="changeActiveFilteringTab('not_assigned')">Non assegnati</div>
+      <div class="results-tab-filtering" [ngClass]="{'active': scheduleResultsDisplayedTab === 'assigned'}" (click)="changeActiveFilteringTab('assigned')">Assegnati</div>
     </div>
     <div class="d-flex" *ngIf="scheduleResults">
       <div class="col-2 v-wide-col">
@@ -12,7 +12,7 @@
           <div class="not-selected" *ngIf="!all_selected"></div>
         </div>
       </div>
-      <div class="col-10 v-wide-col"><span class="select-all-label">{{'schedule.result.select_all' | translate}}</span></div>
+      <div class="col-10 v-wide-col"><span class="select-all-label">Seleziona tutto</span></div>
     </div>
     <ng-container *ngIf="scheduleResults; else sKeleTons">
       <ng-container *ngFor="let item of scheduleResults; let idx = index">
@@ -21,8 +21,8 @@
     </ng-container>
     <div class="force-scroll"></div>
   </div>
-  <button class="float-right integraa-btn" [ngClass]="{'disabled': scheduleResultsDisplayedTab  === 'not_assigned' || !scheduleResults || !selected_sets.length}" [disabled]="scheduleResultsDisplayedTab === 'not_assigned' || !scheduleResults || !selected_sets.length" (click)="makeDispatchesVisible()">{{'schedule.result.create_bom' | translate}}</button>
-  <button class="float-right integraa-btn mr-1" *ngIf="preDispatchData.has_not_fixed_products" [ngClass]="{'disabled': !movedNotFixedStorage.length}" [disabled]="!movedNotFixedStorage.length" (click)="saveMovedNotFixed()">{{'schedule.result.save_move_adres' | translate}}</button>
+  <button class="float-right integraa-btn" [ngClass]="{'disabled': scheduleResultsDisplayedTab  === 'not_assigned' || !scheduleResults || !selected_sets.length}" [disabled]="scheduleResultsDisplayedTab === 'not_assigned' || !scheduleResults || !selected_sets.length" (click)="makeDispatchesVisible()">Crea Distinta</button>
+  <button class="float-right integraa-btn mr-1" *ngIf="preDispatchData.has_not_fixed_products" [ngClass]="{'disabled': !movedNotFixedStorage.length}" [disabled]="!movedNotFixedStorage.length" (click)="saveMovedNotFixed()">Salva Indirizzi spostati</button>
 </div>
 
 <ng-template #sKeleTons>
@@ -78,15 +78,15 @@
           </div>
           <div class="col-5 wide-col">
             <div class="postman-name h-100" >
-              <ng-select *ngIf="!item.is_distenta_created && !notFixedProductsTableShown" class="integraa-select postman-select" [items]="postmen[parent.day]" placeholder="{{'schedule.result.plshold.not_assigned' | translate}}" (change)="assignPostman($event, item, parent)" [clearable]="false" [bindLabel]="'full_name'" [(ngModel)]="selectedPostmen[parent.day][item.id]"></ng-select>
+              <ng-select *ngIf="!item.is_distenta_created && !notFixedProductsTableShown" class="integraa-select postman-select" [items]="postmen[parent.day]" [placeholder]="'Not Assigned'" (change)="assignPostman($event, item, parent)" [clearable]="false" [bindLabel]="'full_name'" [(ngModel)]="selectedPostmen[parent.day][item.id]"></ng-select>
               <span class="mt-auto mb-auto" *ngIf="item.is_distenta_created" >{{selectedPostmen[parent.day][item.id] ? selectedPostmen[parent.day][item.id].full_name : 'Not Assigned'}}</span>
-              <select [disabled]="true" *ngIf="notFixedProductsTableShown" class="integraa-select postman-select ng-select-similar"><option selected>{{'schedule.result.not_assigned2' | translate}}</option></select>
-              <input type="text" (change)="changeDispatchName($event, item)" *ngIf="scheduleResultsDisplayedTab === 'assigned'" [disabled]="item.is_distenta_created" class="dispatch-name-input" value="{{item.name}}" placeholder="{{'schedule.result.plshold.dispatchname' | translate}}"/>
-              <span class="error-msg" *ngIf="errors.sets[item.id] === 1">{{'schedule.result.required_field' | translate}}</span>
+              <select [disabled]="true" *ngIf="notFixedProductsTableShown" class="integraa-select postman-select ng-select-similar"><option selected>Not Assigned</option></select>
+              <input type="text" (change)="changeDispatchName($event, item)" *ngIf="scheduleResultsDisplayedTab === 'assigned'" [disabled]="item.is_distenta_created" class="dispatch-name-input" value="{{item.name}}" placeholder="Dispatch Name"/>
+              <span class="error-msg" *ngIf="errors.sets[item.id] === 1">Campo obbligatorio</span>
             </div>
           </div>
-          <div class="col-3 v-wide-col"> <div class="count mt-1">{{item.quantity}} {{'schedule.result.deliveries' | translate}}</div> </div>
-          <div class="col-2 v-wide-col"> <div class="mt-1" *ngIf="item.is_missed">{{'schedule.result.found' | translate}}</div><div *ngIf="!item.is_missed" class="mt-1">{{'schedule.result.not_found' | translate}}</div></div>
+          <div class="col-3 v-wide-col"> <div class="count mt-1">{{item.quantity}} Consegne</div> </div>
+          <div class="col-2 v-wide-col"> <div class="mt-1" *ngIf="item.is_missed">Trovato</div><div *ngIf="!item.is_missed" class="mt-1">Non trovato</div></div>
         </div>
         <div class="d-flex">
           <div class="col-2 "> <div class="time mt-1">{{item.time}}</div> </div>
@@ -99,7 +99,7 @@
         <!--<div dndPlaceholderRef class="dndPlaceholder"></div>-->
         <!--<div *ngFor="let child of item.children; let i = index" [dndDraggable]="{item: 1}" [dndEffectAllowed]="'move'"-->
              <!--(dndStart)="onDragStart($event, child)" class="ngx-dnd-item">-->
-          <ng-container [ngTemplateOutlet]="streetItems" [ngTemplateOutletContext]="{idx: idx+1, item:item, next: next+':'+i }"></ng-container>
+          <ng-container [ngTemplateOutlet]="streetItems" [ngTemplateOutletContext]="{idx: idx+1, item:item, next: next+':'+i}"></ng-container>
         <!--</div>-->
       <!--</div>-->
     </ng-container>
@@ -112,9 +112,9 @@
     <div class="d-flex">
       <div class="col-1"></div>
       <div class="col-1"></div>
-      <div class="col-4 wide-col"><div class="street-items-header-cell">{{'schedule.result.adres' | translate}}</div></div>
-      <div class="col-3 text-center"><div class="street-items-header-cell">{{'schedule.result.deliveries2' | translate}}</div></div>
-      <div class="col-3 wide-col pl-1"><div class="street-items-header-cell">{{'schedule.result.time_of_arrival' | translate}}</div></div>
+      <div class="col-4 wide-col"><div class="street-items-header-cell">Indirizzo</div></div>
+      <div class="col-3 text-center"><div class="street-items-header-cell">Consegne</div></div>
+      <div class="col-3 wide-col pl-1"><div class="street-items-header-cell">Ora d’arrivo</div></div>
       <!--<div class="col-1"><div class="street-items-header-cell">Srv</div></div>-->
       <!--<div class="col-1"><div class="street-items-header-cell">Distanza</div></div>-->
     </div>
@@ -126,7 +126,7 @@
         <div class="rect-loading-skeleton full-width h-33 results-skeleton"></div>
       </ng-container>
       <ng-container  *ngIf="!child.skeleton;">
-        <div class="street-item" [ngClass]="{'danger-bg': child.fromNotFixed, 'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" [dndDraggable]="{item: 1}" [dndDisableIf]="child.fromNotFixed || (child.parent && child.parent.status !== 'not_assigned')" [dndEffectAllowed]="'move'"
+        <div class="street-item" [ngClass]="{'danger-bg': child.fromNotFixed, 'odd-bg': (idx+i)%2, 'even-bg': !((idx+i)%2)}" [dndDraggable]="{item: 1}" [dndDisableIf]="child.fromNotFixed || child.parent.status !== 'not_assigned'" [dndEffectAllowed]="'move'"
              (dndStart)="onDragStart($event, child)" class="{{getStatusClass(child)}}">
           <div class="d-flex">
             <div class="col-1 wide-col d-flex">
@@ -155,8 +155,8 @@
           <div class="product-items-header" *ngIf="item.children">
             <div class="d-flex">
               <div class="col-1 d-flex"><div class="m-auto"></div></div>
-              <div class="col-6 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">{{'schedule.result.destinatario' | translate}}</div></div><div class="m-auto">{{'schedule.result.product' | translate}}</div></div>
-              <div class="col-5 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">{{'schedule.result.barcode' | translate}}</div></div><div class="m-auto">{{'schedule.result.act_code' | translate}}</div></div>
+              <div class="col-6 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Destinatario</div></div><div class="m-auto">Prodotto</div></div>
+              <div class="col-5 d-flex text-center product-items-header-col"><div class="with-white-dashed-bottom-border"><div class="m-auto">Codice a Barre</div></div><div class="m-auto">Codice Atto</div></div>
             </div>
           </div>
           <div class="product-items-body">
@@ -187,11 +187,11 @@
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
       <div class="mt-3">
-        <h5>{{'schedule.result.proceed_with_operation' | translate}}</h5>
+        <h5>Per procedere con questa operazione è necessario riprogrammare alcune distinte</h5>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" (click)="sendMoveToRequest();modal.close()" class="integraa-btn ml-2 float-right integraa-btn-danger" >{{'schedule.result.run' | translate}}</button>
-        <button type="button" (click)="modal.close()" class="integraa-btn ml-2 float-right bg-light" >{{'schedule.result.stop' | translate}}</button>
+        <button type="button" (click)="sendMoveToRequest();modal.close()" class="integraa-btn ml-2 float-right integraa-btn-danger" >Esegui</button>
+        <button type="button" (click)="modal.close()" class="integraa-btn ml-2 float-right bg-light" >Fermare</button>
         <div class="clear-both"></div>
       </div>
     </div>

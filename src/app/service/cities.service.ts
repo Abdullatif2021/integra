@@ -17,49 +17,9 @@ export class CitiesService {
         private filtersService: FiltersService,
     ) { }
 
-    getToDeliverCities(page, rpp, name, order) {
+    getCities(page, rpp, name, order) {
         const options = {
-            params: new HttpParams().set('page', page).set('pageSize', rpp).set('statusType', 'to_be_delivered')
-        };
-        const citiesType = this.filtersService.getGrouping();
-        if (citiesType === 'by_client') {
-            options.params = options.params.set('type', citiesType);
-            if (name !== null) { options.params = options.params.set('cityName', name); }
-            if (name !== null) { options.params = options.params.set('clientName', name); }
-        } else {
-            if (name !== null) { options.params = options.params.set('cityName', name); }
-        }
-        if (order) {
-            options.params = options.params.set('orderMethod', order);
-        }
-        options.params = this.filtersService.getHttpParams(options.params) ;
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCities, options).pipe(
-            catchError(this.handleError)
-        );
-    }
-    getNotDeliveredCities(page, rpp, name, order) {
-        const options = {
-            params: new HttpParams().set('page', page).set('pageSize', rpp).set('statusType', 'not_delivered')
-        };
-        const citiesType = this.filtersService.getGrouping();
-        if (citiesType === 'by_client') {
-            options.params = options.params.set('type', citiesType);
-            if (name !== null) { options.params = options.params.set('cityName', name); }
-            if (name !== null) { options.params = options.params.set('clientName', name); }
-        } else {
-            if (name !== null) { options.params = options.params.set('cityName', name); }
-        }
-        if (order) {
-            options.params = options.params.set('orderMethod', order);
-        }
-        options.params = this.filtersService.getHttpParams(options.params) ;
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getCities, options).pipe(
-            catchError(this.handleError)
-        );
-    }
-    getInStockCities(page, rpp, name, order) {
-        const options = {
-            params: new HttpParams().set('page', page).set('pageSize', rpp).set('statusType', 'in_stock')
+            params: new HttpParams().set('page', page).set('pageSize', rpp)
         };
         const citiesType = this.filtersService.getGrouping();
         if (citiesType === 'by_client') {

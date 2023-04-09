@@ -1,6 +1,5 @@
-import { TranslateSelectorService } from './service/translate-selector-service';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule , HttpClient} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
@@ -20,12 +19,6 @@ import {GoogleDirectionsService} from './service/planning/google-directions.serv
 import {StreetsLocatingService} from './service/locating/streets-locating.service';
 import {MapService} from './service/map.service';
 import {MarkersService} from './service/markers.service';
-import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-
-export function HttpLoaderFactory(httpClient: HttpClient) {
-  return new TranslateHttpLoader(httpClient);
-}
 
 @NgModule({
   declarations: [
@@ -40,14 +33,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     SharedModule,
     LoadingBarHttpClientModule,
     SnotifyModule,
-    HttpClientModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      }
-    })
   ],
   providers: [
       { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
@@ -66,6 +51,5 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
   ],
   bootstrap: [AppComponent]
 })
-
 
 export class AppModule { }

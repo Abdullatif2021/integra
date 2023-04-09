@@ -5,8 +5,6 @@ import {ActivatedRoute} from '@angular/router';
 import {DragAndDropService} from '../../../../service/drag-and-drop.service';
 import {takeUntil} from 'rxjs/internal/operators';
 import {ScheduleService} from '../../service/schedule.service';
-import { TranslateService } from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-not-fixed-tree',
@@ -20,14 +18,8 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
       private snotifyService: SnotifyService,
       private route: ActivatedRoute,
       private dragAndDropService: DragAndDropService,
-      private scheduleService: ScheduleService,
-      private translate: TranslateService,
-      private translateSelectorService: TranslateSelectorService,
-
-      ) {
-        this.translateSelectorService.setDefaultLanuage();
-
-      }
+      private scheduleService: ScheduleService
+  ) { }
 
   list = [];
   preDispatch;
@@ -35,7 +27,6 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
   allLoaded = false ;
   loading = false ;
   page = 1;
-  dragging = null ;
   unsubscribe = new EventEmitter();
   selected = [];
 
@@ -44,13 +35,11 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
     this.preDispatch = this.route.snapshot.params.id;
     this.preDispatchData = this.route.snapshot.data.data ;
     const data = await this.resultsService.getNotFixedItems(this.preDispatch).toPromise().catch(e => {
-      this.snotifyService.error( this.translate.instant('schedule.fixed_tree.getNotFixedItems.error'),
-       { showProgressBar: false, timeout: 1500 });
+      this.snotifyService.error('Qualcosa andato storto', { showProgressBar: false, timeout: 1500 });
     });
     if (data && data.data) {
       this.list = data.data ;
-      this.snotifyService.warning( this.translate.instant('schedule.fixed_tree.getNotFixedItems.warning'),
-       { showProgressBar: false, timeout: 1500 });
+      this.snotifyService.warning('Alcuni prodotti doveno trascianti manualmente alle distinte', { showProgressBar: false, timeout: 1500 });
     }
     this.dragAndDropService.dropped.pipe(takeUntil(this.unsubscribe)).subscribe(
         (_d: any) => {
@@ -76,7 +65,6 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
           this.selected = [...this.list];
           this.list.forEach(item => item.selected = true );
       }
-      console.log(this.selected);
   }
 
   onDrop(event, item) {
@@ -92,13 +80,12 @@ export class NotFixedTreeComponent implements OnInit, OnDestroy {
   }
 
   async loadMore() {
-      if (this.loading) { return ; }
+      if (this.loading) { return ;}
       this.page++;
       this.loading = true ;
       this.list.push({skeleton: true});
       const data = await this.resultsService.getNotFixedItems(this.preDispatch, this.page).toPromise().catch(e => {
-          this.snotifyService.error( this.translate.instant('schedule.fixed_tree.getNotFixedItems.error'),
-           { showProgressBar: false, timeout: 1500 });
+          this.snotifyService.error('Qualcosa andato storto', { showProgressBar: false, timeout: 1500 });
       });
       this.list.pop();
       this.loading = false ;

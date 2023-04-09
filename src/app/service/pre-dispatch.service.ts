@@ -7,7 +7,6 @@ import {catchError} from 'rxjs/operators';
 import {FiltersService} from './filters.service';
 import {PaginationService} from './pagination.service';
 import {IntegraaModalService} from './integraa-modal.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +17,8 @@ export class PreDispatchService {
         private http: HttpClient,
         private filtersService: FiltersService,
         private paginationService: PaginationService,
-        private integraaModalService: IntegraaModalService,
-        private translate: TranslateService,
-        ) {}
+        private integraaModalService: IntegraaModalService
+    ) {}
 
     public selectedPreDispatches = [] ;
     canPlanChanges = new EventEmitter<boolean>();
@@ -61,15 +59,15 @@ export class PreDispatchService {
 
     translateStatus(status) {
         switch (status) {
-            case 'in_localize': return this.translate.instant('services.pre_dispatch_service.translateStatus.in_localize');
-            case 'notPlanned': return this.translate.instant('services.pre_dispatch_service.translateStatus.notPlanned');
-            case 'planned': return this.translate.instant('services.pre_dispatch_service.translateStatus.planned');
-            case 'inPlanning': return this.translate.instant('services.pre_dispatch_service.translateStatus.inPlanning');
-            case 'localized': return this.translate.instant('services.pre_dispatch_service.translateStatus.localized');
-            case 'in_grouping': return this.translate.instant('services.pre_dispatch_service.translateStatus.in_grouping');
-            case 'in_divide': return this.translate.instant('services.pre_dispatch_service.translateStatus.in_divide');
-            case 'in_drawing': return this.translate.instant('services.pre_dispatch_service.translateStatus.in_drawing');
-            case 'drawing_paths': return this.translate.instant('services.pre_dispatch_service.translateStatus.drawing_paths');
+            case 'in_localize': return 'In localizzazione';
+            case 'notPlanned': return 'Non Pianificato';
+            case 'planned': return 'Pianificata';
+            case 'inPlanning': return 'In Pianificazione';
+            case 'localized': return 'Localizzato';
+            case 'in_grouping': return 'Ragruppamento';
+            case 'in_divide': return 'In Divisione';
+            case 'in_drawing': return 'Percoso in disegnamento';
+            case 'drawing_paths': return 'Disegno percorso ';
             default: return status;
         }
     }

@@ -3,7 +3,6 @@ import {TablesConfig} from '../../config/tables.config';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {SettingsService} from '../../service/settings.service';
 import {ApiResponseInterface} from '../../core/models/api-response.interface';
-import {TranslateSelectorService} from '../../service/translate-selector-service';
 
 @Component({
   selector: 'app-settings',
@@ -14,8 +13,8 @@ export class SettingsComponent implements OnInit {
 
   subSettings: any = {
     general: [
-      {id: 'service-time', name: 'settings.subSettings.general.service_time', route: '/settings'},
-      {id: 'pagination-options', name: 'settings.subSettings.general.pagination_options', route: '/settings/pagination'}
+      {id: 'service-time', name: 'Tempo di servizio', route: '/settings'},
+      {id: 'pagination-options', name: 'Pagination Options', route: '/settings/pagination'}
     ],
     mapProvider: [
       // {id: 'map-box', name: 'MapBox', route: '/settings/map-box'},
@@ -24,8 +23,8 @@ export class SettingsComponent implements OnInit {
     ],
   }
   settings = [
-    {id: 'general', name: 'settings.subSettings.settings.general'},
-    {id: 'mapProvider', name: 'settings.subSettings.settings.map_provider', route: (subSetting) => '/settings/map/' + subSetting.id}
+    {id: 'general', name: 'General'},
+    {id: 'mapProvider', name: 'Map Provider', route: (subSetting) => '/settings/map/' + subSetting.id}
   ];
 
   activeSetting: any ;
@@ -38,14 +37,12 @@ export class SettingsComponent implements OnInit {
   constructor(
       private router: Router,
       private activatedRoute: ActivatedRoute,
-      private settingsService: SettingsService,
-      private translateSelectorService: TranslateSelectorService,
-      ) {
-      this.translateSelectorService.setDefaultLanuage();
+      private settingsService: SettingsService
+  ) {
       router.events.subscribe((_route) => {
         if (_route instanceof NavigationEnd) { this.updateActiveTabFromRoute() ; }
       });
-    }
+  }
 
   ngOnInit() {
       this.activatedRoute.data.subscribe((d) => {

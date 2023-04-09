@@ -26,12 +26,9 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalDirective} from '../../../../shared/directives/modal.directive';
 import {PwsisbsConfirmModalComponent} from '../../modals/pwsisbs-confirm-modal/pwsisbs-confirm-modal.component';
 import {PsbatpdwsiConfirmModalComponent} from '../../modals/psbatpdwsi-confirm-modal/psbatpdwsi-confirm-modal.component';
+import {StreetsLocatingService} from '../../../../service/locating/streets-locating.service';
 import {SnotifyService} from 'ng-snotify';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
-import { TranslateService } from '@ngx-translate/core';
-import {CreateNewActivityComponent} from '../../../../parts/activities-part/modals/create-new-activity/create-new-activity.component';
-import {IntegraaModalService} from '../../../../service/integraa-modal.service';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-to-deliver',
@@ -40,7 +37,7 @@ import {TranslateSelectorService} from '../../../../service/translate-selector-s
 })
 export class ToDeliverComponent implements OnInit, OnDestroy {
 
-  productssTable = TablesConfig.table.productsTable ;
+  productsTable = TablesConfig.table.productsTable ;
   citiesTable = TablesConfig.simpleTable.citiesTable ;
   streetsTable = TablesConfig.simpleTable.streetsTable ;
   products: any ;
@@ -58,44 +55,45 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
 
   actions = [
     {
-        name: this.translate.instant('home.to_delivered_action.create_one.value'), fields: [
+        name: 'Crea nuova attivita', fields: [
             { type: 'select', field: 'method', options: [
-                    {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'},
-                    {name: this.translate.instant('home.to_delivered_action.create_one.by_filter'), value: 'filters'}
-                ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.create_one.select'), value: 'selected'}
+                    {name: 'Selezionati', value: 'selected'},
+                    {name: 'Secondo i filtri applicati', value: 'filters'}
+                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ],
-        before_modal_open: (event) => this.createActivityCheck(event),
-        modal: CreateNewActivityComponent,
-        modalOptions: {size: 'xl'}
+        run: (event) => this.createActivity(event)
     },
     {
-        name: this.translate.instant('home.to_delivered_action.cre_pre_dispatch.value'), fields: [
+        name: 'Crea nuova Pre-Distinta', fields: [
             { type: 'select', field: 'method', options: [
-                    {name: this.translate.instant('home.to_delivered_action.cre_pre_dispatch.select'), value: 'selected'},
-                    {name: this.translate.instant('home.to_delivered_action.cre_pre_dispatch.by_filter'), value: 'filters'}
-                ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.cre_pre_dispatch.select'), value: 'selected'}
+                    {name: 'Selezionati', value: 'selected'},
+                    {name: 'Secondo i filtri applicati', value: 'filters'}
+                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ],
         modal: PreDispatchNewComponent
     },
     {
-        name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.value'), fields: [
+        name: 'Mosta attivita in corso',
+        run: (event) => {this.router.navigate(['to-deliver/activities'])}
+    },
+    {
+        name: 'Aggiungi a Pre-Distinta esistente', fields: [
             { type: 'select', field: 'method', options: [
-                    {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.select'), value: 'selected'},
-                    {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.by_filter'), value: 'filters'}
-                ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.select'),
-                 value: 'selected'}
+                    {name: 'Selezionati', value: 'selected'},
+                    {name: 'Secondo i filtri applicati', value: 'filters'}
+                ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
             }
         ],
         modal: PreDispatchAddComponent,
     },
     {
-        name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.import_products'), fields: [],
+        name: 'Importa Prodotti da Codici a Barre', fields: [],
         modal: ImportFromBarcodesComponent,
     },
     {
-        name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.load_products_by_scanner'), fields: [
+        name: 'Carica prodotti da Scanner', fields: [
             { type: 'text', field: 'barcode', placeholder: 'Barcode'},
         ], submit: (data, event) => {
           this.filtersService.addBarcodeFilter(data.barcode);
@@ -110,8 +108,8 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
     },
   ];
 
-  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getToDeliverCities(page, rpp, name, order);
-  streetsGetMethod = (page, rpp, name, order) => this.streetsService.getToDeliverStreets(page, rpp, name, this.current_cities, order);
+  citiesGetMethod = (page, rpp, name, order) => this.citiesService.getCities(page, rpp, name, order);
+  streetsGetMethod = (page, rpp, name, order) => this.streetsService.getStreets(page, rpp, name, this.current_cities, order);
 
   constructor(
       private citiesService: CitiesService,
@@ -130,24 +128,18 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       private componentFactoryResolver: ComponentFactoryResolver,
       private modalService: NgbModal,
       private snotifyService: SnotifyService,
-      private router: Router,
-      private translate: TranslateService,
-      private translateSelectorService: TranslateSelectorService,
-      private integraaModalService: IntegraaModalService
+      private router: Router
   ) {
-      this.translateSelectorService.setDefaultLanuage();
       this.paginationService.updateResultsCount(null) ;
       this.paginationService.updateLoadingState(true) ;
       this.activatedRoute.queryParams.subscribe(params => {
           if (params['actionsonly'] === 'addproductstopd') {
               this.actions = <any>{
-                  name: this.translate.instant(''), fields: [
+                  name: 'Aggiungi a Pre-Distinta esistente', fields: [
                       { type: 'select', field: 'method', options: [
-                              {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.select'), value: 'selected'},
-                              {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.by_filter'),
-                               value: 'filters'}
-                          ], selectedAttribute: {name: this.translate.instant('home.to_delivered_action.add_to_existing_pre_bill.select'),
-                           value: 'selected'}
+                              {name: 'Selezionati', value: 'selected'},
+                              {name: 'Secondo i filtri applicati', value: 'filters'}
+                          ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
                       }
                   ],
                   modal: PreDispatchAddDirectComponent,
@@ -170,13 +162,9 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-      const filtersConfig = <any>{...FilterConfig.products};
-      this.filtersService.setFields(filtersConfig, this, 'products');
-      this.filtersService.keep('products');
-      this.filtersService.clear('products');
-
-      this.handleGroupingDisplay(this.filtersService.getGrouping(), this.filtersService.filters, this.filtersService.getPlaceholders());
+      this.citiesTable.title = 'Paese';
+      this.citiesTable.searchPlaceHolder =  'Cerca Paese';
+      this.filtersService.clear();
       this.loadProducts(false);
       this.paginationService.rppValueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((rpp: number) => {
           this.loadProducts(false) ;
@@ -186,13 +174,21 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       });
       this.filtersService.filtersChanges.pipe(takeUntil(this.unsubscribe)).subscribe((filtersData: any) => {
           const filters = filtersData.filters ;
-          this.handleGroupingDisplay(filters.grouping, filters, filtersData.placeholders);
+          this.citiesTable.title = filters.grouping === 'by_client' ? 'Cliente' : 'Paese' ;
+          this.citiesTable.searchPlaceHolder = filters.grouping === 'by_client' ? 'Cerca Cliente' : 'Cerca Paese' ;
+          if (filters.grouping === 'by_cap' && filters.recipientCap && filtersData.placeholders && filtersData.placeholders.recipientCap) {
+              this._streetsTable.clearData();
+              this._citiesTable.setSearchValue(filtersData.placeholders.recipientCap);
+              this.current_cities = {all: true, items: [], search: filtersData.placeholders.recipientCap};
+          } else if (this._citiesTable.resetIfAuto()) {
+              this.current_cities = {all: true, items: [], search: null};
+          }
           this.loadProducts(true) ;
           this._streetsTable.reload();
           this._citiesTable.reload();
       });
       this.actionsService.setActions(this.actions);
-      this.actionsService.reload.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
+      this.preDispatchActionsService.reloadData.pipe(takeUntil(this.unsubscribe)).subscribe((state) => {
           this.loadProducts(false) ;
           this._citiesTable.reload(true);
           this._streetsTable.reload(true);
@@ -201,24 +197,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       this.productsService.selectAllOnLoadEvent.pipe(takeUntil(this.unsubscribe)).subscribe((state: boolean) => {
           this.selectAllOnLoad = state ;
       });
-  }
-
-  handleGroupingDisplay(grouping, filters, placeholders) {
-      if (grouping === 'show_activities') {
-          return this.router.navigate(['activities']);
-      }
-      if (grouping === 'show_summary') {
-          return this.router.navigate(['summary']);
-      }
-      this.citiesTable.title = grouping === 'by_client' ? 'Cliente' : 'Paese' ;
-      this.citiesTable.searchPlaceHolder = grouping === 'by_client' ? 'Cerca Cliente' : 'Cerca Paese' ;
-      if (grouping === 'by_cap' && filters.recipientCap && placeholders && placeholders.recipientCap) {
-          this._streetsTable.clearData();
-          this._citiesTable.setSearchValue(placeholders.recipientCap);
-          this.current_cities = {all: true, items: [], search: placeholders.recipientCap};
-      } else if (this._citiesTable.resetIfAuto()) {
-          this.current_cities = {all: true, items: [], search: null};
-      }
+      this.filtersService.setFields(FilterConfig.products, this);
   }
 
   cityChanged(event) {
@@ -278,7 +257,10 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
 
   selectedItemsChanged(items) {
       this.productsService.selectedProducts = items ;
-      this.productsService.selectState = 'products' ;
+  }
+
+  getCategoriesByName(name) {
+      return this.categoriesService.getCategoriesByName(name);
   }
 
   openModal(modal, data, options = {}) {
@@ -295,8 +277,7 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
   handleStreetsAction(event) {
       if (event.action.action === 'rename') {
           if (event.inputValue.length < 2 ) {
-              this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.name_is_short'),
-               { showProgressBar: false, timeout: 2000 });
+              this.snotifyService.warning('Il nuovo nome è molto corto', { showProgressBar: false, timeout: 2000 });
               return ;
           }
           const promise = this.streetsService.renameStreet(event.item, event.inputValue);
@@ -305,20 +286,14 @@ export class ToDeliverComponent implements OnInit, OnDestroy {
       }
   }
 
-  showLogModal(elm) {
-    this.integraaModalService.open(`/pages/product/${elm.id}/log`,
-        {width: 1000, height: 600, title: `Log: ${elm.barcode}`}, {});
-    }
-
-  createActivityCheck(event) {
+  createActivity(event) {
       if (event.method === 'selected' && !this.productsService.selectedProducts.length) {
-          this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.select_first'), { showProgressBar: false, timeout: 2000 });
-          return false;
-      } else if (event.method === 'filters' && !Object.keys(this.filtersService.getFilterObject(true)).length) {
-          this.snotifyService.warning(this.translate.instant('home.modals.not_delivered_actions.warning.no_filter_applied'), { showProgressBar: false, timeout: 2000 });
-          return false;
+          return this.snotifyService.warning('You have to select products first', { showProgressBar: false, timeout: 2000 });
+      } else if (event.method === 'filters' && !Object.keys(this.filtersService.filters).length
+          && !Object.keys(this.filtersService.specials).length) {
+          return this.snotifyService.warning('No Filters applied', { showProgressBar: false, timeout: 2000 });
       }
-      return true;
+      this.router.navigate(['to-deliver/activities']);
   }
 
   ngOnDestroy() {

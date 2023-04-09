@@ -5,7 +5,7 @@ import {PreDispatchLogComponent} from './components/pre-dispatch-log/pre-dispatc
 import {CoreModule} from '../../../../core/core.module';
 import {SharedModule} from '../../../../shared/shared.module';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {TranslateModule} from '@ngx-translate/core';
+
 const routes: Routes = [
     {path: '', component: PreDispatchLogComponent}
 ];
@@ -16,8 +16,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModule,
     CoreModule,
-    FontAwesomeModule,
-    TranslateModule.forChild()
+    FontAwesomeModule
   ],
   declarations: [
       PreDispatchLogComponent

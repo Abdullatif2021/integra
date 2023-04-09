@@ -1,27 +1,27 @@
 <ng-template #modalRef let-modal>
 <div class="modal-container">
   <div class="modal-body">
-    <h6>{{'home.modals.pre_add.add_existing' | translate}}</h6>
+    <h6>Aggiungi a Pre-distinta esistente</h6>
     <div class="selected-count-confirm">
-      {{'home.modals.pre_add.about_try' | translate}} <b *ngIf="data.method === 'selected'" >{{productsService.selectedProducts.length}}</b><b *ngIf="data.method === 'filters'" >{{filteredProductsCount}}</b>
-      {{'home.modals.pre_add.correct_quantity' | translate}}
+      ATTENZIONE! Stai per processare <b *ngIf="data.method === 'selected'" >{{productsService.selectedProducts.length}}</b><b *ngIf="data.method === 'filters'" >{{filteredProductsCount}}</b> righe. Assicurati che la quantità sia corretta,
+      altrimenti riprova o contatta l'assistenz. Premi su Conferma se non hai dubbi sull'operazione.
     </div>
     <div class="row mt-4">
-      <div class="col-12 text-danger mb-2" *ngIf="error===1">{{'home.modals.pre_add.no_select' | translate}}</div>
+      <div class="col-12 text-danger mb-2" *ngIf="error===1">Pre Dispatch is not selected</div>
       <!--<div class="col-6">-->
         <!--<label>Aggiungi a Pre-distinta esistente</label>-->
         <!--<ng-select [clearable]="false" (change)="changeBindLabel($event)" [bindLabel]="'name'" [items]="options" placeholder="Seleziona" class="integraa-select"></ng-select>-->
       <!--</div>-->
       <div class="col-12">
-        <label>{{'home.modals.pre_add.distinte' | translate}}</label>
+        <label>Pre-distinte:</label>
         <!--<ng-select [clearable]="false" *ngIf="bindLabel=='name'" (change)="select($event)" [items]="preDispatches" [bindLabel]="'name'" class="integraa-select"></ng-select>-->
         <ng-select [clearable]="false" [loading]="searching" (search)="search($event)" (change)="select($event)" [items]="preDispatches" [bindLabel]="'name_code'" class="integraa-select auto-complete"></ng-select>
       </div>
     </div>
 
     <div class="btns-container mt-3">
-      <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal, products_already_in_use)">{{'home.modals.pre_add.run' | translate}}</button>
-      <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'home.modals.pre_add.go_out' | translate}}</button>
+      <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal, products_already_in_use)">Esegui</button>
+      <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
       <div class="clear-both"></div>
     </div>
   </div>
@@ -31,7 +31,7 @@
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
       <div class="cant-delete-now">
-        {{'home.modals.pre_add.used_products' | translate}}
+        Questi prodotti sono stati già usati in un'altra pre-distinta
       </div>
       <div class="row mt-2">
         <div class="col-12 align-self-center">
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="modal.close()">{{'home.modals.pre_add.ok' | translate}}</button>
+        <button type="button" class="integraa-btn integraa-danger-btn ml-2 float-right" (click)="modal.close()">Ok</button>
         <div class="clear-both"></div>
       </div>
     </div>

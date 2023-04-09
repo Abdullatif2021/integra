@@ -1,17 +1,12 @@
-import { TranslateSelectorService } from './../../../../../../service/translate-selector-service';
 import {Component, OnInit} from '@angular/core';
 import {MapService} from '../../../../../../service/map.service';
 import {MapMarker} from '../../../../../../core/models/map-marker.interface';
 import {ActivatedRoute} from '@angular/router';
 import {DispatchViewService} from '../../service/dispatch-view.service';
 import {MapsAPILoader} from '@agm/core';
-import {SetStatusModalComponent} from '../../../../../../shared/modals/set-status-modal/set-status-modal.component';
+import {SetStatusModalComponent} from '../../modals/set-status-modal/set-status-modal.component';
 import {ActionsService} from '../../../../../../service/actions.service';
 import {PaginationService} from '../../../../../../service/pagination.service';
-import { TranslateService } from '@ngx-translate/core';
-import {AgenciesService} from '../../../../../../service/agencies.service';
-import {RecipientsService} from '../../../../../../service/recipients.service';
-import {CustomersService} from '../../../../../../service/customers.service';
 
 @Component({
     selector: 'app-dispatch-view',
@@ -40,14 +35,8 @@ export class DispatchViewComponent implements OnInit {
         private dispatchViewService: DispatchViewService,
         private mapsAPILoader: MapsAPILoader,
         private actionsService: ActionsService,
-        private paginationService: PaginationService,
-        private translate: TranslateService,
-        private translateSelectorService: TranslateSelectorService,
-        protected recipientsService: RecipientsService,
-        private customersService: CustomersService,
-        private agenciesService: AgenciesService,
+        private paginationService: PaginationService
     ) {
-        this.translateSelectorService.setDefaultLanuage();
         this.dispatch = route.snapshot.params.id;
     }
 
@@ -103,7 +92,7 @@ export class DispatchViewComponent implements OnInit {
             this.markers.push({
                 lat: elm.lat,
                 lng: elm.long,
-                label: this.translate.instant('pages.dispatch_view.add_start_and_end_points.empty'),
+                label: '',
                 title: elm.name,
                 id: elm.id,
                 icon: icon,
@@ -121,7 +110,7 @@ export class DispatchViewComponent implements OnInit {
             this.markers.push({
                 lat: this.startPoint.lat,
                 lng: this.startPoint.long,
-                label: this.translate.instant('pages.dispatch_view.add_start_and_end_points.start_end'),
+                label: 'Start/End',
                 title: this.startPoint.text,
                 id: 'start+end+point',
                 icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
@@ -132,7 +121,7 @@ export class DispatchViewComponent implements OnInit {
             this.markers.push({
                 lat: this.startPoint.lat,
                 lng: this.startPoint.long,
-                label: this.translate.instant('pages.dispatch_view.add_start_and_end_points.start'),
+                label: 'Start',
                 title: this.startPoint.text,
                 id: 'start+point',
                 icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
@@ -142,7 +131,7 @@ export class DispatchViewComponent implements OnInit {
             this.markers.push({
                 lat: this.endPoint.lat,
                 lng: this.endPoint.long,
-                label: this.translate.instant('pages.dispatch_view.add_start_and_end_points.end'),
+                label: 'End',
                 title: this.endPoint.text,
                 id: 'end+point',
                 icon: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png?color=ff333333&scale=1.2',
@@ -159,30 +148,26 @@ export class DispatchViewComponent implements OnInit {
         this.data = this.data.concat([{skeleton: true}, {skeleton: true}, {skeleton: true}]);
         const data = await this.dispatchViewService.getDispatchGroups(this.dispatch, this.page).catch(e => {});
         this.data.splice(-3);
-        if (!data || !data.groups || !data.groups.length) { return ; }
+        if (!data || !data.length) { return ; }
         this.loading = false;
-        this.data = this.data.concat(data.groups);
-        if (data && data.groups && data.groups.length && (data.state === 'prepared' || data.state === 'in_delivery')) {
+        this.data = this.data.concat(data);
+        if (data && data.length && data[0].state === 'prepared') {
             this.handleActions(true);
         }
     }
 
     handleActions(isPrepared) {
-        if (!isPrepared) { return ; }
+        if (!isPrepared) { return ;}
         this.actionsService.setActions([
             {
-                name: this.translate.instant('pages.dispatch_view.action.action_name'), fields: [
+                name: 'Change status', fields: [
                     { type: 'select', field: 'method', options: [
-                            {name: this.translate.instant('pages.dispatch_view.action.selected'), value: 'selected'},
-                            {name: this.translate.instant('pages.dispatch_view.action.by_filter'), value: 'filters'}
-                        ], selectedAttribute: {name: this.translate.instant('pages.dispatch_view.action.selected'), value: 'selected'}
+                            {name: 'Selezionati', value: 'selected'},
+                            {name: 'Secondo i filtri applicati', value: 'filters'}
+                        ], selectedAttribute: {name: 'Selezionati', value: 'selected'}
                     }
                 ],
-                modal: SetStatusModalComponent,
-                modalData: {
-                    selected: () => this.dispatchViewService.getSelectedProducts() ,
-                    state: 'in_delivery'
-                },
+                modal: SetStatusModalComponent
             },
         ]);
     }
@@ -248,12 +233,10 @@ export class DispatchViewComponent implements OnInit {
                 this.dispatchViewService.selectedProducts = this.dispatchViewService.selectedProducts.concat(item.products.map(p => p.id));
             } else {
                 this.dispatchViewService.selectedProducts =
-                this.dispatchViewService.selectedProducts.filter( i => !item.products.find(j => j.id === i));
+                    this.dispatchViewService.selectedProducts.filter( i => !item.products.find(j => j.id === i));
             }
         }
-        console.log(this.dispatchViewService.getSelectedProducts());
     }
-
     mapReady(map) {
         const that = this;
         map.addListener('dragend', function () {

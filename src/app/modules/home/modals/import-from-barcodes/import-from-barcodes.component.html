@@ -3,18 +3,18 @@
     <div class="modal-body">
       <div class="row">
         <div class="col-12">
-          <label>{{'home.modals.import_from.import_col' | translate}}</label>
+          <label>Colonne da Importare</label>
           <textarea (input)="valueChanged($event)" class="form-control barcodes-input"></textarea>
           <div class="total">
-            <label>{{'home.modals.import_from.total_lines' | translate}}</label>
+            <label>Totale righe: </label>
             <div class="total-val">{{ items.length }}</div>
           </div>
         </div>
       </div>
 
       <div class="btns-container mt-3">
-        <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">{{'home.modals.import_from.run' | translate}}</button>
-        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">{{'home.modals.import_from.go_out' | translate}}</button>
+        <button type="button" class="integraa-btn ml-2 float-right" (click)="run(modal)">Esegui</button>
+        <button type="button" class="integraa-btn bg-light float-right" (click)="modal.close()">Esci</button>
         <div class="clear-both"></div>
       </div>
     </div>

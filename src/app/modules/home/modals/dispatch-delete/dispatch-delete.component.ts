@@ -1,10 +1,7 @@
-import { browser } from 'protractor';
-import { TranslateService } from '@ngx-translate/core';
 import { Component, OnInit } from '@angular/core';
 import {DispatchService} from '../../../../service/dispatch.service';
 import {DispatchActionsService} from '../../service/dispatch-actions.service';
 import {ModalComponent} from '../modal.component';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-dispatch-delete',
@@ -17,14 +14,9 @@ export class DispatchDeleteComponent extends ModalComponent implements OnInit {
 
   constructor(
       private dispatchService: DispatchService,
-      private dispatchActionsService: DispatchActionsService,
-      private translate: TranslateService,
-      private translateSelectorService: TranslateSelectorService,
-
+      private dispatchActionsService: DispatchActionsService
   ) {
     super();
-    this.translateSelectorService.setDefaultLanuage();
-
   }
 
   ngOnInit() {

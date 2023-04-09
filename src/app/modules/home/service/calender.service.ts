@@ -11,7 +11,8 @@ export class CalenderService {
     constructor(
         private http: HttpClient,
         private filtersService: FiltersService
-    ) {}
+    ) {
+    }
 
 
     getWeeklyCalender(week = 1, sets = null, postmen = null, revisors = null, date = null, state = 'NOT_PREAPERED'): Observable<any> {

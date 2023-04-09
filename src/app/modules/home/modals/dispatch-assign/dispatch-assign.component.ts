@@ -1,4 +1,3 @@
-import { TranslateService } from '@ngx-translate/core';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ModalComponent} from '../modal.component';
 import {takeUntil} from 'rxjs/internal/operators';
@@ -8,7 +7,6 @@ import {Subject} from 'rxjs';
 import {DispatchService} from '../../../../service/dispatch.service';
 import {SnotifyService} from 'ng-snotify';
 import {DispatchActionsService} from '../../service/dispatch-actions.service';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
     selector: 'app-dispatch-assign',
@@ -31,14 +29,10 @@ export class DispatchAssignComponent extends ModalComponent implements OnInit, O
         private paginationService: PaginationService,
         private dispatchService: DispatchService,
         private snotifyService: SnotifyService,
-        private dispatchActionsService: DispatchActionsService,
-        private translate: TranslateService,
-        private translateSelectorService: TranslateSelectorService,
-
+        private dispatchActionsService: DispatchActionsService
     ) {
         super();
-        this.translateSelectorService.setDefaultLanuage();
-      }
+    }
 
     ngOnInit() {
         this.items = this.dispatchService.selectedDispatches;
@@ -75,6 +69,7 @@ export class DispatchAssignComponent extends ModalComponent implements OnInit, O
         this.dispatchActionsService.assignToUser(this.data.method, this.selected.id, this.items ? this.items.map(item => item.id) : null);
         modal.close();
     }
+
 
     ngOnDestroy() {
         this.unsubscribe.next();

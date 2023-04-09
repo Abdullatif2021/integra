@@ -1,4 +1,3 @@
-import { TranslateService } from '@ngx-translate/core';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ModalComponent} from '../modal.component';
 import {DispatchActionsService} from '../../service/dispatch-actions.service';
@@ -7,7 +6,6 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {FiltersService} from '../../../../service/filters.service';
 import {PaginationService} from '../../../../service/pagination.service';
 import {Subject} from 'rxjs';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
     selector: 'app-dispatch-prepare',
@@ -27,14 +25,10 @@ export class DispatchPrepareComponent extends ModalComponent implements OnInit, 
         private dispatchService: DispatchService,
         private dispatchActionsService: DispatchActionsService,
         private filtersService: FiltersService,
-        private paginationService: PaginationService,
-        private translate: TranslateService,
-        private translateSelectorService: TranslateSelectorService,
-
-        ) {
-          super();
-          this.translateSelectorService.setDefaultLanuage();
-        }
+        private paginationService: PaginationService
+    ) {
+        super();
+    }
 
     ngOnInit() {
         this.items = this.dispatchService.selectedDispatches;

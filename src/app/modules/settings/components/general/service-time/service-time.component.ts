@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {SettingsService} from '../../../../../service/settings.service';
 import {ApiResponseInterface} from '../../../../../core/models/api-response.interface';
 import {Observable} from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-service-time',
@@ -13,11 +11,8 @@ import {TranslateSelectorService} from '../../../../../service/translate-selecto
 export class ServiceTimeComponent implements OnInit {
 
   constructor(
-      private settingsService: SettingsService , private translate: TranslateService,
-      private translateSelectorService: TranslateSelectorService,
-    ) {
-        this.translateSelectorService.setDefaultLanuage();
-    }
+      private settingsService: SettingsService
+  ) { }
   settings = [];
   subscription ;
   loading = true ;

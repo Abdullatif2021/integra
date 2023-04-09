@@ -18,31 +18,13 @@ export class ProductsService {
       private paginationService: PaginationService
   ) { }
 
-  selectState = 'products';
-  selectedProducts: any = [];
+  public selectedProducts = [];
   selectAllOnLoadEvent = new EventEmitter() ;
-
-  setSelectedProducts(products) {
-       this.selectedProducts = products.id;
-  }
-
-  getSelectedProducts() {
-      return this.selectedProducts;
-  }
-
-  updateProductsStatusByProducts(products, status) {
-      const options = {
-          status: status,
-          product_ids: products.id,
-      };
-      return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, options);
-  }
-
   getToDeliverProducts(cities, streets, order_field = null, order_method = '1') {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)
-              .set('pageSize', this.paginationService.rpp)
-              .set('statusType', 'to_be_delivered')};
+              .set('pageSize', this.paginationService.rpp)};
+
       const citiesType = this.filtersService.getGrouping();
       if (citiesType === 'by_client') {
           options.params = options.params.set('by_clients_Filter', '1');
@@ -94,7 +76,6 @@ export class ProductsService {
       );
   }
 
-
   getPreDispatchProducts(id) {
       const options = { params: new HttpParams()
               .set('page', this.paginationService.current_page)
@@ -121,6 +102,24 @@ export class ProductsService {
       }
       return this.http.post<ApiResponseInterface>(AppConfig.endpoints.getProductByCategory, options);
   }
+
+  updateProductsStatusByProducts(products, status) {
+      const options = {
+          status: status,
+          product_ids: products,
+      }
+      return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, options);
+  }
+
+  updateProductsStatusByFilters(status) {
+      const data = {
+          status: status,
+      }
+      const options = { params: new HttpParams()};
+      options.params = this.filtersService.getHttpParams(options.params) ;
+      return this.http.post<ApiResponseInterface>(AppConfig.endpoints.changeProductStatus, data, options);
+  }
+
   handleError(error: HttpErrorResponse) {
       if (error.error instanceof ErrorEvent) {
           console.error('An error occurred:', error.error.message);

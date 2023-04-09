@@ -1,10 +1,10 @@
 <ng-template  #confirmPlanningModalRef let-modal>
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
-      <h6 class="text-center">{{'core.global_modals.address_scheduling' | translate}}</h6>
+      <h6 class="text-center">Vuoi ripianificare gli indirizzi non assegnati o pianificare solo i nuovi indirizzi.</h6>
       <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close();confirmPlanningActionChosen(false)" class="integraa-btn ml-2 float-right" >{{'core.global_modals.just_new'| translate}}</button>
-        <button type="button" (click)="modal.close();confirmPlanningActionChosen(true)" class="integraa-btn ml-2 float-right" >{{'core.global_modals.reschedule'| translate}}</button>
+        <button type="button" (click)="modal.close();confirmPlanningActionChosen(false)" class="integraa-btn ml-2 float-right" >Solo i nuovi</button>
+        <button type="button" (click)="modal.close();confirmPlanningActionChosen(true)" class="integraa-btn ml-2 float-right" >Ripianifica tutto</button>
         <div class="clear-both"></div>
       </div>
     </div>
@@ -16,7 +16,7 @@
   <div class="modal-container nFoundItemModal">
     <div class="modal-body">
       <h6 class="text-center">
-        {{'core.global_modals.products_added.value1' | translate}} {{planning_add_products_data.products_count ? planning_add_products_data.products_count : 'Null'}} {{'core.global_modals.products_added.value2' | translate}}
+        Ci sono {{planning_add_products_data.products_count ? planning_add_products_data.products_count : 'Null'}} prodotti nella lista da consegnare della stessa categoria e stessa strada che non sono aggiunti, i prodotti saranno aggiunti automaticamente prima di creare le
       </h6>
       <div class="items-display-area">
         <div class="pagination-area">
@@ -26,10 +26,10 @@
         </div>
         <div class="items-area">
           <div class="to-add-item header-item">
-            <div class="to-add-item-category">{{'core.global_modals.category' | translate}}</div>
-            <div class="to-add-item-barcode">{{'core.global_modals.barcode' | translate}}</div>
-            <div class="to-add-item-recipient">{{'core.global_modals.recipient' | translate}}</div>
-            <div class="to-add-item-address">{{'core.global_modals.address' | translate}}</div>
+            <div class="to-add-item-category">Category</div>
+            <div class="to-add-item-barcode">Barcode</div>
+            <div class="to-add-item-recipient">Recipient</div>
+            <div class="to-add-item-address">Address</div>
           </div>
           <div class="to-add-item" *ngFor="let product of planning_add_products_items; let idx = index"  [ngClass]="{'odd-bg':(idx%2),'even-bg':!(idx%2)}">
             <div class="to-add-item-category">{{product.category}}</div>
@@ -55,8 +55,8 @@
         </div>
       </div>
       <div class="btns-container mt-3">
-        <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(true)" class="integraa-btn ml-2 float-right" >{{'core.global_modals.button.continue' | translate}}</button>
-        <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(false)" class="integraa-btn ml-2 float-right" >{{'core.global_modals.button.cancel' | translate}}</button>
+        <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(true)" class="integraa-btn ml-2 float-right" >Continua</button>
+        <button type="button" (click)="modal.close();confirmPlanningAddProductsChosen(false)" class="integraa-btn ml-2 float-right" >Annulla</button>
         <div class="clear-both"></div>
       </div>
     </div>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {PreDispatchAddDirectComponent} from './modals/pre-dispatch-add-direct/pre-dispatch-add-direct.component';
 import {StreetsLocatingService} from '../../service/locating/streets-locating.service';
-import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -12,10 +13,9 @@ export class HomeComponent implements OnInit {
   constructor(
       private router: Router,
       private activatedRoute: ActivatedRoute,
-      private streetsLocatingService: StreetsLocatingService,
-      private translate: TranslateService,
+      private streetsLocatingService: StreetsLocatingService
+  ) { }
 
-  ) {}
   active_tab = 'to-deliver';
   actions_only = false ;
   ngOnInit() {

@@ -9,8 +9,6 @@ import {
     Output,
     SimpleChanges, OnChanges, OnDestroy
 } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import {IntegraaModalService} from '../../../service/integraa-modal.service';
 
 @Component({
     selector: 'app-table',
@@ -19,9 +17,7 @@ import {IntegraaModalService} from '../../../service/integraa-modal.service';
 })
 export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDestroy {
 
-    constructor(private cdr: ChangeDetectorRef     , private integraaModalService: IntegraaModalService,
-         private translate: TranslateService)
-    {}
+    constructor(private cdr: ChangeDetectorRef) {}
 
     cells_size = [] ;
     @ViewChild('tableRow') tableRowElement;
@@ -91,7 +87,6 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
             this.selectedProducts = this.items ;
         }
         this.selected.emit(this.selectedProducts);
-        console.log(this.selectedProducts)
     }
 
     resetSelected() {
@@ -112,9 +107,7 @@ export class TableComponent implements OnInit, AfterViewChecked, OnChanges, OnDe
             this.selectable = typeof this.table.selectable !== 'undefined' ? this.table.selectable : true ;
         }
     }
-    showLog(id) {
-        this.integraaModalService.open(`/pages/pre-dispatch/${id}/log`, { width: 900, height: 600 }, {});
-    }
+
     trackItems(item) {
         return item.id ;
     }

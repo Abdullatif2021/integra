@@ -9,8 +9,6 @@ import {PaginationService} from '../../../../service/pagination.service';
 import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PreDispatchActionsService} from '../../service/pre-dispatch-actions.service';
-import {TranslateService} from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-pre-dispatch-add',
@@ -21,8 +19,8 @@ import {TranslateSelectorService} from '../../../../service/translate-selector-s
 export class PreDispatchAddComponent extends ModalComponent implements OnInit, OnDestroy {
 
   options = [
-      {name: 'home.modals.pre_add.options.pre_name', value: 'name'},
-      {name: 'home.modals.pre_add.options.pre_code', value: 'code'}
+      {name: 'Il nome della Pre-distinta', value: 'name'},
+      {name: 'N° della Predistinta', value: 'code'}
   ];
 
   bindLabel = 'name' ;
@@ -38,14 +36,10 @@ export class PreDispatchAddComponent extends ModalComponent implements OnInit, O
       private preDispatchActionsService: PreDispatchActionsService,
       public productsService: ProductsService,
       public paginationService: PaginationService,
-      private modalService: NgbModal,
-      private translate: TranslateService,
-      private translateSelectorService: TranslateSelectorService,
-
-      ) {
-        super();
-        this.translateSelectorService.setDefaultLanuage();
-      }
+      private modalService: NgbModal
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.filteredProductsCount = this.paginationService.resultsCount ;

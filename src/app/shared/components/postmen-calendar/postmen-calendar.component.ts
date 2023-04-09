@@ -4,7 +4,6 @@ import {FileSystemFileEntry} from 'ngx-file-drop';
 import {AppConfig} from '../../../config/app.config';
 import {CalenderService} from '../../../modules/home/service/calender.service';
 import {SnotifyService} from 'ng-snotify';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-postmen-calendar',
@@ -29,13 +28,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
 
   current_day = 0;
   save_day_index = null;
-  days = [  'shared.postmen_calendar.days.monday',
-            'shared.postmen_calendar.days.tuesday',
-            'shared.postmen_calendar.days.wednesday',
-            'shared.postmen_calendar.days.thursday',
-            'shared.postmen_calendar.days.friday',
-            'shared.postmen_calendar.days.saturday',
-            'shared.postmen_calendar.days.sunday'];
+  days = ['Lunedi', 'Martedi', 'Mercoledi', 'Giovedi', 'Venerdi', 'Sabato', 'Domenica'];
   availableUsers = [];
 
   @ViewChild('editPostmanNoteModal') editPostmanNoteModal ;
@@ -50,18 +43,8 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
   displayed_postman = null ;
   formatted_date = '' ;
   monthes = [
-        'shared.postmen_calendar.months.january',
-        'shared.postmen_calendar.months.february',
-        'shared.postmen_calendar.months.march',
-        'shared.postmen_calendar.months.april',
-        'shared.postmen_calendar.months.may',
-        'shared.postmen_calendar.months.june',
-        'shared.postmen_calendar.months.july',
-        'shared.postmen_calendar.months.august',
-        'shared.postmen_calendar.months.september',
-        'shared.postmen_calendar.months.october',
-        'shared.postmen_calendar.months.november',
-        'shared.postmen_calendar.months.december'
+      'Gennaio', 'febbraio', 'marzo', 'Aprile', 'Maggio', 'Giugno',
+      'Luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'
   ];
   details = null ;
   moreData = [] ;
@@ -75,19 +58,18 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
   current_week_index = 0 ;
   loading_more = false ;
   data_sizes = <any>{};
-  week_range = [0, 1, 2, 3, 4, 5, 6];
+  week_range = [0, 1, 2, 3, 4, 5, 6]
   constructor(
       private modalService: NgbModal,
       private calenderService: CalenderService,
       private snotifyService: SnotifyService,
-      private translate: TranslateService
-    ) {}
+  ) { }
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-      console.log('changes');
+      console.log('changes')
       if (changes.data) {
           this.handleDataChanges(changes);
       }
@@ -113,19 +95,12 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
           return this.data = null ;
       }
       const date = new Date(this.data[0].dayDate.split('/').reverse().join('-'));
-
-    let currentMonth = this.monthes[date.getMonth()];
-    this.translate.get(`${currentMonth}`).subscribe(( data: any ) =>  {
-        this.formatted_date = `
+      this.formatted_date = `
             ${this.data[0].dayNumber} - ${this.data[this.data.length - 1].dayNumber}
-             ${data} ${date.getFullYear()}
+             ${this.monthes[date.getMonth()]} ${date.getFullYear()}
           `.trim();
-    });
 
-    // this.translate.get('menu').subscribe((data:any)=> {        console.log(data);       })
-
-
-      this.data_sizes = {postmen: 0, revisore: 0, availablePostmen: 0, availableRevisore: 0 };
+      this.data_sizes = {postmen: 0, revisore: 0, availablePostmen: 0, availableRevisore: 0}
       this.data.forEach( day => {
           Object.keys(this.data_sizes).forEach(key => {
               this.data_sizes[key] = Math.max(day[key] ? day[key].length : 1, this.data_sizes[key]);
@@ -247,7 +222,6 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
 
   resetStatusSelect() {
       this.details.status = null;
-    //   console.log(status)
   }
 
   async addSetNote(event, type) {
@@ -284,8 +258,7 @@ export class PostmenCalendarComponent implements OnInit, OnChanges {
 
       // get the available postmen.
       const ap = await this.availableUsersGetMethod(postman).toPromise().catch(e => {});
-      if (!ap) { return this.snotifyService.error(this.translate.instant('shared.postmen_calendar.error_massege'),
-       {showProgressBar: false}); }
+      if (!ap) { return this.snotifyService.error('Something went wrong', {showProgressBar: false});}
       this.availableUsers = ap.data;
 
       // get the details.

@@ -19,11 +19,11 @@ export class StreetsService {
         private streetsLocatingService: StreetsLocatingService
         ) { }
 
-    getToDeliverStreets(page, rpp, name, cities, order) {
+    getStreets(page, rpp, name, cities, order) {
         if (!cities.all && (!cities.items || !cities.items.length)) {
             return false;
         }
-        const options = { params: new HttpParams().set('page', page).set('pageSize', rpp).set('statusType', 'to_be_delivered')};
+        const options = { params: new HttpParams().set('page', page).set('pageSize', rpp)};
         if (order) {
             options.params = options.params.set('orderMethod', order);
         }
@@ -57,82 +57,7 @@ export class StreetsService {
             catchError(this.handleError)
         );
     }
-    getNotDeliveredStreets(page, rpp, name, cities, order) {
-        if (!cities.all && (!cities.items || !cities.items.length)) {
-            return false;
-        }
-        const options = { params: new HttpParams().set('page', page).set('pageSize', rpp).set('statusType', 'not_delivered')};
-        if (order) {
-            options.params = options.params.set('orderMethod', order);
-        }
-        if (name !== null) { options.params = options.params.set('streetName', name); }
-        const citiesType = this.filtersService.getGrouping();
-        if (cities.all) {
-            if (cities.items.length) {
-                if (citiesType === 'by_client') {
-                    options.params = options.params.set('exclude_clients_ids', cities.items);
-                } else {
-                    options.params = options.params.set('exclude_cities_ids', cities.items);
-                }
-            }
-            if (cities.search) {
-                options.params = options.params.set('bySearch', cities.search);
-            }
-        } else {
-            if (cities.items.length) {
-                if (citiesType === 'by_client') {
-                    options.params = options.params.set('clients', cities.items);
-                } else {
-                    options.params = options.params.set('cities_ids', cities.items);
-                }
-            }
-        }
-        if (citiesType === 'by_client') {
-            options.params = options.params.set('by_clients_Filter', '1');
-        }
-        options.params = this.filtersService.getHttpParams(options.params) ;
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getStreet, options).pipe(
-            catchError(this.handleError)
-        );
-    }
-    getInStockStreets(page, rpp, name, cities, order) {
-        if (!cities.all && (!cities.items || !cities.items.length)) {
-            return false;
-        }
-        const options = { params: new HttpParams().set('page', page).set('pageSize', rpp).set('statusType', 'in_stock')};
-        if (order) {
-            options.params = options.params.set('orderMethod', order);
-        }
-        if (name !== null) { options.params = options.params.set('streetName', name); }
-        const citiesType = this.filtersService.getGrouping();
-        if (cities.all) {
-            if (cities.items.length) {
-                if (citiesType === 'by_client') {
-                    options.params = options.params.set('exclude_clients_ids', cities.items);
-                } else {
-                    options.params = options.params.set('exclude_cities_ids', cities.items);
-                }
-            }
-            if (cities.search) {
-                options.params = options.params.set('bySearch', cities.search);
-            }
-        } else {
-            if (cities.items.length) {
-                if (citiesType === 'by_client') {
-                    options.params = options.params.set('clients', cities.items);
-                } else {
-                    options.params = options.params.set('cities_ids', cities.items);
-                }
-            }
-        }
-        if (citiesType === 'by_client') {
-            options.params = options.params.set('by_clients_Filter', '1');
-        }
-        options.params = this.filtersService.getHttpParams(options.params) ;
-        return this.http.get<ApiResponseInterface>(AppConfig.endpoints.getStreet, options).pipe(
-            catchError(this.handleError)
-        );
-    }
+
     renameStreet(street, newName) {
         return new Promise(async(resolve, reject) => {
             const oldName = street.name ;

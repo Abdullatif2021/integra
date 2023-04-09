@@ -7,7 +7,6 @@ import {SnotifyService} from 'ng-snotify';
 import {BackProcessingService} from '../back-processing.service';
 import {AppConfig} from '../../config/app.config';
 import {map} from 'rxjs/internal/operators';
-import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class StreetsLocatingService {
@@ -18,8 +17,7 @@ export class StreetsLocatingService {
         private tuttocittaGeocodeService: TuttocittaGeocodeService,
         private mapBoxGeocodeService: MapBoxGeocodeService,
         private snotifyService: SnotifyService,
-        private backProcessingService: BackProcessingService,
-        private translate: TranslateService,
+        private backProcessingService: BackProcessingService
     ) {
     }
 
@@ -33,8 +31,7 @@ export class StreetsLocatingService {
         if (!streets || !streets.length) {
             return ;
         }
-        this.snotifyService.info(this.translate.instant('services.streets_locating_service.snotifyService_info'),
-         { showProgressBar: false});
+        this.snotifyService.info('Some streets are being localized!', { showProgressBar: false});
         this.running = true ;
         while (streets && streets.length) {
             const located = [];

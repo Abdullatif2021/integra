@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ApiResponseInterface} from '../../../core/models/api-response.interface';
 import {SnotifyService} from 'ng-snotify';
-import { TranslateService , TranslatePipe } from '@ngx-translate/core';
 
   @Component({
       selector: 'app-simple-table',
@@ -10,7 +9,8 @@ import { TranslateService , TranslatePipe } from '@ngx-translate/core';
   })
   export class SimpleTableComponent implements OnInit, OnChanges {
 
-      constructor(private snotifyService: SnotifyService, private translate: TranslateService) {}
+      constructor(private snotifyService: SnotifyService) {
+      }
 
       @Input() table: any = {
           title: '',
@@ -164,7 +164,7 @@ import { TranslateService , TranslatePipe } from '@ngx-translate/core';
       runAction(action, item) {
           if (action.action = 'rename') {
               item._on_action = 'rename' ;
-              return this.delayedAction = {action: action, item: item};
+              return this.delayedAction = {action: action, item: item};;
           }
           this.onAction.emit({action: action, item: item});
       }
@@ -177,7 +177,7 @@ import { TranslateService , TranslatePipe } from '@ngx-translate/core';
       inputActionKeyDown(event) {
           if (event.key === 'Enter') {
               this.dispatchDelayedAction(event.target.value);
-          }
+          };
       }
 
       dispatchDelayedAction(value) {

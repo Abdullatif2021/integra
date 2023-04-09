@@ -5,8 +5,6 @@ import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {takeUntil} from 'rxjs/internal/operators';
 import {SettingsService} from '../../../../service/settings.service';
 import {PlanningService} from '../../../../service/planning/planning.service';
-import { TranslateService } from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 
 @Component({
@@ -32,11 +30,8 @@ export class ToPlanComponent implements OnInit, OnDestroy {
       private listTreeService: ListTreeService,
       private settingsService: SettingsService,
       private planningService: PlanningService,
-      private translate: TranslateService,
-      private translateSelectorService: TranslateSelectorService,
+  ) {
 
-      ) {
-      this.translateSelectorService.setDefaultLanuage();
       this.route.parent.params.subscribe(
           data => {
             this.preDispatch = data.id;
@@ -61,7 +56,7 @@ export class ToPlanComponent implements OnInit, OnDestroy {
               const items = this.listTreeService.select.fetchSelectedItems(this.tree[0]);
               return this.planningService.moveToInPlanning(this.preDispatch, items, null, 'created', () => {
                   this.reloadNode({item: {node: this.tree[0]}});
-                  return this.translate.instant('schedule.to_plan.moveToInPlanning');
+                  return 'Items moved successfully';
               });
           }
       );

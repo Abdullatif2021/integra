@@ -7,7 +7,6 @@ import {TreeNodeInterface} from '../../../../core/models/tree-node.interface';
 import {DropEffect} from 'ngx-drag-drop';
 import {DragAndDropService} from '../../../../service/drag-and-drop.service';
 import {ScheduleService} from '../../service/schedule.service';
-import {TranslateSelectorService} from '../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-not-matches-tree',
@@ -21,12 +20,8 @@ export class NotMatchesTreeComponent implements OnInit, OnDestroy {
       private route: ActivatedRoute,
       private settingsService: SettingsService,
       private dragAndDropService: DragAndDropService,
-      private scheduleService: ScheduleService,
-      private translateSelectorService: TranslateSelectorService,
-
-  ) {
-    this.translateSelectorService.setDefaultLanuage();
-   }
+      private scheduleService: ScheduleService
+  ) { }
 
 
   unsubscribe = new EventEmitter();

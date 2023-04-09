@@ -8,7 +8,6 @@ import {BackProcessingService} from '../back-processing.service';
 import {AppConfig} from '../../config/app.config';
 import {ApiResponseInterface} from '../../core/models/api-response.interface';
 import {MapService} from '../map.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
     providedIn: 'root'
@@ -21,8 +20,7 @@ export class PlanningService {
         private snotifyService: SnotifyService,
         private googleDirectionsService: GoogleDirectionsService,
         private backProcessingService: BackProcessingService,
-        private translate: TranslateService,
-        ) {}
+    ) { }
 
     moveItemsToInPlaningChanges = new EventEmitter<any>() ;
     moveItemsBackToAddressesChanges = new EventEmitter<any>() ;
@@ -57,9 +55,7 @@ export class PlanningService {
     }
 
     moveToInPlanning(preDispatchId, data, filter = null, status = null, success) {
-        this.run(this.sendMoveToInPlanningRequest(preDispatchId, data, filter, status, true),
-         this.translate.instant('services.planning_service.moving_items'),
-         success, () => {
+        this.run(this.sendMoveToInPlanningRequest(preDispatchId, data, filter, status, true), 'Moving Items', success, () => {
             console.log('error');
         });
     }
@@ -83,8 +79,7 @@ export class PlanningService {
                         if (typeof failed === 'function') {
                             failed(data) ;
                         }
-                        reject({body: data ? data.status : this.translate.instant('services.planning_service.error'),
-                         config: { showProgressBar: false, timeout: 3000 }});
+                        reject({body: data ? data.status : 'Something went wrong', config: { showProgressBar: false, timeout: 3000 }});
                     }
                 },
                 error => {
@@ -110,7 +105,7 @@ export class PlanningService {
     }
 
     async saveParameters(data, success, error) {
-        await this.run(this.sendSaveParametersRequest(data), this.translate.instant('services.planning_service.save'), success, error);
+        await this.run(this.sendSaveParametersRequest(data), 'Saving', success, error);
     }
 
     /*** } Parameters ***/
@@ -136,10 +131,10 @@ export class PlanningService {
     async confirmPlanning(preDispatch, match, notMatchesOption, departureDate, successHandler, errorHandler) {
         await this.run(this.sendConfirmPlanningRequest(preDispatch, match, notMatchesOption, departureDate), 'Matching', (data) => {
             successHandler(data);
-            return this.translate.instant('services.planning_service.return');
+            return 'Pre-Dispatches was matched';
         }, (error) => {
             errorHandler(error);
-            return this.translate.instant('services.planning_service.error');
+            return 'Something went wrong';
         });
     }
 

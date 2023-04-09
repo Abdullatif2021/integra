@@ -4,8 +4,6 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {ActivatedRoute} from '@angular/router';
 import {DispatchService} from '../../../../../../service/dispatch.service';
 import {IntegraaModalService} from '../../../../../../service/integraa-modal.service';
-import { TranslateService } from '@ngx-translate/core';
-import {TranslateSelectorService} from '../../../../../../service/translate-selector-service';
 
 @Component({
   selector: 'app-dispatch-log',
@@ -18,11 +16,7 @@ export class DispatchLogComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private dispatchService: DispatchService,
         private integraaModalService: IntegraaModalService,
-        private translate: TranslateService,
-        private translateSelectorService: TranslateSelectorService,
-        ) {
-            this.translateSelectorService.setDefaultLanuage();
-        }
+    ) {}
 
     log = [];
     loading = true ;
@@ -37,6 +31,7 @@ export class DispatchLogComponent implements OnInit, OnDestroy {
         this.dispatchService.getLog(this.id).pipe(takeUntil(this.unsubscribe)).subscribe(
             res => {
                 this.log = res.data;
+                console.log(this.log, res);
                 this.loading = false ;
             }, error => {
                 this.loading = false;
@@ -46,7 +41,7 @@ export class DispatchLogComponent implements OnInit, OnDestroy {
 
 
     showLog(id) {
-        this.integraaModalService.open(`/pages/dispatch/${id}/log`, {width: 900, height: 600}, {});
+        this.integraaModalService.open(`/pages/pre-dispatch/${id}/log`, {width: 900, height: 600}, {});
     }
 
     expand(item) {

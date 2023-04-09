@@ -18,7 +18,7 @@
             <ng-container *ngFor="let col of (table.cols);let idx = index">
 
                 <th scope="col" class="table-head-item border-left-white" [ngStyle]="{width:cells_size[(idx + (selectable ? 1 : 0))] + 'px'}" *ngIf="typeof(col.title) === 'string'">
-                    {{col.title | translate}}
+                    {{col.title}}
                     <ng-container *ngIf="col.order">
                         <div class="order-container">
                             <div (click)="changeOrder(col.order,'ASC')" [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-desc order-btn"></div>
@@ -32,7 +32,7 @@
                         <div class="position-relative">
                             <!-- print col separator if needed -->
                             <div class="separator" *ngIf="i && col.separator"></div>
-                            <div>{{title | translate}}</div>
+                            <div>{{title}}</div>
                             <div class="order-container multiple-order" *ngIf="col.order && col.order[i]">
                                 <div (click)="changeOrder(col.order[i],'ASC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'ASC'}" class="order-desc order-btn"></div>
                                 <div (click)="changeOrder(col.order[i],'DESC')"  [ngClass]="{'active-order': this.currentOrder.field == col.order && this.currentOrder.order === 'DESC'}" class="order-asc order-btn"></div>
@@ -66,14 +66,14 @@
 
 
                     <th scope="col" class="table-head-item border-left-white"  *ngIf="typeof(col.title) === 'string'">
-                        {{col.title | translate}}
+                        {{col.title}}
                     </th>
                     <!-- if the col contains more than one field, print every one of them -->
                     <th scope="col" class="table-head-item border-left-white" *ngIf="typeof(col.title) === 'object'">
                         <ng-container *ngFor="let title of col.title; let idx = index">
                             <!-- print col separator if needed -->
                             <div class="separator" *ngIf="idx && col.separator"></div>
-                            <div>{{title | translate}}</div>
+                            <div>{{title}}</div>
                         </ng-container>
                     </th>
                 </ng-container>
@@ -89,9 +89,6 @@
                 <tr #tableRow class="table-item" (click)="selectItem(item)" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx, 'selected-row':isSelectedRow(item)}">
                     <!-- select row item <static item > {  -->
                     <td class="table-item-cell select-cell"  *ngIf="selectable">
-                        <ng-container *ngIf="table.mark && table.mark.field && item[table.mark.field] && item[table.mark.field] != '-'">
-                            <img [src]="table.mark.icon" class="row-mark" placement="right" tooltipClass="show-more-tooltip" ngbTooltip="{{ table.mark.prefix | translate }}  {{ item[table.mark.field] }}" >
-                        </ng-container>
                         <div class="select-row rounded-circle" (click)="$event.stopPropagation();selectItem(item)">
                             <div class="selected" *ngIf="isSelectedRow(item)"><fa-icon [icon]="['fa','check']"></fa-icon></div>
                         </div>
@@ -102,7 +99,7 @@
                         <!-- item cell {  -->
                         <td class="table-item-cell justify-content-center">
                             <ng-container *ngIf="col.valueDisplay; else DisplayCell">
-                                <ng-select class="integraa-select" [multiple]="col.multiple" *ngIf="col.valueDisplay === 'select'" [items]="item[col.field]" [bindValue]="'id'" [(ngModel)]="item[col.value]" [bindLabel]="col.valueDisplayLabel"></ng-select>
+                                <ng-select class="integraa-select" *ngIf="col.valueDisplay === 'select'" [items]="item[col.field]" bindValue="id" [(ngModel)]="item[col.value]" [bindLabel]="col.valueDisplayLabel"></ng-select>
                                 <input type="date" class="integraa-select-a-like" *ngIf="col.valueDisplay === 'dateSelect'" [value]="item[col.field]">
                                 <div class="integraa-select-a-like integraa-select-div-a-like" *ngIf="col.valueDisplay === 'singleSelect'">{{item[col.field]}}
                                 </div>
@@ -116,7 +113,7 @@
                                         <div class="separator" *ngIf="idx && col.value_separator == 'dashed'"></div>
                                         <div class="line-separator" *ngIf="idx && col.value_separator == 'line'"></div>
                                         <div *ngIf="typeof(field) === 'string'"><span [ngClass]="col.classes !== undefined ? (col.classes[field] ? col.classes[field] : '') : ''">{{item[field]}}</span></div>
-                                        <div *ngIf="typeof(field) === 'function'"><span [ngClass]="col.classes !== undefined ? (col.classes[idx] ? col.classes[idx] : '') : ''" [innerHTML]="field(item, parent)|translate"></span></div>
+                                        <div *ngIf="typeof(field) === 'function'"><span [ngClass]="col.classes !== undefined ? (col.classes[idx] ? col.classes[idx] : '') : ''" [innerHTML]="field(item, parent)"></span></div>
                                     </ng-container>
                                 </span>
                             </ng-template>
@@ -142,7 +139,7 @@
                 <tr [ngbCollapse]="!isCollapsed[item.id]" [ngClass]="{'odd-bg':!(idx%2),'even-bg':(idx%2),'active-item':!idx}">
                     <td [colSpan]="table.cols.length + (selectable ? 1 : 0)" class="collapse-actions-container">
                         <ng-container *ngFor="let action of table.collapsedActions ">
-                            <button class="integraa-btn collapse-action-btn z-depth-1 {{action._class}}" (click)="action.click && action.click(item, parent)">{{action.label | translate}}</button>
+                            <button class="integraa-btn collapse-action-btn z-depth-1 {{action._class}}" (click)="action.click && action.click(item, parent)">{{action.label}}</button>
                         </ng-container>
                     </td>
                 </tr>
@@ -179,29 +176,29 @@
 <!-- TODO complete this thing -->
 <!--  Actions templates { -->
 <ng-template #view let-action="action" let-item="item">
-    <div class="action-icon-container"><img (click)="$event.stopPropagation(); action.click && action.click(item, parent)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.view' | translate}}"></div>
+    <div class="action-icon-container"><img (click)="$event.stopPropagation(); action.click && action.click(item, parent)" [ngClass]="action._class" src="assets/images/code-review.svg" class="action-icon" placement="bottom" ngbTooltip="Visualizza"></div>
 </ng-template>
 <ng-template #book><div class="action-icon-container"><img src="assets/images/notepad.svg" class="action-icon"></div></ng-template>
-<ng-template #print><div class="action-icon-container"><img src="assets/images/printer.svg" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.print' | translate}}"></div></ng-template>
-<ng-template #excel_export let-action="action" let-item="item"><div class="action-icon-container"><img (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/excel.svg" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.export' | translate}}"></div></ng-template>
-<ng-template #edit let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/edit.svg" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.edit' | translate}}"></div></ng-template>
-<ng-template #calender_view let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/calender.png" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.calender' | translate}}"></div></ng-template>
+<ng-template #print><div class="action-icon-container"><img src="assets/images/printer.svg" class="action-icon" placement="bottom" ngbTooltip="Stampa"></div></ng-template>
+<ng-template #excel_export let-action="action" let-item="item"><div class="action-icon-container"><img (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/excel.svg" class="action-icon" placement="bottom" ngbTooltip="Esporta"></div></ng-template>
+<ng-template #edit let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/edit.svg" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="Modifica"></div></ng-template>
+<ng-template #calender_view let-action="action" let-item="item"><div class="action-icon-container"><img src="assets/images/calender.png" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" class="action-icon" placement="bottom" ngbTooltip="Calender"></div></ng-template>
 <ng-template #pPlay let-action="action" let-item="item">
-    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/play.svg" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.resume' | translate}}" class="action-icon play-pause-icon"></div>
+    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/play.svg" placement="bottom" ngbTooltip="Riprendi" class="action-icon play-pause-icon"></div>
 </ng-template>
 <ng-template #pPause let-action="action" let-item="item">
-    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/pause.svg" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.pause' | translate}}" class="action-icon play-pause-icon"></div>
+    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/pause.svg" placement="bottom" ngbTooltip="Pausa" class="action-icon play-pause-icon"></div>
 </ng-template>
 <ng-template #pDelete let-action="action" let-item="item">
-    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/delete.x.png" placement="bottom" ngbTooltip="{{'shared.table.ngbTooltip.remove' | translate}}" class="action-icon"></div>
+    <div class="action-icon-container"><img *ngIf="(action.print_if?action.print_if(item, parent):true)" (click)="$event.stopPropagation(); action.click && action.click(item, parent)" src="assets/images/delete.x.png" placement="bottom" ngbTooltip="Elimina" class="action-icon"></div>
 </ng-template>
 <ng-template #progress let-action="action" let-item="item">
     <div class="action-icon-container"><div class="progress-action-container z-depth-half"><div class="progress-action-value" [ngClass]="{'warning-progress': itemsProgressWarning[item.id]}" [ngStyle]="{width:item[action.field]+'%'}">&nbsp;</div><div class="progress-action-text-value horiz {{action.status ? action.status(item) : ''}}">{{item[action.field]}} %</div></div></div>
 </ng-template>
 <ng-template #more let-item="item" let-action="action">
     <div class="action-icon-container"><span class="collapse-arrow action-icon">
-        <fa-icon *ngIf="!isCollapsed[item.id]" (click)="$event.stopPropagation(); isCollapsed[item.id] = !isCollapsed[item.id];" [icon]="['fa','chevron-right']" placement="bottom" tooltipClass="show-more-tooltip" ngbTooltip="{{'shared.table.ngbTooltip.more' | translate}}"></fa-icon>
-        <fa-icon *ngIf="isCollapsed[item.id]" (click)="$event.stopPropagation(); isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-up']"  placement="bottom" tooltipClass="show-more-tooltip" ngbTooltip="{{'shared.table.ngbTooltip.less' | translate}}"></fa-icon>
+        <fa-icon *ngIf="!isCollapsed[item.id]" (click)="$event.stopPropagation(); isCollapsed[item.id] = !isCollapsed[item.id];" [icon]="['fa','chevron-right']" placement="bottom" tooltipClass="show-more-tooltip" ngbTooltip="Di Più"></fa-icon>
+        <fa-icon *ngIf="isCollapsed[item.id]" (click)="$event.stopPropagation(); isCollapsed[item.id] = !isCollapsed[item.id]" [icon]="['fa','chevron-up']"  placement="bottom" tooltipClass="show-more-tooltip" ngbTooltip="Di meno"></fa-icon>
     </span></div>
 </ng-template>
 

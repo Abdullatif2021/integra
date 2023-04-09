@@ -168,7 +168,7 @@ export class ResultsService implements OnDestroy {
             this.sendGetSetGroupsRequest(set.id, set.page).subscribe(
                 data => {
                     if (!data.success) { return reject(data); }
-                    resolve(this.reshapeGroupsData(set, data.data.groups));
+                    resolve(this.reshapeGroupsData(set, data.data));
                 },
                 error => reject(error)
             );
